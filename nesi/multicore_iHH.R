@@ -154,13 +154,13 @@ for (n in fileNumber){
   i=n-(offset-1)
   if(n == 1){ # from start to first half of overlaped region (first chunk)
   print("n=1")
-    results = neutral_res[[i]][neutral_res[[i]][,2] < ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
+    results = neutral_res[[i]][neutral_res[[i]][,2] <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
     #print(max(results[,2]))
    } else {
       if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
         #print("max")
         a= results
-        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) < neutral_res[[i]][,2]  ,]
+        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  ,]
         print(max(results[,2]))
         print(min(b[,2]))
         results = rbind(a,b)
@@ -170,7 +170,7 @@ for (n in fileNumber){
           
         
         a = results
-        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) < neutral_res[[i]][,2]  & neutral_res[[i]][,2] <  ((window -overlap)* (n) + (1/2 * overlap)), ]
+        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  & neutral_res[[i]][,2] <  ((window -overlap)* (n) + (1/2 * overlap)), ]
         #print(max(a[,2]))
         #print(min(b[,2]))
         results = rbind(a,b )
