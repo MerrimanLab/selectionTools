@@ -12,4 +12,4 @@ hapsPop=hapsPop[(af > maf) & (af < (1-maf)),]
 print(paste("af >",maf))
 print(table((af > maf ) & (af < (1-maf))))
 
-write.table(hapsPop, file=paste(args1,".mod",sep="", quote=FALSE, row.names=FALSE, col.names=FALSE))
+write.table(hapsPop, file=paste(args[1],".mod",sep="", quote=FALSE, row.names=FALSE, col.names=FALSE))
