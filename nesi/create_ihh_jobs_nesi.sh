@@ -1,6 +1,16 @@
 #!/bin/bash
 
 #
+# James Boocock 
+# July 2013
+# University of Otago
+#
+# Murray Cadzow
+# July 2013
+# University of Otago
+#
+#
+#
 # $1 large_input_file
 # $2 window
 # $3 overlap

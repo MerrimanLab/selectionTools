@@ -1,3 +1,6 @@
+
+
+
 args<-commandArgs(TRUE)
 pop=as.character(args[1])
 chr=as.numeric(args[2])
