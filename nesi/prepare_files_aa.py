@@ -36,6 +36,7 @@ def main():
                 first_file.close()
                 first_file = overlapping_file 
                 overlapping_file = open(population+str(i+1)+'.phaps','w')
+                first_file.write(line)
             if(int(line.split()[2]) >= ((window - overlap)*i)):
                 overlapping_file.write(line)
     overlapping_file.close()
