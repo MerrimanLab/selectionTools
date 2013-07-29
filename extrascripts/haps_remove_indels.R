@@ -1,3 +1,8 @@
+#
+# Murray Cadzow
+# July 2013
+# University of Otago
+
 args<-commandArgs(TRUE)
 #read in haps file from shapeit
 hapsPop=read.table(file=args[1])

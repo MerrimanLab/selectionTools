@@ -1,3 +1,8 @@
+#
+# Murray Cadzow
+# July 2013
+# University of Otago
+
 #Set directory to Rehh directory
 #setwd('~/R/rehh')
 args<-commandArgs(TRUE)

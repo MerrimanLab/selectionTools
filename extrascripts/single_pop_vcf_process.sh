@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# Murray Cadzow
+# July 2013
+# University of Otago
+
 #$1 = pop name
 #$2 = vcf file of population
 #$3 = chr

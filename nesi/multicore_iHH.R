@@ -1,3 +1,9 @@
+#
+# Murray Cadzow and James Boocock
+# July 2013
+# University of Otago
+#
+
 #script to split chromosome into x sized segments to compute iHH on
 args<-commandArgs(TRUE)
 #read in haps file from shapeit

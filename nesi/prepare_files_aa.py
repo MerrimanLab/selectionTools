@@ -1,4 +1,7 @@
-
+#
+# James Boocock
+# July 2013
+# University of Otago
 
 import sys
 import os
