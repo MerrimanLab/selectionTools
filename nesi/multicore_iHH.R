@@ -25,7 +25,7 @@ maf=as.numeric(args[9])
 setwd(working_dir)
 #pseudo code
 i=1
-while(i * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
+while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
   print(i * (window - overlap))
   if(i == 1){
     bin = hapsPop[hapsPop[,3] < (window * i),]
@@ -161,8 +161,6 @@ for (n in fileNumber){
         #print("max")
         a= results
         b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  ,]
-        print(max(results[,2]))
-        print(min(b[,2]))
         results = rbind(a,b)
         print(max(results[,2]))
       } else { #start =take second half of overlap, end = take first half (middle regions)

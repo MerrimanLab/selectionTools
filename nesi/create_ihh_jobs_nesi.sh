@@ -68,8 +68,8 @@ for i in $(eval echo "{1..${noFolders}}") ; do
      #@ group = nesi
      #@ class = default
      #@ notification = never
-     #@ wall_clock_limit = 1:00:00
-     #@ resources = ConsumableMemory(${mem_in_gigs}) ConsumableVirtualMemory(${mem_in_gigs})
+     #@ wall_clock_limit = ${WALL_CLOCK}
+     #@ resources = ConsumableMemory(${mem_in_gigs}gb) ConsumableVirtualMemory(${mem_in_gigs}gb)
      #@ output = ${i}/\$(jobid).out
      #@ error = ${i}/\$(jobid).err
      #@ parallel_threads =${PARRALEL_CORES} 
@@ -95,7 +95,7 @@ done
 NUMBER_FINISHED=0
 
 while true; do 
-    NUMBER_FINISHED=`ls */*ihh | wc -l`
+    NUMBER_FINISHED=`ls */*ihh 2> /dev/null | wc -l`
     if [ "${NUMBER_FINISHED}" == "${noFolders}" ]; then
         Rscript nesi_recombine_ihh.R ${POP} ${CHROM} ${WINDOW} ${OVERLAP} ${OVERLAP} ${PARRALEL_CORES}
         break

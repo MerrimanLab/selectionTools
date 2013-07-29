@@ -2,7 +2,7 @@ args<-commandArgs(TRUE)
 pop=as.character(args[1])
 chr=as.numeric(args[2])
 window=as.numeric(args[3]) # size of the small windows
-smallWindowOverlap=as.numeric(args[4])) # overlap for the small windows
+smallWindowOverlap=as.numeric(args[4]) # overlap for the small windows
 overlap=as.numeric(args[5]) # overlap between the large windows
 cores=as.numeric(args[6])
 
@@ -14,7 +14,6 @@ cores=as.numeric(args[6])
 #cores = 10
 bigWindow= (window-smallWindowOverlap) * (cores-1) + window
 
-setwd(workingdir)
 fileList=dir(pattern="*wd.*ihh", recursive=TRUE)
 ihh_list=list()
 for(i in 1:length(fileList)){ihh_list[[i]]<-read.table(fileList[i])}

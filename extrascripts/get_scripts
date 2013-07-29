@@ -18,5 +18,4 @@ destination=`pwd`
 ln -s ${source}/multicore_iHH.R ${destination}/
 ln -s ${source}/prepare_files_aa.py ${destination}/
 ln -s ${source}/create_ihh_jobs_nesi.sh ${destination}/
-ln -s ${source}/zip_files.py ${destination}/
 ln -s ${source}/nesi_recombine_ihh.R ${destination}/
