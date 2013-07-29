@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+# James Boocock
+# July 2013
+# University of Otago
 #
 NUMBER_PER_LINE=`awk '{print NF}' $1 | uniq | wc -l  | cut -d " " -f 1`
 REPEAT_POSITIONS=`cat $1 | cut -d " " -f 3 | uniq -d`

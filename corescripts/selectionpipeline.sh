@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# Murray Cadzow
+# July 2013
+# University of Otago
+
 # $1 filtered bgzipped vcf file
 # $2 chr number
 # $3 pop1 text file
