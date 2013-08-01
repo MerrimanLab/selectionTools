@@ -153,7 +153,8 @@ def main():
     parser.add_option('-V','--phased-vcf-gz',dest="vcf_gz", help="Gzipped VCF not implemented")
     (options,args) = parser.parse_args()
     #print(options)
-    
+    if(options.format is None) :
+        options.format = 'high'
     # Will annotate the haps file with exactly what is required
     # More options could be added later covering a wider range of file types 
     # andy maybe different input ancestral alleles.
