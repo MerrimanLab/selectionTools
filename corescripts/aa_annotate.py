@@ -12,6 +12,9 @@ import vcf
 from optparse import OptionParser
 from pyfasta import Fasta
 
+#for bgzip
+import gzip
+
 #
 # Command Line Arguments
 #
@@ -55,11 +58,13 @@ def annotate_vcf(options):
     chroms = {}
     if(options.output != None):
         output = open(options.output, 'w')
+    #TODO MAKE WORK WITH REFERENCE FASTA
     for key in keyz:
         chroms[(key.split(':'))[2]] = key
     
     aaSeq = f[chroms[options.chromosome]]
-    vcf_reader = vcf.Reader(open(options.vcf_file), 'r')
+    vcf_reader = vcf.Reader(filename=options.vcf_file)
+    
     for record in vcf_reader:
         if(record.ID == None):
             record.ID = str(record.POS)
@@ -150,10 +155,10 @@ def main():
     parser.add_option('-o','--output',dest="output",help="Output File (optional)")
     parser.add_option('-f','--format',dest="format",help="Format us High or use Low & High")
     parser.add_option('-v','--phased-vcf',dest="vcf_file",help="Phased VCF file (.vcf)")
-    parser.add_option('-V','--phased-vcf-gz',dest="vcf_gz", help="Gzipped VCF not implemented")
     (options,args) = parser.parse_args()
     #print(options)
-    
+    if(options.format is None) :
+        options.format = 'high'
     # Will annotate the haps file with exactly what is required
     # More options could be added later covering a wider range of file types 
     # andy maybe different input ancestral alleles.
