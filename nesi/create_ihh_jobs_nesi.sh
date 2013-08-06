@@ -57,7 +57,7 @@ fi
 echo "$@" > command.out
 bigWindow=`echo "(${WINDOW}-${OVERLAP}) * (${PARRALEL_CORES}) + ${OVERLAP}" | bc`
 echo $bigWindow
-max_line=`tail -1 $HAPS | awk '{ print $3 }'`
+#max_line=`tail -1 $HAPS | awk '{ print $3 }'`
 #let "limit = 30000 * 1024"
 mem_in_gigs=`echo "${MEM_PER_THREAD} * ${PARRALEL_CORES}" | bc`
 limit=`echo "${MEM_PER_THREAD} * ${PARRALEL_CORES} * 1024 * 1024" | bc`
@@ -73,7 +73,7 @@ for i in $(eval echo "{1..${noFolders}}") ; do
      echo "Processing $i in $working_dir"
      echo "#@ shell = /bin/bash
      #@ environment = COPY_ALL
-     #@ job_name = ihs_CEU_${i}
+     #@ job_name = ihs_${POP}_${i}
      #@ job_type = serial
      #@ group = nesi
      #@ class = default
