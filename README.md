@@ -26,5 +26,7 @@ for multicore processing the R package multicore is required.
 
 - multicore [multicore](http://cran.r-project.org/web/packages/multicore/ multicore)
 
+- for load leveler processing PyLoadL is required. [PyLoadL](http://www.gingergeeks.co.uk/pyloadl/download.php PyLoadL)
+
 
 
