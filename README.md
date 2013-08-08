@@ -27,6 +27,6 @@ for multicore processing the R package multicore is required.
 - multicore [multicore](http://cran.r-project.org/web/packages/multicore/ multicore)
 
 - for load leveler processing PyLoadL is required. [PyLoadL](http://www.gingergeeks.co.uk/pyloadl/download.php PyLoadL)
-
+  LoadLeveler 4.1.0.6, 4.1.1.4 on RHEL5.3, Python 2.6.2 with Pyrex 0.9.9 have been tested
 
 

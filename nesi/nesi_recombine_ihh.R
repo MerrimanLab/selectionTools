@@ -36,10 +36,9 @@ for (n in fileNumber){
     if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
       #print("max")
       a= results
-      b = ihh_list[[n]][ ((bigWindow-overlap)* (n-1) + 1/2*overlap) < ihh_list[[n]][,2]  ,]
-      print(max(results[,2]))
-      print(min(b[,2]))
+      b = ihh_list[[n]][ ((bigWindow-overlap)* (n-1) + 1/2*overlap) <= ihh_list[[n]][,2]  ,]
       results = rbind(a,b)
+      print(min(b[,2]))
       print(max(results[,2]))
     } else { #start =take second half of overlap, end = take first half (middle regions)
       #print("middle")
