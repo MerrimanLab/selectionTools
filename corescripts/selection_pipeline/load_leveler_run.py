@@ -32,6 +32,12 @@ logger.setLevel(level=logging.INFO)
 
 SUBPROCESS_FAILED_EXIT=10
 
+load_leveler_template="""
+        #@ shell = /bin/bash
+        #@ 
+"""
+
+
 class LoadLevelerRun(object):
     
     """ Load leveler class takes the pipeline and runs the PHD on the nesi pan 
