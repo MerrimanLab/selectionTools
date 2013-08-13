@@ -21,7 +21,7 @@ def hap_to_tped(basename,output_basename,chromosome):
     log.debug("Started converting from HAPS to TPED")
     tped_out = open(output_basename + '.tped','w')
     # Use shutil to copy sample to tfam
-    shutil.copy(basename + '.sample', output_basename + '.tfam')
+    shutil.copyfile(basename + '.sample', output_basename + '.tfam')
     #default centimorgan values.
     centimorgans = '0'
     with open(basename + '.haps','r') as f:
