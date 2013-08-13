@@ -26,8 +26,10 @@ def hap_to_tped(basename,output_basename,chromosome):
     tfam_out = open(output_basename + '.tfam','w')
     with open(basename + '.sample','r') as f:
         for line in f:
-            if i != 1:
-                tfam_out.write(line)
+            if i > 1:
+                newline=line.split()
+                newline=line[0:5]
+                tfam_out.write(' '.join(newline) +'\n')
             i = i + 1
     tfam_out.close()
     centimorgans = '0'
