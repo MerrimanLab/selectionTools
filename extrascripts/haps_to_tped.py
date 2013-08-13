@@ -21,8 +21,15 @@ def hap_to_tped(basename,output_basename,chromosome):
     log.debug("Started converting from HAPS to TPED")
     tped_out = open(output_basename + '.tped','w')
     # Use shutil to copy sample to tfam
-    shutil.copyfile(basename + '.sample', output_basename + '.tfam')
     #default centimorgan values.
+    i = 0
+    tfam_out = open(output_basename + '.tfam','w')
+    with open(basename + '.sample','r') as f:
+        for line in f:
+            if i != 1:
+                tfam_out.write(line)
+            i = i + 1
+    tfam_out.close()
     centimorgans = '0'
     with open(basename + '.haps','r') as f:
         log.debug("Read in TPED file")
@@ -34,7 +41,7 @@ def hap_to_tped(basename,output_basename,chromosome):
             alt = split_line[4]
             allele_lambda = make_allelic_lambda(ref,alt)
             alleles = map(allele_lambda,split_line[5:])
-            tped_out.write(chromosome + ' ' + rsid + ' ' + centimorgans + ' ' + pos +  ' '.join(alleles) + '\n') 
+            tped_out.write(chromosome + ' ' + rsid + ' ' + centimorgans + ' ' + pos + ' ' +' '.join(alleles) + '\n') 
     tped_out.close()
     log.debug("Finished converting from HAPS to TPED")
 
