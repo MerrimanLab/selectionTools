@@ -28,7 +28,7 @@ def hap_to_tped(basename,output_basename,chromosome):
         for line in f:
             if i > 1:
                 newline=line.split()
-                newline=line[0:5]
+                newline=newline[0:6]
                 tfam_out.write(' '.join(newline) +'\n')
             i = i + 1
     tfam_out.close()
