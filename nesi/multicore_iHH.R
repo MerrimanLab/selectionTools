@@ -4,20 +4,40 @@
 # University of Otago
 #
 
+require(getopt)
+
 #script to split chromosome into x sized segments to compute iHH on
 args<-commandArgs(TRUE)
+spec = matrix(c(
+	'help', 	'h', 	0, 	"logical",
+	'input',   'i', 1,  "character",
+	'chr',     'c', 1,  "integer",
+	'window',  'w', 1,  "integer",
+	'overlap', 'o', 1,  "integer",
+	'cores',   'r', 1,  "integer",
+	'working_dir', 'd', 1, "character",
+	'offset',   's' , 1, "integer",
+	"maf"  ,    'm' , 1, "integer",
+	"pop"  ,    'p', 1, "character"
+), byrow=T, ncol=4) 
+opt = getopt(spec)
+
+if (!is.null(opt$help)){
+	cat(getopt(spec,usage=TRUE));
+	q(status=1);
+}
 #read in haps file from shapeit
-pop1=as.character(args[1])
+pop1=as.character(opt$pop)
 #print("*")
-hapsPop=read.table(file=args[2])
+hapsPop=read.table(opt$input)
 hapsPop=hapsPop[nchar(as.character(hapsPop[,4]))==1 & nchar(as.character(hapsPop[,5]))==1, ] #remove indels
-chr=as.numeric(args[3])
-window=as.numeric(args[4])
-overlap=as.numeric(args[5])
-cores=as.numeric(args[6])
-working_dir=as.character(args[7])
-offset=as.numeric(args[8])
-maf=as.numeric(args[9])
+chr=as.numeric(opt$chr)
+window=as.numeric(opt$window)
+overlap=as.numeric(opt$overlap)
+cores=as.numeric(opt$cores)
+working_dir=as.character(opt$working_dir)
+offset=as.numeric(opt$offset)
+maf=as.numeric(opt$maf)
 #size of each region
 #window=500000
 #overlap = 100000

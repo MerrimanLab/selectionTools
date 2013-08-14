@@ -34,8 +34,31 @@ SUBPROCESS_FAILED_EXIT=10
 
 load_leveler_template="""
         #@ shell = /bin/bash
-        #@ 
+        #@ group = {0}
+        #@ class = default
+        #@ job_name = {1}
+        #@ wall_clock_limit = {2}
+        #@ resources = ConsumableMemory({3}) ConsumableVirtualMemory({4})
+        #@ output = $(jobid).out
+        #@ error = $(jobid).err 
 """
+
+# serial_task_with_threads
+load_leveler_serial ="""
+        #@ job_type = serial
+        #@ parallel_threads = {0}
+"""
+# mpi_task
+load_leveler_mpi = """
+        #@ job_type = parallel
+        #@ total_tasks_threads = {0}
+        #@ blocking = {1}
+""" 
+# Queue jobs on load leveler
+load_leveler_queue ="""
+            #@ queue
+    """
+
 
 
 class LoadLevelerRun(object):
@@ -67,5 +90,6 @@ class LoadLevelerRun(object):
         return 1   
     def run_vcf_tools(self,options,config):
         return 1
+         
     def run_plink(self,options, config):
         return 1
