@@ -6,7 +6,7 @@ from optparse import OptionParser
 
 import logging
 logger = logging.getLogger(__name__)
-
+SUBPROCESS_FAILED_EXIT=10
 class CommandTemplate(object):
 
     def run_vcf_to_plink(self,options,config):
@@ -38,7 +38,7 @@ class CommandTemplate(object):
         logger.debug("Attempting to call shape it to phase the data")
         genetic_map = ''
         for file in os.listdir(config['shapeit']['genetic_map_dir']):
-            if fnmatch.fnmatch(file,'genetic_map_chr'+options.chromosome+'*'):
+            if fnmatch.fnmatch(file,config['shapeit']['genetic_map_chr'].replace('?',options.chromosome):
                 genetic_map = file
             
         shapeit=config['shapeit']['shapeit_executable']
@@ -57,10 +57,72 @@ class CommandTemplate(object):
         cmd.append(rscript)
         cmd.append(indel_filter)
         cmd.extend([haps,str(options.maf),output_name])
-    
         return(cmd,output_name)
 
+    def join_impute2_files(options,config,output_prefix,no_commands):
+        output_haps=open(output_prefix+'.haps','wb')
+        output_warnings=open(output_prefix+'.warnings','wb')
+        output_info=open(output_prefix+'.info','wb')
+        for i in range(no_commands):
+            with open(output_prefix+'_'+str(i)+'haps','r') as h
+                with open(output_prefix + '_'+str(i)+'.warnings','r') as w:
+                    with open(output_prefix + '_'+str(i) + '.info','r')as f:
+                        output_haps.write(h.read())
+                        output_warnings.write(w.read())
+                        output_info.write(f.read())
+        output_haps.close()
+        output_warnings.close()
+        output_info.close()
+                         
+    #def run_tajimas_d(options,config,gen,sample):
+    
+    #def fu_and_wus_h(options,config,gen,sample):
 
+     
+
+    def run_impute2(self,options,config,haps):
+        cmds=[]
+        prefix = options.output_prefix + options.chromosome + '_impute2'
+        logger.debug('Attempting to call impute2 the data')
+        impute2=config['impute2']['impute_executable']
+        distance=config['impute2']['chromosome_split_size']
+        genetic_map_dir=config['impute2']['genetic_map_dir']
+        genetic_map=''
+        for file in os.listdir(config['impute2']['genetic_map_dir']):
+            if fnmatch.fnmatch(file,config['impute2']['genetic_map_chr'].replace('?',options.chromosome):
+                genetic_map = file
+        
+        legend_file =''
+        for file in os.listdir(config['impute2']['impute_reference_dir']):
+            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.legend'):
+                legend_file = file
+        
+        hap_file = ''
+        for file in os.listdir(config['impute2']['impute_reference_dir']):
+            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.hap'):
+                hap_file = file
+        distance=int(distance) * 1000000
+        # Break files into 5 megabase regions.
+        try:
+            subprocess.call("`tail -1 ${0}| awk '{print $3}'`".format(haps),stdout=subprocess.PIPE) 
+        except:
+            logger.error("Tail command failed on haps file")
+        #Get the max position from your haps file# 
+        max_position=int(proc.stdout.read().strip())
+        no_of_impute_jobs=max_position//distance + 1
+        
+        #create the command template
+        cmd_template=[]
+        cmd_template.append(impute2)
+        cmd_template.extend(['-m',genetic_map,'-h',hap_file,'-l',legend_file,'-known_haps_g',haps])
+        for i in range(0,no_of_impute_jobs):
+            individual_command=cmd_template
+            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance])
+            individual_prefix=prefix + '_'+ str(i)
+            individual_command.extend('-o',individual_prefix+'.haps','-w',individual_prefix + '.warninigs','-i',individual_prefix +'.info')
+            cmds.append(individual_command)
+        return (cmds,prefix)
+             
 
     def run_aa_annotate_haps(self,options,config,haps):
         cmd = []

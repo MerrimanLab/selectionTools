@@ -100,7 +100,6 @@ def parse_arguments():
         options.phased_vcf = False
     if (options.full_process == None):
         options.full_process= False
-    logger.debug(options.config_file)
     return options 
      
 # Calls a subprocess to run vcf tools

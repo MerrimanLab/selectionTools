@@ -93,7 +93,7 @@ for i in $(eval echo "{1..${noFolders}}") ; do
      ulimit -v ${limit} -m ${limit}
      mkdir $i
      # Call R with the input file as a command line argument
-     Rscript multicore_iHH.R ${POP} ${POP}${i}.phaps ${CHROM} ${WINDOW} ${OVERLAP} ${PARRALEL_CORES} $i $offset ${MAF}
+     Rscript multicore_iHH.R --pop ${POP} -i ${POP}${i}.phaps --chr ${CHROM} --window ${WINDOW} --overlap ${OVERLAP} --cores ${PARRALEL_CORES} $i $offset --maf ${MAF}
 	" > ${i}.job
      sync
      llsubmit ${i}.job

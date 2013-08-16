@@ -1,4 +1,4 @@
-
+import queue
 import os
 import sys
 import re
@@ -20,6 +20,9 @@ SUBPROCESS_FAILED_EXIT=10
 class StandardRun(CommandTemplate):
     
     def __init__(self,options,config):
+        
+        self.threads=config['system']['threads_avaliable']        
+
         if(options.phased_vcf): 
             haps = self.ancestral_annotation_vcf(options,config)
             ihh = self.run_multi_coreihh(options,config,haps)
@@ -64,21 +67,33 @@ class StandardRun(CommandTemplate):
 
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
-        cmd.extend(['--thread',config['system']['threads_avaliable']])
+        cmd.extend(['--thread',self.threads)
         self.run_subprocess(cmd,'shapeit')
         return(prefix + '.haps')
 
     #Calls a subprocess to run impute   
+
+        
+    def impute_worker(q):
+        while True:
+            cmd=q.get()
+            self.run_subprocess(cmd,'impute2')
+            q.task_done()             
  
     def run_impute2(self,options,config,haps):
-        cmd = []
-        prefix = options.output_prefix + options.chromosome + '_impute2'
-        logger.debug('Attempting to call impute2 the data')
-        impute2=config['impute2']['impute_executable']
-        cmd.append(impute2)
-    #    cmd.append(['--
-    
-    #Calls a subprocess to run the indel filter
+        imputeQueue=queue.Queue()
+        (cmds,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps):
+        threads=self.threads
+        no_commands=len(cmds)
+        for i in range(thread):
+            t = Thread(target=impute_worker,args=imputeQueue)
+            t.daemon = True
+        for cmd in cmds
+            q.put(cmd)
+        impute_queue.join()
+        CommandTemplate.join_impute2_files(options,config,output_prefix,no_commands)
+        return(output_prefix+'.haps') 
+         
 
     def indel_filter(self,options,config,haps):
         (cmd,output_name) = CommandTemplate.indel_filter(self,options,config,haps)
@@ -90,11 +105,13 @@ class StandardRun(CommandTemplate):
         self.run_subprocess(cmd,'ancestral_annotation')
         return (output_name)
     
-#def run_tajimas_d(options,config,gen,sample):
+    #def run_tajimas_d(options,config,gen,sample):
+    
+    #def fu_and_wus_h(options,config,gen,sample):
 
     def run_multi_coreihh(self,options,config,haps):
         (cmd,output_name) = CommandTemplate.run_multi_coreihh(self,options,config,haps)
-        cores=config['system']['threads_avaliable']
+        cores=self.threads
         cmd.extend(['--cores',cores])
         cmd.extend(['--working_dir','.'])
         with open(haps,'r') as hap_file:
