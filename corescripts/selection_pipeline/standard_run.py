@@ -9,20 +9,66 @@ from run_pipeline import CommandTemplate
 import fnmatch
 
 from optparse import OptionParser
-import ConfigParser
 
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
 import logging
 logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT=10
+MISSING_EXECUTABLE_ERROR=5
 
 class StandardRun(CommandTemplate):
-    
-    def __init__(self,options,config):
+   
+    def is_script(self,fpath):
+        return os.path.isfile(fpath)
+    def is_exe(self,fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+    #Stolen code from 
+    #http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
+    def which(self,program,program_name):
+        fpath, fname = os.path.split(program)
+        print(program)
+        if fpath:
+            if self.is_exe(program):
+                return program
+            elif (self.is_script(program)):
+                return program
+        else:
+            for path in os.environ["PATH"].split(os.pathsep):
+                path = path.strip('"')
+                exe_file = os.path.join(path, program)
+                if self.is_exe(exe_file):
+                    return exe_file
+        logger.error(program_name +" path = " + fpath+" not locatable path or in the directory specified in your config file ")
+        return None    
+  
+    #Ensures the executables specified on the path exist so that the standard run will
+    # work on the machine 
+    def check_executables_and_scripts_exist(self,options,config):
+        executables=['plink','shapeit','impute','Rscript','python','ancestral_allele','indel_filter','multicore_ihh']
+        if(self.which(config['plink']['plink_executable'],'plink')is None): 
+            return False
+        if(self.which(config['shapeit']['shapeit_executable'],'shapeit') is None ):
+            return False
+        if(self.which(config['ancestral_allele']['ancestral_allele_script'],'ancestral_allele') is None):
+            return False
+        if(self.which(config['impute']['impute_executable'],'impute2') is None):
+            return False
+        if(self.which(config['Rscript']['indel_filter'],'indel_filter') is None):
+            return False
+        if(self.which(config['Rscript']['rscript_executable'],'Rscript') is None):
+            return False
+        if(self.which(config['multicore_ihh']['multicore_ihh'],'multicore_ihh') is None):
+            return False
+        return True
         
-        self.threads=config['system']['threads_avaliable']        
 
+
+    def __init__(self,options,config):
+        #Perform local executable check.# 
+        if( not self.check_executables_and_scripts_exist(options,config)):
+            sys.exit(MISSING_EXECUTABLE_ERROR)
+        self.threads=config['system']['threads_avaliable']        
         if(options.phased_vcf): 
             haps = self.ancestral_annotation_vcf(options,config)
             ihh = self.run_multi_coreihh(options,config,haps)
@@ -43,12 +89,13 @@ class StandardRun(CommandTemplate):
  
     def run_subprocess(self,command,tool):   
         try:
-            subprocess.call(command) 
+            exit_code = subprocess.call(command) 
         except:
             logger.error(tool + " failed to run " + ' '.join(command))
-            sys.exit(SUBPROCESS_FAILED_EXIT)    
-        
-            
+            sys.exit(SUBPROCESS_FAILED_EXIT)   
+
+        if(exit_code != 0): 
+            sys.exit(SUBPROCESS_FAILED_EXIT)   
         logger.error("Finished tool " + tool)
 
     def run_vcf_to_plink(self,options,config):
@@ -67,7 +114,7 @@ class StandardRun(CommandTemplate):
 
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
-        cmd.extend(['--thread',self.threads)
+        cmd.extend(['--thread',self.threads])
         self.run_subprocess(cmd,'shapeit')
         return(prefix + '.haps')
 
@@ -82,13 +129,13 @@ class StandardRun(CommandTemplate):
  
     def run_impute2(self,options,config,haps):
         imputeQueue=queue.Queue()
-        (cmds,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps):
+        (cmds,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps)
         threads=self.threads
         no_commands=len(cmds)
         for i in range(thread):
             t = Thread(target=impute_worker,args=imputeQueue)
             t.daemon = True
-        for cmd in cmds
+        for cmd in cmds:
             q.put(cmd)
         impute_queue.join()
         CommandTemplate.join_impute2_files(options,config,output_prefix,no_commands)

@@ -104,12 +104,40 @@ done
 
 NUMBER_FINISHED=0
 
+mem_required=`echo "${mem_in_gigs} * ${noFolders}" | bc`
+limit=`echo "${mem_required} * 1024 * 1024" | bc`
+
+
 while true; do 
     NUMBER_FINISHED=`ls */*ihh 2> /dev/null | wc -l`
     if [ "${NUMBER_FINISHED}" == "${noFolders}" ]; then
-        Rscript nesi_recombine_ihh.R ${POP} ${CHROM} ${WINDOW} ${OVERLAP} ${OVERLAP} ${PARRALEL_CORES}
-        break
+     	echo "#@ shell = /bin/bash
+     	#@ environment = COPY_ALL
+     	#@ job_name = ihs_${POP}_recombine
+     	#@ job_type = serial
+     	#@ group = nesi
+     	#@ class = default
+     	#@ notification = never
+     	#@ wall_clock_limit = ${WALL_CLOCK}
+     	#@ resources = ConsumableMemory(${mem_required}gb) ConsumableVirtualMemory(${mem_required}gb)
+     	#@ output = \$(jobid).out
+     	#@ error = \$(jobid).err
+     	#@ parallel_threads =1
+     	#@ notification = complete
+     	#@ queue
+     	ulimit -v ${limit} -m ${limit}
+      Rscript nesi_recombine_ihh.R ${POP} ${CHROM} ${WINDOW} ${OVERLAP} ${OVERLAP} ${PARRALEL_CORES}" > recombine_${POP}.job
+			llsubmit recombine_${POP}.job
+      break
     fi
     sleep 5m
 done
 
+while true; do
+		NUMBER_FINISHED=`ls *iHH 2> /dev/null | wc -l`
+		if [ "${NUMBER_FINISHED}" == "1" ]; then
+			break
+		fi
+		sleep 5m
+done
+exit 0

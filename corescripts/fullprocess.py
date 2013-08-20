@@ -19,7 +19,7 @@ import re
 import fnmatch
 
 from optparse import OptionParser
-import ConfigParser
+import configparser
 
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
@@ -214,7 +214,7 @@ def run_multi_coreihh(options,config,haps):
     return output_name
 
 def parse_config(options):
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(options.config_file)
     config_parsed = {}
     logger.debug(config.sections())

@@ -15,7 +15,11 @@ class CommandTemplate(object):
         logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
         vcf_tools=config['vcftools']['vcf_tools_executable']
         cmd.append(vcf_tools)
-        cmd.extend(['--gzvcf',options.vcf_input, '--plink', '--out',prefix,'--remove-indels'])
+        if(options.vcf_gz):
+            cmd.append('--gzvcf')
+        else:
+            cmd.append('--vcf')
+        cmd.extend([options.vcf_input, '--plink', '--out',prefix,'--remove-indels'])
         logger.debug(config['vcftools']['extra_args'])
         cmd.extend(config['vcftools']['extra_args'].split())
         return (cmd,prefix)
@@ -38,7 +42,7 @@ class CommandTemplate(object):
         logger.debug("Attempting to call shape it to phase the data")
         genetic_map = ''
         for file in os.listdir(config['shapeit']['genetic_map_dir']):
-            if fnmatch.fnmatch(file,config['shapeit']['genetic_map_chr'].replace('?',options.chromosome):
+            if fnmatch.fnmatch(file,config['shapeit']['genetic_map_prefix'].replace('?',options.chromosome)):
                 genetic_map = file
             
         shapeit=config['shapeit']['shapeit_executable']
@@ -64,7 +68,7 @@ class CommandTemplate(object):
         output_warnings=open(output_prefix+'.warnings','wb')
         output_info=open(output_prefix+'.info','wb')
         for i in range(no_commands):
-            with open(output_prefix+'_'+str(i)+'haps','r') as h
+            with open(output_prefix+'_'+str(i)+'haps','r') as h:
                 with open(output_prefix + '_'+str(i)+'.warnings','r') as w:
                     with open(output_prefix + '_'+str(i) + '.info','r')as f:
                         output_haps.write(h.read())
@@ -89,17 +93,17 @@ class CommandTemplate(object):
         genetic_map_dir=config['impute2']['genetic_map_dir']
         genetic_map=''
         for file in os.listdir(config['impute2']['genetic_map_dir']):
-            if fnmatch.fnmatch(file,config['impute2']['genetic_map_chr'].replace('?',options.chromosome):
+            if fnmatch.fnmatch(file,config['impute2']['genetic_map_chr'].replace('?',options.chromosome)):
                 genetic_map = file
         
         legend_file =''
         for file in os.listdir(config['impute2']['impute_reference_dir']):
-            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.legend'):
+            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.legend')):
                 legend_file = file
         
         hap_file = ''
         for file in os.listdir(config['impute2']['impute_reference_dir']):
-            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.hap'):
+            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.hap')):
                 hap_file = file
         distance=int(distance) * 1000000
         # Break files into 5 megabase regions.
@@ -117,7 +121,7 @@ class CommandTemplate(object):
         cmd_template.extend(['-m',genetic_map,'-h',hap_file,'-l',legend_file,'-known_haps_g',haps])
         for i in range(0,no_of_impute_jobs):
             individual_command=cmd_template
-            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance])
+            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
             individual_prefix=prefix + '_'+ str(i)
             individual_command.extend('-o',individual_prefix+'.haps','-w',individual_prefix + '.warninigs','-i',individual_prefix +'.info')
             cmds.append(individual_command)

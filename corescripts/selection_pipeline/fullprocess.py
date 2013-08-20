@@ -18,7 +18,7 @@ import re
 import fnmatch
 
 from optparse import OptionParser
-import ConfigParser
+import configparser
 
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
@@ -36,7 +36,7 @@ SUBPROCESS_FAILED_EXIT=10
 
 
 def parse_config(options):
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(options.config_file)
     config_parsed = {}
     logger.debug(config.sections())
@@ -70,6 +70,7 @@ def parse_arguments():
     parser.add_option('--population',dest="population",help="Population Code ")
     parser.add_option('--imputation',action="store_true", dest="imputation",help="Imputation")
     parser.add_option('--full-process',action="store_true",dest="full_process",help="Run Entire Process")
+    parser.add_option('--gzvcf',action="store_true",dest="vcf_gz",help="VCF input is in GZ file (optional)")
       
     (options, args) = parser.parse_args()
     if(options.verbose != None):
@@ -100,6 +101,8 @@ def parse_arguments():
         options.phased_vcf = False
     if (options.full_process == None):
         options.full_process= False
+    if (options.vcf_gz == None):
+        options.vcf_gz = False
     return options 
      
 # Calls a subprocess to run vcf tools

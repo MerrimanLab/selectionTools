@@ -18,7 +18,6 @@ import re
 import fnmatch
 
 from optparse import OptionParser
-import ConfigParser
 
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
