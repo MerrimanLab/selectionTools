@@ -111,7 +111,6 @@ class LoadLevelerRun(object):
         logger.info(ihh)
         logger.info("Goodbye :)")
     
-    def ancestral_annotation_vcf(self,options,config):
         
     def run_vcf_to_plink(self,options,config):
         logger.debug("Preparing vcf_to_plink for running on pan")
