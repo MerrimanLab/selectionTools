@@ -17,15 +17,12 @@ import re
 #For matching the file names
 import fnmatch
 
-from run_pipeline import CommandTemplate
-
 from optparse import OptionParser
 
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
 import logging
-#For giving steps unique names
-from datetime import datetime
+
 #Import standard run 
 
 logging.basicConfig(format='%(asctime)s %(message)s')
@@ -43,7 +40,7 @@ load_leveler_template="""
 load_leveler_step="""
         #@ step_name = {0}
         #@ wall_clock_limit = {1}
-        #@ resources = ConsumableMemory({2}gb) ConsumableVirtualMemory({2}gb)
+        #@ resources = ConsumableMemory({2}) ConsumableVirtualMemory({2})
 """
 
 load_leveler_account_no="""
@@ -69,11 +66,6 @@ load_leveler_queue ="""
             #@ queue
     """
 
-# ulimit load leveler ulimit
-load_leveler_ulimit ="""
-            ulimit -v {0} -m {0}
-    """
-
 
 
 class LoadLevelerRun(object):
@@ -94,18 +86,18 @@ class LoadLevelerRun(object):
         self.create_load_leveler_script(options,config)
     def create_load_leveler_script(self,options,config):
         if(options.phased_vcf): 
-           (dependecies,haps) = self.ancestral_annotation_vcf(options,config,dependencies)
-           (dependencies,haps) = self.run_multi_coreihh(options,config,haps,dependencies)
+           (script,dependecies,haps) = self.ancestral_annotation_vcf(options,config,dependencies)
+           (script,dependencies,haps) = self.run_multi_coreihh(options,config,haps,dependencies)
         else:
-            (dependencies,ped,map) = self.run_vcf_tools(options,config,dependencies)
-            (dependencies,ped,map) = self.run_plink(options,config,ped,map,dependencies)
-            (dependencies,haps) = self.run_shape_it(options,config,ped,map,dependencies) 
+            (script,dependencies,ped,map) = self.run_vcf_tools(options,config,dependencies)
+            (script,dependencies,ped,map) = self.run_plink(options,config,ped,map,dependencies)
+            (script,dependencies,haps) = self.run_shape_it(options,config,ped,map,dependencies) 
         if(options.imputation):
-            (dependencies,haps)= self.run_impute2(options,config,haps,dependencies)
-        (dependencies,haps) = self.indel_filter(options,config,haps,dependencies)
+            (script,dependencies,haps)= self.run_impute2(options,config,haps,dependencies)
+        (script,dependencies,haps) = self.indel_filter(options,config,haps,dependencies)
         #tajimas = run_tajimas_d(options,config,haps)
-        (dependencies,haps) = self.run_aa_annotate_haps(options,config,haps,dependencies)
-        (dependencies,ihh) = self.run_multi_coreihh(options,config,haps,dependencies)
+        (script,dependencies,haps) = self.run_aa_annotate_haps(options,config,haps,dependencies)
+        (script,dependencies,ihh) = self.run_multi_coreihh(options,config,haps,dependencies)
         logger.info("Pipeline completed successfully")
         logger.info(haps)
         logger.info(ihh)
@@ -114,21 +106,13 @@ class LoadLevelerRun(object):
     def ancestral_annotation_vcf(self,options,config):
         
     def run_vcf_to_plink(self,options,config):
-        logger.debug("Preparing vcf_to_plink for running on pan")
         (cmd,prefix) = CommandTemplate.run_vcf_to_plink(self,options,config)
         self.load_leveler_script.write(self.script_template)
         self.load_leveler_script.write(self.load_leveler_serial.format(1))
-        # Set up wall time and memory required
-        memory_required="4"
-        ulimit=memory_required=str(int(memory_required) * 1024 * 1024)
-        step_name=prefix+str(datetime.now()).strip()
-        self.load_leveler_script.write(self.load_leveler_step.format(step_name,"11:59:00",memory_required))
-        self.load_leveler_script.write(self.load_leveler_queue)
-        logger.debug("Finished preparing vcf_to_plink for running on pan")
-        return(step_name,prefix + '.ped', prefix+'.map',) 
+        self.load_leveler_script.write(self.load_leveler_step.format())
+"""
+          
         
           
     def run_plink(self,options, config):
-        logger.debug("Preparing plink filtering for running on pan")
-         
-        logger.debug("Finished preparing plink filtering for running on pan")
+        return 1
