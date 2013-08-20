@@ -78,10 +78,10 @@ class LoadLevelerRun(object):
         self.group =config['nesi']['group'] 
         self.class =config['nesi']['class']
         self.account_no=config['nesi']['account_no']
-        self.load_leveler_script = open('level_the_load.ll','wb')
-        self.load_leveler_script.write(load__leveler_template.format(self.group,self.class))
+        self.load_leveler_script = load_leveler_template.format(self.group,self.class)
         if(self.account_no is not None):
-             self.load_leveler_script.write(load_leveler_account_no.format(self.account_no))
+             self.load_leveler_script = self.load_leveler_script + load_leveler_account_no.format(self.account_no)
+        
         self.create_load_leveler_script(options,config)
     def create_load_leveler_script(self,options,config):
         if(options.phased_vcf): 
@@ -106,7 +106,6 @@ class LoadLevelerRun(object):
         
     def run_vcf_to_plink(self,options,config):
         (cmd,prefix) = CommandTemplate.run_vcf_to_plink(self,options,config)
-          
         
           
     def run_plink(self,options, config):

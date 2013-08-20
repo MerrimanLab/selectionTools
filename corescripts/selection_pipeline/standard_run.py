@@ -161,6 +161,7 @@ class StandardRun(CommandTemplate):
         cores=self.threads
         cmd.extend(['--cores',cores])
         cmd.extend(['--working_dir','.'])
+        cmd.extend(['--offset',0])
         with open(haps,'r') as hap_file:
             line = hap_file.readline()
             

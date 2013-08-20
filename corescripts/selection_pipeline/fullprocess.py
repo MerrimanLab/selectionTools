@@ -108,25 +108,6 @@ def parse_arguments():
 # Calls a subprocess to run vcf tools
 
 
-def run_aa_annotate_vcf(options,config):
-    cmd = []
-    output_name= options.output_prefix + '_aachanged.haps'
-    py_executable = config['python']['python_executable']
-    aa_annotate = config['ancestral_allele']['ancestral_allele_script']
-    logger.debug('Attempting to run ancestral allele annotation')
-    for file in os.listdir(config['ancestral_allele']['ancestral_fasta_dir']):
-        if fnmatch.fnmatch(file,config['ancestral_allele']['ancestral_prefix'].replace('chr',options.chromosome)):
-            ancestral_fasta = file
-    cmd.append(py_executable)
-    cmd.append(aa_annotate)
-    cmd.extend(['-v',options.vcf_input ,'-c', options.chromosome, '-o', output_name,'-a',os.path.join(config['ancestral_allele']['ancestral_fasta_dir'],ancestral_fasta)])
-    try:
-        subprocess.call(cmd)
-    except:
-        logger.error("ancestral allele annotation failed to run" + ' '.join(cmd))
-        sys.exit(SUBPROCESS_FAILED_EXIT)
-    return output_name
-
 def main():
     options = parse_arguments()
     config = parse_config(options)
