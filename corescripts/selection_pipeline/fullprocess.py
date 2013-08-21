@@ -111,7 +111,7 @@ def parse_arguments():
 def main():
     options = parse_arguments()
     config = parse_config(options)
-    if(config['system']['nesi']==True):
+    if(config['system']['nesi']=="True"):
         LoadLevelerRun(options,config)
     else:
         StandardRun(options,config)        
