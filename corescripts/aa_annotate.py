@@ -23,7 +23,7 @@ import gzip
 # --chr Chromosome
 # --output Output file
 # --format |High|Low|
-#
+# optional reference chromosome fasta can be used also
 
 #
 # 10000 genomesfasta Ancestral allele file can be downloaded from
@@ -51,18 +51,23 @@ import gzip
 # TODO Shrink the classes down so that there is far less repeated code.
 #
 
-
-def annotate_vcf(options):
+def aa_seq(options):
     f = Fasta(options.ancestralfasta)
     keyz = (f.keys())
     chroms = {}
+    for key in keyz:
+        if(options.ref_fasta != None):
+            chroms[(key.split(' '))[0]] = key
+        else:
+            chroms[(key.split(':'))[2]] = key
+    aaSeq = f[chroms[options.chromosome]]
+    return(aaSeq)
+
+def annotate_vcf(options):
     if(options.output != None):
         output = open(options.output, 'w')
     #TODO MAKE WORK WITH REFERENCE FASTA
-    for key in keyz:
-        chroms[(key.split(':'))[2]] = key
-    
-    aaSeq = f[chroms[options.chromosome]]
+    aaSeq = aa_seq(options)
     vcf_reader = vcf.Reader(filename=options.vcf_file)
     
     for record in vcf_reader:
@@ -111,7 +116,6 @@ def aa_check(realAA,ref,alt,format,line):
                 newLine = line.split()
                 newLine[3] = realAA
                 newLine[4] = ref
-                #print(newLine)
                 for i in range(5,len(newLine)):
                         newLine[i] = '1'
             return ' '.join(newLine)
@@ -121,13 +125,7 @@ def aa_check(realAA,ref,alt,format,line):
 
 
 def annotate_haps(options):
-    f = Fasta(options.ancestralfasta)
-    keyz = (f.keys())
-    chroms = {}
-    for key in keyz:
-        chroms[(key.split(':'))[2]] = key
-    
-    aaSeq = f[chroms[options.chromosome]]
+    aaSeq = aa_seq(options)
     output = None
     if(options.output != None):
         output = open(options.output, 'w')
@@ -137,8 +135,8 @@ def annotate_haps(options):
             pos = int(lineSplit[2])
             ref = lineSplit[3]
             alt = lineSplit[4]
-            tempSeq=aaSeq[pos]
-            #print(tempSeq)
+            tempSeq=aaSeq[pos].decode()
+            #print(lineSplit)
             outputLine = aa_check(tempSeq,ref,alt,options.format,line) 
             if(outputLine != None):
                 if(options.output != None):
@@ -150,7 +148,8 @@ def annotate_haps(options):
 def main():
     parser = OptionParser()
     parser.add_option('-i','--haps',dest='haps',help="Haplotype File (.haps)")
-    parser.add_option('-a','--aa', dest='ancestralfasta',help="Ancestral Allele FastA file")
+    parser.add_option('-a','--aa', dest='ancestralfasta',help="Ancestral Allele Fasta file")
+    parser.add_option('--ref-fasta',action='store_true',dest='ref_fasta',help='Use reference fasta which does is not split chromosome by chromosome')
     parser.add_option('-c','--chr',dest="chromosome",help="Chromosome")
     parser.add_option('-o','--output',dest="output",help="Output File (optional)")
     parser.add_option('-f','--format',dest="format",help="Format us High or use Low & High")

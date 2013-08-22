@@ -4,6 +4,7 @@ import sys
 import re
 from run_pipeline import CommandTemplate
 
+from threading import Thread
 
 #For matching the file names
 import fnmatch
@@ -52,7 +53,7 @@ class StandardRun(CommandTemplate):
             return False
         if(self.which(config['ancestral_allele']['ancestral_allele_script'],'ancestral_allele') is None):
             return False
-        if(self.which(config['impute']['impute_executable'],'impute2') is None):
+        if(self.which(config['impute2']['impute_executable'],'impute2') is None):
             return False
         if(self.which(config['Rscript']['indel_filter'],'indel_filter') is None):
             return False
@@ -87,7 +88,9 @@ class StandardRun(CommandTemplate):
         logger.info(ihh)
         logger.info("Goodbye :)")
  
-    def run_subprocess(self,command,tool):   
+    def run_subprocess(self,command,tool):  
+        print(tool)
+        print(command)
         try:
             exit_code = subprocess.call(command) 
         except:
@@ -121,7 +124,7 @@ class StandardRun(CommandTemplate):
     #Calls a subprocess to run impute   
 
         
-    def impute_worker(q):
+    def impute_worker(self,q):
         while True:
             cmd=q.get()
             self.run_subprocess(cmd,'impute2')
@@ -132,12 +135,14 @@ class StandardRun(CommandTemplate):
         (cmds,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps)
         threads=self.threads
         no_commands=len(cmds)
-        for i in range(thread):
-            t = Thread(target=impute_worker,args=imputeQueue)
+        #print(cmds)
+        for i in range(int(threads)):
+            t = Thread(target=self.impute_worker,args=[imputeQueue])
             t.daemon = True
+            t.start()
         for cmd in cmds:
-            q.put(cmd)
-        impute_queue.join()
+            imputeQueue.put(cmd)
+        imputeQueue.join()
         CommandTemplate.join_impute2_files(options,config,output_prefix,no_commands)
         return(output_prefix+'.haps') 
          
@@ -148,7 +153,7 @@ class StandardRun(CommandTemplate):
         return(output_name)
  
     def run_aa_annotate_haps(self,options,config,haps):
-        (cmd,output_name) = CommandTemplate.indel_filter(self,options,config,haps)
+        (cmd,output_name) = CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
         self.run_subprocess(cmd,'ancestral_annotation')
         return (output_name)
     
@@ -161,7 +166,7 @@ class StandardRun(CommandTemplate):
         cores=self.threads
         cmd.extend(['--cores',cores])
         cmd.extend(['--working_dir','.'])
-        cmd.extend(['--offset',0])
+        cmd.extend(['--offset','1'])
         with open(haps,'r') as hap_file:
             line = hap_file.readline()
             

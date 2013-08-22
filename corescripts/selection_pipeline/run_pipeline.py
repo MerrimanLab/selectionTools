@@ -1,6 +1,8 @@
 import re
 import os
 import fnmatch
+import sys
+import subprocess
 
 from optparse import OptionParser
 
@@ -64,11 +66,11 @@ class CommandTemplate(object):
         return(cmd,output_name)
 
     def join_impute2_files(options,config,output_prefix,no_commands):
-        output_haps=open(output_prefix+'.haps','wb')
-        output_warnings=open(output_prefix+'.warnings','wb')
-        output_info=open(output_prefix+'.info','wb')
+        output_haps=open(output_prefix+'.haps','w')
+        output_warnings=open(output_prefix+'.warnings','w')
+        output_info=open(output_prefix+'.info','w')
         for i in range(no_commands):
-            with open(output_prefix+'_'+str(i)+'haps','r') as h:
+            with open(output_prefix+'_'+str(i)+'.haps','r') as h:
                 with open(output_prefix + '_'+str(i)+'.warnings','r') as w:
                     with open(output_prefix + '_'+str(i) + '.info','r')as f:
                         output_haps.write(h.read())
@@ -90,27 +92,32 @@ class CommandTemplate(object):
         logger.debug('Attempting to call impute2 the data')
         impute2=config['impute2']['impute_executable']
         distance=config['impute2']['chromosome_split_size']
-        genetic_map_dir=config['impute2']['genetic_map_dir']
+        genetic_map_dir=config['impute2']['impute_map_dir']
         genetic_map=''
-        for file in os.listdir(config['impute2']['genetic_map_dir']):
-            if fnmatch.fnmatch(file,config['impute2']['genetic_map_chr'].replace('?',options.chromosome)):
-                genetic_map = file
+        for file in os.listdir(config['impute2']['impute_map_dir']):
+            if fnmatch.fnmatch(file,config['impute2']['impute_map_prefix'].replace('?',options.chromosome)):
+                genetic_map = os.path.join(config['impute2']['impute_map_dir'],file)
         
         legend_file =''
         for file in os.listdir(config['impute2']['impute_reference_dir']):
-            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.legend')):
-                legend_file = file
+            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome)+'.legend'):
+                legend_file = os.path.join(config['impute2']['impute_reference_dir'],file)
         
         hap_file = ''
+        print(config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.hap'))
         for file in os.listdir(config['impute2']['impute_reference_dir']):
-            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.hap')):
-                hap_file = file
+            if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome)+'.hap'):
+                hap_file = os.path.join(config['impute2']['impute_reference_dir'],file)
+        print(hap_file)
+        print(legend_file)
         distance=int(distance) * 1000000
         # Break files into 5 megabase regions.
         try:
-            subprocess.call("`tail -1 ${0}| awk '{print $3}'`".format(haps),stdout=subprocess.PIPE) 
+            print("tail -1 {0}| awk '{{print $3}}'".format(haps))
+            proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Tail command failed on haps file")
+            sys.exit(SUBPROCESS_FAILED_EXIT)
         #Get the max position from your haps file# 
         max_position=int(proc.stdout.read().strip())
         no_of_impute_jobs=max_position//distance + 1
@@ -123,7 +130,7 @@ class CommandTemplate(object):
             individual_command=cmd_template
             individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
             individual_prefix=prefix + '_'+ str(i)
-            individual_command.extend('-o',individual_prefix+'.haps','-w',individual_prefix + '.warninigs','-i',individual_prefix +'.info')
+            individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
             cmds.append(individual_command)
         return (cmds,prefix)
              
@@ -134,12 +141,16 @@ class CommandTemplate(object):
         py_executable = config['python']['python_executable']
         aa_annotate = config['ancestral_allele']['ancestral_allele_script']
         logger.debug('Attempting to run ancestral allele annotation')
-        for file in os.listdir(config['ancestral_allele']['ancestral_fasta_dir']):
-            if fnmatch.fnmatch(file,config['ancestral_allele']['ancestral_prefix'].replace('?',options.chromosome)):
-                ancestral_fasta = file
         cmd.append(py_executable)
         cmd.append(aa_annotate)
-        cmd.extend(['-i',haps ,'-c', options.chromosome, '-o', output_name,'-a',os.path.join(config['ancestral_allele']['ancestral_fasta_dir'],ancestral_fasta)])
+        if('reference_fasta' in config['ancestral_allele'].keys()):
+            cmd.append('--ref-fasta')
+            ancestral_fasta=config['ancestral_allele']['reference_fasta']
+        else:
+            for file in os.listdir(config['ancestral_allele']['ancestral_fasta_dir']):
+                if fnmatch.fnmatch(file,config['ancestral_allele']['ancestral_prefix'].replace('?',options.chromosome)):
+                    ancestral_fasta = os.path.join(config['ancestral_allele']['ancestral_fasta_dir'],file)
+        cmd.extend(['-i',haps ,'-c', options.chromosome, '-o', output_name,'-a',ancestral_fasta])
         return (cmd,output_name)
 
     def run_multi_coreihh(self,options,config,haps):
