@@ -155,7 +155,7 @@ class CommandTemplate(object):
 
     def run_multi_coreihh(self,options,config,haps):
         cmd=[]
-        output_name= options.output_prefix + '.ihh'
+        output_name= options.output_prefix + 'chr' + options.chromosome+ '.ihh'
         rscript=config['Rscript']['rscript_executable']
         multicore_ihh=config['multicore_ihh']['multicore_ihh']
         window=config['multicore_ihh']['window']
