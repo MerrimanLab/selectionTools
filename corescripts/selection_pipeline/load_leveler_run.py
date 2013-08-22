@@ -87,7 +87,6 @@ class LoadLevelerRun(object):
         self.load_leveler_script.write(self.string_to_bytes(' '.join(cmd)))
         self.load_leveler_script.write(self.string_to_bytes('\n'))
     def queue_ll(self):
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue))
         self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue+'\n'))
     def mpi_task(self,threads):
         self.load_leveler_script.write(self.string_to_bytes(load_leveler_mpi.format(threads)))
@@ -135,7 +134,7 @@ class LoadLevelerRun(object):
         logger.info("Goodbye :)")
     # Need to make multicore ihh work using only 
     def run_multi_coreihh(self,options,config,haps):
-        (cmd,out_name) = CommandTemplate.run_multi_coreihh(self,options,config,haps)
+        (cmd,prefix) = CommandTemplate.run_multi_coreihh(self,options,config,haps)
         threads = '10'
         cmd.extend(['--cores',threads])
         cmd.extend(['--working_dir','.'])
@@ -150,10 +149,9 @@ class LoadLevelerRun(object):
         self.write_step_preamble(memory_required,wall_time,dependencies) 
         self.write_job_preamble(memory_required,cmd)
         return( step_name + ">=0 ",output_name) 
-          
 
     def run_aa_annotate_haps(self,options,config,haps):
-        (cmd,output_name) =CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
+        (cmd,prefix) =CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
         memory_required="4"
         wall_time="11:59:00"
         step_name = prefix + self.get_date_string()
@@ -166,7 +164,7 @@ class LoadLevelerRun(object):
         return( step_name + ">=0 ",output_name) 
 
     def indel_filter(self,options,config,haps,dependencies):
-        (cmd,output_name) = CommandTemplate.indel_filter(self,options,config,haps)
+        (cmd,prefix) = CommandTemplate.indel_filter(self,options,config,haps)
         memory_required="4"
         wall_time="11:59:00"
         step_name = prefix + self.get_date_string()
@@ -191,7 +189,7 @@ class LoadLevelerRun(object):
         self.queue_ll()
         self.write_job_preamble(memory_required,cmd)
         logger.debug("Finished preparing shape it for running on nesi")
-     
+        return(step_name +">=0",prefix + '.haps')
     def run_vcf_to_plink(self,options,config):
         logger.debug("Preparing vcf_to_plink for running on pan")
         (cmd,prefix) = CommandTemplate.run_vcf_to_plink(self,options,config)
@@ -220,22 +218,30 @@ class LoadLevelerRun(object):
         memory_required="4"
         wall_time="11:59:00"
         step_name = prefix + self.get_date_string()
-        self.write_step_preamble(memory_required,wall_time,step_name)
+        self.write_step_preamble(memory_required,wall_time,step_name,dependencies)
         self.serial_task(1)
         self.queue_ll()
         self.write_job_preamble(memory_required,cmd)
         return(step_name)
+    def create_impute_commands(self,prefix,haps,dependencies)
+        step_name = prefix + self.get_date_string()
+        distance=int(self.config['impute2']['chromosome_split_size'])*1000000
+        # CREATE IMPUTE PAIRS 
+        return(step_name + ">= 0",cmds)       
+         
 
+        return(#cmds,#create_impute_split_step_name)
     def run_impute2(self,options,config,haps,dependencies):
-        (cmds,output_prefix) = CommandTemplate.run_impute2(self,options,config.haps)
+        (cmd_template,prefix) = CommandTemplate.run_impute2(self,options,config,haps)
         memory_required="20"
         output_dependencies=[]
+        (cmds,create_impute_split_step_name)=self.create_impute_commands(prefix,haps,dependencies)
         no_commands=len(cmds)
         for cmd in cmds:
             memory_required=""
             wall_time="11:59:00"
             step_name = prefix + self.get_date_string()
-            self.write_step_preamble(memory_required,wall_time,step_name)
+            self.write_step_preamble(memory_required,wall_time,step_name,create_impute_split_step_name)
             self.serial_task(1)
             self.queue_ll()
             self.write_job_preamble(memory_required,cmd)
@@ -249,7 +255,7 @@ class LoadLevelerRun(object):
         memory_required="4"
         wall_time="11:59:00"
         step_name = prefix + self.get_date_string()
-        self.write_step_preamble(memory_required,wall_time,step_name)
+        self.write_step_preamble(memory_required,wall_time,step_name,dependencies)
         self.serial_task(1)
         self.queue_ll()
         self.write_job_preamble(memory_required,cmd)

@@ -87,11 +87,9 @@ class CommandTemplate(object):
      
 
     def run_impute2(self,options,config,haps):
-        cmds=[]
         prefix = options.output_prefix + options.chromosome + '_impute2'
         logger.debug('Attempting to call impute2 the data')
         impute2=config['impute2']['impute_executable']
-        distance=config['impute2']['chromosome_split_size']
         genetic_map_dir=config['impute2']['impute_map_dir']
         genetic_map=''
         for file in os.listdir(config['impute2']['impute_map_dir']):
@@ -108,31 +106,11 @@ class CommandTemplate(object):
         for file in os.listdir(config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome)+'.hap'):
                 hap_file = os.path.join(config['impute2']['impute_reference_dir'],file)
-        print(hap_file)
-        print(legend_file)
-        distance=int(distance) * 1000000
-        # Break files into 5 megabase regions.
-        try:
-            print("tail -1 {0}| awk '{{print $3}}'".format(haps))
-            proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
-        except:
-            logger.error("Tail command failed on haps file")
-            sys.exit(SUBPROCESS_FAILED_EXIT)
-        #Get the max position from your haps file# 
-        max_position=int(proc.stdout.read().strip())
-        no_of_impute_jobs=max_position//distance + 1
-        
         #create the command template
         cmd_template=[]
         cmd_template.append(impute2)
         cmd_template.extend(['-m',genetic_map,'-h',hap_file,'-l',legend_file,'-known_haps_g',haps])
-        for i in range(0,no_of_impute_jobs):
-            individual_command=cmd_template
-            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
-            individual_prefix=prefix + '_'+ str(i)
-            individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
-            cmds.append(individual_command)
-        return (cmds,prefix)
+        return (cmd_template,prefix)
              
 
     def run_aa_annotate_haps(self,options,config,haps):

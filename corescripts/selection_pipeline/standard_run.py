@@ -18,6 +18,13 @@ logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT=10
 MISSING_EXECUTABLE_ERROR=5
 
+python_impute2_script="""
+        for i in range(0,no_of_impute_jobs):
+            individual_command=cmd_template
+            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
+            individual_prefix=prefix + '_'+ str(i)
+            individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
+            cmds.append(individual_command)"""
 class StandardRun(CommandTemplate):
    
     def is_script(self,fpath):
@@ -132,9 +139,25 @@ class StandardRun(CommandTemplate):
  
     def run_impute2(self,options,config,haps):
         imputeQueue=queue.Queue()
-        (cmds,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps)
-        threads=self.threads
-        no_commands=len(cmds)
+        (cmd_template,output_prefix,legend_file,hap_file,genetic_map) = CommandTemplate.run_impute2(self,options,config,haps)
+        distance=int(config['impute2']['chromosome_split_size']) * 1000000
+        # Break files into 5 megabase regions.
+        try:
+            print("tail -1 {0}| awk '{{print $3}}'".format(haps))
+            proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
+        except:
+            logger.error("Tail command failed on haps file")
+            sys.exit(SUBPROCESS_FAILED_EXIT)
+        #Get the max position from your haps file# 
+        no_of_impute_jobs = int(proc.stdout.read())//distance + 1
+        #create the command template
+        #Get the max position from your haps file# 
+        for i in range(0,no_of_impute_jobs):
+            individual_command=cmd_template
+            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
+            individual_prefix=prefix + '_'+ str(i)
+            individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
+            cmds.append(individual_command)
         #print(cmds)
         for i in range(int(threads)):
             t = Thread(target=self.impute_worker,args=[imputeQueue])
@@ -167,8 +190,6 @@ class StandardRun(CommandTemplate):
         cmd.extend(['--cores',cores])
         cmd.extend(['--working_dir','.'])
         cmd.extend(['--offset','1'])
-            
-   
         self.run_subprocess(cmd,'multcore_ihh')
         os.rename(options.population+'_chr_'+options.chromosome+"_wd_"+'.'+"_.ihh",output_name)
         return output_name
