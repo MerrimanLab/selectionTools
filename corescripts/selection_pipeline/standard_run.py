@@ -167,8 +167,6 @@ class StandardRun(CommandTemplate):
         cmd.extend(['--cores',cores])
         cmd.extend(['--working_dir','.'])
         cmd.extend(['--offset','1'])
-        with open(haps,'r') as hap_file:
-            line = hap_file.readline()
             
    
         self.run_subprocess(cmd,'multcore_ihh')

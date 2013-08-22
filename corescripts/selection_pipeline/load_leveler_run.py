@@ -59,7 +59,6 @@ load_leveler_serial ="""
 load_leveler_mpi = """
         #@ job_type = parallel
         #@ total_tasks_threads = {0}
-        #@ blocking = {1}
 """
 load_leveler_dependency = """
         #@ dependency = ({0})
@@ -81,7 +80,29 @@ class LoadLevelerRun(object):
     """ Load leveler class takes the pipeline and runs the PHD on the nesi pan 
         cluster.
     """
+    #We run this to generate a script for every job
+    def write_job_preamble(self,memory_required,cmd):
+        ulimit = str(int(memory_required) * 1024 * 1024)
+        self.load_leveler_script.write(self.string_to_bytes(load_leveler_ulimit.format(ulimit)))
+        self.load_leveler_script.write(self.string_to_bytes(' '.join(cmd)))
+        self.load_leveler_script.write(self.string_to_bytes('\n'))
+    def queue_ll(self):
+        self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue))
+        self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue+'\n'))
+    def mpi_task(self,threads):
+        self.load_leveler_script.write(self.string_to_bytes(load_leveler_mpi.format(threads)))
+    def serial_task(self,threads):
+        self.load_leveler_script.write(self.string_to_bytes(load_leveler_serial.format(threads)))
+
+    def write_step_preamble(self,memory_required,wall_time,step_name,dependencies=None):
+        self.load_leveler_script.write(self.string_to_bytes(self.script_template)) 
+        if(dependencies is not None):
+            self.load_leveler_script.write(self.string_to_bytes(load_leveler_dependency.format(dependencies)))
+        self.load_leveler_script.write(bytes(load_leveler_step.format(step_name,wall_time,memory_required),'UTF-8'))
+
     def __init__(self,options,config):
+        self.options=options
+        self.config=config
         logger.debug('Running the script on nesi')
         self.group=config['nesi']['group'] 
         self.nesi_class=config['nesi']['class']
@@ -112,56 +133,128 @@ class LoadLevelerRun(object):
         logger.info(haps)
         logger.info(ihh)
         logger.info("Goodbye :)")
+    # Need to make multicore ihh work using only 
+    def run_multi_coreihh(self,options,config,haps):
+        (cmd,out_name) = CommandTemplate.run_multi_coreihh(self,options,config,haps)
+        threads = '10'
+        cmd.extend(['--cores',threads])
+        cmd.extend(['--working_dir','.'])
+        cmd.extend(['--offset','1'])
+        memory_required=str(int(threads)*3)
+        wall_time="11:59:00"
+        step_name = prefix + self.get_date_string()
+        self.write_step_preamble(memory_required,wall_time,step_name)
+        #10 threads for shapeit
+        self.serial_task(10)
+        self.queue_ll()
+        self.write_step_preamble(memory_required,wall_time,dependencies) 
+        self.write_job_preamble(memory_required,cmd)
+        return( step_name + ">=0 ",output_name) 
+          
+
+    def run_aa_annotate_haps(self,options,config,haps):
+        (cmd,output_name) =CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
+        memory_required="4"
+        wall_time="11:59:00"
+        step_name = prefix + self.get_date_string()
+        self.write_step_preamble(memory_required,wall_time,step_name)
+        #10 threads for shapeit
+        self.serial_task(10)
+        self.queue_ll()
+        self.write_step_preamble(memory_required,wall_time,dependencies) 
+        self.write_job_preamble(memory_required,cmd)
+        return( step_name + ">=0 ",output_name) 
+
+    def indel_filter(self,options,config,haps,dependencies):
+        (cmd,output_name) = CommandTemplate.indel_filter(self,options,config,haps)
+        memory_required="4"
+        wall_time="11:59:00"
+        step_name = prefix + self.get_date_string()
+        self.write_step_preamble(memory_required,wall_time,step_name)
+        #10 threads for shapeit
+        self.serial_task(10)
+        self.queue_ll()
+        self.write_step_preamble(memory_required,wall_time,dependencies) 
+        self.write_job_preamble(memory_required,cmd)
+        return( step_name + ">=0 ",output_name) 
 
     def run_shape_it(self,options,config,ped,map,dependencies):
         logger.debug("Preparing shapeit for running on nesi")
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
-        cmd.extend(['--thread',
-        self.load_leveler_script.write(self.string_to_bytes(self.script_template)) 
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_serial.format(1)))
-        memory_required = "30"
-        ulimit = str(int(memory_required) * 1024 * 1024)
+        cmd.extend(['--thread','10'])
+        memory_required="24"
+        wall_time="11:59:00"
         step_name = prefix + self.get_date_string()
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue))
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_ulimit.format(ulimit)))
-        self.load_leveler_script.write(self.string_to_bytes(' '.join(cmd)))
-        self.load_leveler_script.write(self.string_to_bytes('\n'))
+        self.write_step_preamble(memory_required,wall_time,step_name)
+        #10 threads for shapeit
+        self.serial_task(10)
+        self.queue_ll()
+        self.write_job_preamble(memory_required,cmd)
         logger.debug("Finished preparing shape it for running on nesi")
      
     def run_vcf_to_plink(self,options,config):
         logger.debug("Preparing vcf_to_plink for running on pan")
         (cmd,prefix) = CommandTemplate.run_vcf_to_plink(self,options,config)
-        print(self.script_template)
-        self.load_leveler_script.write(bytes(self.script_template,'UTF-8'))
-        self.load_leveler_script.write(bytes(load_leveler_serial.format(1),'UTF-8'))
-        # Set up wall time and memory required
         memory_required="4"
-        ulimit=str(int(memory_required) * 1024 * 1024)
-        step_name=prefix+self.get_date_string()
-        self.load_leveler_script.write(bytes(load_leveler_step.format(step_name,"11:59:00",memory_required),'UTF-8'))
-        self.load_leveler_script.write(bytes(load_leveler_queue,'UTF-8'))
-        self.load_leveler_script.write(bytes(load_leveler_ulimit.format(ulimit),'UTF-8'))
-        self.load_leveler_script.write(bytes(' '.join(cmd),'UTF-8'))
-        self.load_leveler_script.write(self.string_to_bytes('\n'))
+        wall_time="11:59:00"
+        step_name = prefix + self.get_date_string()
+        self.write_step_preamble(memory_required,wall_time,step_name)
+        self.serial_task(1)
+        self.queue_ll()
+        self.write_job_preamble(memory_required,cmd)
+        #and queue
         logger.debug("Finished preparing vcf_to_plink for running on pan")
         return(step_name + '>= 0',prefix + '.ped', prefix+'.map',) 
-        
-          
+    def join_impute2_files(self,output_prefix,no_commands,dependencies):
+        step_name = prefix + self.get_date_string()
+        haps=[]
+        warnings=[]
+        info=[]
+        for i in range(no_commands):
+            haps.append(output_prefix+'_'+str(i)+'.haps')
+            warnings.append(output_prefix+'_'+str(i)+'.warnings')
+            info.append(output_prefix+'_'+str(i)+'.info')
+        command = 'cat {0} > {1}'.format(' '.join(haps)) + '\n'
+        command = command +  'cat {0} > {1}'.format(' '.join(haps)) + '\n'
+        command = command + 'cat {0} > {1}'.format(' '.join(haps)) + '\n'
+        memory_required="4"
+        wall_time="11:59:00"
+        step_name = prefix + self.get_date_string()
+        self.write_step_preamble(memory_required,wall_time,step_name)
+        self.serial_task(1)
+        self.queue_ll()
+        self.write_job_preamble(memory_required,cmd)
+        return(step_name)
+
+    def run_impute2(self,options,config,haps,dependencies):
+        (cmds,output_prefix) = CommandTemplate.run_impute2(self,options,config.haps)
+        memory_required="20"
+        output_dependencies=[]
+        no_commands=len(cmds)
+        for cmd in cmds:
+            memory_required=""
+            wall_time="11:59:00"
+            step_name = prefix + self.get_date_string()
+            self.write_step_preamble(memory_required,wall_time,step_name)
+            self.serial_task(1)
+            self.queue_ll()
+            self.write_job_preamble(memory_required,cmd)
+            output_dependencies.append(step_name + ">= 0")
+        join_dependency=self.join_impute2_files(output_dependencies,no_commands,output_dependencies)
+        return(join_dependency + ">=0",output_prefix+'.haps')
+
     def run_plink_filter(self,options, config,ped,map,dependencies):
         logger.debug("Preparing plink filtering for running on pan")
         (cmd,prefix) = CommandTemplate.run_plink_filter(self,options,config,ped,map)
-        self.load_leveler_script.write(self.string_to_bytes(self.script_template))
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_serial.format(1)))
         memory_required="4"
-        ulimit=str(int(memory_required) * 1024 * 1024)
-        step_name=prefix + self.get_date_string()
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_step.format(step_name,"11:59:00",memory_required)))
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_dependency.format(dependencies)))
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue))
-        self.load_leveler_script.write(self.string_to_bytes(load_leveler_ulimit.format(ulimit)))
-        self.load_leveler_script.write(self.string_to_bytes(' '.join(cmd)))
-        self.load_leveler_script.write(self.string_to_bytes('\n'))
+        wall_time="11:59:00"
+        step_name = prefix + self.get_date_string()
+        self.write_step_preamble(memory_required,wall_time,step_name)
+        self.serial_task(1)
+        self.queue_ll()
+        self.write_job_preamble(memory_required,cmd)
         logger.debug("Finished preparing plink filtering for running on pan")
+        return(step_name + ">=0",prefix+'.ped',prefix+'.map')
     
     # Utility functions used for setting up the job step names
     def string_to_bytes(self,input):
