@@ -93,6 +93,7 @@ class LoadLevelerRun(object):
              self.script_template = self.script_template + (load_leveler_account_no.format(self.account_no))
         self.create_load_leveler_script(options,config)
         self.load_leveler_script.close()
+
     def create_load_leveler_script(self,options,config):
         if(options.phased_vcf): 
             (dependecies,haps) = self.ancestral_annotation_vcf(options,config)
@@ -112,6 +113,20 @@ class LoadLevelerRun(object):
         logger.info(ihh)
         logger.info("Goodbye :)")
 
+    def run_shape_it(self,options,config,ped,map,dependencies):
+        logger.debug("Preparing shapeit for running on nesi")
+        (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
+        cmd.extend(['--thread',
+        self.load_leveler_script.write(self.string_to_bytes(self.script_template)) 
+        self.load_leveler_script.write(self.string_to_bytes(load_leveler_serial.format(1)))
+        memory_required = "30"
+        ulimit = str(int(memory_required) * 1024 * 1024)
+        step_name = prefix + self.get_date_string()
+        self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue))
+        self.load_leveler_script.write(self.string_to_bytes(load_leveler_ulimit.format(ulimit)))
+        self.load_leveler_script.write(self.string_to_bytes(' '.join(cmd)))
+        self.load_leveler_script.write(self.string_to_bytes('\n'))
+        logger.debug("Finished preparing shape it for running on nesi")
      
     def run_vcf_to_plink(self,options,config):
         logger.debug("Preparing vcf_to_plink for running on pan")
@@ -154,3 +169,4 @@ class LoadLevelerRun(object):
 
     def get_date_string(self):
         return str(datetime.now()).replace(' ','').replace(':','').replace('.','').replace('-','')
+    
