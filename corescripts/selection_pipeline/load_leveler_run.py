@@ -99,6 +99,9 @@ class LoadLevelerRun(object):
             self.load_leveler_script.write(self.string_to_bytes(load_leveler_dependency.format(dependencies)))
         self.load_leveler_script.write(bytes(load_leveler_step.format(step_name,wall_time,memory_required),'UTF-8'))
 
+    def get_dependency(self,dependency):
+        return dependency + " >=0"
+    #Could potentially fuck out a whole part filtered out of your daat#
     def __init__(self,options,config):
         self.options=options
         self.config=config
@@ -133,7 +136,7 @@ class LoadLevelerRun(object):
         logger.info(ihh)
         logger.info("Goodbye :)")
     # Need to make multicore ihh work using only 
-    def run_multi_coreihh(self,options,config,haps):
+    def run_multi_coreihh(self,options,config,haps,dependencies):
         (cmd,prefix) = CommandTemplate.run_multi_coreihh(self,options,config,haps)
         threads = '10'
         cmd.extend(['--cores',threads])
@@ -150,7 +153,7 @@ class LoadLevelerRun(object):
         self.write_job_preamble(memory_required,cmd)
         return( step_name + ">=0 ",output_name) 
 
-    def run_aa_annotate_haps(self,options,config,haps):
+    def run_aa_annotate_haps(self,options,config,haps,dependencies):
         (cmd,prefix) =CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
         memory_required="4"
         wall_time="11:59:00"
@@ -174,7 +177,7 @@ class LoadLevelerRun(object):
         self.queue_ll()
         self.write_step_preamble(memory_required,wall_time,dependencies) 
         self.write_job_preamble(memory_required,cmd)
-        return( step_name + ">=0 ",output_name) 
+        return(self.get_dependency(step_name),prefix) 
 
     def run_shape_it(self,options,config,ped,map,dependencies):
         logger.debug("Preparing shapeit for running on nesi")
@@ -218,25 +221,34 @@ class LoadLevelerRun(object):
         memory_required="4"
         wall_time="11:59:00"
         step_name = prefix + self.get_date_string()
-        self.write_step_preamble(memory_required,wall_time,step_name,dependencies)
+        self.write_step_preamble(memory_required,wall_time,step_name," && ".join(dependencies))
         self.serial_task(1)
         self.queue_ll()
-        self.write_job_preamble(memory_required,cmd)
-        return(step_name)
-    def create_impute_commands(self,prefix,haps,dependencies)
-        step_name = prefix + self.get_date_string()
-        distance=int(self.config['impute2']['chromosome_split_size'])*1000000
-        # CREATE IMPUTE PAIRS 
-        return(step_name + ">= 0",cmds)       
+        self.write_job_preamble(memory_required,command)
+        return(self.get_dependency(step_name))
+    def create_impute_commands(self,prefix,haps,cmd_template,no_jobs):
+        cmds=[]
+        for i in range(0,no_of_impute_jobs):
+            individual_command=cmd_template
+            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
+            individual_prefix=prefix + '_'+ str(i)
+            individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
+            cmds.append(individual_command)
+        return(self.get_dependency(step_name),cmds)       
          
 
-        return(#cmds,#create_impute_split_step_name)
     def run_impute2(self,options,config,haps,dependencies):
         (cmd_template,prefix) = CommandTemplate.run_impute2(self,options,config,haps)
         memory_required="20"
         output_dependencies=[]
+        try:
+            proc =subprocess.Popen( """tail -1 {0} > awk '{{print $2}}'""".format(join(options.vcf_input),stdout=subprocess.PIPE,shell=True))
+        except:
+            logger.error("Tail command failed on VCF input")
+            sys.exit(SUBPROCESS_FAILED_EXIT)
+        distance=int(self.config['impute2']['chromosome_split_size'])*1000000
+        no_of_impute_jobs = int(proc.stdout.read())//distance + 1
         (cmds,create_impute_split_step_name)=self.create_impute_commands(prefix,haps,dependencies)
-        no_commands=len(cmds)
         for cmd in cmds:
             memory_required=""
             wall_time="11:59:00"
@@ -245,9 +257,9 @@ class LoadLevelerRun(object):
             self.serial_task(1)
             self.queue_ll()
             self.write_job_preamble(memory_required,cmd)
-            output_dependencies.append(step_name + ">= 0")
-        join_dependency=self.join_impute2_files(output_dependencies,no_commands,output_dependencies)
-        return(join_dependency + ">=0",output_prefix+'.haps')
+            output_dependencies.append(self.get_dependency(step_name))
+        self.join_impute2_files(output_dependencies,no_commands,output_dependencies)
+        return(output_dependencies,output_prefix+'.haps')
 
     def run_plink_filter(self,options, config,ped,map,dependencies):
         logger.debug("Preparing plink filtering for running on pan")
@@ -260,7 +272,7 @@ class LoadLevelerRun(object):
         self.queue_ll()
         self.write_job_preamble(memory_required,cmd)
         logger.debug("Finished preparing plink filtering for running on pan")
-        return(step_name + ">=0",prefix+'.ped',prefix+'.map')
+        return(self.get_dependency(step_name),prefix+'.ped',prefix+'.map')
     
     # Utility functions used for setting up the job step names
     def string_to_bytes(self,input):
