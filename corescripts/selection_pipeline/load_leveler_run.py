@@ -98,14 +98,18 @@ class LoadLevelerRun(object):
     # to fix this we need to do a case statement for all the jobs_steps
     
     #We run this to generate a script for every job
-    def write_job_preamble(self,memory_required,cmd,job_step,inList=True):
+    def write_job_preamble(self,memory_required,cmd,job_step,inList=True,modules=None):
         ulimit = str(int(memory_required) * 1024 * 1024)
         command = ''
         command = command + (load_leveler_ulimit.format(ulimit))
+        if(modules is not None):
+            for module in modules:
+                command = command +('module load '+ module) + '\n'
         if(inList):
             command = command +(' '.join(cmd))
         else:
             command = command + (cmd) + '\n'
+           
         self.job_commands.append(command)
         self.job_steps.append(job_step)
     def queue_ll(self):
@@ -193,9 +197,11 @@ class LoadLevelerRun(object):
         step_name = self.get_step_name(prefix)
         self.write_step_preamble(memory_required,wall_time,step_name,dependencies)
         #10 threads for shapeit
-        self.serial_task(10)
+        self.serial_task(1)
         self.queue_ll()
-        self.write_job_preamble(memory_required,cmd,step_name)
+        modules=[]
+        modules.append('python/3.3.2')
+        self.write_job_preamble(memory_required,cmd,step_name,modules=modules)
         return( step_name + ">=0 ",prefix+'.haps') 
 
     def indel_filter(self,options,config,haps,dependencies):
@@ -205,7 +211,7 @@ class LoadLevelerRun(object):
         step_name = self.get_step_name(prefix)
         self.write_step_preamble(memory_required,wall_time,step_name,dependencies)
         #10 threads for shapeit
-        self.serial_task(10)
+        self.serial_task(1)
         self.queue_ll()
         self.write_job_preamble(memory_required,cmd,step_name)
         return(self.get_dependency(step_name),prefix+'.haps') 
@@ -213,13 +219,13 @@ class LoadLevelerRun(object):
     def run_shape_it(self,options,config,ped,map,dependencies):
         logger.debug("Preparing shapeit for running on nesi")
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
-        cmd.extend(['--thread','10'])
-        memory_required="24"
-        wall_time="11:59:00"
+        cmd.extend(['--thread','2'])
+        memory_required="10"
+        wall_time="00:59:00"
         step_name = self.get_step_name(prefix)
         self.write_step_preamble(memory_required,wall_time,step_name,dependencies)
         #10 threads for shapeit
-        self.serial_task(10)
+        self.serial_task(2)
         self.queue_ll()
         self.write_job_preamble(memory_required,cmd,step_name)
         logger.debug("Finished preparing shape it for running on nesi")

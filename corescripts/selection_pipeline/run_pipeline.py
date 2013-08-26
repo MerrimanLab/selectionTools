@@ -116,7 +116,7 @@ class CommandTemplate(object):
     def run_aa_annotate_haps(self,options,config,haps):
         cmd = []
         output_name= options.output_prefix + '_aachanged.haps'
-        py_executable = config['python']['python_executable']
+        py_executable = config['ancestral_allele']['python_executable']
         aa_annotate = config['ancestral_allele']['ancestral_allele_script']
         logger.debug('Attempting to run ancestral allele annotation')
         cmd.append(py_executable)
