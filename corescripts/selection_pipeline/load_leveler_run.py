@@ -112,6 +112,7 @@ class LoadLevelerRun(object):
            
         self.job_commands.append(command)
         self.job_steps.append(job_step)
+    
     def queue_ll(self):
         self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue+'\n'))
     def mpi_task(self,threads):
@@ -173,22 +174,25 @@ class LoadLevelerRun(object):
         logger.info(haps)
         logger.info(ihh)
         logger.info("Goodbye :)")
-    # Need to make multicore ihh work using only 
+    
+    # Change multicore ihh so it uses the new arguments
     def run_multi_coreihh(self,options,config,haps,dependencies):
         (cmd,prefix) = CommandTemplate.run_multi_coreihh(self,options,config,haps)
-        threads = '10'
-        cmd.extend(['--cores',threads])
-        cmd.extend(['--working_dir','.'])
-        cmd.extend(['--offset','1'])
-        memory_required=str(int(threads)*3)
-        wall_time="11:59:00"
+        parralel_cores = '10'
+        cmd.extend(['--cores',parralel_cores])
+        memory_required=str(3)
+        wall_time="00:59:00"
+        r_script_path=config['rscript']['rscript_executable']
+        #retarded dependecy brought about by my retarded coding
+        python_executable='python'
+        nesi_script_dir=config['nesi']['nesi_script_dir']
+        cmd.extend(['--script_dir',nesi_script_dir,'--python',py_executable,'--rscript',r_script_path])
         step_name = self.get_step_name(prefix)
         self.write_step_preamble(memory_required,wall_time,step_name,dependencies)
-        #10 threads for shapeit
-        self.serial_task(10)
+        self.serial_task(1)
         self.queue_ll()
         self.write_job_preamble(memory_required,cmd,step_name)
-        return( step_name + ">=0 ",prefix + '.haps') 
+        return( self.get_dependency(step_name), prefix + '.haps') 
 
     def run_aa_annotate_haps(self,options,config,haps,dependencies):
         (cmd,prefix) =CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
@@ -200,6 +204,7 @@ class LoadLevelerRun(object):
         self.serial_task(1)
         self.queue_ll()
         modules=[]
+        #Make useful. so that its not just a hard coded value#
         modules.append('python/3.3.2')
         self.write_job_preamble(memory_required,cmd,step_name,modules=modules)
         return( step_name + ">=0 ",prefix+'.haps') 
@@ -229,7 +234,7 @@ class LoadLevelerRun(object):
         self.queue_ll()
         self.write_job_preamble(memory_required,cmd,step_name)
         logger.debug("Finished preparing shape it for running on nesi")
-        return(step_name +">=0",prefix + '.haps')
+        return(self.get_dependency(step_name),prefix + '.haps')
     def run_vcf_to_plink(self,options,config):
         logger.debug("Preparing vcf_to_plink for running on pan")
         (cmd,prefix) = CommandTemplate.run_vcf_to_plink(self,options,config)
@@ -242,7 +247,7 @@ class LoadLevelerRun(object):
         self.write_job_preamble(memory_required,cmd,step_name)
         #and queue
         logger.debug("Finished preparing vcf_to_plink for running on pan")
-        return(step_name + '>= 0',prefix + '.ped', prefix+'.map',) 
+        return(self.get_dependency(step_name),prefix + '.ped', prefix+'.map',) 
     def join_impute2_files(self,prefix,no_commands,dependencies):
         step_name = self.get_step_name(prefix)
         haps=[]
