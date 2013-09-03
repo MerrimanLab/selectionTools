@@ -1,4 +1,3 @@
-#
 # Python Script to perform for running the single process for our pipeline
 #
 # Murray Cadzow 

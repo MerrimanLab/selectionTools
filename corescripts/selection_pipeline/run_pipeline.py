@@ -56,7 +56,7 @@ class CommandTemplate(object):
 
     def indel_filter(self,options,config,haps):
         cmd = []    
-        output_name= options.output_prefix + options.chromosome + '_indel_filter.haps'        
+        output_name= options.output_prefix + options.chromosome + '_indel_filter'        
         logger.debug('Attempting to run the R indel and maf filter usually reserved for after phasing')
         rscript = config['Rscript']['rscript_executable']
         indel_filter = config['Rscript']['indel_filter']
@@ -115,7 +115,7 @@ class CommandTemplate(object):
 
     def run_aa_annotate_haps(self,options,config,haps):
         cmd = []
-        output_name= options.output_prefix + '_aachanged.haps'
+        output_name= options.output_prefix + '_aachanged'
         py_executable = config['ancestral_allele']['python_executable']
         aa_annotate = config['ancestral_allele']['ancestral_allele_script']
         logger.debug('Attempting to run ancestral allele annotation')

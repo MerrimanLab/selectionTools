@@ -52,8 +52,8 @@ load_leveler_template="""
         #@ shell = /bin/bash
         #@ group = {0}
         #@ class = {1}
-        #@ output = $(step_name).$(jobid).out
-        #@ error = $(step_name).$(jobid).err 
+        #@ output = logs/$(step_name).$(jobid).out
+        #@ error = logs/$(step_name).$(jobid).err 
 """
 load_leveler_step="""
         #@ step_name = {0}
@@ -112,6 +112,8 @@ class LoadLevelerRun(object):
            
         self.job_commands.append(command)
         self.job_steps.append(job_step)
+    def create_multicore_ihh_nesi(self,memory_required,cmd,job_step,inList,module=None):
+        return 0 
     def queue_ll(self):
         self.load_leveler_script.write(self.string_to_bytes(load_leveler_queue+'\n'))
     def mpi_task(self,threads):
@@ -127,7 +129,7 @@ class LoadLevelerRun(object):
 
     def get_dependency(self,dependency):
         return dependency + " >=0"
-    #Could potentially fuck out a whole part filtered out of your daat#
+    #Could potentially fuck out a whole part filtered out of your data
     def __init__(self,options,config):
         self.options=options
         self.config=config
@@ -136,6 +138,10 @@ class LoadLevelerRun(object):
         self.job_commands=[]
         self.job_steps=[]
         logger.debug('Running the script on nesi')
+        try:
+            os.makedirs('logs')
+        except OSError:
+            logger.warning("Could not create logs directory folder exists")
         self.group=config['nesi']['group'] 
         self.nesi_class=config['nesi']['class']
         self.account_no=config['nesi']['account_no']
@@ -187,8 +193,9 @@ class LoadLevelerRun(object):
         #10 threads for shapeit
         self.serial_task(10)
         self.queue_ll()
+        cmd.append('\n' + "mv *.ihh " +prefix)
         self.write_job_preamble(memory_required,cmd,step_name)
-        return( step_name + ">=0 ",prefix + '.haps') 
+        return( step_name + ">=0 ",prefix) 
 
     def run_aa_annotate_haps(self,options,config,haps,dependencies):
         (cmd,prefix) =CommandTemplate.run_aa_annotate_haps(self,options,config,haps)

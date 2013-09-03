@@ -6,6 +6,8 @@
 
 require(getopt)
 
+require(rehh) 
+require(multicore) #package for run in parallel in R.
 #script to split chromosome into x sized segments to compute iHH on
 args<-commandArgs(TRUE)
 spec = matrix(c(
@@ -98,8 +100,6 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
 ## works below here ##
 
 # Using rehh package to compute iHS  
-library(rehh) 
-library(multicore) #package for run in parallel in R.
 
 
 #hap_file="neutral_data_rehh/hap_neutral_"; 
