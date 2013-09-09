@@ -1,0 +1,6 @@
+[submodule "pyfasta"]
+	path = pyfasta
+	url = git@github.com:brentp/pyfasta.git
+[submodule "PyVCF"]
+	path = PyVCF
+	url = git@github.com:jamescasbon/PyVCF.git
