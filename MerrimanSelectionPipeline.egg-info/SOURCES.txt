@@ -1,0 +1,13 @@
+setup.py
+MerrimanSelectionPipeline.egg-info/PKG-INFO
+MerrimanSelectionPipeline.egg-info/SOURCES.txt
+MerrimanSelectionPipeline.egg-info/dependency_links.txt
+MerrimanSelectionPipeline.egg-info/entry_points.txt
+MerrimanSelectionPipeline.egg-info/not-zip-safe
+MerrimanSelectionPipeline.egg-info/top_level.txt
+selection_pipeline/__init__.py
+selection_pipeline/aa_annotate.py
+selection_pipeline/fullprocess.py
+selection_pipeline/load_leveler_run.py
+selection_pipeline/run_pipeline.py
+selection_pipeline/standard_run.py
