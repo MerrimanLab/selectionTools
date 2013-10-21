@@ -60,20 +60,12 @@ Options:
 
   -q, --silent          Run Silently
 
-  -i VCF_INPUT, --vcf=VCF_INPUT
+  -i VCF_INPUT, --vcf=VCF_INPUT VCF input file
 
-                        VCF input file
+  -o OUTPUT_PREFIX, --out=OUTPUT_PREFIX Output file prefix
 
-  -o OUTPUT_PREFIX, --out=OUTPUT_PREFIX
-
-                        Output file prefix
-
-  -c CHROMOSOME, --chromosome=CHROMOSOME
-
-                        Chromosome
-  -l LOG_FILE, --log-fire=LOG_FILE
-
-                        Log file for the pipeline process
+  -c CHROMOSOME, --chromosome=CHROMOSOME Chromosome
+  -l LOG_FILE, --log-fire=LOG_FILE Log file for the pipeline process
 
   --maf=MAF             Minor allele-frequency filter
 
@@ -81,18 +73,13 @@ Options:
 
   --daf=DAF             Derived Allele Frequency filter proportion
 
-  --remove-missing=REMOVE_MISSING
+  --remove-missing=REMOVE_MISSING Remove missing genotypes
 
-                        Remove missing genotypes
-
-  --config-file=CONFIG_FILE
-
-                        Config file
+  --config-file=CONFIG_FILE Config file
 
   --phased-vcf          Phased vcf file
 
-  --population=POPULATION
-                        Population Code
+  --population=POPULATION Population Code
   --imputation          Imputation
 
   --full-process        Run Entire Process
