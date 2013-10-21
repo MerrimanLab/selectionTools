@@ -1,3 +1,5 @@
 tmp/*
 */*haps
 */*sample
+src/*/*
+bin/*

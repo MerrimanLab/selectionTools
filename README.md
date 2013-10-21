@@ -26,7 +26,56 @@ for multicore processing the R package multicore is required.
 
 - multicore [multicore](http://cran.r-project.org/web/packages/multicore/ multicore)
 
-- for load leveler processing PyLoadL is required. [PyLoadL](http://www.gingergeeks.co.uk/pyloadl/download.php PyLoadL)
-  LoadLeveler 4.1.0.6, 4.1.1.4 on RHEL5.3, Python 2.6.2 with Pyrex 0.9.9 have been tested
+Installation
+------------
+
+To install the package standalone (no dependencies)
+
+In the root directory run `./install.sh --standalone` 
+
+To install the package and as many dependencies as possible
+
+In the root directory run `./install.sh` will attempt to install as many dependencies as can be possible.
+
+
+
+Follow-up Instructions
+----------------------
+
+If you installed the dependencies using install.sh some extra steps are required to use the selection pipeline.
+
+- add $SELECTION_PIPELINE_DIR/bin to your path variable (export PATH=${PATH}:selection_pipeline_folder/bin) in your shell rc file e.g .bashrc, .zshrc.
+
+
+Usage
+-----
+
+Usage: selection_pipeline [options]
+
+Options:
+  -h, --help            show this help message and exit
+  -v, --verbose         Print debug messages
+  -q, --silent          Run Silently
+  -i VCF_INPUT, --vcf=VCF_INPUT
+                        VCF input file
+  -o OUTPUT_PREFIX, --out=OUTPUT_PREFIX
+                        Output file prefix
+  -c CHROMOSOME, --chromosome=CHROMOSOME
+                        Chromosome
+  -l LOG_FILE, --log-fire=LOG_FILE
+                        Log file for the pipeline process
+  --maf=MAF             Minor allele-frequency filter
+  --hwe=HWE             Hardy-Weinberg Equillibrium filter proportion
+  --daf=DAF             Derived Allele Frequency filter proportion
+  --remove-missing=REMOVE_MISSING
+                        Remove missing genotypes
+  --config-file=CONFIG_FILE
+                        Config file
+  --phased-vcf          Phased vcf file
+  --population=POPULATION
+                        Population Code
+  --imputation          Imputation
+  --full-process        Run Entire Process
+  --gzvcf               VCF input is in GZ file (optional)
 
 
