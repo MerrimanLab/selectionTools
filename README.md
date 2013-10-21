@@ -46,13 +46,14 @@ If you installed the dependencies using install.sh some extra steps are required
 
 - add $SELECTION_PIPELINE_DIR/bin to your path variable (export PATH=${PATH}:selection_pipeline_folder/bin) in your shell rc file e.g .bashrc, .zshrc.
 
+- selection_pipeline executable should be added to your path.
 
 Usage
 -----
 
 Usage: selection_pipeline [options]
 
-Options:
+`Options:
   -h, --help            show this help message and exit
   -v, --verbose         Print debug messages
   -q, --silent          Run Silently
@@ -77,5 +78,8 @@ Options:
   --imputation          Imputation
   --full-process        Run Entire Process
   --gzvcf               VCF input is in GZ file (optional)
+`
 
+Config File
+-----------
 
