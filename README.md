@@ -44,41 +44,62 @@ Follow-up Instructions
 
 If you installed the dependencies using install.sh some extra steps are required to use the selection pipeline.
 
-- add $SELECTION_PIPELINE_DIR/bin to your path variable (export PATH=${PATH}:selection_pipeline_folder/bin) in your shell rc file e.g .bashrc, .zshrc.
-
-- selection_pipeline executable should be added to your path.
+- selection_pipeline executable should be added to your path automatically.
 
 Usage
 -----
 
 Usage: selection_pipeline [options]
 
-`Options:
+Options:
+
+
   -h, --help            show this help message and exit
+
   -v, --verbose         Print debug messages
+
   -q, --silent          Run Silently
+
   -i VCF_INPUT, --vcf=VCF_INPUT
+
                         VCF input file
+
   -o OUTPUT_PREFIX, --out=OUTPUT_PREFIX
+
                         Output file prefix
+
   -c CHROMOSOME, --chromosome=CHROMOSOME
+
                         Chromosome
   -l LOG_FILE, --log-fire=LOG_FILE
+
                         Log file for the pipeline process
+
   --maf=MAF             Minor allele-frequency filter
+
   --hwe=HWE             Hardy-Weinberg Equillibrium filter proportion
+
   --daf=DAF             Derived Allele Frequency filter proportion
+
   --remove-missing=REMOVE_MISSING
+
                         Remove missing genotypes
+
   --config-file=CONFIG_FILE
+
                         Config file
+
   --phased-vcf          Phased vcf file
+
   --population=POPULATION
                         Population Code
   --imputation          Imputation
+
   --full-process        Run Entire Process
+
   --gzvcf               VCF input is in GZ file (optional)
-`
+
+
 
 Config File
 -----------
