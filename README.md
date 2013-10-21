@@ -46,6 +46,9 @@ If you installed the dependencies using install.sh some extra steps are required
 
 - selection_pipeline executable should be added to your path automatically.
 
+
+
+
 Usage
 -----
 
@@ -65,6 +68,7 @@ Options:
   -o OUTPUT_PREFIX, --out=OUTPUT_PREFIX Output file prefix
 
   -c CHROMOSOME, --chromosome=CHROMOSOME Chromosome
+
   -l LOG_FILE, --log-fire=LOG_FILE Log file for the pipeline process
 
   --maf=MAF             Minor allele-frequency filter
@@ -91,3 +95,4 @@ Options:
 Config File
 -----------
 
+The selection pipeline is configured and run using both the program arguments and a config file the specfies the more persistent features of a single program. 
