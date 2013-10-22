@@ -53,40 +53,74 @@
 \section{Introduction}
 Mik to fill this in
 \section{Getting Started}
+\subsection{Prerequisites}
+The selection pipeline requires some basic libraries and tools are installed on your system. These are python3, Zlib and others.
 \subsection{Installation}
-To install the package standalone will require manual configuration of the config file run this as root.
-\begin{minted}[bgcolor=bg]{bash}
+To install the package standalone, requiring manual configuration of the config file, run this as root.
+
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh --standalone
 \end{minted}
 
 The rest of this section will be dedicated to the automatic installation. To perform an automatic installation of the selection pipeline run as root.
-\begin{minted}[bgcolor=bg]{bash}
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh
 \end{minted}
 
-Installation creates a default config file located in the base directory of the pipeline. Installation adds a program to the system path selection\_pipeline. To see the help and test the program is installed correctly run the following command.
+Installation creates a default config file located in the base directory of the pipeline. Installation adds a program called selection\_pipeline to the system path. To test the program is installed correctly run the following command at a terminal prompt.
 
-\begin{minted}[bgcolor=bg]{bash}
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
 selection_pipeline -h
 \end{minted}
 
+The pipeline uses VCF tools, VCF tools requires a perl library to work correctly. Assuming you are using bash as your default shell open your .bashrc file in your home directory and append to the PERL5LIB environment variable.
+
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+# Change the path to match the location of your selection pipeline bin folder.
+export PERL5LIB=\${PERL5LIB}:/home/sfk/selection_pipeline/lib/perl5
+\end{minted}
+
+To avoid having to change the default config file append the same folder to you PATH environment variable.\\
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+export PATH=\${PATH}:/home/sfk/selection_pipeline/bin
+\end{minted}
+
+\subsection{Genetic Maps and Impute Haplotypes}
+To use the phasing and imputation features of the pipeline requires both genetic map files and haplotype files. For humans these files that conform to the format required for shapeit and impute2 can be found \href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. Download and extract the reference files of your choice and extract them. To use the files with the selection pipeline requires setting a few options in the config file you will use these are as follows an example config file is avaliable in the base directory of the selection pipeline.\\
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+[shapeit]
+genetic_map_dir = # genetic map file directory #
+genetic_map_prefix = # full file name with ? where chromosome number changes #
+[impute_executable]
+impute_map_dir= # genetic map file directory location #
+impute_reference_dir = # impute reference directory location
+impute_map_prefix = # the full file name with a ? for where the chromosome number is #
+impute_reference_prefix = # The file name with a ? for chromosome name and the extension left out. 
+\end{minted}
+
+\section{Tutorial}
 \subsection{Selection Signatures at the Lactase Locus}
 \subsubsection{Getting the Data}
-To perform this tutorial you will be required to install tabix, this package includes the tabix software to install the software on ubuntu requires running the command.
-\begin{lstlisting}[language=Bash]
-apt-get install tabix
-\end{lstlisting}
-On other distributions just run as root. 
-\begin{lstlisting}[language=Bash]
-./install_tabix.sh
-\end{lstlisting}
-This places the tabix executable in the \emph{bin/} folder. to run tabix type \emph{bin/./tabix} in a terminal from the base directory of the selection pipeline.
 
-The lactase gene is located on Chromosome 2 between 136,545,410-136,594,750 positions. For this example we will use a 10 megabase region containing Lactase and the CEU and YRI populations from the 1000 genomes. Usually iHS would be done chromosome wide but in order to demonstrate how to use thepipeline we will use a small part of chromosome 2 between 130-140 megabases. To download this file from 1000 genomes use the command below you will need to use tabix to download this region.
+The lactase gene is located on Chromosome 2 between 136,545,410-136,594,750 positions. For the example we will use a 10 megabase region containing the Lactase gene and the CEU and YRI populations from the 1000 genomes. Usually iHS would be done chromosome wide but in order to demonstrate how to use the pipeline we will use the chromosome 2 region 130,000,000-140,000,000. To download the example dataset enter the command below. 
 
-\begin{lstlisting}[language=Bash]
+\begin{minted}[bgcolor=bg]{bash}
+wget http://tutorial_file_location.com 
+\end{minted}
 
-\end{lstlisting}
+\subsection{Setting up Pipeline Run}
+To perform the analysis we will only  
+
+
+\section{Using the Package Genome Wide}
+A genome wide script is provided in the scripts directory for performing a genome wide analysis.
+
+
+
+
+
+
+
 
 
 \bibliographystyle{jss}

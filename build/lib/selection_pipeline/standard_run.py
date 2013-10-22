@@ -88,12 +88,15 @@ class StandardRun(CommandTemplate):
             (haps)= self.run_impute2(options,config,haps)
         haps = self.indel_filter(options,config,haps)
         #tajimas = run_tajimas_d(options,config,haps)
+        vcf = self.haps_to_vcf(options,config,haps)
         haps = self.run_aa_annotate_haps(options,config,haps)
         ihh = self.run_multi_coreihh(options,config,haps)
         logger.info("Pipeline completed successfully")
+        logger.info(vcf)
         logger.info(haps)
         logger.info(ihh)
         logger.info("Goodbye :)")
+    
  
     def run_subprocess(self,command,tool):  
         print(tool)
@@ -137,6 +140,10 @@ class StandardRun(CommandTemplate):
             self.run_subprocess(cmd,'impute2')
             q.task_done()             
  
+    def haps_to_vcf(self,options,config,haps):
+        (cmd,output_name) = CommandTemplate.haps_to_vcf(self,options,config,haps)
+        
+
     def run_impute2(self,options,config,haps):
         imputeQueue=queue.Queue()
         (cmd_template,output_prefix,legend_file,hap_file,genetic_map) = CommandTemplate.run_impute2(self,options,config,haps)

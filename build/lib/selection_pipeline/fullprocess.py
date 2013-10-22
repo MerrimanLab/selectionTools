@@ -89,9 +89,9 @@ def parse_arguments():
     if(options.hwe is None):
         options.hwe = 0.001
     if(options.maf is None):
-        options.maf = 0.05
+        options.maf = 0.01
     if(options.daf is None):
-        options.daf = 0.05
+        options.daf = 0.00
     if(options.remove_missing is None):
         options.remove_missing = 0.99
     if (options.config_file == None):

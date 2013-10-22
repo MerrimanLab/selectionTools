@@ -6,36 +6,36 @@ import subprocess
 
 from optparse import OptionParser
 
-import logging
+    import logging
 logger = logging.getLogger(__name__)
-SUBPROCESS_FAILED_EXIT=10
-class CommandTemplate(object):
+    SUBPROCESS_FAILED_EXIT=10
+    class CommandTemplate(object):
 
-    def run_vcf_to_plink(self,options,config):
-        cmd = []
-        prefix = options.output_prefix + options.chromosome
-        logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
-        vcf_tools=config['vcftools']['vcf_tools_executable']
-        cmd.append(vcf_tools)
-        if(options.vcf_gz):
-            cmd.append('--gzvcf')
-        else:
-            cmd.append('--vcf')
-        cmd.extend([options.vcf_input, '--plink', '--out',prefix,'--remove-indels'])
-        logger.debug(config['vcftools']['extra_args'])
-        cmd.extend(config['vcftools']['extra_args'].split())
-        return (cmd,prefix)
+        def run_vcf_to_plink(self,options,config):
+            cmd = []
+            prefix = options.output_prefix + options.chromosome
+            logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
+    vcf_tools=config['vcftools']['vcf_tools_executable']
+            cmd.append(vcf_tools)
+            if(options.vcf_gz):
+                cmd.append('--gzvcf')
+                else:
+                    cmd.append('--vcf')
+                    cmd.extend([options.vcf_input, '--plink', '--out',prefix,'--remove-indels'])
+                    logger.debug(config['vcftools']['extra_args'])
+    cmd.extend(config['vcftools']['extra_args'].split())
+                    return (cmd,prefix)
 
-    def run_plink_filter(self,options,config,ped,map):
-        
-        logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
-        cmd = []
-        prefix = ped.split('.')[0]
-        plink = config['plink']['plink_executable']
-        cmd.append(plink)
-        # add standard plink commands #
+                    def run_plink_filter(self,options,config,ped,map):
 
-        cmd.extend(['--noweb','--file',prefix,'--geno',str(options.remove_missing),'--hwe',str(options.hwe),'--maf',str(options.maf),'--recode','--out',prefix])
+                        logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
+                        cmd = []
+                        prefix = ped.split('.')[0]
+    plink = config['plink']['plink_executable']
+cmd.append(plink)
+    # add standard plink commands #
+
+    cmd.extend(['--noweb','--file',prefix,'--geno',str(options.remove_missing),'--hwe',str(options.hwe),'--maf',str(options.maf),'--recode','--out',prefix])
         cmd.extend(config['plink']['extra_args'].split())
         return(cmd,prefix)
     def run_shape_it(self,options,config,ped,map):
@@ -144,4 +144,7 @@ class CommandTemplate(object):
         # Todo look at MAF in rehh
         cmd.extend([multicore_ihh,'-p',population,'-i',haps,'-c',str(options.chromosome),'--window',str(window),'--overlap',str(overlap),'--maf',str(config['multicore_ihh']['derived_allele_frequency'])])
         return (cmd,output_name)
-
+    def haps_to_vcf(self,options,config,haps):
+        cmd=[]
+        output_name=options.output_prefix + 'chr' + options.chromosome + 'vcf'
+        

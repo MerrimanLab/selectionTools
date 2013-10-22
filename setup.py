@@ -15,6 +15,7 @@ setup(
         'console_scripts': [
             'ancestral_annotation = selection_pipeline.aa_annotate:main',
             'selection_pipeline = selection_pipeline.fullprocess:main',
+            'multi_population = selection_pipeline.multipipeline:main'
         ]
     },
     url="github.com/smilefreak/MerrimanSelectionPipeline"
