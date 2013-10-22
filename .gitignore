@@ -4,3 +4,4 @@ tmp/*
 src/*/*
 bin/*
 lactase/*
+lib/perl5/*
