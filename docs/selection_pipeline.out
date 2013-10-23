@@ -1,8 +1,11 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Getting Started}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Installation}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Genetic Maps and Impute Haplotypes}{section.2}% 4
-\BOOKMARK [1][-]{section.3}{Tutorial}{}% 5
-\BOOKMARK [2][-]{subsection.3.1}{Selection Signatures at the Lactase Locus}{section.3}% 6
-\BOOKMARK [3][-]{subsubsection.3.1.1}{Getting the Data}{subsection.3.1}% 7
-\BOOKMARK [2][-]{subsection.3.2}{Setting up Pipeline Run}{section.3}% 8
+\BOOKMARK [2][-]{subsection.2.1}{Prerequisites}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Installation}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Genetic Maps and Impute Haplotypes}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Tutorial}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Selection Signatures at the Lactase Locus}{section.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Getting the Data}{subsection.3.1}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Setting up Pipeline Run}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Population Files}{section.3}% 10
+\BOOKMARK [1][-]{section.4}{Genome Wide Selection Scans}{}% 11

@@ -18,7 +18,8 @@ else
 	mkdir -p lib/perl5
 	echo "Installing Dependencies"
 	which vcftools
-	if [ "$?" -ne "0" ]; then 
+	echo $?
+	if [ $? -ne 0 ]; then 
 		echo "Installing VCF tools"
 		tar xzf src/vcftools.tar.gz
 		(cd vcftools_0.1.11/ && make)
@@ -48,9 +49,10 @@ else
 		tar xzf src/impute_v2.3.0_x86_64_static.tgz
 		mv impute_v2.3.0_x86_64_static/impute2 bin/
 		rm -Rf impute_v2.3.0_x86_64_static/
+		chmod 755 bin/impute2
 	fi
 	which tabix
-	if [ $? -ne 0]; then
+	if [ $? -ne 0 ]; then
 		echo "Installing Tabix"
 		tar -xjf src/tabix.tar.bz2
 		(cd tabix-0.2.6/ && make)
@@ -64,7 +66,13 @@ else
 	echo "Install Selection Pipeline"
 	git submodule init
 	git submodule update
+	if [[ $EUID -eq 0 ]]; then
 	(cd pyfasta && python3 setup.py install)
 	(cd PyVCF && python3 setup.py install)
 	python3 setup.py install
+	else
+	(cd pyfasta && python3 setup.py install --user)
+	(cd PyVCF && python3 setup.py install --user)
+	python3 setup.py install --user
+	fi
 fi

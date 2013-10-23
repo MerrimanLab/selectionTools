@@ -6,36 +6,36 @@ import subprocess
 
 from optparse import OptionParser
 
-    import logging
+import logging
 logger = logging.getLogger(__name__)
-    SUBPROCESS_FAILED_EXIT=10
-    class CommandTemplate(object):
+SUBPROCESS_FAILED_EXIT=10
+class CommandTemplate(object):
 
-        def run_vcf_to_plink(self,options,config):
-            cmd = []
-            prefix = options.output_prefix + options.chromosome
-            logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
-    vcf_tools=config['vcftools']['vcf_tools_executable']
-            cmd.append(vcf_tools)
-            if(options.vcf_gz):
-                cmd.append('--gzvcf')
-                else:
-                    cmd.append('--vcf')
-                    cmd.extend([options.vcf_input, '--plink', '--out',prefix,'--remove-indels'])
-                    logger.debug(config['vcftools']['extra_args'])
-    cmd.extend(config['vcftools']['extra_args'].split())
-                    return (cmd,prefix)
+    def run_vcf_to_plink(self,options,config):
+        cmd = []
+        prefix = options.output_prefix + options.chromosome
+        logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
+        vcf_tools=config['vcftools']['vcf_tools_executable']
+        cmd.append(vcf_tools)
+        if(options.vcf_gz):
+            cmd.append('--gzvcf')
+        else:
+            cmd.append('--vcf')
+            cmd.extend([options.vcf_input, '--plink', '--out',prefix,'--remove-indels'])
+            logger.debug(config['vcftools']['extra_args'])
+            cmd.extend(config['vcftools']['extra_args'].split())
+        return (cmd,prefix)
 
-                    def run_plink_filter(self,options,config,ped,map):
+    def run_plink_filter(self,options,config,ped,map):
 
-                        logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
-                        cmd = []
-                        prefix = ped.split('.')[0]
-    plink = config['plink']['plink_executable']
-cmd.append(plink)
-    # add standard plink commands #
+        logger.debug("Attempting to call vcf tools to convert to ped/map plink format")
+        cmd = []
+        prefix = ped.split('.')[0]
+        plink = config['plink']['plink_executable']
+        cmd.append(plink)
+        # add standard plink commands #
 
-    cmd.extend(['--noweb','--file',prefix,'--geno',str(options.remove_missing),'--hwe',str(options.hwe),'--maf',str(options.maf),'--recode','--out',prefix])
+        cmd.extend(['--noweb','--file',prefix,'--geno',str(options.remove_missing),'--hwe',str(options.hwe),'--maf',str(options.maf),'--recode','--out',prefix])
         cmd.extend(config['plink']['extra_args'].split())
         return(cmd,prefix)
     def run_shape_it(self,options,config,ped,map):
@@ -46,7 +46,7 @@ cmd.append(plink)
         for file in os.listdir(config['shapeit']['genetic_map_dir']):
             if fnmatch.fnmatch(file,config['shapeit']['genetic_map_prefix'].replace('?',options.chromosome)):
                 genetic_map = file
-            
+                
         shapeit=config['shapeit']['shapeit_executable']
         cmd.append(shapeit)
         cmd.extend(['--input-ped',ped,map,'-M',os.path.join(config['shapeit']['genetic_map_dir'],genetic_map),'--output-max',prefix])
@@ -81,7 +81,7 @@ cmd.append(plink)
         output_info.close()
                          
     #def run_tajimas_d(options,config,gen,sample):
-    
+
     #def fu_and_wus_h(options,config,gen,sample):
 
      
@@ -146,5 +146,9 @@ cmd.append(plink)
         return (cmd,output_name)
     def haps_to_vcf(self,options,config,haps):
         cmd=[]
-        output_name=options.output_prefix + 'chr' + options.chromosome + 'vcf'
-        
+        output_name=options.output_prefix + 'chr' + options.chromosome + '.vcf'
+        qc_tool_executable=config['qctool']['qctool_executable']
+        cmd.append(qctool_executable)
+        cmd.extend(['-g',haps,'og',output_name])
+        return (cmd,output_name)
+            

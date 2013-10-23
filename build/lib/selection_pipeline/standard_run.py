@@ -53,7 +53,7 @@ class StandardRun(CommandTemplate):
     #Ensures the executables specified on the path exist so that the standard run will
     # work on the machine 
     def check_executables_and_scripts_exist(self,options,config):
-        executables=['plink','shapeit','impute','Rscript','python','ancestral_allele','indel_filter','multicore_ihh']
+        executables=['plink','shapeit','impute','Rscript','python','ancestral_allele','indel_filter','multicore_ihh','qctool']
         if(self.which(config['plink']['plink_executable'],'plink')is None): 
             return False
         if(self.which(config['shapeit']['shapeit_executable'],'shapeit') is None ):
@@ -68,9 +68,10 @@ class StandardRun(CommandTemplate):
             return False
         if(self.which(config['multicore_ihh']['multicore_ihh'],'multicore_ihh') is None):
             return False
+        if(self.which(config['qctool']['qctool_executable'],'qctool') is None):
+            return False
         return True
         
-
 
     def __init__(self,options,config):
         #Perform local executable check.# 
@@ -142,7 +143,8 @@ class StandardRun(CommandTemplate):
  
     def haps_to_vcf(self,options,config,haps):
         (cmd,output_name) = CommandTemplate.haps_to_vcf(self,options,config,haps)
-        
+        self.run_subprocess(cmd,'hapstovcf')
+        return(output_name) 
 
     def run_impute2(self,options,config,haps):
         imputeQueue=queue.Queue()

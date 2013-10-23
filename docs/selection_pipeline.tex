@@ -108,12 +108,20 @@ The lactase gene is located on Chromosome 2 between 136,545,410-136,594,750 posi
 wget http://tutorial_file_location.com 
 \end{minted}
 
+Extract the data into a new folder
+
 \subsection{Setting up Pipeline Run}
-To perform the analysis we will only  
+To perform the analysis the first step will is to navigate to the folder you extracted the tutorial data.
+\subsection{Population Files}
+Population files are required for any cross population comparisions. The commands below will initiate the data generation step.
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+multipopultions -p POP1.txt -p POP2.txt -i input.vcf --c defaults.cfg
+\end{minted}
 
+The generated folders and current folder have all the data required to perform further selection analysis.
 
-\section{Using the Package Genome Wide}
-A genome wide script is provided in the scripts directory for performing a genome wide analysis.
+\section{Genome Wide Selection Scans}
+The script is designed to work on one chromosome starting with a VCF file containing one or more populations. The pipeline was designed to be applied genome wide in the genome\_wide/ directory we have provided a script that can perform a genome wide analysis. Read the README in this folder for more information.
 
 
 
