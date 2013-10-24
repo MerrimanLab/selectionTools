@@ -51,6 +51,12 @@ maf=as.numeric(opt$maf)
 #want to create overlapping bins
 #column 3 is base position
 setwd(working_dir)
+
+#calculate offset from file - 
+
+# first position in file
+offset=ceiling(hapsPop[1,3]/(window-overlap))
+print(offset)
 #pseudo code
 i=1
 while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){

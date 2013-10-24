@@ -9,6 +9,12 @@
 # July 2013
 # University Of Otago
 # 
+#
+# Update to match changes in the other files.
+# for now: nesi updates are parked
+#
+#
+
 
 import os
 import sys

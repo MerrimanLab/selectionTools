@@ -25,6 +25,7 @@ logger.setLevel(level=logging.INFO)
 
 SUBPROCESS_FAILED_EXIT = 10
 CANNOT_FIND_EXECUTABLE = 20
+CONFIG_FILE_NOT_FOUND = 30
 
 def get_populations(populations):
     pops = {}
@@ -39,6 +40,9 @@ def get_populations(populations):
                     pops[pop_name].append(line)
     return pops
 def parse_config(options):
+    if not os.path.isfile(options.config_file):
+        logger.error("Config file not found please check arguments")
+        sys.exit(CONFIG_FILE_NOT_FOUND)  
     config = configparser.ConfigParser()
     config.read(options.config_file)
     config_parsed = {}
@@ -57,9 +61,6 @@ def parse_config(options):
     return config_parsed
 
 def run_subprocess(command,tool,stdout=None):  
-        print(tool)
-        print(command)
-        
         try:
             if(stdout is None):
                 exit_code = subprocess.call(command) 
@@ -112,18 +113,19 @@ def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     for key, value in populations.items():
         cmd = []
-        vcf_output = open(key + '.vcf','w')
+#        vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
         vcf_merge_exec=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_merge_exec)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+  #      run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-        vcf_output.close()
+ #       vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
+    final_vcfs=[]
     if(options.extra_args is not None):
         extra_args=options.extra_args
     else:
@@ -134,7 +136,6 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         directory=population_name
         # Create directory for each sub population to run in
         print(population_name)
-        os.chdir(directory)
         if not os.path.exists(directory):
             os.mkdir(directory)
         running_log= open(os.path.join(directory,population_name+'.log'),'w')
@@ -143,8 +144,11 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         cmd.append(selection_pipeline_executable) 
         cmd.extend(['-c',options.chromosome,'-i',os.path.abspath(vcf),'-o',population_name,'--population',population_name,'--config-file',os.path.abspath(options.config_file)])
         cmd.append(extra_args)  
+        os.chdir(directory)
         run_subprocess(cmd,'selection_pipeline')
-        run_subprocess.close()
+        final_vcfs.append(options.population_name + options.chromosome + '.vcf')
+        running_log.close()
+    return final_vcfs
 
 def main():
     parser=OptionParser()
@@ -153,6 +157,8 @@ def main():
     parser.add_option('-i','--vcf-input-file',dest="vcf_input",help="VCF Input File")
     parser.add_option('-c','--chromosome',dest="chromosome",help="Chromosome label doesn't actually have to correspond to the real chromosome but is required to determine what output files to make")
     parser.add_option('-C','--config-file',dest='config_file',help='Configuration File')
+    parser.add_option('--fst-window-size',dest="fst_window_size",help="FST window size")
+    parser.add_option('--fst-window-step',dest="fst_window_step",help="FST window step size")
     (options,args) = parser.parse_args()
     assert options.vcf_input is not None, "No VCF file has been specified as input"
     assert options.chromosome is not None, "No chromosome has been specified to the script"
@@ -160,7 +166,7 @@ def main():
     config = parse_config(options)
     if not (check_executables_and_scripts_exist(options,config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)
-    
+     
     populations=get_populations(options.populations)
     output_vcfs = subset_vcf(options.vcf_input,config,populations)
     print(output_vcfs) 

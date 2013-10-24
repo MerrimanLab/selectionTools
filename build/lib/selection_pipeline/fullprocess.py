@@ -70,6 +70,7 @@ def parse_arguments():
     parser.add_option('--imputation',action="store_true", dest="imputation",help="Imputation")
     parser.add_option('--full-process',action="store_true",dest="full_process",help="Run Entire Process")
     parser.add_option('--gzvcf',action="store_true",dest="vcf_gz",help="VCF input is in GZ file (optional)")
+    parser.add_option('--TajimaD',dest='tajimas_d',help="Output Tajima's D statistic in bins of size <int>")
       
     (options, args) = parser.parse_args()
     if(options.verbose != None):
@@ -83,7 +84,9 @@ def parse_arguments():
     assert options.output_prefix is not None, "Output file prefix has not been specified."
     assert options.population is not None, "Population code has not been specified."
     #Optional arguments using sane defaults  
-     
+
+    if(options.tajimas_d is None):
+        options.tajimas_d = 1     
     if(options.imputation is None):
         options.imputation = False
     if(options.hwe is None):

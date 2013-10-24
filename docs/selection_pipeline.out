@@ -8,4 +8,12 @@
 \BOOKMARK [3][-]{subsubsection.3.1.1}{Getting the Data}{subsection.3.1}% 8
 \BOOKMARK [2][-]{subsection.3.2}{Setting up Pipeline Run}{section.3}% 9
 \BOOKMARK [2][-]{subsection.3.3}{Population Files}{section.3}% 10
-\BOOKMARK [1][-]{section.4}{Genome Wide Selection Scans}{}% 11
+\BOOKMARK [1][-]{section.4}{Command line Arguments}{}% 11
+\BOOKMARK [1][-]{section.5}{Multipopulation}{}% 12
+\BOOKMARK [1][-]{section.6}{Selection Pipeline}{}% 13
+\BOOKMARK [1][-]{section.7}{Configuration File}{}% 14
+\BOOKMARK [2][-]{subsection.7.1}{Argument Description}{section.7}% 15
+\BOOKMARK [1][-]{section.8}{Extra Features}{}% 16
+\BOOKMARK [2][-]{subsection.8.1}{Genome Wide Selection Scans}{section.8}% 17
+\BOOKMARK [2][-]{subsection.8.2}{Ancestral Allele Annotation}{section.8}% 18
+\BOOKMARK [2][-]{subsection.8.3}{Galaxy Intergration}{section.8}% 19

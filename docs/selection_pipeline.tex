@@ -120,15 +120,24 @@ multipopultions -p POP1.txt -p POP2.txt -i input.vcf --c defaults.cfg
 
 The generated folders and current folder have all the data required to perform further selection analysis.
 
-\section{Genome Wide Selection Scans}
+\section{Command line Arguments}
+The selection pipeline contains
+\section{Multipopulation}
+\section{Selection Pipeline}
+
+\section{Configuration File}
+The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line arguments. There are two main programs in selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters.
+\subsection{Argument Description}
+
+
+\section{Extra Features}
+
+\subsection{Genome Wide Selection Scans}
 The script is designed to work on one chromosome starting with a VCF file containing one or more populations. The pipeline was designed to be applied genome wide in the genome\_wide/ directory we have provided a script that can perform a genome wide analysis. Read the README in this folder for more information.
-
-
-
-
-
-
-
+\subsection{Ancestral Allele Annotation}
+	Needs to be fixed to take any set of human fasta files as the ancestral allele combination.
+\subsection{Galaxy Intergration}
+The galaxy folder contains the scripts required to add the selection pipeline to your local galaxy installation. The pipeline is also avaliable on the galaxy toolshed at galaxy\_url
 
 
 \bibliographystyle{jss}

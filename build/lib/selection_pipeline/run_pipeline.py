@@ -116,7 +116,7 @@ class CommandTemplate(object):
     def run_aa_annotate_haps(self,options,config,haps):
         cmd = []
         output_name= options.output_prefix + '_aachanged'
-        py_executable = config['ancestral_allele']['python_executable']
+        py_executable = config['python3']['python_executable']
         aa_annotate = config['ancestral_allele']['ancestral_allele_script']
         logger.debug('Attempting to run ancestral allele annotation')
         cmd.append(py_executable)
@@ -144,11 +144,20 @@ class CommandTemplate(object):
         # Todo look at MAF in rehh
         cmd.extend([multicore_ihh,'-p',population,'-i',haps,'-c',str(options.chromosome),'--window',str(window),'--overlap',str(overlap),'--maf',str(config['multicore_ihh']['derived_allele_frequency'])])
         return (cmd,output_name)
-    def haps_to_vcf(self,options,config,haps):
+    
+    def fix_sample_file(self,options,config,sample_file):
+        cmd=[]
+        cmd.extend(['cut', '-d',' ', '-f', '1-6', sample_file])
+        sample_file=sample_file.split('.sample')[0] + '_fixed.sample'
+        return(cmd,sample_file)
+
+    def haps_to_vcf(self,options,config,haps,new_sample_file):
         cmd=[]
         output_name=options.output_prefix + 'chr' + options.chromosome + '.vcf'
-        qc_tool_executable=config['qctool']['qctool_executable']
+        qctool_executable=config['qctool']['qctool_executable']
         cmd.append(qctool_executable)
-        cmd.extend(['-g',haps,'og',output_name])
+        cmd.extend(['-filetype','shapeit_haplotypes','-g',haps,'-s',new_sample_file,'-og',output_name])
         return (cmd,output_name)
-            
+           
+    def vcf_to_tajimas_do(self,option,config,haps):
+       return 1  

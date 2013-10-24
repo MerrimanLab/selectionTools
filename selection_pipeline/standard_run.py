@@ -81,29 +81,35 @@ class StandardRun(CommandTemplate):
         if(options.phased_vcf): 
             haps = self.ancestral_annotation_vcf(options,config)
             ihh = self.run_multi_coreihh(options,config,haps)
+            tajimaSD = self.vcf_to_tajimas_d(options.config,options.vcf_input)
         else:
             (ped,map) = self.run_vcf_to_plink(options,config)
             (ped,map) = self.run_plink_filter(options,config,ped,map)
-            (haps) = self.run_shape_it(options,config,ped,map) 
-        if(options.imputation):
-            (haps)= self.run_impute2(options,config,haps)
-        haps = self.indel_filter(options,config,haps)
+            (haps,sample) = self.run_shape_it(options,config,ped,map) 
+            if(options.imputation):
+                (haps)= self.run_impute2(options,config,haps)
+            haps = self.indel_filter(options,config,haps)
         #tajimas = run_tajimas_d(options,config,haps)
-        vcf = self.haps_to_vcf(options,config,haps)
-        haps = self.run_aa_annotate_haps(options,config,haps)
+            new_sample_file = self.fix_sample_file(options,config,sample)
+            vcf = self.haps_to_vcf(options,config,haps,new_sample_file)
+            haps = self.run_aa_annotate_haps(options,config,haps)
+            tajimaSD = self.vcf_to_tajimas_d(options,config,vcf)
         ihh = self.run_multi_coreihh(options,config,haps)
         logger.info("Pipeline completed successfully")
-        logger.info(vcf)
+        logger.info(options.vcf_input)
         logger.info(haps)
         logger.info(ihh)
         logger.info("Goodbye :)")
     
  
-    def run_subprocess(self,command,tool):  
+    def run_subprocess(self,command,tool,stdout=None):  
         print(tool)
         print(command)
         try:
-            exit_code = subprocess.call(command) 
+            if(stdout is None):
+                exit_code = subprocess.call(command) 
+            else:
+                exit_code = subprocess.call(command,stdout=stdout)
         except:
             logger.error(tool + " failed to run " + ' '.join(command))
             sys.exit(SUBPROCESS_FAILED_EXIT)   
@@ -129,8 +135,8 @@ class StandardRun(CommandTemplate):
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
         cmd.extend(['--thread',self.threads])
-        self.run_subprocess(cmd,'shapeit')
-        return(prefix + '.haps')
+        #self.run_subprocess(cmd,'shapeit')
+        return(prefix + '.haps',prefix + '.sample')
 
     #Calls a subprocess to run impute   
 
@@ -141,14 +147,14 @@ class StandardRun(CommandTemplate):
             self.run_subprocess(cmd,'impute2')
             q.task_done()             
  
-    def haps_to_vcf(self,options,config,haps):
-        (cmd,output_name) = CommandTemplate.haps_to_vcf(self,options,config,haps)
+    def haps_to_vcf(self,options,config,haps,new_sample_file):
+        (cmd,output_name) = CommandTemplate.haps_to_vcf(self,options,config,haps,new_sample_file)
         self.run_subprocess(cmd,'hapstovcf')
         return(output_name) 
 
     def run_impute2(self,options,config,haps):
         imputeQueue=queue.Queue()
-        (cmd_template,output_prefix,legend_file,hap_file,genetic_map) = CommandTemplate.run_impute2(self,options,config,haps)
+        (cmd_template,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps)
         distance=int(config['impute2']['chromosome_split_size']) * 1000000
         # Break files into 5 megabase regions.
         try:
@@ -161,14 +167,15 @@ class StandardRun(CommandTemplate):
         no_of_impute_jobs = int(proc.stdout.read())//distance + 1
         #create the command template
         #Get the max position from your haps file# 
+        cmds = []
         for i in range(0,no_of_impute_jobs):
             individual_command=cmd_template
             individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
-            individual_prefix=prefix + '_'+ str(i)
+            individual_prefix=output_prefix + '_'+ str(i)
             individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
             cmds.append(individual_command)
         #print(cmds)
-        for i in range(int(threads)):
+        for i in range(int(self.threads)):
             t = Thread(target=self.impute_worker,args=[imputeQueue])
             t.daemon = True
             t.start()
@@ -202,3 +209,13 @@ class StandardRun(CommandTemplate):
         self.run_subprocess(cmd,'multcore_ihh')
         os.rename(options.population+'_chr_'+options.chromosome+"_wd_"+'.'+"_.ihh",output_name)
         return output_name
+    def fix_sample_file(self,options,config,sample_file):
+        (cmd,output_name) = CommandTemplate.fix_sample_file(self,options,config,sample_file)
+        new_sample_file=open(output_name,'w')
+        self.run_subprocess(cmd,'fix sample file',stdout=new_sample_file)
+        new_sample_file.close()
+        return(output_name) 
+    def vcf_to_tajimas_d(self,options,config,vcf):
+        (cmd,output_name) = CommandTemplate.vcf_to_tajimas_d(self,options,config,vcf)
+        self.run_subprocess(cmd,'tajimas_d')
+

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  22 OCT 2013 18:54
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  24 OCT 2013 14:13
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -777,14 +777,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 116--120
 
  []
 
-[3]
+[3] [4]
 No file selection_pipeline.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 137.
-[4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 137.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 146.
+[5]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 146.
  (./selection_pipeline.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 137.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 137.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 146.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 146.
 
 
 Package rerunfilecheck Warning: File `selection_pipeline.out' has changed.
@@ -792,29 +792,29 @@ Package rerunfilecheck Warning: File `selection_pipeline.out' has changed.
 (rerunfilecheck)                or use package `bookmark'.
 
 Package rerunfilecheck Info: Checksums for `selection_pipeline.out':
-(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
-(rerunfilecheck)             After:  07D449C9A5109FCFFB8C172D34F3414A;712.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 137.
+(rerunfilecheck)             Before: CD7EC11A943F251FCAE35C7B423ED3D6;866
+(rerunfilecheck)             After:  1E173B87A28ACEC03FEA2CB327EA4B2B;1209.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 146.
  ) 
 Here is how much of TeX's memory you used:
- 8909 strings out of 495031
- 126452 string characters out of 6181530
+ 8935 strings out of 495031
+ 126768 string characters out of 6181530
  229895 words of memory out of 5000000
- 11957 multiletter control sequences out of 15000+600000
- 13935 words of font info for 34 fonts, out of 8000000 for 9000
+ 11973 multiletter control sequences out of 15000+600000
+ 14621 words of font info for 35 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 31i,5n,40p,617b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
- </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1000.600pk> </tmp/texfonts/pk/ljfou
-r/jknappen/ec/ecit1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt1000.600
-pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </tmp/texfonts/pk/ljfo
-ur/jknappen/ec/ecrm1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1440.60
-0pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm0800.600pk> </tmp/texfonts/pk/ljf
-our/jknappen/ec/ecrm1200.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1728.6
-00pk>
-Output written on selection_pipeline.pdf (4 pages, 85669 bytes).
+ 31i,5n,40p,657b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </tmp/texfonts/pk/ljfour/jknappen/ec/ecti1000.600pk> </tmp/texfonts/pk/ljfou
+r/jknappen/ec/ecbx1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecit1000.600
+pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </tmp/texfonts/pk/ljfo
+ur/jknappen/ec/ecbx1200.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1000.60
+0pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </tmp/texfonts/pk/ljf
+our/jknappen/ec/ecrm0800.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1200.6
+00pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
+Output written on selection_pipeline.pdf (5 pages, 98376 bytes).
 PDF statistics:
- 343 PDF objects out of 1000 (max. 8388607)
- 69 compressed objects within 1 object stream
- 16 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 436 PDF objects out of 1000 (max. 8388607)
+ 129 compressed objects within 2 object streams
+ 25 named destinations out of 1000 (max. 500000)
+ 113 words of extra memory for PDF output out of 10000 (max. 10000000)
 

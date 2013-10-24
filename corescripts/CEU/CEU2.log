@@ -1,0 +1,25 @@
+
+@----------------------------------------------------------@
+|        PLINK!       |     v1.07      |   10/Aug/2009     |
+|----------------------------------------------------------|
+|  (C) 2009 Shaun Purcell, GNU General Public License, v2  |
+|----------------------------------------------------------|
+|  For documentation, citation & bug-report instructions:  |
+|        http://pngu.mgh.harvard.edu/purcell/plink/        |
+@----------------------------------------------------------@
+
+Skipping web check... [ --noweb ] 
+Writing this text to log file [ CEU2.log ]
+Analysis started: Thu Oct 24 15:42:38 2013
+
+Options in effect:
+	--noweb
+	--file CEU2
+	--geno 0.99
+	--hwe 0.001
+	--maf 0.01
+	--recode
+	--out CEU2
+
+
+ERROR: No file [ CEU2.ped ] exists.
