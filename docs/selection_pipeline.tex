@@ -10,9 +10,8 @@
 \usepackage{minted}
 \usepackage{float}
 \hypersetup{colorlinks = true, linkcolor = blue}
-
 \lstset{language=Python}
-
+\usepackage[margin=0.5in]{geometry}
 
 \usepackage{listings}
 \usepackage{makeidx}
@@ -56,13 +55,13 @@ Mik to fill this in
 \subsection{Prerequisites}
 The selection pipeline requires some basic libraries and tools are installed on your system. These are python3, Zlib and others.
 \subsection{Installation}
-To install the package standalone, requiring manual configuration of the config file, run this as root.
+To install the package standalone, requiring manual configuration of the config file, run this as root.\\
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh --standalone
 \end{minted}
 
-The rest of this section will be dedicated to the automatic installation. To perform an automatic installation of the selection pipeline run as root.
+The rest of this section will be dedicated to the automatic installation. To perform an automatic installation of the selection pipeline run as root.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh
 \end{minted}
@@ -86,46 +85,124 @@ export PATH=\${PATH}:/home/sfk/selection_pipeline/bin
 \end{minted}
 
 \subsection{Genetic Maps and Impute Haplotypes}
-To use the phasing and imputation features of the pipeline requires both genetic map files and haplotype files. For humans these files that conform to the format required for shapeit and impute2 can be found \href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. Download and extract the reference files of your choice and extract them. To use the files with the selection pipeline requires setting a few options in the config file you will use these are as follows an example config file is avaliable in the base directory of the selection pipeline.\\
+To use the phasing and imputation features of the pipeline requires both genetic map files and haplotype files. For humans these files that conform to the format required for shapeit and impute2 can be found \href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. Download and extract the reference files of your choice and extract them. To use the files with the selection pipeline requires setting a few options in the config file you will use these are as follows an example config file is avaliable the base directory of the selection pipeline. The question mark character "?" in the config is substituted by the chromosome number, this is used for reference files that are split on chromosomes. \\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 [shapeit]
 genetic_map_dir = # genetic map file directory #
 genetic_map_prefix = # full file name with ? where chromosome number changes #
 [impute_executable]
 impute_map_dir= # genetic map file directory location #
-impute_reference_dir = # impute reference directory location
+impute_reference_dir = # impute reference directory location #
 impute_map_prefix = # the full file name with a ? for where the chromosome number is #
 impute_reference_prefix = # The file name with a ? for chromosome name and the extension left out. 
 \end{minted}
-
+\subsection{Ancestral Fasta Files}
+To generate results for iHS requires assigning the ancestral allele. The selection pipeline uses the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. To setup the selection pipeline 
+open your config files and change the following fields.\\
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+[ancestral_allele]
+ancestral_allele_script= /home/smilefreak/MerrimanSelectionPipeline/selection_pipeline/aa_annotate.py
+ancestral_fasta_dir = # directory you downloaded alignment to #
+ancestral_prefix=human_ancestor_?.fa # default extracted file chromosome substitution #
+\end{minted}
 \section{Tutorial}
 \subsection{Selection Signatures at the Lactase Locus}
 \subsubsection{Getting the Data}
-
-The lactase gene is located on Chromosome 2 between 136,545,410-136,594,750 positions. For the example we will use a 10 megabase region containing the Lactase gene and the CEU and YRI populations from the 1000 genomes. Usually iHS would be done chromosome wide but in order to demonstrate how to use the pipeline we will use the chromosome 2 region 130,000,000-140,000,000. To download the example dataset enter the command below. 
+The lactase gene is located on Chromosome 2 between 136,545,410-136,594,750 positions. For the example we will use a 10 megabase region containing the Lactase gene and the CEU and YRI populations from the 1000 genomes. In order to demonstrate how to use the pipeline we will use the chromosome 2 region 130,000,000-140,000,000. To download the example dataset enter the command below. \\
 
 \begin{minted}[bgcolor=bg]{bash}
 wget http://tutorial_file_location.com 
 \end{minted}
 
-Extract the data into a new folder
+Extract the example data into a new folder.
 
 \subsection{Setting up Pipeline Run}
 To perform the analysis the first step will is to navigate to the folder you extracted the tutorial data.
 \subsection{Population Files}
-Population files are required for any cross population comparisions. The commands below will initiate the data generation step.
+Population files are required for any cross population comparisions. The commands below will initiate the data generation step.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-multipopultions -p POP1.txt -p POP2.txt -i input.vcf --c defaults.cfg
+multipop\_selection_pipeline -p POP1.txt -p POP2.txt -i input.vcf --c defaults.cfg
 \end{minted}
-
-The generated folders and current folder have all the data required to perform further selection analysis.
+The generated folders and current folder have all the data required to perform further selection analysis. Within each population folder 4 output files are generated these contain tajima's D, iHH, an updated VCF and Fey and Wu's H statistic these files are located in the results folder inside each population subfolder. Between each each population Fst are generated and located in the fst folder. Fst calculations are generated using the weir and cockerham estimator.
+\subsection{Data Analysis}
+The pipelines purpose is to generate signiatures of selection from a VCF formatted input file. In order to express the usefulness of the pipeline it is pertinent to illustrate the effectiveness of the pipeline. The next section describes some basic plotting of these data using the R programming language.
+\subsubsection{Fst}
+\subsubsection{Fey and Wu's H}
+\subsubsection{iHS}
+\subsubsection{Tajima's D}
+\subsubsection{rSb}
 
 \section{Command line Arguments}
-The selection pipeline contains
-\section{Multipopulation}
-\section{Selection Pipeline}
+The selection pipeline contains three major scripts selection\_pipeline aa\_annotate and multipopulation. The selection pipeline does all the within population statistics calculations. The multipopulation program calculates all the between population statistics and calls the selection pipeline. The aa\_annotate program annotates a haplotype file or a phased vcf file with the ancestral allele from the 6-way EPO alignment, for other species or alternative ancestral annotation the feauture will be added promptly.
+\subsection{Multipopulation}
+\subsubsection{Input Files}
+\begin{itemize}
+\item -i <vcf input file>
+VCF file containing all the populations you want to analyse from one chromosome or a part of a chromosome only. 
+\end{itemize}
+\subsubsection{Output Files}
+\begin{itemize}
+\item FST \\
+Fst results are stored in the fst folder with the chromosome number followed by the two populations. e.g 2CEUYRI.fst
+\item Selection Pipeline Results\\
+All single population pipeline results are stored in the subdirectory of the population in a folder named results. These contain the ihh, tajimasD and a population VCF file.
+\end{itemize}
+\subsubsection{Other parameters (Compulsory)}
+\begin{itemize}
+\item -c <Chromosome>\\
+Chromosome name used for labelling outputs.
+\item -a <Arguments to the selection pipeline>\\
+Quoted string containing any extra arguments to the selection\_pipeline program. e.g "--imputation"
+\item -C <path to config file>\\
+Path to the selection pipeline config file an example config file is located in the base directory of the extracted package.
+\end{itemize}
+\subsubsection{Other parameters (Optional)}
+\begin{itemize}
+\item --fst-window-size <FST window size>\\
+Argument is passed directly to the VCF tools command line.
+\item --fst-window-step <FST window step>\\
+Argument is passed directly to the VCF tools command line.
+\end{itemize}
+\subsection{Selection Pipeline}
+\subsubsection{Input Files}
+\begin{itemize}
+\item -i <VCF input file>\\
+Single population single chromosome VCF input file.
+\end{itemize}
+\subsubsection{Output Files}
+The Results directory contains all the output files.
+\begin{itemize}
+\item .ihh file\\
+The outputted iHH data for each SNP
+\item .taj\_d file\\
+Tajima's D output
+\item .vcf file\\
+Single population VCF updated by the pipeline, can contain.
+\end{itemize}
+\subsubsection{Other parameters(Compulsory)}
+\begin{itemize}
+\item --config-file <Config File path>\\
+Path to the selection pipeline config file an example config file is located in the base directory of the extracted package.
+\end{itemize}
+\subsubsection{Other parameters(Optional)}
+\begin{itemize}
+\item --maf <minimum MAF>\\
+Minor allele frequency filter threshold any SNPs below this threshold will be discarded from the analysis.
+\item --hwe <hardy-weinberg minimum p-value>\\
+A hardy weinberg test is performed on every snp any snps failing the test will be discarded.
+\item --daf <Minimum derived allele frequency>\\
+Derived allele frequencies below this minimum will be discarded.
+\item --remove-missing <Inclusion threshold for missing genotypes>\\
+Inclusion criteria for SNPs with missing data. SNPs with less than this value will be removed from analysis.
+\item --TajimaD <tajimas D bin size>\\
+Tajima's D statistic bin size.
+\end{itemize}
+\subsection{Ancestral Annotation}
+\subsubsection{Input Files}
+\subsubsection{Output Files}
+\subsubsection{Other parameters}
 
-\section{Configuration File}
+\subsection{Configuration File}
 The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line arguments. There are two main programs in selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters.
 \subsection{Argument Description}
 
@@ -134,8 +211,6 @@ The selection pipeline requires a configuration file, by default the program loo
 
 \subsection{Genome Wide Selection Scans}
 The script is designed to work on one chromosome starting with a VCF file containing one or more populations. The pipeline was designed to be applied genome wide in the genome\_wide/ directory we have provided a script that can perform a genome wide analysis. Read the README in this folder for more information.
-\subsection{Ancestral Allele Annotation}
-	Needs to be fixed to take any set of human fasta files as the ancestral allele combination.
 \subsection{Galaxy Intergration}
 The galaxy folder contains the scripts required to add the selection pipeline to your local galaxy installation. The pipeline is also avaliable on the galaxy toolshed at galaxy\_url
 

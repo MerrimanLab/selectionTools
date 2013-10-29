@@ -1,6 +1,6 @@
 #
 #
-# Multipopulation script calls the selectio
+# Multipopulation script calls the selection
 # pipeline for each population that we need
 # to do then zips up and runs a script to p# each of the cross population statistics once
 # it has all finished.
@@ -25,8 +25,14 @@ logger.setLevel(level=logging.INFO)
 
 SUBPROCESS_FAILED_EXIT = 10
 CANNOT_FIND_EXECUTABLE = 20
-CONFIG_FILE_NOT_FOUND = 30
+CANNOT_FIND_CONFIG = 30
 
+
+
+# using fey and wus h
+# generate the statistics for fey and wus h
+def fey_and_wus_h():
+    return 0
 def get_populations(populations):
     pops = {}
     for pop in populations:
@@ -40,9 +46,6 @@ def get_populations(populations):
                     pops[pop_name].append(line)
     return pops
 def parse_config(options):
-    if not os.path.isfile(options.config_file):
-        logger.error("Config file not found please check arguments")
-        sys.exit(CONFIG_FILE_NOT_FOUND)  
     config = configparser.ConfigParser()
     config.read(options.config_file)
     config_parsed = {}
@@ -119,12 +122,13 @@ def subset_vcf(vcf_input,config,populations):
         vcf_merge_exec=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_merge_exec)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-  #      run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+ #       run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
- #       vcf_output.close()
+  #      vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
+    orig_dir = os.getcwd()
     if(options.extra_args is not None):
         extra_args=options.extra_args
     else:
@@ -145,8 +149,41 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         cmd.append(extra_args)  
         os.chdir(directory)
         run_subprocess(cmd,'selection_pipeline')
-        run_subprocess.close()
-
+        #run_subprocess.close()
+        running_log.close()
+    os.chdir(orig_dir)
+def fst_vcf(input_vcf,config,options,populations):
+    
+    vcf_tools =config['vcftools']['vcf_tools_executable']
+    directory = 'fst'
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+    pops = list(populations.keys())
+    orig_dir = os.getcwd()
+    os.chdir(directory)
+    for i in range(0,len(pops)-1):
+        p = pops[i]
+        cmd=[]
+        cmd.append(vcf_tools)
+        first_pop_name = open('first_pop.tmp','w')
+        first_pop_name.write('\n'.join(populations[p]))
+        first_pop_name.close()
+        cmd.extend(['--fst-window-size',options.fst_window_size,'--fst-window-step',options.fst_window_step,'--weir-fst-pop','first_pop.tmp','--vcf',input_vcf])
+        for j in range(i+1,len(pops)):
+            s = pops[j]
+            tmp_cmd = []
+            tmp_cmd.extend(cmd)
+            tmp_cmd.extend(['--weir-fst-pop','second_pop.tmp']) 
+            second_pop_name = open('second_pop.tmp','w')
+            second_pop_name.write('\n'.join(populations[s]))
+            second_pop_name.close()
+            print(tmp_cmd)
+            run_subprocess(tmp_cmd,'fst_calculation')
+            os.rename('out.windowed.weir.fst',options.chromosome + p + s + '.fst')
+    os.remove('second_pop.tmp')
+    os.remove('first_pop.tmp')        
+ 
+    os.chdir(orig_dir)
 def main():
     parser=OptionParser()
     parser.add_option('-p','--population',action='append',dest="populations",help='population_files')
@@ -160,13 +197,24 @@ def main():
     assert options.vcf_input is not None, "No VCF file has been specified as input"
     assert options.chromosome is not None, "No chromosome has been specified to the script"
     assert options.config_file is not None, "No config file has been specified for the program"
+    if not os.path.isfile(options.config_file):
+        logger.error("Cannot find config file specified at path {0}".format(options.config_file))
+        sys.exit(CANNOT_FIND_CONFIG)
     config = parse_config(options)
     if not (check_executables_and_scripts_exist(options,config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)
-     
+    if options.fst_window_step is None:
+        options.fst_window_step = str(10)
+    else:
+        options.fst_window_step = str(fst_window_step)
+    
+    if options.fst_window_size is None:
+        options.fst_window_size = str(1000)
+    else:
+        options.fst_window_size = str(fst_window_size) 
+    options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)
+    output_fst =  fst_vcf(options.vcf_input,config,options,populations)
     output_vcfs = subset_vcf(options.vcf_input,config,populations)
-    print(output_vcfs) 
     run_selection_pipeline(output_vcfs,options,populations,config)
-
 if __name__=="__main__":main()

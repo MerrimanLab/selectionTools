@@ -56,7 +56,7 @@ class CommandTemplate(object):
 
     def indel_filter(self,options,config,haps):
         cmd = []    
-        output_name= options.output_prefix + options.chromosome + '_indel_filter'        
+        output_name= options.output_prefix + options.chromosome + '_indel_filter.haps'        
         logger.debug('Attempting to run the R indel and maf filter usually reserved for after phasing')
         rscript = config['Rscript']['rscript_executable']
         indel_filter = config['Rscript']['indel_filter']
@@ -70,7 +70,7 @@ class CommandTemplate(object):
         output_warnings=open(output_prefix+'.warnings','w')
         output_info=open(output_prefix+'.info','w')
         for i in range(no_commands):
-            with open(output_prefix+'_'+str(i)+'.haps','r') as h:
+            with open(output_prefix+'_'+str(i)+'.haps_haps','r') as h:
                 with open(output_prefix + '_'+str(i)+'.warnings','r') as w:
                     with open(output_prefix + '_'+str(i) + '.info','r')as f:
                         output_haps.write(h.read())
@@ -109,7 +109,7 @@ class CommandTemplate(object):
         #create the command template
         cmd_template=[]
         cmd_template.append(impute2)
-        cmd_template.extend(['-m',genetic_map,'-h',hap_file,'-l',legend_file,'-known_haps_g',haps])
+        cmd_template.extend(['-m',genetic_map,'-h',hap_file,'-l',legend_file,'-known_haps_g',haps,'-phase'])
         return (cmd_template,prefix)
              
 
@@ -158,10 +158,20 @@ class CommandTemplate(object):
         cmd.append(qctool_executable)
         cmd.extend(['-filetype','shapeit_haplotypes','-g',haps,'-s',new_sample_file,'-og',output_name])
         return (cmd,output_name)
+
+    def fix_vcf_qctool(self,options,config,vcf):
+        cmd=[]
+        output_name=vcf.split('.vcf')[0] + '_fixed.vcf'
+        cmd.extend(['sed', 's/^NA/{0}/g'.format(options.chromosome),vcf])
+        return(cmd,output_name)  
            
     def vcf_to_tajimas_d(self,options,config,vcf):
         cmd=[]
         output_name = 'out.Tajima.D'   
+        vcftools_executable=config['vcftools']['vcf_tools_executable']
+        cmd.append(vcftools_executable)
+        cmd.extend(['--TajimaD',options.tajimas_d,'--vcf',vcf])
+        return(cmd,output_name)
         ##### FINISH TAJIMAS D  THINGY #####
 
 

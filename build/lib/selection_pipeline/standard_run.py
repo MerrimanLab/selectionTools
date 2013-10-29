@@ -81,6 +81,7 @@ class StandardRun(CommandTemplate):
         if(options.phased_vcf): 
             haps = self.ancestral_annotation_vcf(options,config)
             ihh = self.run_multi_coreihh(options,config,haps)
+            tajimaSD = self.vcf_to_tajimas_d(options.config,options.vcf_input)
         else:
             (ped,map) = self.run_vcf_to_plink(options,config)
             (ped,map) = self.run_plink_filter(options,config,ped,map)
@@ -91,10 +92,22 @@ class StandardRun(CommandTemplate):
         #tajimas = run_tajimas_d(options,config,haps)
             new_sample_file = self.fix_sample_file(options,config,sample)
             vcf = self.haps_to_vcf(options,config,haps,new_sample_file)
+            vcf = self.fix_vcf_qctool(options,config,vcf)
             haps = self.run_aa_annotate_haps(options,config,haps)
+            tajimaSD = self.vcf_to_tajimas_d(options,config,vcf)
         ihh = self.run_multi_coreihh(options,config,haps)
+
+        # Concetenate  all the outputfiles, delete everything else
+        
+        # create the results directory
+        if not os.path.exists('results'):
+            os.mkdir('results')
+        os.rename(tajimaSD,'results' + tajimaSD)
+        os.rename(vcf,'results' + tajimaSD)
+        os.rename(ihh,'results' + tajimaSD)
         logger.info("Pipeline completed successfully")
-        logger.info(options.vcf_input)
+        logger.info(tajimaSD)
+        logger.info(vcf)
         logger.info(haps)
         logger.info(ihh)
         logger.info("Goodbye :)")
@@ -153,6 +166,9 @@ class StandardRun(CommandTemplate):
     def run_impute2(self,options,config,haps):
         imputeQueue=queue.Queue()
         (cmd_template,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps)
+
+        # change from megabases to bp which is what is
+        # expected by the impute2 command line options
         distance=int(config['impute2']['chromosome_split_size']) * 1000000
         # Break files into 5 megabase regions.
         try:
@@ -161,18 +177,31 @@ class StandardRun(CommandTemplate):
         except:
             logger.error("Tail command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
+        # get the start of the haps file 
+        try:
+            print("head -1 {0}| awk '{{print $3}}'".format(haps))
+            head = subprocess.Popen("""head -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
+        except:
+            logger.error("Head command failed on haps file")
+            sys.exit(SUBPROCESS_FAILED_EXIT)
         #Get the max position from your haps file# 
-        no_of_impute_jobs = int(proc.stdout.read())//distance + 1
+        start_position = int(head.stdout.read())
+        no_of_impute_jobs = (int(proc.stdout.read())-int(start_position))//distance + 1
         #create the command template
         #Get the max position from your haps file# 
+
+        # get the start of the first window
+        # 
+        first_window = start_position // distance 
+        print(first_window) 
         cmds = []
         for i in range(0,no_of_impute_jobs):
-            individual_command=cmd_template
-            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
+            individual_command=list(cmd_template)
+            individual_command.extend(['-int',str((i+first_window)*distance),str((i+first_window+1)*distance)])
             individual_prefix=output_prefix + '_'+ str(i)
             individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
-            cmds.append(individual_command)
-        #print(cmds)
+            cmds.append(list(individual_command))
+        print(cmds)
         for i in range(int(self.threads)):
             t = Thread(target=self.impute_worker,args=[imputeQueue])
             t.daemon = True
@@ -180,7 +209,7 @@ class StandardRun(CommandTemplate):
         for cmd in cmds:
             imputeQueue.put(cmd)
         imputeQueue.join()
-        CommandTemplate.join_impute2_files(options,config,output_prefix,no_commands)
+        CommandTemplate.join_impute2_files(options,config,output_prefix,no_of_impute_jobs)
         return(output_prefix+'.haps') 
          
 
@@ -213,3 +242,15 @@ class StandardRun(CommandTemplate):
         self.run_subprocess(cmd,'fix sample file',stdout=new_sample_file)
         new_sample_file.close()
         return(output_name) 
+    def vcf_to_tajimas_d(self,options,config,vcf):
+        (cmd,output_name) = CommandTemplate.vcf_to_tajimas_d(self,options,config,vcf)
+        self.run_subprocess(cmd,'tajimas_d')
+        taj_file =options.population + options.chromosome + '.taj_d'
+        os.rename(output_name,taj_file)
+        return(taj_file)
+    def fix_vcf_qctool(self,options,config,vcf):
+        (cmd,output_name) = CommandTemplate.fix_vcf_qctool(self,options,config,vcf)
+        fixed_vcf = open(output_name,'w')
+        self.run_subprocess(cmd,'fix vcf qctool',stdout=fixed_vcf)
+        return(output_name)  
+

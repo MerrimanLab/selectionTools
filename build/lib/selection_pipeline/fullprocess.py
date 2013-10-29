@@ -86,7 +86,10 @@ def parse_arguments():
     #Optional arguments using sane defaults  
 
     if(options.tajimas_d is None):
-        options.tajimas_d = 1     
+        # default tajimas D 1000 bin size
+        options.tajimas_d = str(1000)
+    else:
+        options.tajimas_d = str(options.tajimas_d)
     if(options.imputation is None):
         options.imputation = False
     if(options.hwe is None):

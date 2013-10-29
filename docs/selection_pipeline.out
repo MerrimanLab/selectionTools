@@ -3,17 +3,36 @@
 \BOOKMARK [2][-]{subsection.2.1}{Prerequisites}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{Installation}{section.2}% 4
 \BOOKMARK [2][-]{subsection.2.3}{Genetic Maps and Impute Haplotypes}{section.2}% 5
-\BOOKMARK [1][-]{section.3}{Tutorial}{}% 6
-\BOOKMARK [2][-]{subsection.3.1}{Selection Signatures at the Lactase Locus}{section.3}% 7
-\BOOKMARK [3][-]{subsubsection.3.1.1}{Getting the Data}{subsection.3.1}% 8
-\BOOKMARK [2][-]{subsection.3.2}{Setting up Pipeline Run}{section.3}% 9
-\BOOKMARK [2][-]{subsection.3.3}{Population Files}{section.3}% 10
-\BOOKMARK [1][-]{section.4}{Command line Arguments}{}% 11
-\BOOKMARK [1][-]{section.5}{Multipopulation}{}% 12
-\BOOKMARK [1][-]{section.6}{Selection Pipeline}{}% 13
-\BOOKMARK [1][-]{section.7}{Configuration File}{}% 14
-\BOOKMARK [2][-]{subsection.7.1}{Argument Description}{section.7}% 15
-\BOOKMARK [1][-]{section.8}{Extra Features}{}% 16
-\BOOKMARK [2][-]{subsection.8.1}{Genome Wide Selection Scans}{section.8}% 17
-\BOOKMARK [2][-]{subsection.8.2}{Ancestral Allele Annotation}{section.8}% 18
-\BOOKMARK [2][-]{subsection.8.3}{Galaxy Intergration}{section.8}% 19
+\BOOKMARK [2][-]{subsection.2.4}{Ancestral Fasta Files}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Tutorial}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Selection Signatures at the Lactase Locus}{section.3}% 8
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Getting the Data}{subsection.3.1}% 9
+\BOOKMARK [2][-]{subsection.3.2}{Setting up Pipeline Run}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.3}{Population Files}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.4}{Data Analysis}{section.3}% 12
+\BOOKMARK [3][-]{subsubsection.3.4.1}{Fst}{subsection.3.4}% 13
+\BOOKMARK [3][-]{subsubsection.3.4.2}{Fey and Wu's H}{subsection.3.4}% 14
+\BOOKMARK [3][-]{subsubsection.3.4.3}{iHS}{subsection.3.4}% 15
+\BOOKMARK [3][-]{subsubsection.3.4.4}{Tajima's D}{subsection.3.4}% 16
+\BOOKMARK [3][-]{subsubsection.3.4.5}{rSb}{subsection.3.4}% 17
+\BOOKMARK [1][-]{section.4}{Command line Arguments}{}% 18
+\BOOKMARK [2][-]{subsection.4.1}{Multipopulation}{section.4}% 19
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Input Files}{subsection.4.1}% 20
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Output Files}{subsection.4.1}% 21
+\BOOKMARK [3][-]{subsubsection.4.1.3}{Other parameters \(Compulsory\)}{subsection.4.1}% 22
+\BOOKMARK [3][-]{subsubsection.4.1.4}{Other parameters \(Optional\)}{subsection.4.1}% 23
+\BOOKMARK [2][-]{subsection.4.2}{Selection Pipeline}{section.4}% 24
+\BOOKMARK [3][-]{subsubsection.4.2.1}{Input Files}{subsection.4.2}% 25
+\BOOKMARK [3][-]{subsubsection.4.2.2}{Output Files}{subsection.4.2}% 26
+\BOOKMARK [3][-]{subsubsection.4.2.3}{Other parameters\(Compulsory\)}{subsection.4.2}% 27
+\BOOKMARK [3][-]{subsubsection.4.2.4}{Other parameters\(Optional\)}{subsection.4.2}% 28
+\BOOKMARK [2][-]{subsection.4.3}{Ancestral Annotation}{section.4}% 29
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Input Files}{subsection.4.3}% 30
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Output Files}{subsection.4.3}% 31
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Other parameters}{subsection.4.3}% 32
+\BOOKMARK [2][-]{subsection.4.4}{Configuration File}{section.4}% 33
+\BOOKMARK [2][-]{subsection.4.5}{Argument Description}{section.4}% 34
+\BOOKMARK [1][-]{section.5}{Extra Features}{}% 35
+\BOOKMARK [2][-]{subsection.5.1}{Genome Wide Selection Scans}{section.5}% 36
+\BOOKMARK [2][-]{subsection.5.2}{Ancestral Allele Annotation}{section.5}% 37
+\BOOKMARK [2][-]{subsection.5.3}{Galaxy Intergration}{section.5}% 38

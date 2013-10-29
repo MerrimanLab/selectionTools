@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  24 OCT 2013 14:13
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  29 OCT 2013 19:04
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -292,6 +292,21 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 12.
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2013/06/27 1.5pre1 listings language file
 )
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2010/09/12 v5.6 Page Geometry
+\Gm@cnth=\count115
+\Gm@cntv=\count116
+\c@Gm@tempcnt=\count117
+\Gm@bindingoffset=\dimen115
+\Gm@wd@mp=\dimen116
+\Gm@odd@mp=\dimen117
+\Gm@even@mp=\dimen118
+\Gm@layoutwidth=\dimen119
+\Gm@layoutheight=\dimen120
+\Gm@layouthoffset=\dimen121
+\Gm@layoutvoffset=\dimen122
+\Gm@dimlist=\toks19
+)
 (/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty
 Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
 )
@@ -300,12 +315,12 @@ Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 \ttl@box=\box32
 \beforetitleunit=\skip49
 \aftertitleunit=\skip50
-\ttl@plus=\dimen115
-\ttl@minus=\dimen116
-\ttl@toksa=\toks19
-\titlewidth=\dimen117
-\titlewidthlast=\dimen118
-\titlewidthfirst=\dimen119
+\ttl@plus=\dimen123
+\ttl@minus=\dimen124
+\ttl@toksa=\toks20
+\titlewidth=\dimen125
+\titlewidthlast=\dimen126
+\titlewidthfirst=\dimen127
 )
 (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
@@ -316,8 +331,8 @@ LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2008/03/30 v1.1d Input encoding file
-\inpenc@prehook=\toks20
-\inpenc@posthook=\toks21
+\inpenc@prehook=\toks21
+\inpenc@posthook=\toks22
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
@@ -537,9 +552,9 @@ Now handling font encoding PD1 ...
 Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip51
 \@affilsep=\skip52
-\c@Maxaffil=\count115
-\c@authors=\count116
-\c@affil=\count117
+\c@Maxaffil=\count118
+\c@authors=\count119
+\c@affil=\count120
 )
 \@indexfile=\write5
 \openout5 = `selection_pipeline.idx'.
@@ -549,22 +564,22 @@ Writing index file selection_pipeline.idx
 (./selection_pipeline.aux)
 \openout1 = `selection_pipeline.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
 \AtBeginShipoutBox=\box33
-Package hyperref Info: Link coloring ON on input line 43.
+Package hyperref Info: Link coloring ON on input line 42.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -572,11 +587,11 @@ Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count118
+\c@section@level=\count121
 )
-LaTeX Info: Redefining \ref on input line 43.
-LaTeX Info: Redefining \pageref on input line 43.
-LaTeX Info: Redefining \nameref on input line 43.
+LaTeX Info: Redefining \ref on input line 42.
+LaTeX Info: Redefining \pageref on input line 42.
+LaTeX Info: Redefining \nameref on input line 42.
 
 (./selection_pipeline.out) (./selection_pipeline.out)
 \@outlinefile=\write6
@@ -585,17 +600,17 @@ LaTeX Info: Redefining \nameref on input line 43.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count119
-\scratchdimen=\dimen120
+\scratchcounter=\count122
+\scratchdimen=\dimen128
 \scratchbox=\box34
-\nofMPsegments=\count120
-\nofMParguments=\count121
-\everyMPshowfont=\toks22
-\MPscratchCnt=\count122
-\MPscratchDim=\dimen121
-\MPnumerator=\count123
-\makeMPintoPDFobject=\count124
-\everyMPtoPDFconversion=\toks23
+\nofMPsegments=\count123
+\nofMParguments=\count124
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count125
+\MPscratchDim=\dimen129
+\MPnumerator=\count126
+\makeMPintoPDFobject=\count127
+\everyMPtoPDFconversion=\toks24
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
@@ -611,27 +626,72 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count125
+\c@lstlisting=\count128
 runsystem(pygmentize -S default -f latex > selection_pipeline.pyg)...executed.
 
 
 (./selection_pipeline.pyg)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(36.135pt, 525.23788pt, 36.135pt)
+* v-part:(T,H,B)=(36.135pt, 772.77686pt, 36.135pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=525.23788pt
+* \textheight=772.77686pt
+* \oddsidemargin=-36.135pt
+* \evensidemargin=-36.135pt
+* \topmargin=-73.135pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=57.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 45.
+(Font)              <12> on input line 44.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 45.
+(Font)              <8> on input line 44.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 45.
- (./selection_pipeline.toc)
+(Font)              <6> on input line 44.
+(./selection_pipeline.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 3.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}])
 \tf@toc=\write7
 \openout7 = `selection_pipeline.toc'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
+
+ []
 
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
-
 
 (./selection_pipeline.out.pyg
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 1.
@@ -639,16 +699,12 @@ LaTeX Font Info:    Try loading font information for T1+cmtt on input line 1.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 ))
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 63.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 63.
 runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 63--64
+Underfull \hbox (badness 10000) in paragraph at lines 62--63
 
  []
 
@@ -664,19 +720,15 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 65--69
+Underfull \hbox (badness 10000) in paragraph at lines 64--68
 
  []
 
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
-
 
 (./selection_pipeline.out.pyg)
 runsystem(rm selection_pipeline.out.pyg)...executed.
@@ -684,17 +736,18 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 74--75
+Underfull \hbox (badness 10000) in paragraph at lines 73--74
 
  []
 
+[2]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
 
-(./selection_pipeline.out.pyg
+ (./selection_pipeline.out.pyg
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 3.
 )
@@ -703,7 +756,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--82
+Underfull \hbox (badness 10000) in paragraph at lines 80--81
 
  []
 
@@ -719,7 +772,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 83--87
+Underfull \hbox (badness 10000) in paragraph at lines 82--86
 
  []
 
@@ -735,11 +788,32 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 89--100
+Underfull \hbox (badness 10000) in paragraph at lines 88--99
 
  []
 
-[2]
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
+= ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
+d.
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--108
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
+
+ []
+
+[3]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
@@ -751,7 +825,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 109--110
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
 
  []
 
@@ -766,55 +840,53 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
 
+ [4]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 140.
 
-Overfull \hbox (255.81726pt too wide) in paragraph at lines 116--120
-\T1/cmr/m/n/10 mands be-low will ini-ti-ate the data gen-er-a-tion step.       
-   [][][][][][]
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 140.
+
+Overfull \hbox (1.40817pt too wide) in paragraph at lines 145--147
+\T1/cmr/m/n/10 Fst re-sults are stored in the fst folder with the chro-mo-some 
+num-ber fol-lowed by the two pop-u-la-tions. e.g 2CEUYRI.fst 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 116--120
-
- []
-
-[3] [4]
+[5] [6]
 No file selection_pipeline.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 146.
-[5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 146.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 223.
+[7]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 223.
  (./selection_pipeline.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 146.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 146.
-
-
-Package rerunfilecheck Warning: File `selection_pipeline.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `selection_pipeline.out':
-(rerunfilecheck)             Before: CD7EC11A943F251FCAE35C7B423ED3D6;866
-(rerunfilecheck)             After:  1E173B87A28ACEC03FEA2CB327EA4B2B;1209.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 146.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 223.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 223.
+Package rerunfilecheck Info: File `selection_pipeline.out' has not changed.
+(rerunfilecheck)             Checksum: D1A41526E5BCC39E7FE03C43D5ED2DD6;2651.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 223.
  ) 
 Here is how much of TeX's memory you used:
- 8935 strings out of 495031
- 126768 string characters out of 6181530
- 229895 words of memory out of 5000000
- 11973 multiletter control sequences out of 15000+600000
+ 9436 strings out of 495031
+ 134275 string characters out of 6181530
+ 233377 words of memory out of 5000000
+ 12444 multiletter control sequences out of 15000+600000
  14621 words of font info for 35 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 31i,5n,40p,657b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,6n,40p,766b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
  </tmp/texfonts/pk/ljfour/jknappen/ec/ecti1000.600pk> </tmp/texfonts/pk/ljfou
-r/jknappen/ec/ecbx1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecit1000.600
-pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </tmp/texfonts/pk/ljfo
-ur/jknappen/ec/ecbx1200.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1000.60
+r/jknappen/ec/ecit1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ectt1000.600
+pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </tmp/texfonts/pk/ljfo
+ur/jknappen/ec/ecrm1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1000.60
 0pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </tmp/texfonts/pk/ljf
 our/jknappen/ec/ecrm0800.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1200.6
-00pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
-Output written on selection_pipeline.pdf (5 pages, 98376 bytes).
+00pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1728.600pk></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on selection_pipeline.pdf (7 pages, 126034 bytes).
 PDF statistics:
- 436 PDF objects out of 1000 (max. 8388607)
- 129 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
- 113 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 630 PDF objects out of 1000 (max. 8388607)
+ 275 compressed objects within 3 object streams
+ 46 named destinations out of 1000 (max. 500000)
+ 305 words of extra memory for PDF output out of 10000 (max. 10000000)
 
