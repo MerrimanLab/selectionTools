@@ -1,1 +1,23 @@
 Shapeit reference files are stored here
+genetic_map_chr10_combined_b37.txt
+genetic_map_chr11_combined_b37.txt
+genetic_map_chr12_combined_b37.txt
+genetic_map_chr13_combined_b37.txt
+genetic_map_chr14_combined_b37.txt
+genetic_map_chr15_combined_b37.txt
+genetic_map_chr16_combined_b37.txt
+genetic_map_chr17_combined_b37.txt
+genetic_map_chr18_combined_b37.txt
+genetic_map_chr19_combined_b37.txt
+genetic_map_chr1_combined_b37.txt
+genetic_map_chr20_combined_b37.txt
+genetic_map_chr21_combined_b37.txt
+genetic_map_chr22_combined_b37.txt
+genetic_map_chr2_combined_b37.txt
+genetic_map_chr3_combined_b37.txt
+genetic_map_chr4_combined_b37.txt
+genetic_map_chr5_combined_b37.txt
+genetic_map_chr6_combined_b37.txt
+genetic_map_chr7_combined_b37.txt
+genetic_map_chr8_combined_b37.txt
+genetic_map_chr9_combined_b37.txt
