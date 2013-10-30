@@ -5,3 +5,5 @@ src/*/*
 bin/*
 lactase/*
 lib/perl5/*
+referencefiles/*/*
+!referencefiles/*/*.txt
