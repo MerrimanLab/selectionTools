@@ -74,7 +74,7 @@ selection_pipeline -h
 
 All the following examples are using an example directory change you config file according to the location of your selection pipeline folder in each case.
 
-The pipeline uses VCF tools, VCF tools requires a perl library to work correctly. Assuming you are using bash as your default shell open your .bashrc file in your home directory and append to the PERL5LIB environment variable.
+The pipeline uses VCFtools, VCFtools requires a perl library to work correctly. Assuming you are using bash as your default shell open your .bashrc file in your home directory and append to the PERL5LIB environment variable.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 # Change the path to match the location of your selection pipeline bin folder.
@@ -121,6 +121,9 @@ Extract the example data into a new folder.
 \subsection{Setting up Pipeline Run}
 To perform the analysis the first step will is to navigate to the folder you extracted the tutorial data.
 \subsection{Population Files}
+##
+#we should explain the format of these pop files, are they single ID per line?
+##
 Population files are required for any cross population comparisions. The commands below will initiate the data generation step.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 multipop\_selection_pipeline -p POP1.txt -p POP2.txt -i input.vcf --c defaults.cfg
@@ -129,10 +132,66 @@ The generated folders and current folder have all the data required to perform f
 \subsection{Data Analysis}
 The pipelines purpose is to generate signiatures of selection from a VCF formatted input file. In order to express the usefulness of the pipeline it is pertinent to illustrate the effectiveness of the pipeline. The next section describes some basic plotting of these data using the R programming language.
 \subsubsection{Fst}
+CEU\_CHB\_weir\_fst=read.table("CEU\_CHB\_chr2.weir.fst", header=TRUE)
+
+weirFst=CEU\_CHB\_weir\_fst
+pop1="CEU"
+pop2="CHB"
+weirMean=mean(weirFst[,3][weirFst[,3] != "NaN"])
+weirThresUpper =quantile(weirFst[,3], 1-0.025, na.rm=TRUE)
+weirThresLower =quantile(weirFst[,3], 0.025, na.rm=TRUE)
+         
+plot(weirFst[,3]~weirFst[,2], pch=16, cex=.4, type="p", xlab=paste("Chr",chr,"(Mbp)",sep=" "), ylab="Weir Fst", main=paste("Weir Fst for",pop1,"and",pop2,"Populations", sep=" " ), xlim=c(0,300e6),ylim=c(-0.2,1), yaxt="n", xaxt="n")
+axis(side=1, tick=TRUE,at=c(0, 50e6,100e6,150e6,200e6,250e6,300e6),labels=c("0","50","100","150","200","250","300"))
+axis(side=2, tick=TRUE, at=seq(0,1,0.2 ) )
+abline(h=weirThresUpper, lty=3, col = "black")
+abline(h=weirThresLower, lty=3, col="black")
+abline(h=weirMean, lty=5,col="black")
+
+
+
 \subsubsection{Fey and Wu's H}
 \subsubsection{iHS}
+CEU\_ihh=read.table("CEU\_chr2.iHH")
+CEU\_ihs=ihh2ihs(CEU\_ihh)
+#plot density
+distribplot(CEU\_ihs$res.ihs$iHS, main="1000 Genomes CEU iHS Density")
+#plot iHS values
+ihsplot(CEU\_ihs\$res.ihs,plot.pval=FALSE,ylim.scan=2,main="CEU iHS",pch=".")
+#plot iHS Pvalues
+ihsplot(CEU\_ihs\$res.ihs,plot.pval=TRUE,ylim.scan=2,main="CEU iHS",pch=".")
+
+
 \subsubsection{Tajima's D}
+CEU\_tajimaD=read.table(file="CEU\_chr4.Tajima.D", header=TRUE)
+
+tajimaMean=mean(CEU\_tajima[CEU\_tajima\$TajimaD != "NaN",]\$TajimaD)
+tajimaThresUpper = quantile(CEU\_tajima\$TajimaD, (1-0.025))
+tajimaThresLower = quantile(CEU\_tajima\$TajimaD, 0.025)
+
+#plot Tajima's D
+plot(CEU\_tajimaD\$BIN\_START,CEU\_tajimaD\$TajimaD, pch=16, cex=0.4,
+       frame=FALSE, ylab="Tajima's D", ylim=c(-3,6), xaxt="n", yaxt="n",
+       xlim=c(0,300e6), xlab=paste("Chromosome",chr,"(Mbp)",sep=" "))
+axis(side=1, tick=TRUE,at=c(0, 50e6,100e6,150e6,200e6,250e6,300e6),labels=c("0","50","100","150","200","250","300"))
+axis(side=2, tick=TRUE, at=c(-3:6) ) 
+title(main="CEU Tajima's D Chromosome 2)
+abline(h=tajimaMean], lty="dashed", lwd=2)
+abline(h=c(tajimaThresUpper, tajimaThresLower), lty="dotted", lwd=2)
+
+
+
+
 \subsubsection{rSb}
+CEU\_ihh=read.table("CEU\_chr4.iHH")
+CHB\_ihh=read.table("CHB\_chr4.iHH")
+CEU\_CHB= merge(x=CEU\_ihh, y=CHB\_ihh, by="POSITION")
+rsb\_CEU\_CHB= ies2rsb(CEU\_CHB[,c("CHR.x","POSITION","FREQ\_a.x","IHHa.x","IHHd.x","IES.x")], CEU\_CHB[,c("CHR.y","POSITION","FREQ\_a.y","IHHa.y","IHHd.y","IES.y")], 
+                     popname1="CEU", popname2="CHB", method="bilateral")
+#plot Rsb values
+rsbplot(rsb\_CEU\_CHB\$res.rsb, plot.pval=FALSE, ylim.scan=2, pch=".", main=NA)
+#plot Rsb Pvalues
+rsbplot(rsb\_CEU\_CHB\$res.rsb, plot.pval=TRUE, ylim.scan=2, pch=".", main=NA)
 
 \section{Command line Arguments}
 The selection pipeline contains three major scripts selection\_pipeline aa\_annotate and multipopulation. The selection pipeline does all the within population statistics calculations. The multipopulation program calculates all the between population statistics and calls the selection pipeline. The aa\_annotate program annotates a haplotype file or a phased vcf file with the ancestral allele from the 6-way EPO alignment, for other species or alternative ancestral annotation the feauture will be added promptly.
