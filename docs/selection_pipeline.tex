@@ -72,6 +72,8 @@ Installation creates a default config file located in the base directory of the 
 selection_pipeline -h
 \end{minted}
 
+All the following examples are using an example directory change you config file according to the location of your selection pipeline folder in each case.
+
 The pipeline uses VCF tools, VCF tools requires a perl library to work correctly. Assuming you are using bash as your default shell open your .bashrc file in your home directory and append to the PERL5LIB environment variable.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
@@ -81,7 +83,7 @@ export PERL5LIB=\${PERL5LIB}:/home/sfk/selection_pipeline/lib/perl5
 
 To avoid having to change the default config file append the same folder to you PATH environment variable.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-export PATH=\${PATH}:/home/sfk/selection_pipeline/bin
+export PATH=\${PATH}:\${HOME}/selection\_pipeline/bin
 \end{minted}
 
 \subsection{Genetic Maps and Impute Haplotypes}

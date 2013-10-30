@@ -34,5 +34,4 @@
 \contentsline {subsection}{\numberline {4.5}Argument Description}{7}{subsection.4.5}
 \contentsline {section}{\numberline {5}Extra Features}{7}{section.5}
 \contentsline {subsection}{\numberline {5.1}Genome Wide Selection Scans}{7}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Ancestral Allele Annotation}{7}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}Galaxy Intergration}{7}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.2}Galaxy Intergration}{7}{subsection.5.2}

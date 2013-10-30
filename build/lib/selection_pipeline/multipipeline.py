@@ -151,7 +151,7 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         run_subprocess(cmd,'selection_pipeline')
         #run_subprocess.close()
         running_log.close()
-    os.chdir(orig_dir)
+        os.chdir(orig_dir)
 def fst_vcf(input_vcf,config,options,populations):
     
     vcf_tools =config['vcftools']['vcf_tools_executable']
