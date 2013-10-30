@@ -55,13 +55,13 @@ Mik to fill this in
 \subsection{Prerequisites}
 The selection pipeline requires some basic libraries and tools are installed on your system.
 \begin{itemize}
-\item python3
+\item python2 or python3
 \item bourne-again Shell (Bash)
 \item perl5
 \item git
 \end{itemize}
 \subsection{Installation}
-To install the package standalone, requiring manual configuration of the config file, run this as root.\\
+To install the package standalone, requiring manual configuration of the config file run the following command.\\
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh --standalone
@@ -79,26 +79,39 @@ selection_pipeline -h
 \end{minted}
 
 \subsection{Genetic Maps and Impute Haplotypes}
-To use the phasing and imputation features of the pipeline requires both genetic map files and haplotype files. For humans these files that conform to the format required for shapeit and impute2 can be found \href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. Download and extract the reference files of your choice and extract them. To use the files with the selection pipeline requires setting a few options in the config file you will use these are as follows an example config file is avaliable the base directory of the selection pipeline. The question mark character "?" in the config is substituted by the chromosome number, this is used for reference files that are split on chromosomes. \href{http://mathgen.stats.ox.ac.uk/impute/ALL_1000G_phase1integrated_v3_impute_macGT1.tgz} shapeit2 \href{http://www.shapeit.fr/files/genetic_map_b37.tar.gz}\\
+To use the phasing and imputation features of the pipeline requires both genetic map files and haplotype files. For humans these files that conform to the format required for shapeit and impute2 can be found \href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. For impute2 one reference is avaliable \href{http://mathgen.stats.ox.ac.uk/impute/ALL_1000G_phase1integrated_v3_impute_macGT1.tgz}{here} and for shapeit2 \href{http://www.shapeit.fr/files/genetic_map_b37.tar.gz}{here}\\
+
+To use other reference files with the selection pipeline requires setting a few options in the config file. The question mark character "?" in the config is substituted by the chromosome number, this is used for reference files that are split on chromosomes.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-[shapeit]
-genetic_map_dir = # genetic map file directory #
-genetic_map_prefix = # full file name with ? where chromosome number changes #
-[impute_executable]
-impute_map_dir= # genetic map file directory location #
-impute_reference_dir = # impute reference directory location #
-impute_map_prefix = # the full file name with a ? for where the chromosome number is #
-impute_reference_prefix = # The file name with a ? for chromosome name and the extension left out. 
+...
+genetic_map_prefix=genetic_map_chr?_combined_b37.txt
+...
+impute_map_prefix=genetic_map_chr?_combined_b37.txt
+impute_reference_prefix=ALL_1000G_phase1integrated_v3_chr?_impute
+...
 \end{minted}
+
+If you decide to store you reference files in another location, further option will requirealterations.\\ 
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+...
+genetic_map_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/shapeit_ref
+...
+impute_map_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
+impute_reference_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
+...
+\end{minted}
+
 \subsection{Ancestral Fasta Files}
-To generate results for iHS requires assigning the ancestral allele. The selection pipeline uses the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. To setup the selection pipeline 
-open your config files and change the following fields.\\
+To generate results for iHS requires assigning the ancestral allele. The selection pipeline uses the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}.
+
+If you downloaded your reference to a different location you can set the following setting in your config file.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-[ancestral_allele]
-ancestral_allele_script= /home/smilefreak/MerrimanSelectionPipeline/selection_pipeline/aa_annotate.py
+...
 ancestral_fasta_dir = # directory you downloaded alignment to #
-ancestral_prefix=human_ancestor_?.fa # default extracted file chromosome substitution #
+...
 \end{minted}
+
+Currently only the 6-way alignment and the human (hg19) reference genome are available as ancestral references.
 \section{Tutorial}
 \subsection{Selection Signatures at the Lactase Locus}
 \subsubsection{Getting the Data}
@@ -197,7 +210,7 @@ Tajima's D statistic bin size.
 \subsubsection{Other parameters}
 
 \subsection{Configuration File}
-The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line arguments. There are two main programs in selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters.
+The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line arguments. There are two main programs in the selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters.
 \subsection{Argument Description}
 
 
