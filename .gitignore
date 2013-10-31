@@ -8,4 +8,5 @@ lib/perl5/*
 referencefiles/*/*
 include/*
 lib/*
-!referencefiles/*/*.txt
+!referencefiles/*/*.rst
+share/*
