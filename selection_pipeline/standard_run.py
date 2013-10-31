@@ -146,7 +146,7 @@ class StandardRun(CommandTemplate):
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
         cmd.extend(['--thread',self.threads])
-        #self.run_subprocess(cmd,'shapeit')
+        self.run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
     #Calls a subprocess to run impute   

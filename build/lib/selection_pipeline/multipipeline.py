@@ -18,6 +18,7 @@ import subprocess
 from optparse import OptionParser
 import configparser
 import logging
+from .environment import set_environment
 logging.basicConfig(format='%(asctime)s %(message)s')
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
@@ -116,15 +117,15 @@ def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     for key, value in populations.items():
         cmd = []
-#        vcf_output = open(key + '.vcf','w')
+        vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
         vcf_merge_exec=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_merge_exec)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
- #       run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-  #      vcf_output.close()
+        vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -212,6 +213,7 @@ def main():
         options.fst_window_size = str(1000)
     else:
         options.fst_window_size = str(fst_window_size) 
+    set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)
     output_fst =  fst_vcf(options.vcf_input,config,options,populations)

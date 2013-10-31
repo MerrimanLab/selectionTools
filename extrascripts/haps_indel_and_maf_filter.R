@@ -18,7 +18,7 @@ hapsPop[,1]= hapsPop[,2]
 
 
 af = apply(hapsPop[,6:length(hapsPop[1,])], 1, FUN=function(x){sum(x)/length(x)}  )
-hapsPop=hapsPop[(af > maf) & (af < (1-maf)),]
+hapsPop=hapsPop[(af >= maf) & (af <= (1-maf)),]
 print(paste("af >",maf))
 print(table((af > maf ) & (af < (1-maf))))
 
