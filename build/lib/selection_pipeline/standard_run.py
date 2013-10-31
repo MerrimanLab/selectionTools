@@ -146,7 +146,7 @@ class StandardRun(CommandTemplate):
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
         cmd.extend(['--thread',self.threads])
-        #self.run_subprocess(cmd,'shapeit')
+        self.run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
     #Calls a subprocess to run impute   
@@ -172,14 +172,14 @@ class StandardRun(CommandTemplate):
         distance=int(config['impute2']['chromosome_split_size']) * 1000000
         # Break files into 5 megabase regions.
         try:
-            print("tail -1 {0}| awk '{{print $3}}'".format(haps))
+            print(("tail -1 {0}| awk '{{print $3}}'".format(haps)))
             proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Tail command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
         # get the start of the haps file 
         try:
-            print("head -1 {0}| awk '{{print $3}}'".format(haps))
+            print(("head -1 {0}| awk '{{print $3}}'".format(haps)))
             head = subprocess.Popen("""head -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Head command failed on haps file")

@@ -149,7 +149,7 @@ def main():
     parser = OptionParser()
     parser.add_option('-i','--haps',dest='haps',help="Haplotype File (.haps)")
     parser.add_option('-a','--aa', dest='ancestralfasta',help="Ancestral Allele Fasta file")
-    parser.add_option('--ref-fasta',action='store_true',dest='ref_fasta',help='Use reference fasta which does is not split chromosome by chromosome')
+    parser.add_option('--ref-fasta',action='store_true',dest='ref_fasta',help='Use reference fasta which does not split chromosome by chromosome')
     parser.add_option('-c','--chr',dest="chromosome",help="Chromosome")
     parser.add_option('-o','--output',dest="output",help="Output File (optional)")
     parser.add_option('-f','--format',dest="format",help="Format us High or use Low & High")

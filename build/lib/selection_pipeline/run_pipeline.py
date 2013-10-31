@@ -102,7 +102,7 @@ class CommandTemplate(object):
                 legend_file = os.path.join(config['impute2']['impute_reference_dir'],file)
         
         hap_file = ''
-        print(config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.hap'))
+        print((config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.hap')))
         for file in os.listdir(config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome)+'.hap'):
                 hap_file = os.path.join(config['impute2']['impute_reference_dir'],file)
@@ -116,12 +116,12 @@ class CommandTemplate(object):
     def run_aa_annotate_haps(self,options,config,haps):
         cmd = []
         output_name= options.output_prefix + '_aachanged'
-        py_executable = config['python3']['python_executable']
+        py_executable = config['python']['python_executable']
         aa_annotate = config['ancestral_allele']['ancestral_allele_script']
         logger.debug('Attempting to run ancestral allele annotation')
         cmd.append(py_executable)
         cmd.append(aa_annotate)
-        if('reference_fasta' in config['ancestral_allele'].keys()):
+        if('reference_fasta' in list(config['ancestral_allele'].keys())):
             cmd.append('--ref-fasta')
             ancestral_fasta=config['ancestral_allele']['reference_fasta']
         else:

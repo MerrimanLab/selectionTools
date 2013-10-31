@@ -111,7 +111,6 @@ ancestral_fasta_dir = # directory you downloaded alignment to #
 ...
 \end{minted}
 
-Currently only the 6-way alignment and the human (hg19) reference genome are available as ancestral references.
 \section{Tutorial}
 \subsection{Selection Signatures at the Lactase Locus}
 \subsubsection{Getting the Data}
@@ -126,10 +125,7 @@ Extract the example data into a new folder.
 \subsection{Setting up Pipeline Run}
 To perform the analysis the first step will is to navigate to the folder you extracted the tutorial data.
 \subsection{Population Files}
-##
-#we should explain the format of these pop files, are they single ID per line?
-##
-Population files are required for any cross population comparisions. The commands below will initiate the data generation step.\\
+Population files are required for any cross population comparisions. The commands below will initiate the data generation step. Population files are line seperated files the first line contains the population name every successive line contains and individual ID from that population.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 multipop\_selection_pipeline -p POP1.txt -p POP2.txt -i input.vcf --c defaults.cfg
 \end{minted}

@@ -3,6 +3,8 @@
 # Install all the programs required for the install of the program.
 #
 
+PWD=`pwd`
+
 if [ "$1" == "--standalone" ]; then 
 	echo "Install Selection Pipeline"
 	git submodule init
@@ -13,12 +15,15 @@ if [ "$1" == "--standalone" ]; then
 else
 	mkdir -p bin
 	mkdir -p lib/perl5
-	mkdir -p 
 	echo "Installing Dependencies"
-	which vcftools
+	echo "Install Zlib"
+	tar xzf src/zlib-1.2.8.tar.gz
+	#(cd zlib-1.2.8/ && ./configure --prefix ${PWD} && make install)	
+	rm -Rf zlib-1.2.8
+		
 	echo "Installing VCF tools"
 	tar xzf src/vcftools.tar.gz
-	(cd vcftools_0.1.11/ && make)
+	#(cd vcftools_0.1.11/ && make)
 	cp vcftools_0.1.11/bin/* bin/
 	cp vcftools_0.1.11/perl/*pm lib/perl5/
 	rm -Rf vcftools_0.1.11
@@ -26,7 +31,10 @@ else
 	tar xzf src/qctool_v1.3-linux-x86_64.tgz
 	mv qctool_v1.3-linux-x86_64/qctool bin/
 	rm -Rf qctool_v1.3-linux-x86_64
-
+	echo "Installing PLINK"
+	unzip src/plink-1.07-x86_64.zip
+	cp plink-1.07-x86_64/plink bin/
+	rm -Rf plink-1.07-x86_64
 	echo "Installing shapeit"
 	tar xzf src/shapeit.v2.r727.linux.x64.tar.gz
 	mv shapeit.v2.r727.linux.x64 bin/shapeit
@@ -38,7 +46,7 @@ else
 	chmod 755 bin/impute2
 	echo "Installing Tabix"
 	tar -xjf src/tabix.tar.bz2
-	(cd tabix-0.2.6/ && make)
+	#(cd tabix-0.2.6/ && make)
 	cp tabix-0.2.6/bgzip bin/
 	cp tabix-0.2.6/tabix bin/
 	rm -Rf tabix-0.2.6
@@ -48,6 +56,9 @@ else
 	echo "Install Selection Pipeline"
 	git submodule init
 	git submodule update
+	echo "Generating Default Config File"
+  # Because PWD contains slashes (/) need to use # as substitution
+	sed 's#!SELECT_PIPELINE!#'"${PWD}"'#g' corescripts/defaults.cfg > defaults.cfg
 	if [[ $EUID -eq 0 ]]; then
 	(cd pyfasta && python3 setup.py install)
 	(cd PyVCF && python3 setup.py install)

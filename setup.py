@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
+    use_2to3=True,
     name="MerrimanSelectionPipeline",
     version="0.3",
     packages=find_packages(),

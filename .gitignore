@@ -6,4 +6,6 @@ bin/*
 lactase/*
 lib/perl5/*
 referencefiles/*/*
+include/*
+lib/*
 !referencefiles/*/*.txt
