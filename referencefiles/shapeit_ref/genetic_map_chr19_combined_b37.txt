@@ -1,0 +1,1 @@
+/home/smilefreak/OtagoGalaxy/data/1kg/impute2/genetic_map_chr19_combined_b37.txt

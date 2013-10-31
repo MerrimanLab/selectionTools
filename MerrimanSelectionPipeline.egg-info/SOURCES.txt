@@ -7,6 +7,7 @@ MerrimanSelectionPipeline.egg-info/not-zip-safe
 MerrimanSelectionPipeline.egg-info/top_level.txt
 selection_pipeline/__init__.py
 selection_pipeline/aa_annotate.py
+selection_pipeline/environment.py
 selection_pipeline/fullprocess.py
 selection_pipeline/load_leveler_run.py
 selection_pipeline/multipipeline.py

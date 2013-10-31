@@ -27,6 +27,8 @@ import logging
 from .load_leveler_run import LoadLevelerRun 
 from .standard_run import StandardRun
 
+from .environment import set_environment
+
 logging.basicConfig(format='%(asctime)s %(message)s')
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
@@ -110,16 +112,19 @@ def parse_arguments():
         options.vcf_gz = False
     return options 
      
-# Calls a subprocess to run vcf tools
 
 
 def main():
     options = parse_arguments()
     config = parse_config(options)
-    if(config['system']['nesi']=="True"):
-        LoadLevelerRun(options,config)
+    set_environment(config['environment']) 
+    if('nesi' in config['system']):
+        if(config['system']['nesi']=="True"):
+            LoadLevelerRun(options,config)
+        else:
+            StandardRun(options,config)        
     else:
-        StandardRun(options,config)        
+        StandardRun(options,config)
                 
 if __name__=="__main__":main()
 
