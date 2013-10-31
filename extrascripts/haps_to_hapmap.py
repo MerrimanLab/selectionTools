@@ -41,7 +41,7 @@ def main():
             pos = line[2]
             a1 = line[3]
             a2 = line[4]
-            change_alleles=map(lambda x: a1 if(x == 0) else a2,line[5:])
+            change_alleles=map(lambda x: a1 if(x == '0') else a2,line[5:])
             zipa=change_alleles[0::2]
             zipb=change_alleles[1::2]
             change_alleles = zip(zipa,zipb)
