@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  4 NOV 2013 12:40
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  4 NOV 2013 18:13
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -688,7 +688,7 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 58.
- [2]
+
 Underfull \hbox (badness 10000) in paragraph at lines 64--65
 
  []
@@ -699,7 +699,7 @@ runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
 
-(./selection_pipeline.out.pyg
+[2] (./selection_pipeline.out.pyg
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 1.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
@@ -865,13 +865,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 172--173
 
  []
 
-[5]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
 frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
 
- (./selection_pipeline.out.pyg)
+(./selection_pipeline.out.pyg)
 runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
@@ -881,39 +880,47 @@ Underfull \hbox (badness 10000) in paragraph at lines 194--195
 
  []
 
+[5]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l R -f latex -F tokenmerge             -P "verboptions= ,
 frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
 
-(./selection_pipeline.out.pyg)
+ (./selection_pipeline.out.pyg)
 runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
 
- [6]
+
 Overfull \hbox (1.40817pt too wide) in paragraph at lines 225--227
 \T1/cmr/m/n/10 Fst re-sults are stored in the fst folder with the chro-mo-some 
 num-ber fol-lowed by the two pop-u-la-tions. e.g 2CEUYRI.fst 
  []
 
-[7] [8] [9] [10]
+[6] [7] [8] [9] [10]
 No file selection_pipeline.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 405.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 427.
 [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 405.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 427.
  (./selection_pipeline.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 405.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 405.
-Package rerunfilecheck Info: File `selection_pipeline.out' has not changed.
-(rerunfilecheck)             Checksum: EC35B5887C4F72790D3059825D2B8F12;3264.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 405.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 427.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 427.
+
+
+Package rerunfilecheck Warning: File `selection_pipeline.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `selection_pipeline.out':
+(rerunfilecheck)             Before: B1B3E40F57DD221E1BA89749438634D9;3133
+(rerunfilecheck)             After:  945815DAB6FE9A5B2D675E2189B9181D;3129.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 427.
  ) 
 Here is how much of TeX's memory you used:
- 9465 strings out of 495031
- 134843 string characters out of 6181530
- 234381 words of memory out of 5000000
- 12454 multiletter control sequences out of 15000+600000
+ 9461 strings out of 495031
+ 134783 string characters out of 6181530
+ 235381 words of memory out of 5000000
+ 12452 multiletter control sequences out of 15000+600000
  14621 words of font info for 35 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  31i,10n,40p,729b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -925,10 +932,10 @@ ur/jknappen/ec/ecrm1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1000.60
 our/jknappen/ec/ecrm0800.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1200.6
 00pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1728.600pk></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on selection_pipeline.pdf (11 pages, 140902 bytes).
+Output written on selection_pipeline.pdf (11 pages, 141411 bytes).
 PDF statistics:
- 728 PDF objects out of 1000 (max. 8388607)
- 336 compressed objects within 4 object streams
- 59 named destinations out of 1000 (max. 500000)
- 377 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 719 PDF objects out of 1000 (max. 8388607)
+ 326 compressed objects within 4 object streams
+ 57 named destinations out of 1000 (max. 500000)
+ 361 words of extra memory for PDF output out of 10000 (max. 10000000)
 

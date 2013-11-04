@@ -117,15 +117,15 @@ def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     for key, value in list(populations.items()):
         cmd = []
-        vcf_output = open(key + '.vcf','w')
+        #vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
         vcf_merge_exec=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_merge_exec)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+        #run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-        vcf_output.close()
+        #vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):

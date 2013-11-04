@@ -278,7 +278,7 @@ Inclusion criteria for SNPs with missing data. SNPs with less than this value wi
 Tajima's D statistic bin size.
 \end{itemize}
 \subsection{Ancestral Annotation}
-The progam \emph{ancestral_annotation} is installed on the program path. The program annotates haps and vcfs files with ancestral allele annotation from the 6-way IPO alignment or the human reference genome.
+The progam \emph{ancestral\_annotation} is installed on the program path. The program annotates haps and vcfs files with ancestral allele annotation from the 6-way IPO alignment or the human reference genome.
 \subsubsection{Input Files}
 \begin{itemize}
 \item -i or --haps <HAPS File>
@@ -291,6 +291,7 @@ Phased VCF file (.vcf), phased VCF genotypes denoted by a bar ( | ) for each sam
 \item -a or -aa <Ancestral allele fasta>
 
 Ancestral allele annotation file. Currently only works on a the full 1000 genomes reference file from 1000 genomes or the single chromosome fasta files from the 6-way EPO alignment.
+\end{itemize}
 \subsubsection{Output Files}
 \begin{itemize}
 \item -o or --output <Output file name>
@@ -298,15 +299,16 @@ Ancestral allele annotation file. Currently only works on a the full 1000 genome
 Output file name optional argument by default output is sent to the stdout stream.
 \end{itemize}
 \subsubsection{Other parameters}
+\begin{itemize}
 \item --ref-fasta
 
 Denoting that you are using the human reference allele as the ancestral allele. 
 \item -f or --format <format>
 
 The 6-way EPO alignment denotes ancestral alleles with both high and low confidence. To use only ancestral alleles with high confidence use --format high. To use both high and low confident alleles use --format low. By default the program will use only highly confident alleles.
+\end{itemize}
 \subsection{Configuration File}
 The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line arguments. There are two main programs in the selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters. The default config file contains an example of the format.
-\subsection{Sections}
 \subsubsection{system}
 \begin{itemize}
 \item threads\_avaliable
@@ -415,10 +417,8 @@ Full file name for ancestral fasta files containing a "?" character
 \end{itemize}
 \section{Extra Features}
 
-\subsection{Genome Wide Selection Scans}
-The script is designed to work on one chromosome starting with a VCF file containing one or more populations. The pipeline was designed to be applied genome wide in the genome\_wide/ directory we have provided a script that can perform a genome wide analysis. Read the README in this folder for more information.
 \subsection{Galaxy Intergration}
-The galaxy folder contains the scripts required to add the selection pipeline to your local galaxy installation. The pipeline is also avaliable on the galaxy toolshed at galaxy\_url
+The galaxy folder contains the scripts required to add the selection pipeline to your local galaxy installation. The pipeline is also avaliable on the galaxy toolshed at galaxy\_url. To do intergrate the pipeline into galaxy.
 
 
 \bibliographystyle{jss}

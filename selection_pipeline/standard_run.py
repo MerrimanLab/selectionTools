@@ -95,7 +95,7 @@ class StandardRun(CommandTemplate):
             vcf = self.fix_vcf_qctool(options,config,vcf)
             haps = self.run_aa_annotate_haps(options,config,haps)
             haps2_haps = self.prepare_haps_for_variscan(options,config,haps,new_sample_file)
-            feyandwus = self.variscan_feyandwus(options,config,haps2_sample,haps2_haps)
+            feyandwus = self.variscan_feyandwus(options,config,haps2_haps)
             tajimaSD = self.vcf_to_tajimas_d(options,config,vcf)
         ihh = self.run_multi_coreihh(options,config,haps)
 
@@ -108,6 +108,7 @@ class StandardRun(CommandTemplate):
         os.rename(vcf,'results/' + vcf)
         os.rename(ihh,'results/' + ihh)
         os.rename(haps,'results/' + haps)
+        os.rename(feyandwus,'results/' + feyandwus)
         logger.info("Pipeline completed successfully")
         logger.info(tajimaSD)
         logger.info(vcf)
@@ -262,32 +263,34 @@ class StandardRun(CommandTemplate):
         self.run_subprocess(cmd,'haps to hapmap') 
         return(output_name)
     def variscan_feyandwus(self,options,config,hap2):
-        (cmd,output_name,varscan_conf) = CommandTemplate.variscan_feyandwus(self,options.config,hap2) 
+        (cmd,output_name,varscan_conf) = CommandTemplate.variscan_feyandwus(self,options,config,hap2) 
         output_variscan = open(output_name,'w')
          
         # get the start and the end of the hapmap2 file
         #
         varscan_config = open(varscan_conf ,'w+')
         try:
-            print("tail -1 {0}| awk '{{print $3}}'".format(haps))
-            proc = subprocess.Popen("""tail -1 {0}| awk '{{print $4}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
+            print("tail -1 {0}| awk '{{print $4}}'".format(hap2))
+            proc = subprocess.Popen("""tail -1 {0}| awk '{{print $4}}'""".format(hap2),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Tail command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
         # get the start of the haps file 
         try:
-            print("head -1 {0}| awk '{{print $3}}'".format(haps))
-            head = subprocess.Popen("""head -1 {0}| awk '{{print $4}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
+            print("head -2 {0}| tail -1 |awk '{{print $4}}'".format(hap2))
+            head = subprocess.Popen("""head -2 {0} | tail -1 | awk '{{print $4}}'""".format(hap2),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Head command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
-        start_position = int(head.stdout.read())
+        start_pos = head.stdout.read()
+        print(start_pos)
+        start_position = int(start_pos)
         end_position = int(proc.stdout.read())
         
         # Write the start and end of the Fey and Wu's into the config file #
-        varscan_conf.write('StartPos = ' + start_position + "\n")
-        varscan_conf.write('EndPos = ', + end_position + '\n')
+        varscan_config.write('StartPos = ' + str(start_position) + "\n")
+        varscan_config.write('EndPos = ', + str(end_position)+ '\n')
         varscan_config.close() 
-        self.run_subprocess(cmd,'variscan',hap2,stdout=output_name)
+        self.run_subprocess(cmd,'variscan',hap2,stdout=output_variscan)
         output_variscan.close()
         return(output_name)

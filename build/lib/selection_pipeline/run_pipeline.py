@@ -180,16 +180,18 @@ class CommandTemplate(object):
         output_name = options.output_prefix + options.chromosome + '.haps2' 
         haps_executable=config['variscan']['haps_to_hapmap_executable']
         ancestral_fasta = self.get_ancestral_fasta(options,config)
-        cmd.extend(['-i',haps,'-s',sample,'-o', output_name, '-id','ANCESTOR','-a',ancestral_fasta,'-c',options.chromosome])
+        cmd.append(haps_executable)
+        cmd.extend(['-i',haps,'-s',sample,'-o', output_name, '--id','ANCESTOR','-a',ancestral_fasta,'-c',options.chromosome])
         return(cmd,output_name)
     def variscan_feyandwus(self,options,config,hap2):
         cmd=[]
         v_config_name = 'variscan.conf'
-        output_name = options.output_prefix + options.chromosome + 'faw' 
+        output_name = options.output_prefix + options.chromosome + '.faw' 
         variscan_config = open(v_config_name,'w')
-        variscan_executable = config['varscan']['variscan_executable']
+        variscan_executable = config['variscan']['variscan_executable']
         cmd.append(variscan_executable)
         cmd.extend([hap2,variscan_config])
+        # generate default config file for variscan
         config_string = 'RefPos = 0 \n'
         config_string += 'BlockDataFile = none \n'
         config_string += 'SeqChoice = all \n'

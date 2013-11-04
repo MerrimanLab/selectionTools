@@ -31,17 +31,15 @@
 \BOOKMARK [3][-]{subsubsection.4.3.2}{Output Files}{subsection.4.3}% 31
 \BOOKMARK [3][-]{subsubsection.4.3.3}{Other parameters}{subsection.4.3}% 32
 \BOOKMARK [2][-]{subsection.4.4}{Configuration File}{section.4}% 33
-\BOOKMARK [2][-]{subsection.4.5}{Sections}{section.4}% 34
-\BOOKMARK [3][-]{subsubsection.4.5.1}{system}{subsection.4.5}% 35
-\BOOKMARK [3][-]{subsubsection.4.5.2}{environment}{subsection.4.5}% 36
-\BOOKMARK [3][-]{subsubsection.4.5.3}{selection\137pipeline}{subsection.4.5}% 37
-\BOOKMARK [3][-]{subsubsection.4.5.4}{vcf\137tools}{subsection.4.5}% 38
-\BOOKMARK [3][-]{subsubsection.4.5.5}{shapeit}{subsection.4.5}% 39
-\BOOKMARK [3][-]{subsubsection.4.5.6}{impute2}{subsection.4.5}% 40
-\BOOKMARK [3][-]{subsubsection.4.5.7}{plink}{subsection.4.5}% 41
-\BOOKMARK [3][-]{subsubsection.4.5.8}{Rscript}{subsection.4.5}% 42
-\BOOKMARK [3][-]{subsubsection.4.5.9}{python}{subsection.4.5}% 43
-\BOOKMARK [3][-]{subsubsection.4.5.10}{ancestral\137allele}{subsection.4.5}% 44
-\BOOKMARK [1][-]{section.5}{Extra Features}{}% 45
-\BOOKMARK [2][-]{subsection.5.1}{Genome Wide Selection Scans}{section.5}% 46
-\BOOKMARK [2][-]{subsection.5.2}{Galaxy Intergration}{section.5}% 47
+\BOOKMARK [3][-]{subsubsection.4.4.1}{system}{subsection.4.4}% 34
+\BOOKMARK [3][-]{subsubsection.4.4.2}{environment}{subsection.4.4}% 35
+\BOOKMARK [3][-]{subsubsection.4.4.3}{selection\137pipeline}{subsection.4.4}% 36
+\BOOKMARK [3][-]{subsubsection.4.4.4}{vcf\137tools}{subsection.4.4}% 37
+\BOOKMARK [3][-]{subsubsection.4.4.5}{shapeit}{subsection.4.4}% 38
+\BOOKMARK [3][-]{subsubsection.4.4.6}{impute2}{subsection.4.4}% 39
+\BOOKMARK [3][-]{subsubsection.4.4.7}{plink}{subsection.4.4}% 40
+\BOOKMARK [3][-]{subsubsection.4.4.8}{Rscript}{subsection.4.4}% 41
+\BOOKMARK [3][-]{subsubsection.4.4.9}{python}{subsection.4.4}% 42
+\BOOKMARK [3][-]{subsubsection.4.4.10}{ancestral\137allele}{subsection.4.4}% 43
+\BOOKMARK [1][-]{section.5}{Extra Features}{}% 44
+\BOOKMARK [2][-]{subsection.5.1}{Galaxy Intergration}{section.5}% 45

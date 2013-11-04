@@ -1,5 +1,7 @@
+#!/usr/bin/env python
 import sys
 import os
+import re
 
 from optparse import OptionParser
 from pyfasta import Fasta
@@ -14,9 +16,10 @@ from pyfasta import Fasta
 # regex for determining we have a valid SNP #
 
 
-def aa_fasta(options)
+def aa_fasta(options):
     f = Fasta(options.ancestral_fasta)
-    for key in keyz:
+    chroms = {}
+    for key in f.keys():
         if(options.ref_fasta != None):
             chroms[(key.split(' '))[0]] = key
         else:
@@ -36,12 +39,13 @@ def main():
     parser.add_option('--ref-fasta',dest="ref_fasta",help="Reference fasta")
     (options,args) = parser.parse_args() 
     options.chromosome = str(options.chromosome)
+    print(options)
     # Set default ancestral ID#
     if (options.ancestral_indivdual_id is None):
         options.ancestral_indivdual_id = 'ANCESTOR' 
     sample_ids = []
     output = open(options.output_file_name,'w')
-    failed_snps = ('failed_snps.txt','w')
+    failed_snps = open('failed_snps.txt','w')
     aaSeq=aa_fasta(options)
     with open(options.sample_file,'r') as f:
         for i, line in enumerate(f):
@@ -58,7 +62,7 @@ def main():
             line=line.split()
             rsid = line[1]
             pos = line[2]
-            ancestral_allele = aaSeq[pos]
+            ancestral_allele = aaSeq[int(pos)]
             if not (re.match('[ACTGactg]',ancestral_allele)):
                failed_snps.write(rsid + ' ' + pos + '\n')
             else: 
@@ -71,7 +75,7 @@ def main():
                 change_alleles = zip(zipa,zipb)
                 change_alleles = [''.join(row) for row in change_alleles]
                 output_line = rsid + ' ' + a1 + '/' + a2 + ' '+ options.chromosome + ' ' + pos
-                output_line = output_line + ' + -9 -9 -9 -9 -9 -9 ' + ' '.join(change_alleles + ' ' + ancestral_genotypes)
+                output_line = output_line + ' + -9 -9 -9 -9 -9 -9 ' + ' '.join(change_alleles) + ' ' + ancestral_genotypes
                 output.write(output_line + '\n')
     output.close() 
     failed_snps.close()
