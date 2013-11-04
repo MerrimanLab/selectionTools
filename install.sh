@@ -50,7 +50,10 @@ else
 	cp tabix-0.2.6/bgzip bin/
 	cp tabix-0.2.6/tabix bin/
 	rm -Rf tabix-0.2.6
-
+	echo "Installing Variscan"
+ 	tar -xzf src/variscan-2.0.3.tar.gz
+	mv variscan-2.0.3/bin/Linux-i386/variscan bin/
+	rm -Rf variscan-2.0.3
 	echo "Install rehh"
 	R CMD INSTALL src/rehh_1.11.tar.gz	
 	echo "Install Selection Pipeline"

@@ -111,7 +111,15 @@ class CommandTemplate(object):
         cmd_template.append(impute2)
         cmd_template.extend(['-m',genetic_map,'-h',hap_file,'-l',legend_file,'-known_haps_g',haps,'-phase'])
         return (cmd_template,prefix)
-             
+    def get_ancestral_fasta(self,options,config):     
+        if('reference_fasta' in config['ancestral_allele'].keys()):
+            cmd.append('--ref-fasta')
+            ancestral_fasta=config['ancestral_allele']['reference_fasta']
+        else:
+            for file in os.listdir(config['ancestral_allele']['ancestral_fasta_dir']):
+                if fnmatch.fnmatch(file,config['ancestral_allele']['ancestral_prefix'].replace('?',options.chromosome)):
+                    ancestral_fasta = os.path.join(config['ancestral_allele']['ancestral_fasta_dir'],file)
+        return ancestral_fasta
 
     def run_aa_annotate_haps(self,options,config,haps):
         cmd = []
@@ -121,13 +129,7 @@ class CommandTemplate(object):
         logger.debug('Attempting to run ancestral allele annotation')
         cmd.append(py_executable)
         cmd.append(aa_annotate)
-        if('reference_fasta' in config['ancestral_allele'].keys()):
-            cmd.append('--ref-fasta')
-            ancestral_fasta=config['ancestral_allele']['reference_fasta']
-        else:
-            for file in os.listdir(config['ancestral_allele']['ancestral_fasta_dir']):
-                if fnmatch.fnmatch(file,config['ancestral_allele']['ancestral_prefix'].replace('?',options.chromosome)):
-                    ancestral_fasta = os.path.join(config['ancestral_allele']['ancestral_fasta_dir'],file)
+        ancestral_fasta = self.get_ancestral_fasta(options,config)
         cmd.extend(['-i',haps ,'-c', options.chromosome, '-o', output_name,'-a',ancestral_fasta])
         return (cmd,output_name)
 
@@ -156,6 +158,7 @@ class CommandTemplate(object):
         output_name=options.output_prefix + options.chromosome + '.vcf'
         qctool_executable=config['qctool']['qctool_executable']
         cmd.append(qctool_executable)
+        ancestral_fasta = self.get_ancestral_fasta(options,config)
         cmd.extend(['-filetype','shapeit_haplotypes','-g',haps,'-s',new_sample_file,'-og',output_name])
         return (cmd,output_name)
 
@@ -172,7 +175,37 @@ class CommandTemplate(object):
         cmd.append(vcftools_executable)
         cmd.extend(['--TajimaD',options.tajimas_d,'--vcf',vcf])
         return(cmd,output_name)
-        ##### FINISH TAJIMAS D  THINGY #####
-
-
+    def prepare_haps_for_variscan(self,options,config,haps,sample):
+        cmd=[]
+        output_name = options.output_prefix + options.chromosome + '.haps2' 
+        haps_executable=config['variscan']['haps_to_hapmap_executable']
+        ancestral_fasta = self.get_ancestral_fasta(options,config)
+        cmd.extend(['-i',haps,'-s',sample,'-o', output_name, '-id','ANCESTOR','-a',ancestral_fasta,'-c',options.chromosome])
+        return(cmd,output_name)
+    def variscan_feyandwus(self,options,config,hap2):
+        cmd=[]
+        v_config_name = 'variscan.conf'
+        output_name = options.output_prefix + options.chromosome + 'faw' 
+        variscan_config = open(v_config_name,'w')
+        variscan_executable = config['varscan']['variscan_executable']
+        cmd.append(variscan_executable)
+        cmd.extend([hap2,variscan_config])
+        config_string = 'RefPos = 0 \n'
+        config_string += 'BlockDataFile = none \n'
+        config_string += 'SeqChoice = all \n'
+        config_string += 'OutGrup = last \n'
+        config_string += 'RunMode = 22 \n'
+        config_string += 'UseMuts = 1 \n'
+        config_string += 'CompleteDeletion = 0 \n'
+        config_string += 'FixNum = 0 \n'
+        config_string += 'NumNuc = 0 \n'
+        config_string += 'SlidingWindow = 1 \n'
+        config_string += 'WidthSW = 1000 \n'
+        config_string += 'JumpSW = 1000 \n'
+        config_string += 'WindowType = 0 \n'
+        config_string += 'UseLDSinglets = 0 \n'
+        variscan_config.write(config_string)
+        variscan_config.close()
+        return(cmd,output_name,v_config_name)
+        
  

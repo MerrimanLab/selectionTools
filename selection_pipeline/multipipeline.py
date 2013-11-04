@@ -117,15 +117,15 @@ def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     for key, value in populations.items():
         cmd = []
-        vcf_output = open(key + '.vcf','w')
+        #vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
         vcf_merge_exec=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_merge_exec)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+        #run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-        vcf_output.close()
+        #vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -207,12 +207,12 @@ def main():
     if options.fst_window_step is None:
         options.fst_window_step = str(10)
     else:
-        options.fst_window_step = str(fst_window_step)
+        options.fst_window_step = str(options.fst_window_step)
     
     if options.fst_window_size is None:
         options.fst_window_size = str(1000)
     else:
-        options.fst_window_size = str(fst_window_size) 
+        options.fst_window_size = str(options.fst_window_size) 
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)

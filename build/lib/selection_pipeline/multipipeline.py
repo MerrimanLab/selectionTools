@@ -115,7 +115,7 @@ def which(program,program_name):
 def subset_vcf(vcf_input,config,populations):
     print(populations)
     vcf_outputs = []
-    for key, value in populations.items():
+    for key, value in list(populations.items()):
         cmd = []
         vcf_output = open(key + '.vcf','w')
         population = key
@@ -207,12 +207,12 @@ def main():
     if options.fst_window_step is None:
         options.fst_window_step = str(10)
     else:
-        options.fst_window_step = str(fst_window_step)
+        options.fst_window_step = str(options.fst_window_step)
     
     if options.fst_window_size is None:
         options.fst_window_size = str(1000)
     else:
-        options.fst_window_size = str(fst_window_size) 
+        options.fst_window_size = str(options.fst_window_size) 
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)
