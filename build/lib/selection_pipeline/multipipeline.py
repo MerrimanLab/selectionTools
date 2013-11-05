@@ -12,6 +12,7 @@
 # installed.
 #
 
+from collections import OrderedDict
 import sys
 import os
 import subprocess
@@ -113,19 +114,18 @@ def which(program,program_name):
     return None
 
 def subset_vcf(vcf_input,config,populations):
-    print(populations)
     vcf_outputs = []
     for key, value in list(populations.items()):
         cmd = []
-        #vcf_output = open(key + '.vcf','w')
+        vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
-        vcf_merge_exec=config['vcftools']['vcf_subset_executable']
-        cmd.append(vcf_merge_exec)
+        vcf_subset_executable=config['vcftools']['vcf_subset_executable']
+        cmd.append(vcf_subset_executable)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        #run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-        #vcf_output.close()
+        vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -139,7 +139,6 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
     for vcf, population_name in zip(output_vcfs, populations):
         directory=population_name
         # Create directory for each sub population to run in
-        print(population_name)
         if not os.path.exists(directory):
             os.mkdir(directory)
         running_log= open(os.path.join(directory,population_name+'.log'),'w')
@@ -178,7 +177,6 @@ def fst_vcf(input_vcf,config,options,populations):
             second_pop_name = open('second_pop.tmp','w')
             second_pop_name.write('\n'.join(populations[s]))
             second_pop_name.close()
-            print(tmp_cmd)
             run_subprocess(tmp_cmd,'fst_calculation')
             os.rename('out.windowed.weir.fst',options.chromosome + p + s + '.fst')
     os.remove('second_pop.tmp')
@@ -191,7 +189,7 @@ def main():
     parser.add_option('-a','--arguments-selection-pipelines',dest="extra_args",help='Arguments to the selection pipeline script')
     parser.add_option('-i','--vcf-input-file',dest="vcf_input",help="VCF Input File")
     parser.add_option('-c','--chromosome',dest="chromosome",help="Chromosome label doesn't actually have to correspond to the real chromosome but is required to determine what output files to make")
-    parser.add_option('-C','--config-file',dest='config_file',help='Configuration File')
+    parser.add_option('--config-file',dest='config_file',help='Configuration File')
     parser.add_option('--fst-window-size',dest="fst_window_size",help="FST window size")
     parser.add_option('--fst-window-step',dest="fst_window_step",help="FST window step size")
     (options,args) = parser.parse_args()
@@ -205,7 +203,7 @@ def main():
     if not (check_executables_and_scripts_exist(options,config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)
     if options.fst_window_step is None:
-        options.fst_window_step = str(10)
+        options.fst_window_step = str(1000)
     else:
         options.fst_window_step = str(options.fst_window_step)
     
@@ -216,6 +214,7 @@ def main():
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)
+    populations=OrderedDict(sorted(list(populations.items()), key=lambda t: t[0]))
     output_fst =  fst_vcf(options.vcf_input,config,options,populations)
     output_vcfs = subset_vcf(options.vcf_input,config,populations)
     run_selection_pipeline(output_vcfs,options,populations,config)

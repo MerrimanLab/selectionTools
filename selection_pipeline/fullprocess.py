@@ -73,7 +73,9 @@ def parse_arguments():
     parser.add_option('--full-process',action="store_true",dest="full_process",help="Run Entire Process")
     parser.add_option('--gzvcf',action="store_true",dest="vcf_gz",help="VCF input is in GZ file (optional)")
     parser.add_option('--TajimaD',dest='tajimas_d',help="Output Tajima's D statistic in bins of size <int>")
-      
+    parser.add_option('--fay-Window-Width',dest='fayandWuWindowWidth',help="Sliding window width for Fay and Wu's H")
+    parser.add_option('--fay-Window-Jump',dest="fayandWuWindowJump", help="Window Jump for Fay and Wus ( if fay-Window-Width = fay-Window-Jump non-overlapping windows are used") 
+ 
     (options, args) = parser.parse_args()
     if(options.verbose != None):
         if(options.verbose):
@@ -86,10 +88,14 @@ def parse_arguments():
     assert options.output_prefix is not None, "Output file prefix has not been specified."
     assert options.population is not None, "Population code has not been specified."
     #Optional arguments using sane defaults  
+    if(options.fayandWuWindowJump is None):
+        options.fayandWuWindowJump = str(5000)
+    if(options.fayandWuWindowWidth is None):
+        options.fayandWuWindowWidth = str(5000)
 
     if(options.tajimas_d is None):
         # default tajimas D 1000 bin size
-        options.tajimas_d = str(1000)
+        options.tajimas_d = str(5000)
     else:
         options.tajimas_d = str(options.tajimas_d)
     if(options.imputation is None):

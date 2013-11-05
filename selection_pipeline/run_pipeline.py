@@ -177,33 +177,35 @@ class CommandTemplate(object):
         return(cmd,output_name)
     def prepare_haps_for_variscan(self,options,config,haps,sample):
         cmd=[]
-        output_name = options.output_prefix + options.chromosome + '.haps2' 
+        output_name = options.output_prefix + options.chromosome + '.hapmap'
         haps_executable=config['variscan']['haps_to_hapmap_executable']
         ancestral_fasta = self.get_ancestral_fasta(options,config)
         cmd.append(haps_executable)
         cmd.extend(['-i',haps,'-s',sample,'-o', output_name, '--id','ANCESTOR','-a',ancestral_fasta,'-c',options.chromosome])
         return(cmd,output_name)
-    def variscan_feyandwus(self,options,config,hap2):
+    def variscan_fayandwus(self,options,config,hap2):
         cmd=[]
         v_config_name = 'variscan.conf'
         output_name = options.output_prefix + options.chromosome + '.faw' 
         variscan_config = open(v_config_name,'w')
         variscan_executable = config['variscan']['variscan_executable']
         cmd.append(variscan_executable)
-        cmd.extend([hap2,variscan_config])
+        cmd.extend([hap2,v_config_name])
         # generate default config file for variscan
         config_string = 'RefPos = 0 \n'
+        config_string += 'RefSeq = 1 \n'
         config_string += 'BlockDataFile = none \n'
         config_string += 'SeqChoice = all \n'
-        config_string += 'OutGrup = last \n'
+        config_string += 'OutGroup = last \n'
         config_string += 'RunMode = 22 \n'
+        config_string += 'IndivNames = \n'
         config_string += 'UseMuts = 1 \n'
         config_string += 'CompleteDeletion = 0 \n'
         config_string += 'FixNum = 0 \n'
-        config_string += 'NumNuc = 0 \n'
+        config_string += 'NumNuc = 4 \n'
         config_string += 'SlidingWindow = 1 \n'
-        config_string += 'WidthSW = 1000 \n'
-        config_string += 'JumpSW = 1000 \n'
+        config_string += 'WidthSW = {0} \n'.format(options.fayandWuWindowWidth)
+        config_string += 'JumpSW = 5000 \n'.format(options.fayandWuWindowJump)
         config_string += 'WindowType = 0 \n'
         config_string += 'UseLDSinglets = 0 \n'
         variscan_config.write(config_string)

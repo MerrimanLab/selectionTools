@@ -95,7 +95,7 @@ class StandardRun(CommandTemplate):
             vcf = self.fix_vcf_qctool(options,config,vcf)
             haps = self.run_aa_annotate_haps(options,config,haps)
             haps2_haps = self.prepare_haps_for_variscan(options,config,haps,new_sample_file)
-            feyandwus = self.variscan_feyandwus(options,config,haps2_haps)
+            fayandwus = self.variscan_fayandwus(options,config,haps2_haps)
             tajimaSD = self.vcf_to_tajimas_d(options,config,vcf)
         ihh = self.run_multi_coreihh(options,config,haps)
 
@@ -108,12 +108,13 @@ class StandardRun(CommandTemplate):
         os.rename(vcf,'results/' + vcf)
         os.rename(ihh,'results/' + ihh)
         os.rename(haps,'results/' + haps)
-        os.rename(feyandwus,'results/' + feyandwus)
+        os.rename(fayandwus,'results/' + fayandwus)
         logger.info("Pipeline completed successfully")
         logger.info(tajimaSD)
         logger.info(vcf)
         logger.info(haps)
         logger.info(ihh)
+        logger.ihh(fayandwus)
         logger.info("Goodbye :)")
     
  
@@ -150,7 +151,7 @@ class StandardRun(CommandTemplate):
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
         cmd.extend(['--thread',self.threads])
-        #self.run_subprocess(cmd,'shapeit')
+        self.run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
     #Calls a subprocess to run impute   
@@ -262,13 +263,13 @@ class StandardRun(CommandTemplate):
         (cmd,output_name) = CommandTemplate.prepare_haps_for_variscan(self,options,config,haps,sample)
         self.run_subprocess(cmd,'haps to hapmap') 
         return(output_name)
-    def variscan_feyandwus(self,options,config,hap2):
-        (cmd,output_name,varscan_conf) = CommandTemplate.variscan_feyandwus(self,options,config,hap2) 
+    def variscan_fayandwus(self,options,config,hap2):
+        (cmd,output_name,varscan_conf) = CommandTemplate.variscan_fayandwus(self,options,config,hap2) 
         output_variscan = open(output_name,'w')
          
         # get the start and the end of the hapmap2 file
         #
-        varscan_config = open(varscan_conf ,'w+')
+        varscan_config = open(varscan_conf ,'a')
         try:
             print(("tail -1 {0}| awk '{{print $4}}'".format(hap2)))
             proc = subprocess.Popen("""tail -1 {0}| awk '{{print $4}}'""".format(hap2),stdout=subprocess.PIPE,shell=True) 
@@ -289,8 +290,8 @@ class StandardRun(CommandTemplate):
         
         # Write the start and end of the Fey and Wu's into the config file #
         varscan_config.write('StartPos = ' + str(start_position) + "\n")
-        varscan_config.write('EndPos = ', + str(end_position)+ '\n')
+        varscan_config.write('EndPos = ' + str(end_position)+ '\n')
         varscan_config.close() 
-        self.run_subprocess(cmd,'variscan',hap2,stdout=output_variscan)
+        self.run_subprocess(cmd,'variscan',stdout=output_variscan)
         output_variscan.close()
         return(output_name)
