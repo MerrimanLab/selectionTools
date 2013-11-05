@@ -102,7 +102,7 @@ impute_reference_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_r
 \end{minted}
 
 \subsection{Ancestral Fasta Files}
-To generate results for iHS requires assigning the ancestral allele. The selection pipeline uses the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}.
+The generation of results for iHS requires assigning the ancestral allele. The selection pipeline uses the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}.
 
 If you downloaded your reference to a different location you can set the following setting in your config file.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
@@ -129,17 +129,17 @@ Population files are required for any cross population comparisions. The command
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 multipop\_selection_pipeline -p POP1.txt -p POP2.txt -i input.vcf --c defaults.cfg
 \end{minted}
-The generated folders and current folder have all the data required to perform further selection analysis. Within each population folder 4 output files are generated these contain tajima's D, iHH, an updated VCF and Fey and Wu's H statistic these files are located in the results folder inside each population subfolder. Between each each population Fst are generated and located in the fst folder. Fst calculations are generated using the weir and cockerham estimator.
+The generated folders and current folder have all the data required to perform further selection analysis. Within each population folder 4 output files are generated these contain tajima's D, iHH, an updated VCF and Fay and Wu's H statistic these files are located in the results folder inside each population subfolder. Fst is calculated between each population and results are located in the fst folder. Fst results are calculated using the Weir and Cockerham estimator.
 \subsection{Data Analysis}
-The pipelines purpose is to generate signiatures of selection from a VCF formatted input file. In order to express the usefulness of the pipeline it is pertinent to illustrate the effectiveness of the pipeline. The next section describes some basic plotting of these data using the R programming language. All following commands are run in a R session with the working directory in the base directory you are running the tutorial in.
+The purpose of the pipeline is to generate signatures of selection from a VCF formatted input file. In order to express the usefulness of the pipeline it is pertinent to illustrate the effectiveness of the pipeline. The next section describes some basic plotting of these data using the R programming language. All following commands are run in a R session with the working directory in the base directory you are running the tutorial in.
 \subsubsection{Fst}
 
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
-CEU_CHB_weir_fst=read.table("CEU_CHB_chr2.weir.fst", header=TRUE)
-weirFst=CEU\_CHB\_weir\_fst
+CEU_YRI_weir_fst=read.table("CEU_YRI_chr2.weir.fst", header=TRUE)
+weirFst=CEU\_YRI\_weir\_fst
 pop1="CEU"
-pop2="CHB"
+pop2="YRI"
 weirMean=mean(weirFst[,3][weirFst[,3] != "NaN"])
 weirThresUpper =quantile(weirFst[,3], 1-0.025, na.rm=TRUE)
 weirThresLower =quantile(weirFst[,3], 0.025, na.rm=TRUE)
@@ -156,10 +156,9 @@ abline(h=weirMean, lty=5,col="black")
 \end{minted}
 
 
-\subsubsection{Fey and Wu's H}
+\subsubsection{Fay and Wu's H}
 \subsubsection{iHS}
 \begin{minted}[bgcolor=bg,frame=lines]{r}
-CEU\_CHB\_weir\_fst=read.table("CEU\_CHB\_chr2.weir.fst", header=TRUE)
 CEU\_ihh=read.table("CEU\_chr2.iHH")
 CEU\_ihs=ihh2ihs(CEU\_ihh)
 #plot density
@@ -174,7 +173,6 @@ ihsplot(CEU\_ihs\$res.ihs,plot.pval=TRUE,ylim.scan=2,main="CEU iHS",pch=".")
 
 \subsubsection{Tajima's D}
 \begin{minted}[bgcolor=bg,frame=lines]{r}
-CEU\_CHB\_weir\_fst=read.table("CEU\_CHB\_chr2.weir.fst", header=TRUE)
 CEU\_tajimaD=read.table(file="CEU\_chr4.Tajima.D", header=TRUE)
 
 tajimaMean=mean(CEU\_tajima[CEU\_tajima\$TajimaD != "NaN",]\$TajimaD)
@@ -197,23 +195,22 @@ abline(h=c(tajimaThresUpper, tajimaThresLower), lty="dotted", lwd=2)
 
 
 
-\subsubsection{rSb}
+\subsubsection{Rsb}
 \begin{minted}[bgcolor=bg,frame=lines]{R}
-CEU\_CHB\_weir\_fst=read.table("CEU\_CHB\_chr2.weir.fst", header=TRUE)
-CEU\_ihh=read.table("CEU\_chr4.iHH")
-CHB\_ihh=read.table("CHB\_chr4.iHH")
-CEU\_CHB= merge(x=CEU\_ihh, y=CHB\_ihh, by="POSITION")
-rsb\_CEU\_CHB= ies2rsb(CEU\_CHB[,c("CHR.x","POSITION","FREQ\_a.x","IHHa.x","IHHd.x","IES.x")], CEU\_CHB[,c("CHR.y","POSITION","FREQ\_a.y","IHHa.y","IHHd.y","IES.y")], 
-                     popname1="CEU", popname2="CHB", method="bilateral")
+CEU\_ihh=read.table("CEU\_chr2.iHH")
+YRI\_ihh=read.table("YRI\_chr2.iHH")
+CEU\_YRI= merge(x=CEU\_ihh, y=YRI\_ihh, by="POSITION")
+rsb\_CEU\_YRI= ies2rsb(CEU\_YRI[,c("CHR.x","POSITION","FREQ\_a.x","IHHa.x","IHHd.x","IES.x")], CEU\_YRI[,c("CHR.y","POSITION","FREQ\_a.y","IHHa.y","IHHd.y","IES.y")], 
+                     popname1="CEU", popname2="YRI", method="bilateral")
 #plot Rsb values
-rsbplot(rsb\_CEU\_CHB\$res.rsb, plot.pval=FALSE, ylim.scan=2, pch=".", main=NA)
+rsbplot(rsb\_CEU\_YRI\$res.rsb, plot.pval=FALSE, ylim.scan=2, pch=".", main=NA)
 #plot Rsb Pvalues
-rsbplot(rsb\_CEU\_CHB\$res.rsb, plot.pval=TRUE, ylim.scan=2, pch=".", main=NA)
+rsbplot(rsb\_CEU\_YRI\$res.rsb, plot.pval=TRUE, ylim.scan=2, pch=".", main=NA)
 \end{minted}
 
 
 \section{Command line Arguments}
-The selection pipeline contains three major scripts selection\_pipeline aa\_annotate and multipopulation. The selection pipeline does all the within population statistics calculations. The multipopulation program calculates all the between population statistics and calls the selection pipeline. The aa\_annotate program annotates a haplotype file or a phased vcf file with the ancestral allele from the 6-way EPO alignment, for other species or alternative ancestral annotation the feauture will be added promptly.
+The selection pipeline contains three major scripts: \emph selection\_pipeline,\emph aa\_annotate, and\emph multipopulation. The selection pipeline does all the intra-population statistics calculations. The multipopulation program calculates all the inter-population statistics and calls the selection pipeline. The aa\_annotate program annotates a haplotype file or a phased vcf file with the ancestral allele from the 6-way EPO alignment, for other species or alternative ancestral annotation the feauture will be added promptly.
 \subsection{Multipopulation}
 \subsubsection{Input Files}
 \begin{itemize}
@@ -225,12 +222,12 @@ VCF file containing all the populations you want to analyse from one chromosome 
 \item FST \\
 Fst results are stored in the fst folder with the chromosome number followed by the two populations. e.g 2CEUYRI.fst
 \item Selection Pipeline Results\\
-All single population pipeline results are stored in the subdirectory of the population in a folder named results. These contain the ihh, tajimasD and a population VCF file.
+All single population pipeline results are stored in the subdirectory of the population in a folder named results. These contain the iHH, Tajima's D and a population VCF file.
 \end{itemize}
 \subsubsection{Other parameters (Compulsory)}
 \begin{itemize}
 \item -c <Chromosome>\\
-Chromosome name used for labelling outputs.
+Integer for the chromosome being used.
 \item -a <Arguments to the selection pipeline>\\
 Quoted string containing any extra arguments to the selection\_pipeline program. e.g "--imputation"
 \item -C <path to config file>\\
@@ -247,7 +244,7 @@ Argument is passed directly to the VCF tools command line.
 \subsubsection{Input Files}
 \begin{itemize}
 \item -i <VCF input file>\\
-Single population single chromosome VCF input file.
+Single population single chromosome VCF input file. VCF should be bgzipped and tabix indexed.
 \end{itemize}
 \subsubsection{Output Files}
 The Results directory contains all the output files.
@@ -300,6 +297,10 @@ Output file name optional argument by default output is sent to the stdout strea
 \end{itemize}
 \subsubsection{Other parameters}
 \begin{itemize}
+\item -c <chromosome number>
+
+The number of the chromosome being used.
+
 \item --ref-fasta
 
 Denoting that you are using the human reference allele as the ancestral allele. 
@@ -312,6 +313,7 @@ The selection pipeline requires a configuration file, by default the program loo
 \subsubsection{system}
 \begin{itemize}
 \item threads\_avaliable
+
 Certain programs in the pipeline can take advantage of multicore computers. This option instructs the pipeline about the maximum number of concurrent processes it is allowed to use.
 \end{itemize}
 \subsubsection{environment}
