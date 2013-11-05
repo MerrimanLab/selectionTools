@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  4 NOV 2013 18:13
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  5 NOV 2013 16:44
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -905,15 +905,8 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 427.
  (./selection_pipeline.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 427.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 427.
-
-
-Package rerunfilecheck Warning: File `selection_pipeline.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `selection_pipeline.out':
-(rerunfilecheck)             Before: B1B3E40F57DD221E1BA89749438634D9;3133
-(rerunfilecheck)             After:  945815DAB6FE9A5B2D675E2189B9181D;3129.
+Package rerunfilecheck Info: File `selection_pipeline.out' has not changed.
+(rerunfilecheck)             Checksum: 945815DAB6FE9A5B2D675E2189B9181D;3129.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 427.
  ) 
 Here is how much of TeX's memory you used:
@@ -932,7 +925,7 @@ ur/jknappen/ec/ecrm1000.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1000.60
 our/jknappen/ec/ecrm0800.600pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecrm1200.6
 00pk> </tmp/texfonts/pk/ljfour/jknappen/ec/ecbx1728.600pk></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on selection_pipeline.pdf (11 pages, 141411 bytes).
+Output written on selection_pipeline.pdf (11 pages, 141408 bytes).
 PDF statistics:
  719 PDF objects out of 1000 (max. 8388607)
  326 compressed objects within 4 object streams
