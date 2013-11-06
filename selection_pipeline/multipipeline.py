@@ -31,10 +31,35 @@ CANNOT_FIND_CONFIG = 30
 
 
 
-# using fey and wus h
-# generate the statistics for fey and wus h
-def fey_and_wus_h():
-    return 0
+# generate RSB after we have calculated ihs
+
+def rsb(config,options,populations):
+    rscript = config['Rscript']['generate_rsb']
+    generate_rsb =config['Rscript']['generate_rsb']
+    directory = 'rsb'
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+    pops = list(populations.keys())
+    orig_dir = os.getcwd()
+    os.chdir(directory)
+    for i in range(0,len(pops)-1):
+        cmd=[]
+        pop1 = pops[i]
+        cmd.append(rscript)
+        pop1_ihh_file = os.path.join(orig_dir,pop1,'results', pop1 + 'chr' +options.chromosome + '.ihh')
+        cmd.extend([generate_rsb,'--pop1',pop1,'--pop1file',pop1_ihh_file])
+        for j in range(i+1,len(pops)):
+            tmp_cmd=[]
+            tmp_cmd.extend(cmd)
+            pop2=pops[j] 
+            pop2_ihh_file = os.path.join(orig_dir,pop2,'results', pop2 + 'chr' +options.chromosome + '.ihh')
+            tmp_cmd.extend(['--pop2',pop2,'--pop2file',pop2_ihh_file])
+            tmp_cmd.extend(['--chr',options.chromosome]) 
+            run_subprocess(tmp_cmd,'rsb_generation') 
+             
+
+
+
 def get_populations(populations):
     pops = {}
     for pop in populations:
@@ -117,15 +142,15 @@ def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     for key, value in populations.items():
         cmd = []
-        vcf_output = open(key + '.vcf','w')
+        #vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
         vcf_subset_executable=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_subset_executable)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+        #run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-        vcf_output.close()
+        #vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -153,7 +178,6 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         running_log.close()
         os.chdir(orig_dir)
 def fst_vcf(input_vcf,config,options,populations):
-    
     vcf_tools =config['vcftools']['vcf_tools_executable']
     directory = 'fst'
     if not os.path.exists(directory):
@@ -218,4 +242,6 @@ def main():
     output_fst =  fst_vcf(options.vcf_input,config,options,populations)
     output_vcfs = subset_vcf(options.vcf_input,config,populations)
     run_selection_pipeline(output_vcfs,options,populations,config)
+    # Generate post selection script files
+    rsb(config,options,populations)
 if __name__=="__main__":main()

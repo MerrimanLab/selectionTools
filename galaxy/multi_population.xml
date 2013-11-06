@@ -1,0 +1,14 @@
+<tool id="multi_population_selection_pipeilen" name="Multipopulation Selection Pipeline" version="1.0">
+<description>Multipopulation Selection Pipeline</description>
+<command>
+multi_population 
+
+</command>
+<inputs>
+
+</inputs>
+<outputs>
+</outputs>
+<help>
+</help>
+</tool>

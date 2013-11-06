@@ -151,7 +151,7 @@ class StandardRun(CommandTemplate):
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
         cmd.extend(['--thread',self.threads])
-        self.run_subprocess(cmd,'shapeit')
+        #self.run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
     #Calls a subprocess to run impute   
@@ -235,11 +235,14 @@ class StandardRun(CommandTemplate):
     def run_multi_coreihh(self,options,config,haps):
         (cmd,output_name) = CommandTemplate.run_multi_coreihh(self,options,config,haps)
         cores=self.threads
+        ihs_output=output_name.split('.ihh')[0]+'.ihs'
         cmd.extend(['--cores',cores])
         cmd.extend(['--working_dir','.'])
         cmd.extend(['--offset','1'])
+        cmd.extend(['--ihs'])
         self.run_subprocess(cmd,'multcore_ihh')
         os.rename(options.population+'_chr_'+options.chromosome+"_wd_"+'.'+"_.ihh",output_name)
+        os.rename(options.population+'_chr_'+options.chromosome+'_wd_'+'.'+"_.ihs",ihs_output)
         return output_name
     def fix_sample_file(self,options,config,sample_file):
         (cmd,output_name) = CommandTemplate.fix_sample_file(self,options,config,sample_file)
