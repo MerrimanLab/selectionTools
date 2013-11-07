@@ -117,7 +117,7 @@ class StandardRun(CommandTemplate):
         logger.info(vcf)
         logger.info(haps)
         logger.info(ihh)
-        logger.ihh(fayandwus)
+        logger.info(fayandwus)
         logger.info("Goodbye :)")
     
  

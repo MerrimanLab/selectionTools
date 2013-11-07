@@ -107,6 +107,9 @@ class StandardRun(CommandTemplate):
         os.rename(tajimaSD,'results/' + tajimaSD)
         os.rename(vcf,'results/' + vcf)
         os.rename(ihh,'results/' + ihh)
+        # Hack to get ihs to copy to the right folder
+        ihs_file = ihh.split('.haps')[0]+'.ihs'
+        os.rename(ihs_file,'results/'+ihs_file)
         os.rename(haps,'results/' + haps)
         os.rename(fayandwus,'results/' + fayandwus)
         logger.info("Pipeline completed successfully")
@@ -114,7 +117,7 @@ class StandardRun(CommandTemplate):
         logger.info(vcf)
         logger.info(haps)
         logger.info(ihh)
-        logger.ihh(fayandwus)
+        logger.info(fayandwus)
         logger.info("Goodbye :)")
     
  

@@ -21,7 +21,10 @@ spec = matrix(c(
 	'offset',   's' , 1, "integer",
 	"maf"  ,    'm' , 1, "integer",
 	"pop"  ,    'p', 1, "character",
-	"ihs"  ,    'I', 0, "logical"
+	"ihs"  ,    'I', 0, "logical",
+	"big_gap",  'b', 1, "integer",
+	"small_gap", 'S', 1, "integer",
+	"small_gap_penalty", 'P', 1, "integer"
 ), byrow=T, ncol=4) 
 opt = getopt(spec)
 
@@ -213,5 +216,6 @@ for (n in fileNumber){
 write.table(results,paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"))
 if (!is.null(opt$ihs)){
 		ihs =ihh2ihs(results)
-		write.table(ihs,paste(pop1,"chr", chr,"wd",working_dir,".ihs",sep="_"))
+		write.table(ihs$res.ihs,paste(pop1,"chr", chr,"wd",working_dir,".ihs",sep="_"))
+}
 #save.image(file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))
