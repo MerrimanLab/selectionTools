@@ -114,7 +114,7 @@ ancestral_fasta_dir = # directory you downloaded alignment to #
 \section{Tutorial}
 \subsection{Selection Signatures at the Lactase Locus}
 \subsubsection{Getting the Data}
-The lactase gene is located on Chromosome 2 between 136,545,410-136,594,750 positions. For the example we will use a 10 megabase region containing the Lactase gene and the CEU and YRI populations from the 1000 genomes. In order to demonstrate how to use the pipeline we will use the chromosome 2 region 130,000,000-140,000,000. To download the example dataset enter the command below. \\
+The lactase gene is located on Chromosome 2 between 136,545,410-136,594,750 positions. For the example we will use a 10 megabase region containing the Lactase gene and the CEU and YRI populations from the 1000 genomes. In order to demonstrate how to use the pipeline we will use the chromosome 2 region 130,000,000-140,000,000. To download the example dataset enter the command below. The lactase gene is an example of strong selection in the last 5,000-10,000 years in human populations specifically European-derived populations (cite).  \\
 
 \begin{minted}[bgcolor=bg]{bash}
 wget http://tutorial_file_location.com 
@@ -133,87 +133,119 @@ multipop\_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt
 --fst-window-size 1000 --fst-window-step 1000
 \end{minted}
 The generated folders and current folder have all the data required to perform further selection analysis. Within each population folder 4 output files are generated these contain tajima's D, iHH, an updated VCF and Fay and Wu's H statistic these files are located in the results folder inside each population subfolder. Fst is calculated between each population and results are located in the fst folder. Fst results are calculated using the Weir and Cockerham estimator.
-\subsection{Data Analysis}
+\subsection{Data Visualisation}
 The purpose of the pipeline is to generate standard signatures of selection from a VCF formatted input file. In order to express the usefulness of the pipeline it is pertinent to illustrate the effectiveness of the pipeline. The next section describes some basic plotting of these data using the R programming language. All following commands are run in a R session with the working directory in the base directory you are running the tutorial in. In each case the blue lines outline the lactase gene.
 \subsubsection{Fst}
 
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
-CEU_YRI_weir_fst=read.table("fst/2CEUYRI.fst", header=TRUE)
-weirFst=CEU_YRI_weir_fst
-pop1="CEU"
-pop2="YRI"
-chr = "chr2"
-weirThresUpper =quantile(weirFst[,5], .975, na.rm=TRUE)
-weirThresLower =quantile(weirFst[,5], 0.025, na.rm=TRUE)
+CEUYRIfst=read.table("fst/2CEUYRI.fst", header=TRUE)
 # Plot FST 1 megabase each side of the lactase gene
-plot(weirFst[,5]~weirFst[,2], pch=16, cex=.4, type="p", 
-xlab=paste("Chr",chr,"(Mbp)",sep=" "), ylab="Weir Fst", 
-main=paste("Weir Fst for",pop1,"and",pop2,"Populations", sep=" " ), xlim=c(136545410-1e6,136594750+1e6))
-abline(h=weirThresUpper, lty=3, col = "black")
-abline(h=weirThresLower, lty=3, col="black")
+# Plot the weighted fst value for each region
+plot(CEUYRIfst[,5]~CEUYRIfst[,2], pch=16, cex=.4, type="p",xlab='',ylab='FST') 
 rect(136545410,0,136594750,1,border="Blue") 
 \end{minted}
 
- get lactase gene picture.
-In ~\ref{fig:a} you can see clustering of high FST values close to the lactase gene plotted with one megabase downstream and upstream either side of the gene. 
-
-
+\begin{figure}
+\centering
+\includegraphics{pictures/CEUYRI2.png}
+\caption{CEU YRI Fst Values}
+\label{fig:a}
+\end{figure}
+Figure~\ref{fig:a} shows clustering of high FST values close to the lactase gene plotting one megabase downstream and upstream either side of the gene. 
 \subsubsection{Fay and Wu's H}
-\subsubsection{iHS}
-To plot the iHS values around the lactase gene enter to commands below.\\
+To plot the Fay and Wu's H values for the CEU population.\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
-par(mfrow=c(2,1))
-#plot density
-rect(136545410,-10,136594750,10,border="Blue") 
-#plot iHS values for whole 10 megabase region. 
-ihsplot(CEUihs$res.ihs,plot.pval=TRUE,ylim.scan=2,main="CEU iHS",pch=".")
-rect(136545410,-10,136594750,10,border="Blue") 
+CEUFay=read.table('CEU/results/CEU2.faw',comment.char="#")
+#Plot Fay and Wu's H
+plot(CEUFay[,15] ~ CEUFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,
+xlab='',ylab="H Statistic")
+rect(136545410,-100,136594750,100,border="Blue") 
+\end{minted}
+\begin{figure}
+\centering
+\includegraphics{pictures/CEUFay.png}
+\caption{CEU Fay and Wu's H}
+\label{fig:fay}
+\end{figure}
+Figure~\ref{fig:fay} show the Fey and Wu's H statistic one megabase downstream and upstream of the lactase gene
 
+\subsubsection{iHS}
+To plot the iHS values around the lactase gene for the CEU population.\\
+\begin{minted}[bgcolor=bg,frame=lines]{r}
+CEUihs = read.table('CEU/results/CEUchr2.ihs')
+#plot IHS pvalues
+plot(CEUihs[,4] ~ CEUihs[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
+rect(136545410,-10,136594750,10,border="Blue") 
 \end{minted}
 
+\begin{figure}
+\centering
+\includegraphics{pictures/CEUihs.png}
+\caption{CEU IHS}
+\label{fig:b}
+\end{figure}
 
+Figure ~\ref{fig:b} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
 
 \subsubsection{Tajima's D}
 \begin{minted}[bgcolor=bg,frame=lines]{r}
-CEU\_tajimaD=read.table(file="CEU\_chr4.Tajima.D", header=TRUE)
-
-tajimaMean=mean(CEU\_tajima[CEU\_tajima\$TajimaD != "NaN",]\$TajimaD)
-tajimaThresUpper = quantile(CEU\_tajima\$TajimaD, (1-0.025))
-tajimaThresLower = quantile(CEU\_tajima\$TajimaD, 0.025)
-
-#plot Tajima's D
-plot(CEU\_tajimaD\$BIN\_START,CEU\_tajimaD\$TajimaD, pch=16, cex=0.4,
-       frame=FALSE, ylab="Tajima's D", ylim=c(-3,6), xaxt="n", yaxt="n",
-       xlim=c(0,300e6), xlab=paste("Chromosome",chr,"(Mbp)",sep=" "))
-axis(side=1, tick=TRUE,at=c(0, 50e6,100e6,150e6,200e6,250e6,300e6),
-labels=c("0","50","100","150","200","250","300"))
-axis(side=2, tick=TRUE, at=c(-3:6) ) 
-title(main="CEU Tajima's D Chromosome 2)
-abline(h=tajimaMean], lty="dashed", lwd=2)
-abline(h=c(tajimaThresUpper, tajimaThresLower), lty="dotted", lwd=2)
+tajimaD=read.table(file="CEU/results/CEU2.taj_d", header=TRUE)
+plot(tajimaD[,4] ~ tajimaD[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
+rect(136545410,-10,136594750,10,border="Blue") 
 \end{minted}
 
+\begin{figure}
+\centering
+\includegraphics{pictures/CEUtajimas.png}
+\caption{CEU IHS}
+\label{fig:taj}
+\end{figure}
 
-
+Figure~\ref{fig:taj} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene
 
 
 \subsubsection{Rsb}
 \begin{minted}[bgcolor=bg,frame=lines]{R}
-CEU\_ihh=read.table("CEU\_chr2.iHH")
-YRI\_ihh=read.table("YRI\_chr2.iHH")
-CEU\_YRI= merge(x=CEU\_ihh, y=YRI\_ihh, by="POSITION")
-rsb\_CEU\_YRI= ies2rsb(CEU\_YRI[,c("CHR.x","POSITION","FREQ\_a.x","IHHa.x","IHHd.x","IES.x")], CEU\_YRI[,c("CHR.y","POSITION","FREQ\_a.y","IHHa.y","IHHd.y","IES.y")], 
-                     popname1="CEU", popname2="YRI", method="bilateral")
-#plot Rsb values
-rsbplot(rsb\_CEU\_YRI\$res.rsb, plot.pval=FALSE, ylim.scan=2, pch=".", main=NA)
-#plot Rsb Pvalues
-rsbplot(rsb\_CEU\_YRI\$res.rsb, plot.pval=TRUE, ylim.scan=2, pch=".", main=NA)
+\end{minted}
+\section{Output Files}
+The output files are preserved in the same state as the original output from the program used to generate the data.
+\subsection{multi\_population}
+\subsubsection{Fst}
+Located in the fst folder. Tab-delimited data file containing 1 header line followed data on each subsequent line\\
+\begin{minted}[bgcolor=bg,frame=lines]{rst}
+CHROM   BIN_START       BIN_END N_VARIANTS      WEIGHTED_FST    MEAN_FST  
+2       130000001       130010000       94      0.133102        0.0680276 
+\end{minted}
+\subsection{selection\_pipeline}
+All the outputs for each population are contained in the results folder. If you ran the tool using \emph{multi\_population} the outputs are located in <pop name>/results. 
+\subsubsection{Fay and Wu's H}
+Space-delimited data file containing header line that start with a hash character (\#). Contains lots of columns if you are only interested in Fay and Wu's H, column 1 provides the position and column 15 provides the H statistic. \\
+\begin{minted}[bgcolor=bg,frame=lines]{rst}
+# RefStart   Refend ... FayWu\_H
+130000040 130005039 ... -22.2438460
+\end{minted}
+\subsubsection{iHS}
+Space-delimited data file containing one header line followed by data on each subsequent line.\\
+\begin{minted}[bgcolor=bg,frame=lines]{rst}
+"CHR" "POSITION" "iHS" "Pvalue"
+"rs4662641" 2 130000272 0.0644902912148128 0.0229261107107533
+\end{minted}
+\subsubsection{iHH}
+Space-delimited data file containing one header line followed by data on each subsequent line.\\
+\begin{minted}[bgcolor=bg,frame=lines]{rst}
+"CHR" "POSITION" "FREQ_a" "IHHa" "IHHd" "IES"
+"rs1251176" 2 130000040 0.9823 11558.89 83915.49 11571.13
+\end{minted}
+\subsubsection{Tajima's D}
+Space-delimited data file containing one header line followed by data on each subsequent line.\\
+\begin{minted}[bgcolor=bg,frame=lines]{rst}
+CHROM   BIN\_START       N\_SNPS  TajimaD
+2       130000000       22      0.775224
 \end{minted}
 
-
 \section{Command line Arguments}
-The selection pipeline contains three major scripts: \emph selection\_pipeline,\emph aa\_annotate, and\emph multipopulation. The selection pipeline does all the intra-population statistics calculations. The multipopulation program calculates all the inter-population statistics and calls the selection pipeline. The aa\_annotate program annotates a haplotype file or a phased vcf file with the ancestral allele from the 6-way EPO alignment, for other species or alternative ancestral annotation the feauture will be added promptly.
+The selection pipeline contains three programs: \emph selection\_pipeline,\emph aa\_annotate, and\emph multipopulation. The selection pipeline does all the intra-population statistics calculations. The multipopulation program calculates all the inter-population statistics and calls the selection pipeline. The aa\_annotate program annotates a haplotype file or a phased vcf file with the ancestral allele from the 6-way EPO alignment, for other species or alternative ancestral annotation the feauture will be added promptly.
 \subsection{Multipopulation}
 \subsubsection{Input Files}
 \begin{itemize}
@@ -290,7 +322,7 @@ Haplotype File (.haps)
 Phased VCF file (.vcf), phased VCF genotypes denoted by a bar ( | ) for each sample.
 \item -a or -aa <Ancestral allele fasta>
 
-Ancestral allele annotation file. Currently only works on a the full 1000 genomes reference file from 1000 genomes or the single chromosome fasta files from the 6-way EPO alignment.
+Ancestral allele annotation file. Currently only works on a the full 1000 genomes GRCh37\.64 reference file or the single chromosome fasta files from the 6-way EPO alignment.
 \end{itemize}
 \subsubsection{Output Files}
 \begin{itemize}

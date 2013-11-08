@@ -34,7 +34,7 @@ CANNOT_FIND_CONFIG = 30
 # generate RSB after we have calculated ihs
 
 def rsb(config,options,populations):
-    rscript = config['Rscript']['generate_rsb']
+    rscript = config['Rscript']['rscript_executable']
     generate_rsb =config['Rscript']['generate_rsb']
     directory = 'rsb'
     if not os.path.exists(directory):
@@ -166,7 +166,7 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         # Create directory for each sub population to run in
         if not os.path.exists(directory):
             os.mkdir(directory)
-        running_log= open(os.path.join(directory,population_name+'.log'),'w')
+        #running_log= open(os.path.join(directory,population_name+'.log'),'w')
         
         cmd=[]
         cmd.append(selection_pipeline_executable) 
@@ -174,8 +174,7 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         cmd.append(extra_args)  
         os.chdir(directory)
         run_subprocess(cmd,'selection_pipeline')
-        #run_subprocess.close()
-        running_log.close()
+        #running_log.close()
         os.chdir(orig_dir)
 def fst_vcf(input_vcf,config,options,populations):
     vcf_tools =config['vcftools']['vcf_tools_executable']

@@ -9,13 +9,13 @@ require(getopt)
 
 require(rehh)
 
-args=commandArgs(True)
+args=commandArgs(TRUE)
 spec = matrix(c(
 	'pop1', 	'p', 1, 'character',
 	'pop2',   'P', 1, 'character',
 	'chr',    'c', 1, 'character',
 	'pop1file','-i',1 ,'character',
-	'pop2file,','-I',1,'character',
+	'pop2file,','-I',1,'character'
 ),byrow=T,ncol=4)
 opt = getopt(spec)	
 

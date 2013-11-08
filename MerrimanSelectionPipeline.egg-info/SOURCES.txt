@@ -13,3 +13,4 @@ selection_pipeline/load_leveler_run.py
 selection_pipeline/multipipeline.py
 selection_pipeline/run_pipeline.py
 selection_pipeline/standard_run.py
+selection_pipeline/standard_run_utilities.py

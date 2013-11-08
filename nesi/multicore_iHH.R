@@ -63,9 +63,11 @@ setwd(working_dir)
 offset=ceiling(hapsPop[1,3]/(window-overlap))
 print(offset)
 #pseudo code
-i=1
+i=ceiling(hapsPop[1,3]/(window-overlap))
 while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
-  print(i * (window - overlap))
+	print(hapsPop[length(hapsPop[,3]),3])
+  print((i-1) * (window - overlap) )
+	print((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3])
   if(i == 1){
     bin = hapsPop[hapsPop[,3] < (window * i),]
   } else {
@@ -99,6 +101,9 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
   
 }
 #column 3 of haps file is position
+	print(hapsPop[length(hapsPop[,3]),3])
+  print((i-1) * (window - overlap) )
+	print((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3])
 
 
 
@@ -116,8 +121,8 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
 #hap_file="neutral_data_rehh/hap_neutral_"; 
 #map_file="neutral_data_rehh/map_neutral_"; 
 
-
-fileNumber = offset:(offset+cores-1) 
+print(i)
+fileNumber = offset:i 
 map_file=paste("ind_",pop1,".test",sep="")
 hap_file=paste("t_",pop1,".haps", sep="")
 
@@ -139,7 +144,6 @@ for( i in fileNumber){
     flag = 1;  
     }
 }  
-
 fileNumber = offset:(offset+new_file_number-1)
  
 #print("File number: " + fileNumber)

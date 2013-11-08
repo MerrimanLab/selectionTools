@@ -3,6 +3,7 @@ import os
 import sys
 import re
 from .run_pipeline import CommandTemplate
+from . import standard_run_utilities
 
 from threading import Thread
 
@@ -108,7 +109,7 @@ class StandardRun(CommandTemplate):
         os.rename(vcf,'results/' + vcf)
         os.rename(ihh,'results/' + ihh)
         # Hack to get ihs to copy to the right folder
-        ihs_file = ihh.split('.haps')[0]+'.ihs'
+        ihs_file = ihh.split('.ihh')[0]+'.ihs'
         os.rename(ihs_file,'results/'+ihs_file)
         os.rename(haps,'results/' + haps)
         os.rename(fayandwus,'results/' + fayandwus)
