@@ -91,7 +91,7 @@ impute_reference_prefix=ALL_1000G_phase1integrated_v3_chr?_impute
 ...
 \end{minted}
 
-If you decide to store you reference files in another location, further options will requirealterations.\\ 
+If you decide to store you reference files in another location, further options will require alterations.\\ 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
 genetic_map_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/shapeit_ref
@@ -102,7 +102,7 @@ impute_reference_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_r
 \end{minted}
 
 \subsection{Ancestral Fasta Files}
-The generation of results for iHS requires assigning the ancestral allele. The selection pipeline uses the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}.
+The generation of results for iHS requires assigning the ancestral allele. The selection pipeline uses the ancestral alelles from the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. Make sure to extract contents of the archive after download. The default directory to store the ancestral reference files is referencefiles/ancestral\_ref/.
 
 If you downloaded your reference to a different location you can set the following setting in your config file.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
@@ -132,7 +132,7 @@ multipop\_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt
 -i CEU_YRI_lactase.vcf --config-file defaults.cfg
 --fst-window-size 1000 --fst-window-step 1000
 \end{minted}
-The generated folders and current folder have all the data required to perform further selection analysis. Within each population folder 4 output files are generated these contain tajima's D, iHH, an updated VCF and Fay and Wu's H statistic these files are located in the results folder inside each population subfolder. Fst is calculated between each population and results are located in the fst folder. Fst results are calculated using the Weir and Cockerham estimator.
+The generated folders and current folder have all the data required to perform further selection analysis. Within each population folder 4 output files are generated these contain Tajima's D, iHH, an updated VCF and Fay and Wu's H statistic these files are located in the results folder inside each population subfolder. Fst is calculated between each population and results are located in the fst folder. Fst results are calculated using the Weir and Cockerham estimator.
 \subsection{Data Visualisation}
 The purpose of the pipeline is to generate standard signatures of selection from a VCF formatted input file. In order to express the usefulness of the pipeline it is pertinent to illustrate the effectiveness of the pipeline. The next section describes some basic plotting of these data using the R programming language. All following commands are run in a R session with the working directory in the base directory you are running the tutorial in. In each case the blue lines outline the lactase gene.
 \subsubsection{Fst}
