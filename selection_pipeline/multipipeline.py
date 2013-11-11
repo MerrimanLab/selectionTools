@@ -218,11 +218,9 @@ def main():
     (options,args) = parser.parse_args()
     assert options.vcf_input is not None, "No VCF file has been specified as input"
     assert options.chromosome is not None, "No chromosome has been specified to the script"
-    assert options.config_file is not None, "No config file has been specified for the program"
-    if not os.path.isfile(options.config_file):
-        logger.error("Cannot find config file specified at path {0}".format(options.config_file))
-        sys.exit(CANNOT_FIND_CONFIG)
     config = parse_config(options)
+    if ( options.config_file == None):
+       options.config_file = config['system']['default_config_file'] 
     if not (check_executables_and_scripts_exist(options,config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)
     if options.fst_window_step is None:

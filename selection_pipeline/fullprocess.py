@@ -109,7 +109,6 @@ def parse_arguments():
     if(options.remove_missing is None):
         options.remove_missing = 0.99
     if (options.config_file == None):
-        options.config_file = "defaults.cfg"
     if (options.phased_vcf == None):
         options.phased_vcf = False
     if (options.full_process == None):
@@ -123,7 +122,9 @@ def parse_arguments():
 def main():
     options = parse_arguments()
     config = parse_config(options)
-    set_environment(config['environment']) 
+    # set default config
+    if (options.config_file == None):
+        options.config_file = (config['system']['default_config_file']) 
     if('nesi' in config['system']):
         if(config['system']['nesi']=="True"):
             LoadLevelerRun(options,config)
