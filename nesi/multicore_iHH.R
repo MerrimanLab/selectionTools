@@ -61,13 +61,11 @@ setwd(working_dir)
 
 # first position in file
 offset=ceiling(hapsPop[1,3]/(window-overlap))
-print(offset)
 #pseudo code
 i=ceiling(hapsPop[1,3]/(window-overlap))
 while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
-	print(hapsPop[length(hapsPop[,3]),3])
-  print((i-1) * (window - overlap) )
-	print((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3])
+  #print((i-1) * (window - overlap) )
+	#print((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3])
   if(i == 1){
     bin = hapsPop[hapsPop[,3] < (window * i),]
   } else {
@@ -101,9 +99,9 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
   
 }
 #column 3 of haps file is position
-	print(hapsPop[length(hapsPop[,3]),3])
-  print((i-1) * (window - overlap) )
-	print((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3])
+	#print(hapsPop[length(hapsPop[,3]),3])
+  #print((i-1) * (window - overlap) )
+	#print((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3])
 
 
 
@@ -121,19 +119,19 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
 #hap_file="neutral_data_rehh/hap_neutral_"; 
 #map_file="neutral_data_rehh/map_neutral_"; 
 
-print(i)
+#print(i)
 fileNumber = offset:i 
 map_file=paste("ind_",pop1,".test",sep="")
 hap_file=paste("t_",pop1,".haps", sep="")
 
 
-print(fileNumber)
+#print(fileNumber)
 flag = 0; 
 para = list(); 
 new_file_number = 0
 for( i in fileNumber){  
   if(file.exists(paste(hap_file,i,sep=""))){ 
-    print(i)
+    #print(i)
     p = c(paste(hap_file,i,sep=""), paste(map_file,i,sep=""))   
     new_file_number = new_file_number + 1 
     if(flag==0){        
@@ -186,15 +184,15 @@ save.image(file="working_data.RData")
 
 
 #combine iHH results from window
-print(fileNumber)
+#print(fileNumber)
 results=data.frame()
 for (n in fileNumber){
-  print((n -1)* (window-overlap))
-  print(paste("window",n,": is from:",(window-overlap) * (n-1 ), "to:", ((window - overlap)* (n ) + overlap) , sep=" "))
-  print(paste("merge window",n,": is from:",((window-overlap)* (n-1) + 1/2*overlap), "to:", ((window -overlap)* (n) + (1/2 * overlap)), sep=" "))
+  #print((n -1)* (window-overlap))
+  #print(paste("window",n,": is from:",(window-overlap) * (n-1 ), "to:", ((window - overlap)* (n ) + overlap) , sep=" "))
+  #print(paste("merge window",n,": is from:",((window-overlap)* (n-1) + 1/2*overlap), "to:", ((window -overlap)* (n) + (1/2 * overlap)), sep=" "))
   i=n-(offset-1)
   if(n == 1){ # from start to first half of overlaped region (first chunk)
-  print("n=1")
+  #print("n=1")
     results = neutral_res[[i]][neutral_res[[i]][,2] <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
     #print(max(results[,2]))
    } else {
@@ -203,9 +201,9 @@ for (n in fileNumber){
         a= results
         b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  ,]
         results = rbind(a,b)
-        print(max(results[,2]))
+# print(max(results[,2]))
       } else { #start =take second half of overlap, end = take first half (middle regions)
-        print("middle")
+#print("middle")
           
         
         a = results
