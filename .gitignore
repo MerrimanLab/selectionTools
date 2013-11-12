@@ -11,3 +11,4 @@ lib/*
 !referencefiles/*/*.rst
 share/*
 dist/*
+build/*
