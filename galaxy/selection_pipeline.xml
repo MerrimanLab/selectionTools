@@ -1,0 +1,45 @@
+<tool id="selection_pipeline" name="Run Selection Pipeline">
+    <description>Generate selection signatures from a single population VCF </description>
+<command>
+selection_pipeline -l $selection_log -i $in_vcf
+
+<inputs>
+    <param name="in_vcf" type="data"  format="vcf" label="Single Population VCF file">
+    <param name="chromosome" type="text" label="Specify Chromosome" help="Chromosome e.g (2,3,X)"/> 
+    
+    <conditional name="vcf_type_param">
+        <param name="vcf_type" type="select" label="Select VCF type" help="Select type of VCF file phased or unphased">
+            <option value="unphased">Un-phased</option>
+            <option value="phased">Phased</option>
+        </param>
+        <when value="phased"> 
+        </when>
+        <when value="unphased">
+            <param name="remove_missing" type="text" label="Remove missing genotypes" value="0.99" help="Markers with missing data percentage removed from analysis"/>
+            <param name="imputation" type="boolean"
+                value="false" label="Perform Imputation" label="Perform imputation using impute2"/>
+            <param name="hwe" type="text" value="0.001", label="Hardy-Weinberg Equillibrium Filter" help="SNPs that fail a HWE at the specified threshold will be discarded from the analysis"/>
+        </when>
+    </conditional>
+        <param name="maf" type="text" value="0.01" label="Minor Allele Frequency Filter" help="Filters SNPs from dataset with MAF less than this threshold" />    
+        <param name="daf" type="text" value="0.0" label="Derived Allele Frequency Filter" help="Filters SNPs from data set with DAF less than this threshold (daf calculated after ancestral allele annotation)"/>
+        <param name="tajima_d" type="text" value="5000" label="Tajimas D bin size"/> 
+        <param name="fay_and_wus_width" type="text" value="5000" label="Fay and Wu's sliding window width"/> 
+        <param name="fay_and_wus_jump" type="text"
+    value="5000" label="Fay and Wu's jumping window width" help="
+<\inputs>
+<outputs>
+    <data name="ihs" format="vcf"/>
+    <data name="selection_log" format="txt"/>
+</outputs>
+
+
+<\command>
+<help>
+To use the selection pipeline with galaxy assumes you have setup up your default config file correctly
+
+
+</help>
+
+
+</tool>
