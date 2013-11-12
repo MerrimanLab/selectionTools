@@ -20,7 +20,6 @@ from optparse import OptionParser
 import configparser
 import logging
 from .environment import set_environment
-logging.basicConfig(format='%(asctime)s %(message)s')
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
 
@@ -93,15 +92,26 @@ def parse_config(options):
 def run_subprocess(command,tool,stdout=None):  
         try:
             if(stdout is None):
-                exit_code = subprocess.call(command) 
+                exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE) 
             else:
-                exit_code = subprocess.call(command,stdout=stdout)
+                exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
         except:
             logger.error(tool + " failed to run " + ' '.join(command))
             sys.exit(SUBPROCESS_FAILED_EXIT)   
-
-        if(exit_code != 0): 
+        exit_code.wait()
+        print(exit_code)
+        if(exit_code.returncode != 0): 
             sys.exit(SUBPROCESS_FAILED_EXIT)   
+        while True:
+            line = exit_code.stdout.readline()
+            if not line:
+                break
+            logging.info(tool + " STDOUT: " +line)
+        while True:
+            line = exit_code.stderr.readline()
+            if not line:
+                break
+            logging.info(tool +" STDERR: " + line)
         logger.error("Finished tool " + tool)
 
 
@@ -142,15 +152,15 @@ def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     for key, value in list(populations.items()):
         cmd = []
-        #vcf_output = open(key + '.vcf','w')
+        vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
         vcf_subset_executable=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_subset_executable)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        #run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-        #vcf_output.close()
+        vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -166,7 +176,6 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         # Create directory for each sub population to run in
         if not os.path.exists(directory):
             os.mkdir(directory)
-        #running_log= open(os.path.join(directory,population_name+'.log'),'w')
         
         cmd=[]
         cmd.append(selection_pipeline_executable) 
@@ -210,6 +219,7 @@ def main():
     parser=OptionParser()
     parser.add_option('-p','--population',action='append',dest="populations",help='population_files')
     parser.add_option('-a','--arguments-selection-pipelines',dest="extra_args",help='Arguments to the selection pipeline script')
+    parser.add_option('-l','--log-file',dest="log_file",help="Log file")
     parser.add_option('-i','--vcf-input-file',dest="vcf_input",help="VCF Input File")
     parser.add_option('-c','--chromosome',dest="chromosome",help="Chromosome label doesn't actually have to correspond to the real chromosome but is required to determine what output files to make")
     parser.add_option('--config-file',dest='config_file',help='Configuration File')
@@ -218,22 +228,22 @@ def main():
     (options,args) = parser.parse_args()
     assert options.vcf_input is not None, "No VCF file has been specified as input"
     assert options.chromosome is not None, "No chromosome has been specified to the script"
-    assert options.config_file is not None, "No config file has been specified for the program"
-    if not os.path.isfile(options.config_file):
-        logger.error("Cannot find config file specified at path {0}".format(options.config_file))
-        sys.exit(CANNOT_FIND_CONFIG)
     config = parse_config(options)
+    if ( options.config_file == None):
+       options.config_file = config['system']['default_config_file'] 
     if not (check_executables_and_scripts_exist(options,config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)
     if options.fst_window_step is None:
         options.fst_window_step = str(1000)
     else:
         options.fst_window_step = str(options.fst_window_step)
-    
+    if options.log_file is None:
+        options.log_file = 'multi_population.log'   
     if options.fst_window_size is None:
         options.fst_window_size = str(1000)
     else:
         options.fst_window_size = str(options.fst_window_size) 
+    logging.basicConfig(format='%(asctime)s %(message)s',filename=options.log_file)
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)
@@ -241,6 +251,5 @@ def main():
     output_fst =  fst_vcf(options.vcf_input,config,options,populations)
     output_vcfs = subset_vcf(options.vcf_input,config,populations)
     run_selection_pipeline(output_vcfs,options,populations,config)
-    # Generate post selection script files
     rsb(config,options,populations)
 if __name__=="__main__":main()

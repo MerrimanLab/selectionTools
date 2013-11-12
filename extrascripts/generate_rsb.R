@@ -27,4 +27,4 @@ pop1_data = read.table(opt$pop1file,header=T,row.names=1)
 pop2_data = read.table(opt$pop2file,header=T,row.names=1)
 
 rsb_out = ies2rsb(pop1_data,pop2_data,popname1=opt$pop1,popname2=opt$pop2)
-write.table(rsb_out,paste(opt$chr,opt$pop1,opt$pop2,'.rsb'),sep="")
+write.table(rsb_out,paste(opt$chr,opt$pop1,opt$pop2,'.rsb',sep=""))

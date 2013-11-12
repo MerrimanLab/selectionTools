@@ -80,12 +80,6 @@ class CommandTemplate(object):
         output_warnings.close()
         output_info.close()
                          
-    #def run_tajimas_d(options,config,gen,sample):
-
-    #def fu_and_wus_h(options,config,gen,sample):
-
-     
-
     def run_impute2(self,options,config,haps):
         prefix = options.output_prefix + options.chromosome + '_impute2'
         logger.debug('Attempting to call impute2 the data')
@@ -102,7 +96,6 @@ class CommandTemplate(object):
                 legend_file = os.path.join(config['impute2']['impute_reference_dir'],file)
         
         hap_file = ''
-        print((config['impute2']['impute_reference_prefix'].replace('?',options.chromosome+'.hap')))
         for file in os.listdir(config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file,config['impute2']['impute_reference_prefix'].replace('?',options.chromosome)+'.hap'):
                 hap_file = os.path.join(config['impute2']['impute_reference_dir'],file)

@@ -19,13 +19,7 @@ logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT=10
 MISSING_EXECUTABLE_ERROR=5
 
-python_impute2_script="""
-        for i in range(0,no_of_impute_jobs):
-            individual_command=cmd_template
-            individual_command.extend(['-int',str(i*no_of_impute_jobs),str(i*no_of_impute_jobs+distance)])
-            individual_prefix=prefix + '_'+ str(i)
-            individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
-            cmds.append(individual_command)"""
+
 class StandardRun(CommandTemplate):
    
     def is_script(self,fpath):
@@ -36,7 +30,6 @@ class StandardRun(CommandTemplate):
     #http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
     def which(self,program,program_name):
         fpath, fname = os.path.split(program)
-        print(program)
         if fpath:
             if self.is_exe(program):
                 return program
@@ -51,8 +44,6 @@ class StandardRun(CommandTemplate):
         logger.error(program_name +" path = " + fpath+" not locatable path or in the directory specified in your config file ")
         return None    
   
-    #Ensures the executables specified on the path exist so that the standard run will
-    # work on the machine 
     def check_executables_and_scripts_exist(self,options,config):
         executables=['plink','shapeit','impute','Rscript','python','ancestral_allele','indel_filter','multicore_ihh','qctool']
         if(self.which(config['plink']['plink_executable'],'plink')is None): 
@@ -99,43 +90,47 @@ class StandardRun(CommandTemplate):
             fayandwus = self.variscan_fayandwus(options,config,haps2_haps)
             tajimaSD = self.vcf_to_tajimas_d(options,config,vcf)
         ihh = self.run_multi_coreihh(options,config,haps)
-
-        # Concetenate  all the outputfiles, delete everything else
-        
-        # create the results directory
+         
+        ihs_file = ihh.split('.ihh')[0]+'.ihs'
         if not os.path.exists('results'):
             os.mkdir('results')
         os.rename(tajimaSD,'results/' + tajimaSD)
         os.rename(vcf,'results/' + vcf)
         os.rename(ihh,'results/' + ihh)
-        # Hack to get ihs to copy to the right folder
-        ihs_file = ihh.split('.ihh')[0]+'.ihs'
         os.rename(ihs_file,'results/'+ihs_file)
         os.rename(haps,'results/' + haps)
         os.rename(fayandwus,'results/' + fayandwus)
-        logger.info("Pipeline completed successfully")
         logger.info(tajimaSD)
         logger.info(vcf)
         logger.info(haps)
         logger.info(ihh)
         logger.info(fayandwus)
+        logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
     
  
-    def run_subprocess(self,command,tool,stdout=None):  
-        print(tool)
-        print(command)
+    def run_subprocess(self,command,tool,logging_index,stdout=None):  
         try:
             if(stdout is None):
-                exit_code = subprocess.call(command) 
+                exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE) 
             else:
-                exit_code = subprocess.call(command,stdout=stdout)
+                exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
         except:
             logger.error(tool + " failed to run " + ' '.join(command))
-            sys.exit(SUBPROCESS_FAILED_EXIT)   
-
-        if(exit_code != 0): 
-            sys.exit(SUBPROCESS_FAILED_EXIT)   
+            sys.exit(SUBPROCESS_FAILED_EXIT)  
+        exit_code.wait() 
+        if(exit_code.returncode != 0): 
+            sys.exit(SUBPROCESS_FAILED_EXIT)  
+        while True:
+            line = exit_code.stdout.readline()
+            if not line:
+                break
+            logging.info(tool + " STDOUT: " +line)
+        while True:
+            line = exit_code.stderr.readline()
+            if not line:
+                break
+            logging.info(tool +" STDERR: " + line)
         logger.error("Finished tool " + tool)
 
     def run_vcf_to_plink(self,options,config):
@@ -150,17 +145,16 @@ class StandardRun(CommandTemplate):
         self.run_subprocess(cmd,'plink')
         return(prefix+'.ped',prefix+'.map')
 
-        # Calls a subprocess to run shape it
+    # Calls a subprocess to run shape it
 
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
         cmd.extend(['--thread',self.threads])
-        #self.run_subprocess(cmd,'shapeit')
+        self.run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
     #Calls a subprocess to run impute   
 
-        
     def impute_worker(self,q):
         while True:
             cmd=q.get()
@@ -181,14 +175,12 @@ class StandardRun(CommandTemplate):
         distance=int(config['impute2']['chromosome_split_size']) * 1000000
         # Break files into 5 megabase regions.
         try:
-            print(("tail -1 {0}| awk '{{print $3}}'".format(haps)))
             proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Tail command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
         # get the start of the haps file 
         try:
-            print(("head -1 {0}| awk '{{print $3}}'".format(haps)))
             head = subprocess.Popen("""head -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Head command failed on haps file")
@@ -202,7 +194,6 @@ class StandardRun(CommandTemplate):
         # get the start of the first window
         # 
         first_window = start_position // distance 
-        print(first_window) 
         cmds = []
         for i in range(0,no_of_impute_jobs):
             individual_command=list(cmd_template)
@@ -210,7 +201,6 @@ class StandardRun(CommandTemplate):
             individual_prefix=output_prefix + '_'+ str(i)
             individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
             cmds.append(list(individual_command))
-        print(cmds)
         for i in range(int(self.threads)):
             t = Thread(target=self.impute_worker,args=[imputeQueue])
             t.daemon = True
@@ -232,10 +222,6 @@ class StandardRun(CommandTemplate):
         self.run_subprocess(cmd,'ancestral_annotation')
         return (output_name)
     
-    #def run_tajimas_d(options,config,gen,sample):
-    
-    #def fu_and_wus_h(options,config,gen,sample):
-
     def run_multi_coreihh(self,options,config,haps):
         (cmd,output_name) = CommandTemplate.run_multi_coreihh(self,options,config,haps)
         cores=self.threads
@@ -278,20 +264,17 @@ class StandardRun(CommandTemplate):
         #
         varscan_config = open(varscan_conf ,'a')
         try:
-            print(("tail -1 {0}| awk '{{print $4}}'".format(hap2)))
             proc = subprocess.Popen("""tail -1 {0}| awk '{{print $4}}'""".format(hap2),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Tail command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
         # get the start of the haps file 
         try:
-            print(("head -2 {0}| tail -1 |awk '{{print $4}}'".format(hap2)))
             head = subprocess.Popen("""head -2 {0} | tail -1 | awk '{{print $4}}'""".format(hap2),stdout=subprocess.PIPE,shell=True) 
         except:
             logger.error("Head command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
         start_pos = head.stdout.read()
-        print(start_pos)
         start_position = int(start_pos)
         end_position = int(proc.stdout.read())
         

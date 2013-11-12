@@ -64,13 +64,9 @@ offset=ceiling(hapsPop[1,3]/(window-overlap))
 #pseudo code
 i=ceiling(hapsPop[1,3]/(window-overlap))
 while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
-  #print((i-1) * (window - overlap) )
-	#print((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3])
   if(i == 1){
     bin = hapsPop[hapsPop[,3] < (window * i),]
   } else {
-    #next window is "shifted" back by the overlap distance
-    # starts at the old max (i-1 windows) - overlap, ends at new max (i windows) - overlap
     bin = hapsPop[ hapsPop[,3] > (window - overlap) * (i-1) & hapsPop[,3] < (window - overlap)* i + overlap , ]
   }
   if(length(bin[,3]) > 0){
@@ -98,28 +94,6 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
   i = i + 1
   
 }
-#column 3 of haps file is position
-	#print(hapsPop[length(hapsPop[,3]),3])
-  #print((i-1) * (window - overlap) )
-	#print((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3])
-
-
-
-#d_pop1 = data2haplohh(map_file=paste("ind_",pop1,".test", sep=""),hap_file=paste("t_",pop1,".haps",sep=""))
-#result_ihh_pop1 = scan_hh(d_pop1)
-#result_pop1 = ihh2ihs(result_ihh_pop1)
-
-
-
-## works below here ##
-
-# Using rehh package to compute iHS  
-
-
-#hap_file="neutral_data_rehh/hap_neutral_"; 
-#map_file="neutral_data_rehh/map_neutral_"; 
-
-#print(i)
 fileNumber = offset:i 
 map_file=paste("ind_",pop1,".test",sep="")
 hap_file=paste("t_",pop1,".haps", sep="")
@@ -131,7 +105,6 @@ para = list();
 new_file_number = 0
 for( i in fileNumber){  
   if(file.exists(paste(hap_file,i,sep=""))){ 
-    #print(i)
     p = c(paste(hap_file,i,sep=""), paste(map_file,i,sep=""))   
     new_file_number = new_file_number + 1 
     if(flag==0){        
@@ -143,8 +116,6 @@ for( i in fileNumber){
     }
 }  
 fileNumber = offset:(offset+new_file_number-1)
- 
-#print("File number: " + fileNumber)
 
 my_scan_hh = function(x){     
   d = data2haplohh(hap_file=x[1],map_file=x[2],min_maf=maf)     
@@ -153,7 +124,6 @@ my_scan_hh = function(x){
   return(res)
 }  
 
-# run in parallel, using the number of cores specified by the arguments. 
 neutral_res = mclapply(para,my_scan_hh,mc.cores=cores)  
 
 index = 1
@@ -161,57 +131,23 @@ for ( j in fileNumber){
 	neutral_res[[index]] = read.table(paste(hap_file,j,'.iHH',sep=''))
     index = index + 1
 }
-save(neutral_res,file="neutral_res.RData")
-save.image(file="working_data.RData")
+#save(neutral_res,file="neutral_res.RData")
+#save.image(file="working_data.RData")
 
-#bin regions
-#i=0
-#w = window
-#while(i * (window-overlap) <= hapsPop[length(hapsPop[,3]),3]){
-#  i = i + 1
-#  print(paste("window:",i, sep=" "))
-#  if(i == 1){
-#    print(window * i)
-#  } else {
-#    #next window is "shifted" back by the overlap distance
-#    print((window - overlap) * (i-1))
-#    print((window -overlap) * i + overlap)
-#    print("")
-#  }
-#  
-#}
-
-
-
-#combine iHH results from window
-#print(fileNumber)
 results=data.frame()
 for (n in fileNumber){
-  #print((n -1)* (window-overlap))
-  #print(paste("window",n,": is from:",(window-overlap) * (n-1 ), "to:", ((window - overlap)* (n ) + overlap) , sep=" "))
-  #print(paste("merge window",n,": is from:",((window-overlap)* (n-1) + 1/2*overlap), "to:", ((window -overlap)* (n) + (1/2 * overlap)), sep=" "))
   i=n-(offset-1)
   if(n == 1){ # from start to first half of overlaped region (first chunk)
-  #print("n=1")
     results = neutral_res[[i]][neutral_res[[i]][,2] <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
-    #print(max(results[,2]))
    } else {
       if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
-        #print("max")
         a= results
         b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  ,]
         results = rbind(a,b)
-# print(max(results[,2]))
       } else { #start =take second half of overlap, end = take first half (middle regions)
-#print("middle")
-          
-        
         a = results
         b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  & neutral_res[[i]][,2] <  ((window -overlap)* (n) + (1/2 * overlap)), ]
-        #print(max(a[,2]))
-        #print(min(b[,2]))
         results = rbind(a,b )
-        #print(max(results[,2]))
      }
    } 
 }
@@ -220,4 +156,3 @@ if (!is.null(opt$ihs)){
 		ihs =ihh2ihs(results)
 		write.table(ihs$res.ihs,paste(pop1,"chr", chr,"wd",working_dir,".ihs",sep="_"))
 }
-#save.image(file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))

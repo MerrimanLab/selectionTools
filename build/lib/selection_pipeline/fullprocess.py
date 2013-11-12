@@ -108,14 +108,14 @@ def parse_arguments():
         options.daf = 0.00
     if(options.remove_missing is None):
         options.remove_missing = 0.99
-    if (options.config_file == None):
-        options.config_file = "defaults.cfg"
     if (options.phased_vcf == None):
         options.phased_vcf = False
     if (options.full_process == None):
         options.full_process= False
     if (options.vcf_gz == None):
         options.vcf_gz = False
+    if(options.log_file is None):
+        options.log_file = options.chromosome + options.population + ".log"
     return options 
      
 
@@ -123,7 +123,9 @@ def parse_arguments():
 def main():
     options = parse_arguments()
     config = parse_config(options)
-    set_environment(config['environment']) 
+    # set default config
+    if (options.config_file == None):
+        options.config_file = (config['system']['default_config_file']) 
     if('nesi' in config['system']):
         if(config['system']['nesi']=="True"):
             LoadLevelerRun(options,config)

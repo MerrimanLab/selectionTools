@@ -65,12 +65,12 @@ else
   # Because PWD contains slashes (/) need to use # as substitution
 	sed 's#!SELECT_PIPELINE!#'"${PWD}"'#g' corescripts/defaults.cfg > defaults.cfg
 	if [[ $EUID -eq 0 ]]; then
-	(cd pyfasta && python3 setup.py install)
-	(cd PyVCF && python3 setup.py install)
-	python3 setup.py install
+	(cd pyfasta && python setup.py install)
+	(cd PyVCF && python setup.py install)
+	python setup.py install
 	else
-	(cd pyfasta && python3 setup.py install --user)
-	(cd PyVCF && python3 setup.py install --user)
-	python3 setup.py install --user
+	(cd pyfasta && python setup.py install --user)
+	(cd PyVCF && python setup.py install --user)
+	python setup.py install --user
 	fi
 fi
