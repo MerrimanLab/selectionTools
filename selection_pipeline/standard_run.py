@@ -1,9 +1,8 @@
-import queue
 import os
 import sys
 import re
+from .standard_run_utilities import *
 from .run_pipeline import CommandTemplate
-import standard_run_utilities
 
 from threading import Thread
 
@@ -16,8 +15,6 @@ from optparse import OptionParser
 import subprocess
 import logging
 logger = logging.getLogger(__name__)
-SUBPROCESS_FAILED_EXIT=10
-MISSING_EXECUTABLE_ERROR=5
 
 
 class StandardRun(CommandTemplate):
@@ -107,42 +104,17 @@ class StandardRun(CommandTemplate):
         logger.info(fayandwus)
         logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
-    
- 
-    def run_subprocess(self,command,tool,logging_index,stdout=None):  
-        try:
-            if(stdout is None):
-                exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE) 
-            else:
-                exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
-        except:
-            logger.error(tool + " failed to run " + ' '.join(command))
-            sys.exit(SUBPROCESS_FAILED_EXIT)  
-        exit_code.wait() 
-        if(exit_code.returncode != 0): 
-            sys.exit(SUBPROCESS_FAILED_EXIT)  
-        while True:
-            line = exit_code.stdout.readline()
-            if not line:
-                break
-            logger.info(tool + " STDOUT: " +line)
-        while True:
-            line = exit_code.stderr.readline()
-            if not line:
-                break
-            logger.info(tool +" STDERR: " + line)
-        logger.error("Finished tool " + tool)
 
     def run_vcf_to_plink(self,options,config):
         (cmd,prefix) = CommandTemplate.run_vcf_to_plink(self,options,config)
-        self.run_subprocess(cmd,'vcftools') 
+        run_subprocess(cmd,'vcftools') 
         return(prefix + '.ped', prefix + '.map')
 
     # Calls a subprocess to run plink
 
     def run_plink_filter(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_plink_filter(self,options,config,ped,map)
-        self.run_subprocess(cmd,'plink')
+        run_subprocess(cmd,'plink')
         return(prefix+'.ped',prefix+'.map')
 
     # Calls a subprocess to run shape it
@@ -150,7 +122,7 @@ class StandardRun(CommandTemplate):
     def run_shape_it(self,options,config,ped,map):
         (cmd,prefix) = CommandTemplate.run_shape_it(self,options,config,ped,map)
         cmd.extend(['--thread',self.threads])
-        self.run_subprocess(cmd,'shapeit')
+        run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
     #Calls a subprocess to run impute   
@@ -158,16 +130,15 @@ class StandardRun(CommandTemplate):
     def impute_worker(self,q):
         while True:
             cmd=q.get()
-            self.run_subprocess(cmd,'impute2')
+            run_subprocess(cmd,'impute2')
             q.task_done()             
  
     def haps_to_vcf(self,options,config,haps,new_sample_file):
         (cmd,output_name) = CommandTemplate.haps_to_vcf(self,options,config,haps,new_sample_file)
-        self.run_subprocess(cmd,'hapstovcf')
+        run_subprocess(cmd,'hapstovcf')
         return(output_name) 
 
     def run_impute2(self,options,config,haps):
-        imputeQueue=queue.Queue()
         (cmd_template,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps)
 
         # change from megabases to bp which is what is
@@ -201,25 +172,19 @@ class StandardRun(CommandTemplate):
             individual_prefix=output_prefix + '_'+ str(i)
             individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
             cmds.append(list(individual_command))
-        for i in range(int(self.threads)):
-            t = Thread(target=self.impute_worker,args=[imputeQueue])
-            t.daemon = True
-            t.start()
-        for cmd in cmds:
-            imputeQueue.put(cmd)
-        imputeQueue.join()
+        queue_jobs(cmds,config['system']['threads_avaliable'])
         CommandTemplate.join_impute2_files(options,config,output_prefix,no_of_impute_jobs)
         return(output_prefix+'.haps') 
          
 
     def indel_filter(self,options,config,haps):
         (cmd,output_name) = CommandTemplate.indel_filter(self,options,config,haps)
-        self.run_subprocess(cmd,'indel_filter')
+        run_subprocess(cmd,'indel_filter')
         return(output_name)
  
     def run_aa_annotate_haps(self,options,config,haps):
         (cmd,output_name) = CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
-        self.run_subprocess(cmd,'ancestral_annotation')
+        run_subprocess(cmd,'ancestral_annotation')
         return (output_name)
     
     def run_multi_coreihh(self,options,config,haps):
@@ -230,31 +195,31 @@ class StandardRun(CommandTemplate):
         cmd.extend(['--working_dir','.'])
         cmd.extend(['--offset','1'])
         cmd.extend(['--ihs'])
-        self.run_subprocess(cmd,'multcore_ihh')
+        run_subprocess(cmd,'multcore_ihh')
         os.rename(options.population+'_chr_'+options.chromosome+"_wd_"+'.'+"_.ihh",output_name)
         os.rename(options.population+'_chr_'+options.chromosome+'_wd_'+'.'+"_.ihs",ihs_output)
         return output_name
     def fix_sample_file(self,options,config,sample_file):
         (cmd,output_name) = CommandTemplate.fix_sample_file(self,options,config,sample_file)
         new_sample_file=open(output_name,'w')
-        self.run_subprocess(cmd,'fix sample file',stdout=new_sample_file)
+        run_subprocess(cmd,'fix sample file',stdout=new_sample_file)
         new_sample_file.close()
         return(output_name) 
     def vcf_to_tajimas_d(self,options,config,vcf):
         (cmd,output_name) = CommandTemplate.vcf_to_tajimas_d(self,options,config,vcf)
-        self.run_subprocess(cmd,'tajimas_d')
+        run_subprocess(cmd,'tajimas_d')
         taj_file =options.population + options.chromosome + '.taj_d'
         os.rename(output_name,taj_file)
         return(taj_file)
     def fix_vcf_qctool(self,options,config,vcf):
         (cmd,output_name) = CommandTemplate.fix_vcf_qctool(self,options,config,vcf)
         fixed_vcf = open(output_name,'w')
-        self.run_subprocess(cmd,'fix vcf qctool',stdout=fixed_vcf)
+        run_subprocess(cmd,'fix vcf qctool',stdout=fixed_vcf)
         fixed_vcf.close()
         return(output_name)  
     def prepare_haps_for_variscan(self,options,config,haps,sample):   
         (cmd,output_name) = CommandTemplate.prepare_haps_for_variscan(self,options,config,haps,sample)
-        self.run_subprocess(cmd,'haps to hapmap') 
+        run_subprocess(cmd,'haps to hapmap') 
         return(output_name)
     def variscan_fayandwus(self,options,config,hap2):
         (cmd,output_name,varscan_conf) = CommandTemplate.variscan_fayandwus(self,options,config,hap2) 
@@ -282,6 +247,6 @@ class StandardRun(CommandTemplate):
         varscan_config.write('StartPos = ' + str(start_position) + "\n")
         varscan_config.write('EndPos = ' + str(end_position)+ '\n')
         varscan_config.close() 
-        self.run_subprocess(cmd,'variscan',stdout=output_variscan)
+        run_subprocess(cmd,'variscan',stdout=output_variscan)
         output_variscan.close()
         return(output_name)

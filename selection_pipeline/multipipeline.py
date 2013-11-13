@@ -20,6 +20,7 @@ from optparse import OptionParser
 import ConfigParser
 import logging
 from .environment import set_environment
+from .standard_run_utilities import *
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
 
@@ -89,31 +90,6 @@ def parse_config(options):
                 config_parsed[section][op] = None
     return config_parsed
 
-def run_subprocess(command,tool,stdout=None):  
-        try:
-            if(stdout is None):
-                exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE) 
-            else:
-                exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
-        except:
-            logger.error(tool + " failed to run " + ' '.join(command))
-            sys.exit(SUBPROCESS_FAILED_EXIT)   
-        exit_code.wait()
-        if(exit_code.returncode != 0): 
-            sys.exit(SUBPROCESS_FAILED_EXIT)   
-        while True:
-            line = exit_code.stdout.readline()
-            if not line:
-                break
-            logger.info(tool + " STDOUT: " +line)
-        while True:
-            line = exit_code.stderr.readline()
-            if not line:
-                break
-            logger.info(tool +" STDERR: " + line)
-        logger.error("Finished tool " + tool)
-
-
 def check_executables_and_scripts_exist(options,config): 
         executables=['vcf-subset','selection_pipeline']
         if(which(config['vcftools']['vcf_subset_executable'],'vcf-subset')is None):
@@ -122,44 +98,19 @@ def check_executables_and_scripts_exist(options,config):
             return False
         return True
 
-
-# Copied from standard run to check whether the programs exist. So much copy pasta.
-
-def is_script(fpath):
-    return os.path.isfile(fpath)
-def is_exe(fpath):
-    return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-#Stolen code from 
-#http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
-def which(program,program_name):
-    fpath, fname = os.path.split(program)
-    if fpath:
-        if is_exe(program):
-            return program
-        elif (is_script(program)):
-            return program
-    else:
-        for path in os.environ["PATH"].split(os.pathsep):
-            path = path.strip('"')
-            exe_file = os.path.join(path, program)
-            if is_exe(exe_file):
-                return exe_file
-    logger.error(program_name +" path = " + fpath+" not locatable path or in the directory specified in your config file ")
-    return None
-
 def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     for key, value in populations.items():
         cmd = []
-        vcf_output = open(key + '.vcf','w')
+        #vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
         vcf_subset_executable=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_subset_executable)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+        #run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-        vcf_output.close()
+        #vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -242,7 +193,7 @@ def main():
         options.fst_window_size = str(1000)
     else:
         options.fst_window_size = str(options.fst_window_size) 
-    logging.basicConfig(format='%(asctime)s %(message)s',filename=options.log_file)
+    logging.basicConfig(format='%(asctime)s %(message)s',filename=options.log_file,filemode='w')
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)
