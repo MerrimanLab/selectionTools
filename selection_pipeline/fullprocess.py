@@ -30,7 +30,6 @@ from .standard_run import StandardRun
 from .environment import set_environment
 
 logger = logging.getLogger(__name__)
-logger.setLevel(level=logging.INFO)
 
 SUBPROCESS_FAILED_EXIT=10
 
@@ -115,7 +114,7 @@ def parse_arguments():
         options.vcf_gz = False
     if(options.log_file is None):
         options.log_file = options.chromosome + options.population + ".log"
-     logging.basicConfig(format='%(asctime)s     %(message)s',filename=options.log_file,filemode='w')
+    logging.basicConfig(format='%(asctime)s     %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
 
     return options 
      

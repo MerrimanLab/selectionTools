@@ -22,7 +22,6 @@ import logging
 from .environment import set_environment
 from .standard_run_utilities import *
 logger = logging.getLogger(__name__)
-logger.setLevel(level=logging.INFO)
 
 
 SUBPROCESS_FAILED_EXIT = 10
@@ -193,7 +192,7 @@ def main():
         options.fst_window_size = str(1000)
     else:
         options.fst_window_size = str(options.fst_window_size) 
-    logging.basicConfig(format='%(asctime)s %(message)s',filename=options.log_file,filemode='w')
+    logging.basicConfig(format='%(asctime)s %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)

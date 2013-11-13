@@ -54,18 +54,24 @@ def run_subprocess(command,tool,stdout=None):
             sys.exit(SUBPROCESS_FAILED_EXIT)
         exit_code.wait()
         if(exit_code.returncode != 0):
+            logger.error(tool + "failed to run " +  ' '.join(command))
+            while True:
+                line = exit_code.stderr.readline()
+                if not line:
+                    break
+                logger.info(tool +" STDERR: " + line.strip())
             sys.exit(SUBPROCESS_FAILED_EXIT)
         if(stdout is None):
             while True:
                 line = exit_code.stdout.readline()
                 if not line:
                     break
-                logger.info(tool + " STDOUT: " +line)
+                logger.info(tool + " STDOUT: " +line.strip())
         while True:
             line = exit_code.stderr.readline()
             if not line:
                 break
-            logger.info(tool +" STDERR: " + line)
+            logger.info(tool +" STDERR: " + line.strip())
         logger.error("Finished tool " + tool)
 
 def __queue_worker__(q):
