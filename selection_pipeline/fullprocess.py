@@ -29,7 +29,6 @@ from .standard_run import StandardRun
 
 from .environment import set_environment
 
-logging.basicConfig(format='%(asctime)s %(message)s')
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
 
@@ -116,6 +115,8 @@ def parse_arguments():
         options.vcf_gz = False
     if(options.log_file is None):
         options.log_file = options.chromosome + options.population + ".log"
+     logging.basicConfig(format='%(asctime)s     %(message)s',filename=options.log_file,filemode='w')
+
     return options 
      
 
@@ -124,8 +125,6 @@ def main():
     options = parse_arguments()
     config = parse_config(options)
     # set default config
-    if (options.config_file == None):
-        options.config_file = (config['system']['default_config_file']) 
     if('nesi' in config['system']):
         if(config['system']['nesi']=="True"):
             LoadLevelerRun(options,config)
