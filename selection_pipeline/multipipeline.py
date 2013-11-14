@@ -101,15 +101,15 @@ def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     for key, value in populations.items():
         cmd = []
-        #vcf_output = open(key + '.vcf','w')
+        vcf_output = open(key + '.vcf','w')
         population = key
         comma_list_ids = ','.join(value)
         vcf_subset_executable=config['vcftools']['vcf_subset_executable']
         cmd.append(vcf_subset_executable)
         cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        #run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
+        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
         vcf_outputs.append(key + '.vcf')
-        #vcf_output.close()
+        vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -201,4 +201,7 @@ def main():
     output_vcfs = subset_vcf(options.vcf_input,config,populations)
     run_selection_pipeline(output_vcfs,options,populations,config)
     rsb(config,options,populations)
+    if not os.path.exists('logs'):
+        os.rename(options.log_file,'logs/'+options.log_file)
+    clean_folder('.')
 if __name__=="__main__":main()

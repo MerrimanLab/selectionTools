@@ -44,6 +44,7 @@ def which(program,program_name):
 
 
 def run_subprocess(command,tool,stdout=None):
+        print(' '.join(command))
         try:
             if(stdout is None):
                 exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
@@ -90,3 +91,11 @@ def queue_jobs(commands,threads):
         q.put(command)  
     q.join()
 
+def clean_folder(folder):
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+        except Exception, e:
+            logger.error(e)

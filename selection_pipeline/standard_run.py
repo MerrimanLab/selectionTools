@@ -97,6 +97,10 @@ class StandardRun(CommandTemplate):
         os.rename(ihs_file,'results/'+ihs_file)
         os.rename(haps,'results/' + haps)
         os.rename(fayandwus,'results/' + fayandwus)
+        if not os.path.exists('log'):
+            os.mkdir('log')
+        os.rename(options.log_file,'log/' + options.log_file)
+        clean_folder('.')
         logger.info(tajimaSD)
         logger.info(vcf)
         logger.info(haps)
