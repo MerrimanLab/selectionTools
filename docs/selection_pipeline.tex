@@ -262,7 +262,7 @@ All single population pipeline results are stored in the subdirectory of the pop
 \subsubsection{Other parameters (Compulsory)}
 \begin{itemize}
 \item -l <log\_file> \\
-Path for the log file defaults to multipopulation.log
+Name for the log file. Moved into the logs folder at the end of program run.
 \item -c <Chromosome>\\
 Integer for the chromosome being used.
 \item -a <Arguments to the selection pipeline>\\
@@ -301,7 +301,7 @@ Path to the selection pipeline config file an example config file is located in 
 \subsubsection{Other parameters(Optional)}
 \begin{itemize}
 \item -l <log\_file> \\
-Path for the log file defaults to <chromosome + population + ".log">
+Name for the log file. Moved into the logs folder at the end of program run.
 \item --maf <minimum MAF>\\
 Minor allele frequency filter threshold any SNPs below this threshold will be discarded from the analysis.
 \item --hwe <hardy-weinberg minimum p-value>\\
@@ -495,9 +495,9 @@ Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_si
 \end{itemize}
 \section{Log Files}
 \subsection{multi\_population}
-The location of the log file for  \emph{multi\_population} defaults to "multipopulation.log" unless specified in the command line options. Contains all the logging information for the between population selection signature calculations.
+The location of the log file for  \emph{multi\_population} defaults is located in the log directory. Contains all the logging information for the between population selection signature calculations.
 \subsection{selection\_pipeline}
-The location of the log file for \emph{selection\_pipeline} defaults to <chromosome + population + ".log"> unless specified in the command line options. Contains all the logging information for the within population selection signature calculations.
+The location of the log file for \emph{selection\_pipeline} is located in the log directory The log file contains all the logging information for the within population selection signature calculations.
 
 \section{Extra Features}
 
