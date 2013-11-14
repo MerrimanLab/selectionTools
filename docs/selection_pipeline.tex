@@ -50,10 +50,10 @@
 
 
 \section{Introduction}
-The SelectionPipe Program utilizes next-generation sequencing \(NGS\) data to generate selective signatures. The tools used to detect selection are dependent on the selection signature being investigated \citep{Sabeti:2006ha}. The pipeline generates various output files within and between populations. The starting point for the analysis is a variant call format \(VCF\) file of the genotype data and populations of interest \citep{Danecek:2011gz}. 
+The SelectionPipe Program utilizes next-generation sequencing \(NGS\) data to generate selective signatures. The tools used to detect selection are dependent on the selection signature being investigated \citep{Sabeti:2006ha}. The pipeline generates various output files within and between populations. The starting point for the analysis is a variant call format \(VCF\) file of the genotype data and populations of interest \citep{Danecek:2011gz}. Both $F_{st}$ and Tajima's D can be calculated from standard genotype data. To compute iHS, rsb and Fay and Wu's requires haplotypes, and thus the genotype data must be phased prior to calculation of these statistics. Furthermore these statistics need ancestral allele information. The pipeline phases if the VCF files do not contain the phasing information and then performs ancestral allele annotation. Once complete, the rehh package provides a simple interface for implementing EHH-based analyses \citep{Gautier:2012et}, we extended rehh to include parameters that match those used in \emph{Voight et als.} seminal paper \citep{Voight:2006go}, rehh calculates iHH, iHS, iES and Rsb. To calculate Fay and Wu's H we used a c program called variscan cite. The pipeline implemented in python, takes standard input file to a set of output files containing selection signatures.
 \section{Getting Started}
 \subsection{Prerequisites}
-The selection pipeline was developed on a 64-bit ubuntu 13.04 system but should work on any 64-bit linux deriviant assuming some basic libraries and tools are installed on your system. 20gb of ram should be sufficient.
+The selection pipeline was developed on a 64-bit ubuntu 13.04 system but should work on any 64-bit linux deriviant assuming some basic libraries and tools are installed on your system. 20gb of ram should be sufficient \(required for imputation\).
 \begin{itemize}
 \item python2 or python3
 \item bourne-again Shell (Bash)
