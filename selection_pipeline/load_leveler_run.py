@@ -34,9 +34,7 @@ import logging
 from datetime import datetime
 #Import standard run 
 
-logging.basicConfig(format='%(asctime)s %(message)s')
 logger = logging.getLogger(__name__)
-logger.setLevel(level=logging.INFO)
 
 
 

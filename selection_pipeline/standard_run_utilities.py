@@ -44,7 +44,6 @@ def which(program,program_name):
 
 
 def run_subprocess(command,tool,stdout=None):
-        print(' '.join(command))
         try:
             if(stdout is None):
                 exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE)

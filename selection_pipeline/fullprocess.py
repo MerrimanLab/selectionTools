@@ -20,7 +20,6 @@ from optparse import OptionParser
 import ConfigParser
 
 ## Subprocess import clause required for running commands on the shell##
-import subprocess
 import logging
 
 #Import standard run 
@@ -113,8 +112,7 @@ def parse_arguments():
     if (options.vcf_gz == None):
         options.vcf_gz = False
     if(options.log_file is None):
-        options.log_file = options.chromosome + options.population + ".log"
-    logging.basicConfig(format='%(asctime)s     %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
+        options.log_file = options.population +options.chromosome +"_selection_pipeline.log"
 
     return options 
      
@@ -124,6 +122,9 @@ def main():
     options = parse_arguments()
     config = parse_config(options)
     # set default config
+    print(options.log_file)
+    logging.basicConfig(format='%(asctime)s     %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
+    print(logger)
     if('nesi' in config['system']):
         if(config['system']['nesi']=="True"):
             LoadLevelerRun(options,config)

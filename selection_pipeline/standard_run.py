@@ -99,6 +99,7 @@ class StandardRun(CommandTemplate):
         os.rename(fayandwus,'results/' + fayandwus)
         if not os.path.exists('log'):
             os.mkdir('log')
+        logger.info(options.log_file)
         os.rename(options.log_file,'log/' + options.log_file)
         clean_folder('.')
         logger.info(tajimaSD)
