@@ -72,7 +72,7 @@ def parse_arguments():
     parser.add_option('--TajimaD',dest='tajimas_d',help="Output Tajima's D statistic in bins of size <int>")
     parser.add_option('--fay-Window-Width',dest='fayandWuWindowWidth',help="Sliding window width for Fay and Wu's H")
     parser.add_option('--fay-Window-Jump',dest="fayandWuWindowJump", help="Window Jump for Fay and Wus ( if fay-Window-Width = fay-Window-Jump non-overlapping windows are used") 
- 
+    parser.add_option('--no-clean-up',dest="no_clean_up",action="store_true",help="Do not clean up intermediate datafiles")
     (options, args) = parser.parse_args()
     if(options.verbose != None):
         if(options.verbose):
@@ -89,6 +89,8 @@ def parse_arguments():
         options.fayandWuWindowJump = str(5000)
     if(options.fayandWuWindowWidth is None):
         options.fayandWuWindowWidth = str(5000)
+    if(options.no_clean_up is None):
+        options.no_clean_up =False
 
     if(options.tajimas_d is None):
         # default tajimas D 1000 bin size
@@ -124,7 +126,6 @@ def main():
     # set default config
     print(options.log_file)
     logging.basicConfig(format='%(asctime)s     %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
-    print(logger)
     if('nesi' in config['system']):
         if(config['system']['nesi']=="True"):
             LoadLevelerRun(options,config)

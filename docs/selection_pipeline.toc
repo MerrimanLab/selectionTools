@@ -48,12 +48,12 @@
 \contentsline {subsubsection}{\numberline {5.4.6}impute2}{15}{subsubsection.5.4.6}
 \contentsline {subsubsection}{\numberline {5.4.7}plink}{15}{subsubsection.5.4.7}
 \contentsline {subsubsection}{\numberline {5.4.8}Rscript}{15}{subsubsection.5.4.8}
-\contentsline {subsubsection}{\numberline {5.4.9}python}{15}{subsubsection.5.4.9}
+\contentsline {subsubsection}{\numberline {5.4.9}python}{16}{subsubsection.5.4.9}
 \contentsline {subsubsection}{\numberline {5.4.10}ancestral\_allele}{16}{subsubsection.5.4.10}
 \contentsline {subsubsection}{\numberline {5.4.11}qctool}{16}{subsubsection.5.4.11}
 \contentsline {subsubsection}{\numberline {5.4.12}multicore\_ihh}{16}{subsubsection.5.4.12}
-\contentsline {section}{\numberline {6}Log Files}{16}{section.6}
-\contentsline {subsection}{\numberline {6.1}multi\_population}{16}{subsection.6.1}
+\contentsline {section}{\numberline {6}Log Files}{17}{section.6}
+\contentsline {subsection}{\numberline {6.1}multi\_population}{17}{subsection.6.1}
 \contentsline {subsection}{\numberline {6.2}selection\_pipeline}{17}{subsection.6.2}
 \contentsline {section}{\numberline {7}Extra Features}{17}{section.7}
 \contentsline {subsection}{\numberline {7.1}Galaxy Intergration}{17}{subsection.7.1}

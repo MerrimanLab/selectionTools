@@ -174,6 +174,8 @@ def main():
     parser.add_option('--config-file',dest='config_file',help='Configuration File')
     parser.add_option('--fst-window-size',dest="fst_window_size",help="FST window size")
     parser.add_option('--fst-window-step',dest="fst_window_step",help="FST window step size")
+    parser.add_option('--no-clean-up',dest="no_clean_up",action="store_true",help="Do not clean up intermediate datafiles")
+    
     (options,args) = parser.parse_args()
     assert options.vcf_input is not None, "No VCF file has been specified as input"
     assert options.chromosome is not None, "No chromosome has been specified to the script"
@@ -182,6 +184,9 @@ def main():
        options.config_file = config['system']['default_config_file'] 
     if not (check_executables_and_scripts_exist(options,config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)
+    
+    if options.no_clean_up is None:
+        options.clean_up_files = False
     if options.fst_window_step is None:
         options.fst_window_step = str(1000)
     else:
@@ -204,7 +209,8 @@ def main():
     if not os.path.exists('logs'):
         os.mkdir('logs')    
     os.rename(options.log_file,'logs/'+options.log_file)
-    clean_folder('.')
+    if not options.no_clean_up:
+        clean_folder('.')
     logger.info("Multi_population Complete")
     logger.info("Goodbye :")
 if __name__=="__main__":main()

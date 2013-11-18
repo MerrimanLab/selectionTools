@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  14 NOV 2013 18:57
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  18 NOV 2013 22:03
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -685,29 +685,61 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 
 Package natbib Warning: Citation `Sabeti:2006ha' on page 2 undefined on input l
-ine 53.
+ine 48.
 
 
 Package natbib Warning: Citation `Danecek:2011gz' on page 2 undefined on input 
-line 53.
+line 48.
 
 
-Package natbib Warning: Citation `Gautier:2012et' on page 2 undefined on input 
-line 53.
+Package natbib Warning: Citation `Weir:1984vn' on page 2 undefined on input lin
+e 48.
+
+
+Package natbib Warning: Citation `Tajima:1989un' on page 2 undefined on input l
+ine 48.
 
 
 Package natbib Warning: Citation `Voight:2006go' on page 2 undefined on input l
-ine 53.
+ine 48.
+
+
+Package natbib Warning: Citation `Gautier:2012et' on page 2 undefined on input 
+line 48.
+
+
+Package natbib Warning: Citation `fayandwush' on page 2 undefined on input line
+ 48.
+
+
+Package natbib Warning: Citation `impute22009' on page 2 undefined on input lin
+e 48.
+
+
+Package natbib Warning: Citation `Delaneau:2013hi' on page 2 undefined on input
+ line 48.
+
+
+Package natbib Warning: Citation `Gautier:2012et' on page 2 undefined on input 
+line 48.
+
+
+Package natbib Warning: Citation `Voight:2006go' on page 2 undefined on input l
+ine 48.
+
+
+Package natbib Warning: Citation `variscan2005' on page 2 undefined on input li
+ne 48.
 
 [2]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 58.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 53.
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 58.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 53.
 
-Underfull \hbox (badness 10000) in paragraph at lines 64--65
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
 
  []
 
@@ -728,7 +760,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 68--69
+Underfull \hbox (badness 10000) in paragraph at lines 62--63
 
  []
 
@@ -744,7 +776,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 70--74
+Underfull \hbox (badness 10000) in paragraph at lines 64--68
 
  []
 
@@ -760,12 +792,12 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 79--80
+Underfull \hbox (badness 10000) in paragraph at lines 73--74
 
  []
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 82--83
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
 
  []
 
@@ -781,7 +813,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 84--93
+Underfull \hbox (badness 10000) in paragraph at lines 78--87
 
  []
 
@@ -800,7 +832,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--103
+Underfull \hbox (badness 10000) in paragraph at lines 88--97
 
  []
 
@@ -816,12 +848,12 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 107--113
+Underfull \hbox (badness 10000) in paragraph at lines 101--107
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 117--118
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
 
  []
 
@@ -837,12 +869,12 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 121--122
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 127--128
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
 
  []
 
@@ -869,14 +901,14 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 147--148
+Underfull \hbox (badness 10000) in paragraph at lines 141--142
 
  []
 
 <pictures/CEUYRI2.png, id=344, 481.8pt x 481.8pt>
 File: pictures/CEUYRI2.png Graphic file (type png)
  <use pictures/CEUYRI2.png>
-Package pdftex.def Info: pictures/CEUYRI2.png used on input line 151.
+Package pdftex.def Info: pictures/CEUYRI2.png used on input line 145.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 \openout3 = `selection_pipeline.pyg'.
 
@@ -893,7 +925,7 @@ runsystem(rm selection_pipeline.pyg)...executed.
 <pictures/CEUFay.png, id=346, 481.8pt x 481.8pt>
 File: pictures/CEUFay.png Graphic file (type png)
  <use pictures/CEUFay.png>
-Package pdftex.def Info: pictures/CEUFay.png used on input line 167.
+Package pdftex.def Info: pictures/CEUFay.png used on input line 161.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 
 [6pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
@@ -901,7 +933,7 @@ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.172 
+l.166 
        <./pictures/CEUYRI2.png>]
 \openout3 = `selection_pipeline.pyg'.
 
@@ -914,7 +946,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 174--181
+Underfull \hbox (badness 10000) in paragraph at lines 168--175
 
  []
 
@@ -923,12 +955,12 @@ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.181 
+l.175 
        <./pictures/CEUFay.png>]
 <pictures/CEUihs.png, id=361, 481.8pt x 481.8pt>
 File: pictures/CEUihs.png Graphic file (type png)
  <use pictures/CEUihs.png>
-Package pdftex.def Info: pictures/CEUihs.png used on input line 184.
+Package pdftex.def Info: pictures/CEUihs.png used on input line 178.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 \openout3 = `selection_pipeline.pyg'.
 
@@ -942,7 +974,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 196--197
+Underfull \hbox (badness 10000) in paragraph at lines 190--191
 
  []
 
@@ -951,13 +983,13 @@ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.197 
+l.191 
        <./pictures/CEUihs.png>]
 <pictures/CEUtajimas.png, id=369, 481.8pt x 481.8pt>
 File: pictures/CEUtajimas.png Graphic file (type png)
 
 <use pictures/CEUtajimas.png>
-Package pdftex.def Info: pictures/CEUtajimas.png used on input line 200.
+Package pdftex.def Info: pictures/CEUtajimas.png used on input line 194.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 \openout3 = `selection_pipeline.pyg'.
 
@@ -974,7 +1006,7 @@ runsystem(rm selection_pipeline.pyg)...executed.
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.213 \subsection{multi\_population}
+l.207 \subsection{multi\_population}
                                      <./pictures/CEUtajimas.png>]
 \openout3 = `selection_pipeline.pyg'.
 
@@ -989,7 +1021,23 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 215--220
+Underfull \hbox (badness 10000) in paragraph at lines 209--214
+
+ []
+
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l rst -f latex -F tokenmerge             -P "verboptions=
+ ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed
+.
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 217--222
 
  []
 
@@ -1041,29 +1089,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 235--240
 
  []
 
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l rst -f latex -F tokenmerge             -P "verboptions=
- ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed
-.
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 241--246
-
- []
-
 [10]
-Overfull \hbox (1.40817pt too wide) in paragraph at lines 257--259
+Overfull \hbox (1.40817pt too wide) in paragraph at lines 251--253
 \T1/cmr/m/n/10 Fst re-sults are stored in the fst folder with the chro-mo-some 
 num-ber fol-lowed by the two pop-u-la-tions. e.g 2CEUYRI.fst 
  []
 
-[11] [12] [13] [14] [15] [16]
+[11] [12] [13] [14] [15]
+
+Package natbib Warning: Citation `Voight:2006go' on page 16 undefined on input 
+line 493.
+
+[16]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
@@ -1096,13 +1133,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 529--530
 
  []
 
+[17]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
 
-(./selection_pipeline.out.pyg)
+ (./selection_pipeline.out.pyg)
 runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
@@ -1112,28 +1150,28 @@ Underfull \hbox (badness 10000) in paragraph at lines 539--540
 
  []
 
-No file selection_pipeline.bbl.
+(./selection_pipeline.bbl)
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 550.
-[17]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 550.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 548.
+[18]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 548.
  (./selection_pipeline.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 550.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 550.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 548.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 548.
 Package rerunfilecheck Info: File `selection_pipeline.out' has not changed.
 (rerunfilecheck)             Checksum: D24FA9A9C62121571674DA19B1A26FA7;4091.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 550.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 548.
  ) 
 Here is how much of TeX's memory you used:
- 9556 strings out of 495031
- 136446 string characters out of 6181530
+ 9565 strings out of 495031
+ 136583 string characters out of 6181530
  236531 words of memory out of 5000000
- 12495 multiletter control sequences out of 15000+600000
+ 12501 multiletter control sequences out of 15000+600000
  14621 words of font info for 35 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 31i,7n,40p,1368b,455s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,7n,40p,1595b,455s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/
@@ -1146,10 +1184,10 @@ m-super/sfit1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb
 onts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm
 -super/sfti1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb>
 
-Output written on selection_pipeline.pdf (17 pages, 296679 bytes).
+Output written on selection_pipeline.pdf (18 pages, 300160 bytes).
 PDF statistics:
- 479 PDF objects out of 1000 (max. 8388607)
- 434 compressed objects within 5 object streams
- 85 named destinations out of 1000 (max. 500000)
+ 483 PDF objects out of 1000 (max. 8388607)
+ 437 compressed objects within 5 object streams
+ 86 named destinations out of 1000 (max. 500000)
  501 words of extra memory for PDF output out of 10000 (max. 10000000)
 

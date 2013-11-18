@@ -101,7 +101,8 @@ class StandardRun(CommandTemplate):
             os.mkdir('log')
         logger.info(options.log_file)
         os.rename(options.log_file,'log/' + options.log_file)
-        clean_folder('.')
+        if not options.no_clean_up:
+            clean_folder('.')
         logger.info(tajimaSD)
         logger.info(vcf)
         logger.info(haps)

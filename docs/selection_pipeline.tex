@@ -263,6 +263,8 @@ Integer for the chromosome being used.
 Quoted string containing any extra arguments to the selection\_pipeline program. e.g "--imputation"
 \item --config-file <path to config file>\\
 Path to the selection pipeline config file an example config file is located in the base directory of the extracted package.
+\item --no-clean-up\\ 
+Do not clean up intermediate data files.
 \end{itemize}
 \subsubsection{Other parameters (Optional)}
 \begin{itemize}
@@ -306,6 +308,8 @@ Derived allele frequencies below this minimum will be discarded.
 Inclusion criteria for SNPs with missing data. SNPs with less than this value will be removed from analysis.
 \item --TajimaD <tajimas D bin size>\\
 Tajima's D statistic bin size.
+\item --no-clean-up \\
+Do not clean up intermediate data files
 \end{itemize}
 \subsection{Ancestral Annotation}
 The progam \emph{ancestral\_annotation} is installed on the program path. The program annotates haps and vcfs files with ancestral allele annotation from the 6-way IPO alignment or the human reference genome.
@@ -342,7 +346,7 @@ Denoting that you are using the human reference allele as the ancestral allele.
 The 6-way EPO alignment denotes ancestral alleles with both high and low confidence. To use only ancestral alleles with high confidence use --format high. To use both high and low confident alleles use --format low. By default the program will use only highly confident alleles.
 \end{itemize}
 \subsection{Configuration File}
-The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line arguments. There are two main programs in the selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters. The default config file contains an example of the format.
+The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line argument --config-file <config\_file\_location>. There are two main programs in the selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters. The default config file contains an example of the format.
 \subsubsection{system}
 \begin{itemize}
 \item threads\_avaliable
