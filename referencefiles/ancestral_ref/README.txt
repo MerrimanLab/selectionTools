@@ -1,1 +1,0 @@
-/home/smilefreak/murray/ancestral_allele_annotation/human_ancestor_GRCh37_e59/README.txt
