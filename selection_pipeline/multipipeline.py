@@ -202,6 +202,8 @@ def main():
     run_selection_pipeline(output_vcfs,options,populations,config)
     rsb(config,options,populations)
     if not os.path.exists('logs'):
-        os.rename(options.log_file,'logs/'+options.log_file)
+        os.mkdir('logs')    
+    logger.info(options.log_file)
+    os.rename(options.log_file,'logs/'+options.log_file)
     clean_folder('.')
 if __name__=="__main__":main()

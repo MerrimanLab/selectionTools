@@ -50,7 +50,7 @@
 
 
 \section{Introduction}
-The SelectionPipe Program utilizes next-generation sequencing \(NGS\) data to generate selective signatures. The tools used to detect selection are dependent on the selection signature being investigated \citep{Sabeti:2006ha}. The pipeline generates various output files within and between populations. The starting point for the analysis is a variant call format \(VCF\) file of the genotype data and populations of interest \citep{Danecek:2011gz}. Both $F_{st}$ and Tajima's D can be calculated from standard genotype data. To compute iHS, rsb and Fay and Wu's requires haplotypes, and thus the genotype data must be phased prior to calculation of these statistics. Furthermore these statistics need ancestral allele information. The pipeline phases if the VCF files do not contain the phasing information and then performs ancestral allele annotation. Once complete, the rehh package provides a simple interface for implementing EHH-based analyses \citep{Gautier:2012et}, we extended rehh to include parameters that match those used in \emph{Voight et als.} seminal paper \citep{Voight:2006go}, rehh calculates iHH, iHS, iES and Rsb. To calculate Fay and Wu's H we used a c program called variscan cite. The pipeline implemented in python, takes standard input file to a set of output files containing selection signatures.
+The SelectionPipeline Program utilizes next-generation sequencing \(NGS\) data to generate selective signatures. The tools used to detect selection are dependent on the selection signature being investigated \citep{Sabeti:2006ha}. The pipeline generates various output files within and between populations. The starting point for the analysis is a variant call format \(VCF\) file of the genotype data and populations of interest \citep{Danecek:2011gz}. Both $F_{st}$ and Tajima's D can be calculated from standard genotype data. To compute iHS, rsb and Fay and Wu's requires haplotypes, and thus the genotype data must be phased prior to calculation of these statistics. For phasing shapeit2 is used and for imputation impute2 is used \citep{impute22009} \citep{Delaneau:2013hi}. Furthermore these statistics need ancestral allele information. The pipeline phases if the VCF files do not contain the phasing information and then performs ancestral allele annotation. Once complete, the rehh package provides a simple interface for implementing EHH-based analyses \citep{Gautier:2012et}, we extended rehh to include parameters that match those used in \emph{Voight et als.} seminal paper \citep{Voight:2006go}, rehh calculates iHH, iHS, iES and Rsb. To calculate Fay and Wu's H we used a c program called variscan \citep{variscan2005}. The pipeline implemented in python, takes a VCF file to a set of output files containing selection signatures.
 \section{Getting Started}
 \subsection{Prerequisites}
 The selection pipeline was developed on a 64-bit ubuntu 13.04 system but should work on any 64-bit linux deriviant assuming some basic libraries and tools are installed on your system. 20gb of ram should be sufficient \(required for imputation\).
@@ -72,14 +72,14 @@ The rest of this section will be dedicated to the automatic installation. To per
 ./install.sh
 \end{minted}
 
-Installation creates a default config file located in the base directory of the pipeline. Installation adds a program called selection\_pipeline to the system path. To test the program is installed correctly run the following command at a terminal prompt.
+Installation creates a default configuration file located in the base directory of the pipeline. Installation adds a program called selection\_pipeline to the system path. To test the program is installed correctly run the following command at a terminal prompt.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 selection_pipeline -h
 \end{minted}
 
 \subsection{Genetic Maps and Impute Haplotypes}
-To use the phasing and imputation features of the pipeline requires both genetic map files and haplotype files. For humans these files that conform to the format required for shapeit and impute2 can be found \href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. For impute2 one reference is avaliable \href{http://mathgen.stats.ox.ac.uk/impute/ALL_1000G_phase1integrated_v3_impute_macGT1.tgz}{here}, download and extract the archive to referencefiles/impute\_ref and uncompress the contents. For shapeit2 a genetic map can be found \href{http://www.shapeit.fr/files/genetic_map_b37.tar.gz}{here}, download and extract the archive to referencefiles/shapeit\_ref.\\
+To use the phasing and imputation features of the pipeline requires both genetic map files and haplotype files. For humans these files that conform to the format required for shapeit and impute2 can be found \href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. For impute2 one reference is available \href{http://mathgen.stats.ox.ac.uk/impute/ALL_1000G_phase1integrated_v3_impute_macGT1.tgz}{here}, download and extract the archive to referencefiles/impute\_ref and uncompress the contents. For shapeit2 a genetic map can be found \href{http://www.shapeit.fr/files/genetic_map_b37.tar.gz}{here}, download and extract the archive to referencefiles/shapeit\_ref.\\
 
 To use other reference files with the selection pipeline requires setting a few options in the config file. The question mark character "?" in the config is substituted by the chromosome number, this is used for reference files that are split on chromosomes.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
@@ -102,7 +102,7 @@ impute_reference_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_r
 \end{minted}
 
 \subsection{Ancestral Fasta Files}
-The generation of results for iHS requires assigning the ancestral allele. The selection pipeline uses the ancestral alelles from the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. Make sure to extract contents of the archive after download. The default directory to store the ancestral reference files is referencefiles/ancestral\_ref/.
+The generation of results for iHS requires assigning the ancestral allele. The selection pipeline uses the ancestral alleles from the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. Make sure to extract contents of the archive after download. The default directory to store the ancestral reference files is referencefiles/ancestral\_ref/.
 
 If you downloaded your reference to a different location you can set the following setting in your config file.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
@@ -490,7 +490,9 @@ Gap size in bp for applying a penalty to the area calculated by iHH
 
 \item small\_gap\_multiplier
 
-Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended. 
+Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended.
+
+The rehh package source included with the pipeline has been altered to match the output filters used in Voight's paper. If the EHH > 0.05 reaches the end of a chromosome or the start of a gap > big\_gap\_threshold , then no value is returded for the core snp. The small\_gap\_threshold specifies the gap distance to reduce the distance spanned by the gap by a multiplicative factorpecified by small\_gap\_multiplier. The formula for the penalty is $\frac{small\_gap\_multiplier}{gap\_size}$. To match the parameters used by Voight, 200000 should be  used for big\_gap\_threshold, 20000 for small\_gap\_threshold and 20000 for small\_gap\_multiplier \citep{Voight:2006go}.
 
 \end{itemize}
 \section{Log Files}
@@ -539,8 +541,6 @@ vcf-tools --vcf big\_vcf.vcf --chr 2 --out chr2 --recode
 \end{minted}
 
 The command will generate a vcf file name chr2.recode.vcf containing only data from chromosome 2.
-
- 
 
 \end{enumerate}
 
