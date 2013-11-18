@@ -55,7 +55,7 @@ def rsb(config,options,populations):
             tmp_cmd.extend(['--pop2',pop2,'--pop2file',pop2_ihh_file])
             tmp_cmd.extend(['--chr',options.chromosome]) 
             run_subprocess(tmp_cmd,'rsb_generation') 
-             
+    os.chdir(orig_dir)     
 
 
 
@@ -203,7 +203,8 @@ def main():
     rsb(config,options,populations)
     if not os.path.exists('logs'):
         os.mkdir('logs')    
-    logger.info(options.log_file)
     os.rename(options.log_file,'logs/'+options.log_file)
     clean_folder('.')
+    logger.info("Multi_population Complete")
+    logger.info("Goodbye :")
 if __name__=="__main__":main()
