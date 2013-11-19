@@ -97,19 +97,35 @@ def check_executables_and_scripts_exist(options,config):
             return False
         return True
 
+def __split__vcf__(vcf_input,split_positions):
+    return 0 
+def __merge__vcfs__(vcf_inputs,config,populations):
+    return 0
 def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
-    for key, value in populations.items():
-        cmd = []
-        vcf_output = open(key + '.vcf','w')
-        population = key
-        comma_list_ids = ','.join(value)
-        vcf_subset_executable=config['vcftools']['vcf_subset_executable']
-        cmd.append(vcf_subset_executable)
-        cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-        run_subprocess(cmd,'vcf-merge',stdout=vcf_output)
-        vcf_outputs.append(key + '.vcf')
-        vcf_output.close()
+    line_count = get_vcf_line_count(vcf_input)
+    threads=config['system']['cores_avaliable']
+    split_length = line_count // threads
+    split_positions = [split_length* i for i in range(0,threads)]
+    remainder_length = line_count % threads 
+    split_positions[len(split_positions) - 1] += remainder_length
+    vcf_inputs = __split__vcf__(vcf_input,split_positions)
+    for i, vcf in enumerate(vcf_inputs):
+        for key, value in populations.items():
+            cmd = []
+            vcf_output = open(key + '.vcf','w')
+            population = key
+            # TODO break vcfs into chunk sizes that are a divisor of the maximum
+            # number of cores avaliable.
+         
+    
+            comma_list_ids = ','.join(value)
+            vcf_subset_executable=config['vcftools']['vcf_subset_executable']
+            cmd.append(vcf_subset_executable)
+            cmd.extend(['-f','-c',comma_list_ids,vcf_input])
+            run_subprocess(cmd,'vcf-subset',stdout=vcf_output)
+            vcf_outputs.append(key + '.vcf')
+            vcf_output.close()
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -162,7 +178,7 @@ def fst_vcf(input_vcf,config,options,populations):
             os.rename('out.windowed.weir.fst',options.chromosome + p + s + '.fst')
     os.remove('second_pop.tmp')
     os.remove('first_pop.tmp')        
- 
+    os.remove('out.log') 
     os.chdir(orig_dir)
 def main():
     parser=OptionParser()

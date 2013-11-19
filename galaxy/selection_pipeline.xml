@@ -26,7 +26,12 @@ selection_pipeline -l $selection_log -i $in_vcf
         <param name="tajima_d" type="text" value="5000" label="Tajimas D bin size"/> 
         <param name="fay_and_wus_width" type="text" value="5000" label="Fay and Wu's sliding window width"/> 
         <param name="fay_and_wus_jump" type="text"
-    value="5000" label="Fay and Wu's jumping window width" help="
+    value="5000" label="Fay and Wu's jumping window width" help="How far the Fay and Wu's sliding window jumps for each calculation ( recommended equal to the window width )"/>
+		<conditional name="fay_and_wus">
+				<param name="extended_options" type="boolean" value="false" label="Extended options" />
+		
+		</conditional>
+	
 <\inputs>
 <outputs>
     <data name="ihs" format="vcf"/>
