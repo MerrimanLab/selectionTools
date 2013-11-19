@@ -4,6 +4,8 @@ import sys
 import logging
 
 #queue for threads
+#regex for hash at start of line
+
 
 import Queue
 from threading import Thread
@@ -15,8 +17,18 @@ MISSING_EXECUTABLE_ERROR=5
 def haps_start_and_end(file):
     return 0
 # Get start of vcf file
+def get_vcf_line_count(input_file):
+    with open(input_file,'r') as vcf:
+        line_count = 0
+        for line in vcf:
+            if re.match("^#",line) is not None:
+                line_count = 1
+                break
+        for line in vcf:
+            line_count += 1
+        return(line_count)
+        
 def vcf_start_and_end(file):
-    return 0
 #
 
 def __is_script__(fpath):
