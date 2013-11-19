@@ -13,6 +13,7 @@
 #
 
 from collections import OrderedDict
+import math
 import sys
 import os
 import subprocess
@@ -102,35 +103,45 @@ def __concat__vcfs__(vcf_inputs,config,populations):
     return 0
 def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
-    line_count = get_vcf_line_count(vcf_input)
+    vcf_dict = {}
+    no_pops = len(populations)
     threads=config['system']['cores_avaliable']
+    # Take threads and divide by the number of jobs.
+    threads_per_job = math.ceil(threads / no_pops)
+    # get vcf line count
+    line_count = get_vcf_line_count(vcf_input)
+    # split length is the size of each chunk
     split_length = line_count // threads
-    split_positions = [split_length* i for i in range(1,threads)]
+    # split positions
+    split_positions = [split_length* i for i in range(1,threads+1)]
     remainder_length = line_count % threads 
     split_positions[len(split_positions) - 1] += remainder_length
     vcf_inputs = split_vcf(vcf_input,split_positions)
+    cmds=[]
+    stdouts=[]
     for i, vcf in enumerate(vcf_inputs):
         for key, value in populations.items():
             cmd = []
-            vcf_output = open(key + '.vcf','w'+str(i))
-            population = key
-            # TODO break vcfs into chunk sizes that are a divisor of the maximum
-            # number of cores avaliable.
-         
-    
+            output_file= key +str(i) +'.vcf'  
+                vcf_dict[key].append(vcf_output)
+            except KeyError:
+                vcf_dict[key]=[vcf_output]
             comma_list_ids = ','.join(value)
             vcf_subset_executable=config['vcftools']['vcf_subset_executable']
             cmd.append(vcf_subset_executable)
             cmd.extend(['-f','-c',comma_list_ids,vcf])
-            run_subprocess(cmd,'vcf-subset',stdout=vcf_output)
-            vcf_outputs.append(key + '.vcf' + str(i))
-            vcf_output.close()
-
-    cmds= 
+            stdouts.append(output_file)
+            #run_subprocess(cmd,'vcf-subset',stdout=vcf_output)
+            cmds.append(list(cmd))
+    queue_jobs(cmds,config['system']['cores_avaliable'],stdouts=stdouts)
+    cmds=[]
     for key, value in vcf_dict.items():
         # generate the commands for vcf concat for each output file generated
-
-    
+        cmd=[]
+        vcf_concat_executable=config['vcf_tools']['vcf_concat_executable']
+        cmd.append(vcf_concat_executable)
+        cmd.extend(value)
+    queue_jobs(cmds,config['system']['cores_avaliable'],stdouts=vcf_outputs)
     # call the queue jobs to run vcf-subset 
     # return the population concatenated vcf file
     return vcf_outputs 

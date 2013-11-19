@@ -78,7 +78,6 @@ class StandardRun(CommandTemplate):
             if(options.imputation):
                 (haps)= self.run_impute2(options,config,haps)
             haps = self.indel_filter(options,config,haps)
-        #tajimas = run_tajimas_d(options,config,haps)
             new_sample_file = self.fix_sample_file(options,config,sample)
             vcf = self.haps_to_vcf(options,config,haps,new_sample_file)
             vcf = self.fix_vcf_qctool(options,config,vcf)
@@ -131,14 +130,6 @@ class StandardRun(CommandTemplate):
         run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
-    #Calls a subprocess to run impute   
-
-    def impute_worker(self,q):
-        while True:
-            cmd=q.get()
-            run_subprocess(cmd,'impute2')
-            q.task_done()             
- 
     def haps_to_vcf(self,options,config,haps,new_sample_file):
         (cmd,output_name) = CommandTemplate.haps_to_vcf(self,options,config,haps,new_sample_file)
         run_subprocess(cmd,'hapstovcf')

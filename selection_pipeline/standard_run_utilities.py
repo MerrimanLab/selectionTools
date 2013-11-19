@@ -109,6 +109,7 @@ def run_subprocess(command,tool,stdout=None):
             if(stdout is None):
                 exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
             else:
+            # find out what kind of exception to try here
                 exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
         except:
             logger.error(tool + " failed to run " + ' '.join(command))
@@ -138,17 +139,26 @@ def run_subprocess(command,tool,stdout=None):
 def __queue_worker__(q):
     while True:
         cmd=q.get()
-        run_subprocess(cmd,'impute2')
+        try:
+            cmd=cmd[0]
+            stdout=cmd[1]
+            run_subprocess(cmd,'impute2',stdout=stdout)
+        except IndexError:
+            run_subprocess(cmd,'impute2')
         q.task_done()
 
 def queue_jobs(commands,threads):
     q = queue.Queue()
     for i in range(int(self.threads)):
-        t = Thread(target=self.queue_worker,args=[commands])
+        t = Thread(target=self.queue_worker,args=[q])
         t.daemon = True
         t.start()
-    for command in commands:
-        q.put(command)  
+    
+   if stdouts is None: 
+        for tup in zip(commands,stdouts):
+            q.put(tup)  
+        for cmd in commands:
+            q.put(cmd)
     q.join()
 
 def clean_folder(folder):
