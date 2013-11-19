@@ -19,6 +19,7 @@ import subprocess
 from optparse import OptionParser
 import ConfigParser
 import logging
+import re
 from .environment import set_environment
 from .standard_run_utilities import *
 logger = logging.getLogger(__name__)
@@ -96,24 +97,22 @@ def check_executables_and_scripts_exist(options,config):
         if(which(config['selection_pipeline']['selection_pipeline_executable'],'selection_pipeline') is None):
             return False
         return True
-
-def __split__vcf__(vcf_input,split_positions):
-    return 0 
-def __merge__vcfs__(vcf_inputs,config,populations):
+    
+def __concat__vcfs__(vcf_inputs,config,populations):
     return 0
 def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     line_count = get_vcf_line_count(vcf_input)
     threads=config['system']['cores_avaliable']
     split_length = line_count // threads
-    split_positions = [split_length* i for i in range(0,threads)]
+    split_positions = [split_length* i for i in range(1,threads)]
     remainder_length = line_count % threads 
     split_positions[len(split_positions) - 1] += remainder_length
-    vcf_inputs = __split__vcf__(vcf_input,split_positions)
+    vcf_inputs = split_vcf(vcf_input,split_positions)
     for i, vcf in enumerate(vcf_inputs):
         for key, value in populations.items():
             cmd = []
-            vcf_output = open(key + '.vcf','w')
+            vcf_output = open(key + '.vcf','w'+str(i))
             population = key
             # TODO break vcfs into chunk sizes that are a divisor of the maximum
             # number of cores avaliable.
@@ -122,10 +121,18 @@ def subset_vcf(vcf_input,config,populations):
             comma_list_ids = ','.join(value)
             vcf_subset_executable=config['vcftools']['vcf_subset_executable']
             cmd.append(vcf_subset_executable)
-            cmd.extend(['-f','-c',comma_list_ids,vcf_input])
+            cmd.extend(['-f','-c',comma_list_ids,vcf])
             run_subprocess(cmd,'vcf-subset',stdout=vcf_output)
-            vcf_outputs.append(key + '.vcf')
+            vcf_outputs.append(key + '.vcf' + str(i))
             vcf_output.close()
+
+    cmds= 
+    for key, value in vcf_dict.items():
+        # generate the commands for vcf concat for each output file generated
+
+    
+    # call the queue jobs to run vcf-subset 
+    # return the population concatenated vcf file
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):

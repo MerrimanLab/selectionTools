@@ -2,7 +2,7 @@ import os
 import subprocess
 import sys
 import logging
-
+import re
 #queue for threads
 #regex for hash at start of line
 
@@ -16,13 +16,62 @@ MISSING_EXECUTABLE_ERROR=5
 # Get end of haps file
 def haps_start_and_end(file):
     return 0
-# Get start of vcf file
+
+# 
+# returns Split VCF files that can be used 
+# by the vcf-subset function to take advantage of the cores avaliable 
+#
+#
+# split positions looks like an array
+# 0,100,200 etc. The line ranges not
+# including the header are seperated into
+# seperate files which the function returns
+#
+# potential edge cases with really really small vcf files these should not be in use
+#
+
+def split_vcf(input_file,split_positions):
+    header = ''
+    output_vcfs=[]
+    file_id = 0
+    line_count = 1
+    # get splits files positions 0 and 1
+    # for a 1 core setup these will be
+    # the start and the end of the file 
+    # and so the file will not change
+    i = 0
+    pos1 = split_positions[i] 
+    output_vcf = open(input_file+str(file_id),'w')
+    output_vcfs.append(input_file+str(file_id))
+    with open(input_file,'r') as vcf:
+        for line in vcf:
+            if re.match("^#",line) is not None:
+                header += line
+            else:
+                output_vcf.write(output_vcf)
+                break
+        for line in vcf:
+            if(line_count < pos1):
+                output_vcf.write(header)
+                output_vcf.write(output_vcf)
+            else:
+                i = i + 1
+                pos1 = split_positions[i]
+                file_id += 1
+                out_name = input_file + str(file_id)
+                output_vcfs.append(out_name)
+                output_vcf = open(input_file+str(file_id),'w')
+                output_vcf.write(header)
+                output_vcf.write(line_count)
+            pos += 1
+    return 
 def get_vcf_line_count(input_file):
     with open(input_file,'r') as vcf:
         line_count = 0
         for line in vcf:
             if re.match("^#",line) is not None:
                 line_count = 1
+             else:
                 break
         for line in vcf:
             line_count += 1
