@@ -177,8 +177,6 @@ done
 
 NUMBER_FINISHED=0
 
-mem_required=`echo "${mem_in_gigs} * ${noFolders}" | bc`
-limit=`echo "${mem_required} * 1024 * 1024" | bc`
 
 
 while true; do 
