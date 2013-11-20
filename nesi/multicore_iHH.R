@@ -119,7 +119,7 @@ fileNumber = offset:(offset+new_file_number-1)
 
 my_scan_hh = function(x){     
   d = data2haplohh(hap_file=x[1],map_file=x[2],min_maf=maf)     
-  res = scan_hh(d)
+  res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty)
   write.table(res,paste(x[1],".iHH",sep=""))
   return(res)
 }  

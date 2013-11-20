@@ -37,6 +37,9 @@ cat << EOF
     --mem-per-thread <Memory per thread (gb)>
     --rscript <Rscript path>
     --python <Python executable path>
+	--big_gap <big_gap>
+	--small_gap <small_gap>
+	--small_gap_penalty <small_gap_penalty>
 EOF
 }
 
@@ -98,6 +101,15 @@ do
         --python)
             PY_EXEC=$2
             shift 2
+				--small_gap)
+						SMALL_GAP=$2
+						shift 2
+				--big_gap)
+						BIG_GAP=$2
+						shift 2
+				--small_gap_penalty)
+						SMALL_GAP_PENATLY=$2
+						shift 2
         esac
 done
 
@@ -151,7 +163,7 @@ for i in $(eval echo "{1..${noFolders}}") ; do
      ulimit -v ${limit} -m ${limit}
      mkdir $i
      # Call R with the input file as a command line argument
-     ${SCRIPT_DIR} Rscript multicore_iHH.R --pop ${POP} -i ${POP}${i}.phaps --chr ${CHROM} --window ${WINDOW} --overlap ${OVERLAP} --cores ${PARRALEL_CORES} --working_dir $i --offset $offset --maf ${MAF}
+     ${SCRIPT_DIR} Rscript multicore_iHH.R --pop ${POP} -i ${POP}${i}.phaps --chr ${CHROM} --window ${WINDOW} --overlap ${OVERLAP} --cores ${PARRALEL_CORES} --working_dir $i --offset $offset --maf ${MAF} --big_gap ${BIG_GAP} --small_gap ${SMALL_GAP} --small_gap_penalty ${SMALL_GAP_PENATLY}
 	" > ${i}.job
      sync
      llsubmit ${i}.job
