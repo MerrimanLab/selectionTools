@@ -98,17 +98,15 @@ def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     vcf_dict = {}
     no_pops = len(populations)
-    threads=config['system']['cores_avaliable']
+    threads=int(config['system']['cores_avaliable'])
     # Take threads and divide by the number of jobs.
-    threads_per_job = math.ceil(threads / no_pops)
+    threads_per_job = int(math.ceil(threads / no_pops))
     # get vcf line count
-    print(threads_per_job)
     line_count = get_vcf_line_count(vcf_input)
     # split length is the size of each chunk
-    split_length = line_count // threads
+    split_length = line_count // threads_per_job
     # split positions
-    split_positions = [split_length* i for i in range(1,threads+1)]
-    print(split_positions)
+    split_positions = [split_length* i for i in range(1,threads_per_job+1)]
     remainder_length = line_count % threads 
     split_positions[len(split_positions) - 1] += remainder_length
     vcf_inputs = split_vcf(vcf_input,split_positions)
@@ -117,10 +115,11 @@ def subset_vcf(vcf_input,config,populations):
     for i, vcf in enumerate(vcf_inputs):
         for key, value in populations.items():
             cmd = []
-            output_file= key +str(i) +'.vcf'  
-                vcf_dict[key].append(vcf_output)
+            output_file= key +str(i) +'.vcf' 
+            try:
+                vcf_dict[key].append(output_file)
             except KeyError:
-                vcf_dict[key]=[vcf_output]
+                vcf_dict[key]=[output_file]
             comma_list_ids = ','.join(value)
             vcf_subset_executable=config['vcftools']['vcf_subset_executable']
             cmd.append(vcf_subset_executable)
@@ -128,7 +127,7 @@ def subset_vcf(vcf_input,config,populations):
             stdouts.append(output_file)
             #run_subprocess(cmd,'vcf-subset',stdout=vcf_output)
             cmds.append(list(cmd))
-    queue_jobs(cmds,config['system']['cores_avaliable'],stdouts=stdouts)
+    queue_jobs(cmds,'vcf-subset',config['system']['cores_avaliable'],stdouts=stdouts)
     cmds=[]
     for key, value in vcf_dict.items():
         # generate the commands for vcf concat for each output file generated
