@@ -48,10 +48,13 @@ if [ "$1" == "" ] ; then
 	exit 1
 fi
 
-while :
+echo "$@" > command.out
+while [[ $# -gt 0 ]]
 do
-    case $1 in
+echo $1 $# 
+   case $1 in
         -h | --help | -\?)
+            echo $#
             help
             exit 0
             ;;
@@ -98,33 +101,33 @@ do
         --rscript)
             R_SCRIPT=$2
             shift 2
+	    ;;
         --python)
             PY_EXEC=$2
             shift 2
-				--small_gap)
-						SMALL_GAP=$2
-						shift 2
-				--big_gap)
-						BIG_GAP=$2
-						shift 2
-				--small_gap_penalty)
-						SMALL_GAP_PENATLY=$2
-						shift 2
+            ;;
+        --small_gap)
+            SMALL_GAP=$2
+            shift 2
+            ;;
+        --big_gap)
+            BIG_GAP=$2
+            shift 2
+            ;;
+        --small_gap_penalty)
+            SMALL_GAP_PENATLY=$2
+            shift 2
+            ;;
         esac
 done
 
-if [ $R_SCRIPT == "" ] ; then
+if [[ "$R_SCRIPT" == "" ]] ; then
     R_SCRIPT="Rscript"
 fi
-if [ $PY_EXEC == "" ] ; then
+if [[ "$PY_EXEC" == "" ]] ; then
     PY_EXEC="python"
 fi
 
-if [ "$1" == "" ] ; then
-	help
-	exit 1
-fi
-echo "$@" > command.out
 bigWindow=`echo "(${WINDOW}-${OVERLAP}) * (${PARRALEL_CORES}) + ${OVERLAP}" | bc`
 echo $bigWindow
 max_line=`tail -1 $HAPS | awk '{ print $3 }'`
