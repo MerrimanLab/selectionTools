@@ -53,7 +53,7 @@ else
 	echo "Installing Variscan"
  	tar -xzf src/variscan-2.0.3.tar.gz
 	(cd variscan-2.0.3/src/ && rm *o)
-	(cd variscan-2.0.3 && ./configure && make )
+	(cd variscan-2.0.3 && bash autogen.sh && make )
 	mv variscan-2.0.3/src/variscan bin/
 	rm -Rf variscan-2.0.3
 	echo "Install rehh"

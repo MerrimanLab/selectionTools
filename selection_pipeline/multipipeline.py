@@ -1,5 +1,3 @@
-#
-#
 # Multipopulation script calls the selection
 # pipeline for each population that we need
 # to do then zips up and runs a script to p# each of the cross population statistics once
@@ -25,12 +23,9 @@ from .environment import set_environment
 from .standard_run_utilities import *
 logger = logging.getLogger(__name__)
 
-
 SUBPROCESS_FAILED_EXIT = 10
 CANNOT_FIND_EXECUTABLE = 20
 CANNOT_FIND_CONFIG = 30
-
-
 
 # generate RSB after we have calculated ihs
 
@@ -58,8 +53,6 @@ def rsb(config,options,populations):
             tmp_cmd.extend(['--chr',options.chromosome]) 
             run_subprocess(tmp_cmd,'rsb_generation') 
     os.chdir(orig_dir)     
-
-
 
 def get_populations(populations):
     pops = {}
@@ -109,11 +102,13 @@ def subset_vcf(vcf_input,config,populations):
     # Take threads and divide by the number of jobs.
     threads_per_job = math.ceil(threads / no_pops)
     # get vcf line count
+    print(threads_per_job)
     line_count = get_vcf_line_count(vcf_input)
     # split length is the size of each chunk
     split_length = line_count // threads
     # split positions
     split_positions = [split_length* i for i in range(1,threads+1)]
+    print(split_positions)
     remainder_length = line_count % threads 
     split_positions[len(split_positions) - 1] += remainder_length
     vcf_inputs = split_vcf(vcf_input,split_positions)
