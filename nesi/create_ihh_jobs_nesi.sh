@@ -208,9 +208,10 @@ done
 
 while true; do
 		NUMBER_FINISHED=`ls *iHH 2> /dev/null | wc -l`
-		if [ "${NUMBER_FINISHED}" == "1" ]; then
+		if [[ "${NUMBER_FINISHED}" == "1" ]]; then
 			break
 		fi
 		sleep 5m
 done
 exit 0
+
