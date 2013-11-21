@@ -132,10 +132,18 @@ def subset_vcf(vcf_input,config,populations):
     for key, value in vcf_dict.items():
         # generate the commands for vcf concat for each output file generated
         cmd=[]
-        vcf_concat_executable=config['vcf_tools']['vcf_concat_executable']
-        cmd.append(vcf_concat_executable)
-        cmd.extend(value)
-    queue_jobs(cmds,config['system']['cores_avaliable'],stdouts=vcf_outputs)
+        output_file = key + '.vcf'
+        # Append to vcf_outputs 
+        vcf_outputs.append(output_file)
+        if(len(value) == 1):
+            os.rename(value[0],output_file)
+        else: 
+            vcf_concat_executable=config['vcftools']['vcf_concat_executable']
+            cmd.append(vcf_concat_executable)
+            cmd.extend(value)
+            cmds.append(list(cmd))
+    if(len(cmds) != 0):
+        queue_jobs(cmds,'vcf-concat',config['system']['cores_avaliable'],stdouts=vcf_outputs)
     # call the queue jobs to run vcf-subset 
     # return the population concatenated vcf file
     return vcf_outputs 
@@ -238,7 +246,9 @@ def main():
         os.mkdir('logs')    
     os.rename(options.log_file,'logs/'+options.log_file)
     if not options.no_clean_up:
-        clean_folder('.')
+        keep=[options.vcf_input]
+        keep.extend(options.populations)
+        clean_folder('.',keep=keep)
     logger.info("Multi_population Complete")
     logger.info("Goodbye :")
 if __name__=="__main__":main()

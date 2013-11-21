@@ -111,9 +111,9 @@ def run_subprocess(command,tool,stdout=None):
             else:
             # find out what kind of exception to try here
                 if(hasattr(stdout,'read')):
+
                     exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
                 else:
-                    print(stdout)
                     stdout=open(stdout,'w')
                     exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
                     stdout.close()  
@@ -148,7 +148,7 @@ def __queue_worker__(q,tool_name):
         queue_item=q.get()
         try:
             cmd=queue_item[0]
-            stdout=cmd[1]
+            stdout=queue_item[1]
         except IndexError:
             cmd=queue_item
         try:
@@ -172,9 +172,16 @@ def queue_jobs(commands,tool_name,threads,stdouts=None):
             q.put(cmd)
     q.join()
 
-def clean_folder(folder):
+# clean folder expecting a list containing
+# files to keep from that folder
+# only required if the user 
+# runs the analysis from their root directory
+def clean_folder(folder,keep=None):
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
+        if keep is not None: 
+            if (file_path in os.path.join(folder,keep)):
+                continue
         try:
             if os.path.isfile(file_path):
                 os.unlink(file_path)
