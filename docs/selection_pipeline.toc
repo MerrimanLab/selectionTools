@@ -13,7 +13,7 @@
 \contentsline {subsection}{\numberline {3.5}Data Visualisation}{6}{subsection.3.5}
 \contentsline {subsubsection}{\numberline {3.5.1}Fst}{6}{subsubsection.3.5.1}
 \contentsline {subsubsection}{\numberline {3.5.2}Fay and Wu's H}{6}{subsubsection.3.5.2}
-\contentsline {subsubsection}{\numberline {3.5.3}iHS}{6}{subsubsection.3.5.3}
+\contentsline {subsubsection}{\numberline {3.5.3}iHS}{9}{subsubsection.3.5.3}
 \contentsline {subsubsection}{\numberline {3.5.4}Tajima's D}{10}{subsubsection.3.5.4}
 \contentsline {subsubsection}{\numberline {3.5.5}Rsb}{10}{subsubsection.3.5.5}
 \contentsline {section}{\numberline {4}Output Files}{11}{section.4}
@@ -39,15 +39,15 @@
 \contentsline {subsubsection}{\numberline {5.3.1}Input Files}{14}{subsubsection.5.3.1}
 \contentsline {subsubsection}{\numberline {5.3.2}Output Files}{14}{subsubsection.5.3.2}
 \contentsline {subsubsection}{\numberline {5.3.3}Other parameters}{14}{subsubsection.5.3.3}
-\contentsline {subsection}{\numberline {5.4}Configuration File}{14}{subsection.5.4}
+\contentsline {subsection}{\numberline {5.4}Configuration File}{15}{subsection.5.4}
 \contentsline {subsubsection}{\numberline {5.4.1}system}{15}{subsubsection.5.4.1}
 \contentsline {subsubsection}{\numberline {5.4.2}environment}{15}{subsubsection.5.4.2}
 \contentsline {subsubsection}{\numberline {5.4.3}selection\_pipeline}{15}{subsubsection.5.4.3}
 \contentsline {subsubsection}{\numberline {5.4.4}vcf\_tools}{15}{subsubsection.5.4.4}
-\contentsline {subsubsection}{\numberline {5.4.5}shapeit}{15}{subsubsection.5.4.5}
+\contentsline {subsubsection}{\numberline {5.4.5}shapeit}{16}{subsubsection.5.4.5}
 \contentsline {subsubsection}{\numberline {5.4.6}impute2}{16}{subsubsection.5.4.6}
-\contentsline {subsubsection}{\numberline {5.4.7}plink}{16}{subsubsection.5.4.7}
-\contentsline {subsubsection}{\numberline {5.4.8}Rscript}{16}{subsubsection.5.4.8}
+\contentsline {subsubsection}{\numberline {5.4.7}plink}{17}{subsubsection.5.4.7}
+\contentsline {subsubsection}{\numberline {5.4.8}Rscript}{17}{subsubsection.5.4.8}
 \contentsline {subsubsection}{\numberline {5.4.9}python}{17}{subsubsection.5.4.9}
 \contentsline {subsubsection}{\numberline {5.4.10}ancestral\_allele}{17}{subsubsection.5.4.10}
 \contentsline {subsubsection}{\numberline {5.4.11}qctool}{17}{subsubsection.5.4.11}

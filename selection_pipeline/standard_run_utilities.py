@@ -180,7 +180,7 @@ def clean_folder(folder,keep=None):
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
         if keep is not None: 
-            if (file_path in os.path.join(folder,keep)):
+            if (file_path in [os.path.join(folder,x) for x in keep]):
                 continue
         try:
             if os.path.isfile(file_path):

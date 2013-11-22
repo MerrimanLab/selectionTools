@@ -1,14 +1,14 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Arch Linux) (format=pdflatex 2013.11.6)  19 NOV 2013 12:02
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  21 NOV 2013 18:01
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
 **selection_pipeline.tex
 (./selection_pipeline.tex
 LaTeX2e <2011/06/27>
-Babel <3.9f> and hyphenation patterns for 78 languages loaded.
-(/usr/share/texmf-dist/tex/latex/base/article.cls
+Babel <3.9f> and hyphenation patterns for 2 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/share/texmf-dist/tex/latex/base/size10.clo
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -23,14 +23,14 @@ File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(/usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
 
-(/usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
 Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
 
 
-(/usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
 Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
@@ -71,29 +71,29 @@ Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
 Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
 Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
 )
-(/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-(/usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-(/usr/share/texmf-dist/tex/latex/oberdiek/auxhook.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
 Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
 )
-(/usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 )
 \@linkdim=\dimen103
 \Hy@linkcounter=\count87
 \Hy@pagecounter=\count88
 
-(/usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
 )
 \Hy@SavedSpaceFactor=\count89
 
-(/usr/share/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 Package hyperref Info: Hyper figures OFF on input line 4443.
@@ -105,7 +105,7 @@ Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4688.
 \c@Hy@tempcnt=\count90
 
-(/usr/share/texmf-dist/tex/latex/url/url.sty
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 )
@@ -130,54 +130,54 @@ LaTeX Info: Redefining \pageref on input line 6369.
 
 Package hyperref Message: Driver (autodetected): hpdftex.
 
-(/usr/share/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
 \Fld@listcount=\count95
 \c@bookmark@seq@number=\count96
 
-(/usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
 \Hy@SectionHShift=\skip43
 )
-(/usr/share/texmf-dist/tex/latex/setspace/setspace.sty
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-(/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(/usr/share/texmf-dist/tex/latex/latexconfig/graphics.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
 Package graphics Info: Driver file: pdftex.def on input line 91.
 
-(/usr/share/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 \Gread@gobject=\count97
 ))
 \Gin@req@height=\dimen107
 \Gin@req@width=\dimen108
 )
-(/usr/share/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
 
-(/usr/share/texmf-dist/tex/latex/latexconfig/color.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 130.
 )
-(/usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
-(/usr/share/texmf-dist/tex/latex/latexconfig/color.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
@@ -192,10 +192,10 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 )
-(/usr/share/texmf-dist/tex/latex/relsize/relsize.sty
+(/usr/share/texlive/texmf-dist/tex/latex/relsize/relsize.sty
 Package: relsize 2013/03/29 ver 4.1
 )
-(/usr/share/texmf-dist/tex/latex/listings/listings.sty
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count98
 \lst@gtempboxa=\box26
 \lst@token=\toks15
@@ -209,28 +209,28 @@ Package: relsize 2013/03/29 ver 4.1
 \lst@lineno=\count103
 \lst@maxwidth=\dimen112
 
-(/usr/share/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2013/08/26 1.5b (Carsten Heinz)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2013/07/10 1.5 (Carsten Heinz)
 \c@lstnumber=\count104
 \lst@skipnumbers=\count105
 \lst@framebox=\box27
 )
-(/usr/share/texmf-dist/tex/latex/listings/listings.cfg
-File: listings.cfg 2013/08/26 1.5b listings configuration
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2013/06/27 1.5pre1 listings configuration
 ))
-Package: listings 2013/08/26 1.5b (Carsten Heinz)
+Package: listings 2013/07/10 1.5 (Carsten Heinz)
 
-(/usr/share/texmf-dist/tex/latex/natbib/natbib.sty
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip44
 \bibsep=\skip45
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count106
 )
-(/usr/share/texmf-dist/tex/latex/minted/minted.sty
+(/usr/share/texlive/texmf-dist/tex/latex/minted/minted.sty
 Package: minted 2011/09/17 v1.7 Yet another Pygments shim for LaTeX
 
-(/usr/share/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2008/02/07
 
 Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
@@ -241,7 +241,7 @@ Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix
 \c@FancyVerbLine=\count108
 \FV@StepNumber=\count109
 \FV@OutFile=\write3
-) (/usr/share/texmf-dist/tex/latex/float/float.sty
+) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count110
 \float@exts=\toks16
@@ -249,10 +249,10 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks17
 \@floatcapt=\box30
 )
-(/usr/share/texmf-dist/tex/latex/base/ifthen.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
-(/usr/share/texmf-dist/tex/latex/tools/calc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count111
 \calc@Bcount=\count112
@@ -265,10 +265,10 @@ LaTeX Info: Redefining \addtolength on input line 77.
 \calc@Ccount=\count113
 \calc@Cskip=\skip48
 )
-(/usr/share/texmf-dist/tex/latex/ifplatform/ifplatform.sty
+(/usr/share/texlive/texmf-dist/tex/latex/ifplatform/ifplatform.sty
 Package: ifplatform 2010/10/22 v0.4 Testing for the operating system
 
-(/usr/share/texmf-dist/tex/generic/oberdiek/catchfile.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/catchfile.sty
 Package: catchfile 2011/03/01 v1.6 Catch the contents of a file (HO)
 )
 runsystem(uname -s > "selection_pipeline.w18")...executed.
@@ -289,10 +289,10 @@ runsystem(rm selection_pipeline.aex)...executed.
 
 Package hyperref Info: Option `colorlinks' set `true' on input line 12.
 
-(/usr/share/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2013/08/26 1.5b listings language file
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2013/06/27 1.5pre1 listings language file
 )
-(/usr/share/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/09/12 v5.6 Page Geometry
 \Gm@cnth=\count115
 \Gm@cntv=\count116
@@ -307,10 +307,10 @@ Package: geometry 2010/09/12 v5.6 Page Geometry
 \Gm@layoutvoffset=\dimen122
 \Gm@dimlist=\toks19
 )
-(/usr/share/texmf-dist/tex/latex/base/makeidx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty
 Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
 )
-(/usr/share/texmf-dist/tex/latex/titlesec/titlesec.sty
+(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 \ttl@box=\box32
 \beforetitleunit=\skip49
@@ -322,26 +322,26 @@ Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 \titlewidthlast=\dimen126
 \titlewidthfirst=\dimen127
 )
-(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
-(/usr/share/texmf-dist/tex/latex/base/t1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 ))
-(/usr/share/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2008/03/30 v1.1d Input encoding file
 \inpenc@prehook=\toks21
 \inpenc@posthook=\toks22
 
-(/usr/share/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
 
-(/usr/share/texmf-dist/tex/latex/base/t1enc.dfu
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu
 File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
@@ -491,7 +491,7 @@ File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
 
-(/usr/share/texmf-dist/tex/latex/base/ot1enc.dfu
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu
 File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
@@ -522,7 +522,7 @@ File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
 
-(/usr/share/texmf-dist/tex/latex/base/omsenc.dfu
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu
 File: omsenc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
@@ -548,7 +548,7 @@ Now handling font encoding PD1 ...
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
 ))
-(/usr/share/texmf-dist/tex/latex/preprint/authblk.sty
+(/usr/share/texlive/texmf-dist/tex/latex/preprint/authblk.sty
 Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip51
 \@affilsep=\skip52
@@ -581,10 +581,10 @@ LaTeX Font Info:    ... okay on input line 42.
 \AtBeginShipoutBox=\box33
 Package hyperref Info: Link coloring ON on input line 42.
 
-(/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
-(/usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count121
@@ -598,7 +598,7 @@ LaTeX Info: Redefining \nameref on input line 42.
 \openout6 = `selection_pipeline.out'.
 
 
-(/usr/share/texmf-dist/tex/context/base/supp-pdf.mkii
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count122
 \scratchdimen=\dimen128
@@ -611,10 +611,10 @@ LaTeX Info: Redefining \nameref on input line 42.
 \MPnumerator=\count126
 \makeMPintoPDFobject=\count127
 \everyMPtoPDFconversion=\toks24
-) (/usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
-(/usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 )
 Package grfext Info: Graphics extension search list:
@@ -622,7 +622,7 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 452.
 
-(/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
@@ -689,13 +689,13 @@ Package natbib Warning: Citation `fayandwush' on page 2 undefined on input line
 
 [2]
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 53.
- (/usr/share/texmf-dist/tex/latex/base/omscmr.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 53.
 
-Underfull \hbox (badness 10000) in paragraph at lines 58--59
+Underfull \hbox (badness 10000) in paragraph at lines 62--63
 
  []
 
@@ -707,7 +707,8 @@ d.
 
 (./selection_pipeline.out.pyg
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 1.
- (/usr/share/texmf-dist/tex/latex/base/t1cmtt.fd
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 ))
 runsystem(rm selection_pipeline.out.pyg)...executed.
@@ -715,7 +716,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 62--63
+Underfull \hbox (badness 10000) in paragraph at lines 66--67
 
  []
 
@@ -731,7 +732,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 64--68
+Underfull \hbox (badness 10000) in paragraph at lines 68--72
 
  []
 
@@ -748,12 +749,12 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--74
+Underfull \hbox (badness 10000) in paragraph at lines 77--78
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 76--77
+Underfull \hbox (badness 10000) in paragraph at lines 80--81
 
  []
 
@@ -769,7 +770,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 78--87
+Underfull \hbox (badness 10000) in paragraph at lines 82--91
 
  []
 
@@ -788,7 +789,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--97
+Underfull \hbox (badness 10000) in paragraph at lines 92--101
 
  []
 
@@ -804,12 +805,12 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 101--107
+Underfull \hbox (badness 10000) in paragraph at lines 105--111
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 111--112
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
 
  []
 
@@ -824,7 +825,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 115--116
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
 
  []
 
@@ -840,7 +841,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 121--129
+Underfull \hbox (badness 10000) in paragraph at lines 125--133
 
  []
 
@@ -867,14 +868,14 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 148--149
+Underfull \hbox (badness 10000) in paragraph at lines 152--153
 
  []
 
-<pictures/CEUYRI2.png, id=378, 481.8pt x 481.8pt>
+<pictures/CEUYRI2.png, id=379, 481.8pt x 481.8pt>
 File: pictures/CEUYRI2.png Graphic file (type png)
  <use pictures/CEUYRI2.png>
-Package pdftex.def Info: pictures/CEUYRI2.png used on input line 152.
+Package pdftex.def Info: pictures/CEUYRI2.png used on input line 156.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 \openout3 = `selection_pipeline.pyg'.
 
@@ -888,10 +889,10 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-<pictures/CEUFay.png, id=380, 481.8pt x 481.8pt>
+<pictures/CEUFay.png, id=381, 481.8pt x 481.8pt>
 File: pictures/CEUFay.png Graphic file (type png)
  <use pictures/CEUFay.png>
-Package pdftex.def Info: pictures/CEUFay.png used on input line 168.
+Package pdftex.def Info: pictures/CEUFay.png used on input line 172.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 \openout3 = `selection_pipeline.pyg'.
 
@@ -905,28 +906,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 175--182
-
- []
-
-<pictures/CEUihs.png, id=382, 481.8pt x 481.8pt>
-File: pictures/CEUihs.png Graphic file (type png)
- <use pictures/CEUihs.png>
-Package pdftex.def Info: pictures/CEUihs.png used on input line 185.
-(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 197--198
+Underfull \hbox (badness 10000) in paragraph at lines 179--186
 
  []
 
@@ -935,25 +915,47 @@ Underfull \hbox (badness 10000) in paragraph at lines 197--198
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.198 
+l.186 
        <./pictures/CEUYRI2.png>] [8pdfTeX warning (ext4): destination with the 
 same identifier (name{figure.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.198 
-       <./pictures/CEUFay.png>] [9pdfTeX warning (ext4): destination with the s
-ame identifier (name{figure.3}) has been already used, duplicate ignored
+l.186 
+       <./pictures/CEUFay.png>]
+<pictures/CEUihs.png, id=400, 481.8pt x 481.8pt>
+File: pictures/CEUihs.png Graphic file (type png)
+ <use pictures/CEUihs.png>
+Package pdftex.def Info: pictures/CEUihs.png used on input line 189.
+(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
+frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
+
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
+
+ []
+
+[9pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
+has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.198 
+l.202 
        <./pictures/CEUihs.png>]
-<pictures/CEUtajimas.png, id=407, 481.8pt x 481.8pt>
+<pictures/CEUtajimas.png, id=408, 481.8pt x 481.8pt>
 File: pictures/CEUtajimas.png Graphic file (type png)
 
 <use pictures/CEUtajimas.png>
-Package pdftex.def Info: pictures/CEUtajimas.png used on input line 201.
+Package pdftex.def Info: pictures/CEUtajimas.png used on input line 205.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 \openout3 = `selection_pipeline.pyg'.
 
@@ -970,7 +972,7 @@ runsystem(rm selection_pipeline.pyg)...executed.
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.214 \subsection{multi\_population}
+l.218 \subsection{multi\_population}
                                      <./pictures/CEUtajimas.png>]
 \openout3 = `selection_pipeline.pyg'.
 
@@ -985,7 +987,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 216--221
+Underfull \hbox (badness 10000) in paragraph at lines 220--225
 
  []
 
@@ -1001,7 +1003,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 224--229
+Underfull \hbox (badness 10000) in paragraph at lines 228--233
 
  []
 
@@ -1017,7 +1019,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 230--235
+Underfull \hbox (badness 10000) in paragraph at lines 234--239
 
  []
 
@@ -1033,7 +1035,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 236--241
+Underfull \hbox (badness 10000) in paragraph at lines 240--245
 
  []
 
@@ -1049,24 +1051,24 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 242--247
+Underfull \hbox (badness 10000) in paragraph at lines 246--251
 
  []
 
 [11]
-Overfull \hbox (1.40817pt too wide) in paragraph at lines 258--260
+Overfull \hbox (1.40817pt too wide) in paragraph at lines 262--264
 \T1/cmr/m/n/10 Fst re-sults are stored in the fst folder with the chro-mo-some 
 num-ber fol-lowed by the two pop-u-la-tions. e.g 2CEUYRI.fst 
  []
 
-[12] [13]
-Overfull \hbox (4.14699pt too wide) in paragraph at lines 356--357
+[12] [13] [14]
+Overfull \hbox (4.14699pt too wide) in paragraph at lines 381--382
 \T1/cmr/m/n/10 fig_file_location>. There are two main pro-grams in the se-lec-t
 ion pipeline namely \T1/cmr/m/it/10 se-lec-tion_pipeline \T1/cmr/m/n/10 and \T1
 /cmr/m/it/10 multi_population\T1/cmr/m/n/10 .
  []
 
-[14] [15] [16] [17]
+[15] [16] [17]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
@@ -1079,7 +1081,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 523--529
+Underfull \hbox (badness 10000) in paragraph at lines 524--530
 
  []
 
@@ -1095,7 +1097,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 536--537
+Underfull \hbox (badness 10000) in paragraph at lines 537--538
 
  []
 
@@ -1112,7 +1114,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 546--547
+Underfull \hbox (badness 10000) in paragraph at lines 547--548
 
  []
 
@@ -1120,42 +1122,42 @@ Underfull \hbox (badness 10000) in paragraph at lines 546--547
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 555.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 556.
 [20
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 555.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 556.
  (./selection_pipeline.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 555.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 555.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 556.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 556.
 Package rerunfilecheck Info: File `selection_pipeline.out' has not changed.
 (rerunfilecheck)             Checksum: D24FA9A9C62121571674DA19B1A26FA7;4091.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 555.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 556.
  ) 
 Here is how much of TeX's memory you used:
- 9614 strings out of 493311
- 136482 string characters out of 6143650
- 244482 words of memory out of 5000000
- 12785 multiletter control sequences out of 15000+600000
+ 9606 strings out of 495031
+ 137370 string characters out of 6181530
+ 238783 words of memory out of 5000000
+ 12528 multiletter control sequences out of 15000+600000
  14621 words of font info for 35 fonts, out of 8000000 for 9000
- 957 hyphenation exceptions out of 8191
+ 14 hyphenation exceptions out of 8191
  31i,7n,40p,1643b,455s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1
-000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/s
-hare/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf-dist
-/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/pu
-blic/cm-super/sfit1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/s
-frm0800.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></u
-sr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf-
-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf-dist/fonts/type
-1/public/cm-super/sftt1000.pfb>
-Output written on selection_pipeline.pdf (20 pages, 314742 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-supe
+r/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr
+/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/t
+ype1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super
+/sfit1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/
+share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/ty
+pe1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/
+sfti1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on selection_pipeline.pdf (20 pages, 323815 bytes).
 PDF statistics:
- 530 PDF objects out of 1000 (max. 8388607)
- 482 compressed objects within 5 object streams
+ 534 PDF objects out of 1000 (max. 8388607)
+ 485 compressed objects within 5 object streams
  98 named destinations out of 1000 (max. 500000)
  501 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -140,7 +140,7 @@ class StandardRun(CommandTemplate):
 
         # change from megabases to bp which is what is
         # expected by the impute2 command line options
-        distance=int(config['impute2']['chromosome_split_size']) * 1000000
+        distance=int(options.impute_split_size) * 1000000
         # Break files into 5 megabase regions.
         try:
             proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 

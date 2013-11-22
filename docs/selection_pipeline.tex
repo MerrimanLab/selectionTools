@@ -313,14 +313,35 @@ Name for the log file. Moved into the logs folder at the end of program run.
 Minor allele frequency filter threshold any SNPs below this threshold will be discarded from the analysis.
 \item --hwe <hardy-weinberg minimum p-value>\\
 A hardy weinberg test is performed on every snp any snps failing the test will be discarded.
-\item --daf <Minimum derived allele frequency>\\
-Derived allele frequencies below this minimum will be discarded.
 \item --remove-missing <Inclusion threshold for missing genotypes>\\
 Inclusion criteria for SNPs with missing data. SNPs with less than this value will be removed from analysis.
 \item --TajimaD <tajimas D bin size>\\
 Tajima's D statistic bin size.
 \item --no-clean-up \\
 Do not clean up intermediate data files
+
+\item --ehh-window-size
+Window size for multicore rehh calculations.  
+
+\item --ehh-overlap
+
+Window overlap for multicore rehh calculations.
+
+\item --daf <Minimum derived allele frequency>\\
+Derived allele frequencies below this minimum will be discarded.
+
+\item --big-gap
+
+Gap size in kb for not calculating iHH if the gap is too large.
+
+\item small-gap-
+
+Gap size in kb for applying a penalty to the area calculated by iHH
+
+\item small-gap-penalty
+
+Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended.
+
 \end{itemize}
 \subsection{Ancestral Annotation}
 The progam \emph{ancestral\_annotation} is installed on the program path. The program annotates haps and vcfs files with ancestral allele annotation from the 6-way IPO alignment or the human reference genome.
@@ -476,30 +497,6 @@ Location of the qctool executable.
 \item multicore\_ihh
 
 Location of the multicore\_iHH.R script
-
-\item window
-
-Window size for multicore rehh calculations.  
-
-\item overlap
-
-Window overlap for multicore rehh calculations.
-
-\item derived\_allele\_frequency
-
-Filter for derived allele frequency.
-
-\item big\_gap\_threshold
-
-Gap size in bp for not calculating iHH if the gap is too large.
-
-\item small\_gap\_threshold
-
-Gap size in bp for applying a penalty to the area calculated by iHH
-
-\item small\_gap\_multiplier
-
-Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended.
 
 The rehh package source included with the pipeline has been altered to match the output filters used in Voight's paper. If the EHH > 0.05 reaches the end of a chromosome or the start of a gap > big\_gap\_threshold , then no value is returded for the core snp. The small\_gap\_threshold specifies the gap distance to reduce the distance spanned by the gap by a multiplicative factorpecified by small\_gap\_multiplier. The formula for the penalty is $\frac{small\_gap\_multiplier}{gap\_size}$. To match the parameters used by Voight, 200000 should be  used for big\_gap\_threshold, 20000 for small\_gap\_threshold and 20000 for small\_gap\_multiplier \citep{Voight:2006go}.
 
