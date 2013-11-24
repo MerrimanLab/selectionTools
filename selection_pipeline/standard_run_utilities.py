@@ -29,6 +29,7 @@ def get_vcf_line_count(input_file):
         return(line_count)
         
 def vcf_start_and_end(file):
+    return 0
 #
 
 def __is_script__(fpath):
