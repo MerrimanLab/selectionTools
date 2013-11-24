@@ -77,9 +77,6 @@ def get_vcf_line_count(input_file):
             line_count += 1
         return(line_count)
         
-#def vcf_start_and_end(file):
-#
-
 def __is_script__(fpath):
         return os.path.isfile(fpath)
 def __is_exe__(fpath):

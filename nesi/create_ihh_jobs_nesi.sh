@@ -177,7 +177,7 @@ done
 
 NUMBER_FINISHED=0
 
-mem_required=${mem_in_gigs}
+mem_required=${MEM_PER_THREAD}
 limit=`echo "${mem_required} * 1024 * 1024" | bc`
 
 
