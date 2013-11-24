@@ -37,6 +37,9 @@ cat << EOF
     --mem-per-thread <Memory per thread (gb)>
     --rscript <Rscript path>
     --python <Python executable path>
+	--big_gap <big_gap>
+	--small_gap <small_gap>
+	--small_gap_penalty <small_gap_penalty>
 EOF
 }
 
@@ -45,10 +48,13 @@ if [ "$1" == "" ] ; then
 	exit 1
 fi
 
-while :
+echo "$@" > command.out
+while [[ $# -gt 0 ]]
 do
-    case $1 in
+echo $1 $# 
+   case $1 in
         -h | --help | -\?)
+            echo $#
             help
             exit 0
             ;;
@@ -95,24 +101,33 @@ do
         --rscript)
             R_SCRIPT=$2
             shift 2
+	    ;;
         --python)
             PY_EXEC=$2
             shift 2
+            ;;
+        --small_gap)
+            SMALL_GAP=$2
+            shift 2
+            ;;
+        --big_gap)
+            BIG_GAP=$2
+            shift 2
+            ;;
+        --small_gap_penalty)
+            SMALL_GAP_PENATLY=$2
+            shift 2
+            ;;
         esac
 done
 
-if [ $R_SCRIPT == "" ] ; then
+if [[ "$R_SCRIPT" == "" ]] ; then
     R_SCRIPT="Rscript"
 fi
-if [ $PY_EXEC == "" ] ; then
+if [[ "$PY_EXEC" == "" ]] ; then
     PY_EXEC="python"
 fi
 
-if [ "$1" == "" ] ; then
-	help
-	exit 1
-fi
-echo "$@" > command.out
 bigWindow=`echo "(${WINDOW}-${OVERLAP}) * (${PARRALEL_CORES}) + ${OVERLAP}" | bc`
 echo $bigWindow
 max_line=`tail -1 $HAPS | awk '{ print $3 }'`
@@ -151,7 +166,7 @@ for i in $(eval echo "{1..${noFolders}}") ; do
      ulimit -v ${limit} -m ${limit}
      mkdir $i
      # Call R with the input file as a command line argument
-     ${SCRIPT_DIR} Rscript multicore_iHH.R --pop ${POP} -i ${POP}${i}.phaps --chr ${CHROM} --window ${WINDOW} --overlap ${OVERLAP} --cores ${PARRALEL_CORES} --working_dir $i --offset $offset --maf ${MAF}
+     ${SCRIPT_DIR} Rscript multicore_iHH.R --pop ${POP} -i ${POP}${i}.phaps --chr ${CHROM} --window ${WINDOW} --overlap ${OVERLAP} --cores ${PARRALEL_CORES} --working_dir $i --offset $offset --maf ${MAF} --big_gap ${BIG_GAP} --small_gap ${SMALL_GAP} --small_gap_penalty ${SMALL_GAP_PENATLY}
 	" > ${i}.job
      sync
      llsubmit ${i}.job
@@ -162,7 +177,7 @@ done
 
 NUMBER_FINISHED=0
 
-mem_required=`echo "${mem_in_gigs} * ${noFolders}" | bc`
+mem_required=${MEM_PER_THREAD}
 limit=`echo "${mem_required} * 1024 * 1024" | bc`
 
 
@@ -193,9 +208,10 @@ done
 
 while true; do
 		NUMBER_FINISHED=`ls *iHH 2> /dev/null | wc -l`
-		if [ "${NUMBER_FINISHED}" == "1" ]; then
+		if [[ "${NUMBER_FINISHED}" == "1" ]]; then
 			break
 		fi
 		sleep 5m
 done
 exit 0
+

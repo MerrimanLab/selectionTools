@@ -138,6 +138,7 @@ class CommandTemplate(object):
         cmd.append(rscript)
         # Todo look at MAF in rehh
         cmd.extend([multicore_ihh,'-p',population,'-i',haps,'-c',str(options.chromosome),'--window',str(window),'--overlap',str(overlap),'--maf',str(config['multicore_ihh']['derived_allele_frequency'])])
+        cmd.extend(['--big_gap',str(config['multicore_ihh']['big_gap_threshold']),'--small_gap',str(config['multicore_ihh']['small_gap_threshold']),'--small_gap_penalty',str(config['multicore_ihh']['small_gap_multiplier'])])
         return (cmd,output_name)
     
     def fix_sample_file(self,options,config,sample_file):

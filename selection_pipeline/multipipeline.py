@@ -1,5 +1,3 @@
-#
-#
 # Multipopulation script calls the selection
 # pipeline for each population that we need
 # to do then zips up and runs a script to p# each of the cross population statistics once
@@ -13,22 +11,21 @@
 #
 
 from collections import OrderedDict
+import math
 import sys
 import os
 import subprocess
 from optparse import OptionParser
 import ConfigParser
 import logging
+import re
 from .environment import set_environment
 from .standard_run_utilities import *
 logger = logging.getLogger(__name__)
 
-
 SUBPROCESS_FAILED_EXIT = 10
 CANNOT_FIND_EXECUTABLE = 20
 CANNOT_FIND_CONFIG = 30
-
-
 
 # generate RSB after we have calculated ihs
 
@@ -56,8 +53,6 @@ def rsb(config,options,populations):
             tmp_cmd.extend(['--chr',options.chromosome]) 
             run_subprocess(tmp_cmd,'rsb_generation') 
     os.chdir(orig_dir)     
-
-
 
 def get_populations(populations):
     pops = {}
@@ -96,36 +91,61 @@ def check_executables_and_scripts_exist(options,config):
         if(which(config['selection_pipeline']['selection_pipeline_executable'],'selection_pipeline') is None):
             return False
         return True
-
-def __split__vcf__(vcf_input,split_positions):
-    return 0 
-def __merge__vcfs__(vcf_inputs,config,populations):
+    
+def __concat__vcfs__(vcf_inputs,config,populations):
     return 0
 def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
+    vcf_dict = {}
+    no_pops = len(populations)
+    threads=int(config['system']['cores_avaliable'])
+    # Take threads and divide by the number of jobs.
+    threads_per_job = int(math.ceil(threads / no_pops))
+    # get vcf line count
     line_count = get_vcf_line_count(vcf_input)
-    threads=config['system']['cores_avaliable']
-    split_length = line_count // threads
-    split_positions = [split_length* i for i in range(0,threads)]
+    # split length is the size of each chunk
+    split_length = line_count // threads_per_job
+    # split positions
+    split_positions = [split_length* i for i in range(1,threads_per_job+1)]
     remainder_length = line_count % threads 
     split_positions[len(split_positions) - 1] += remainder_length
-    vcf_inputs = __split__vcf__(vcf_input,split_positions)
+    vcf_inputs = split_vcf(vcf_input,split_positions)
+    cmds=[]
+    stdouts=[]
     for i, vcf in enumerate(vcf_inputs):
         for key, value in populations.items():
             cmd = []
-            vcf_output = open(key + '.vcf','w')
-            population = key
-            # TODO break vcfs into chunk sizes that are a divisor of the maximum
-            # number of cores avaliable.
-         
-    
+            output_file= key +str(i) +'.vcf' 
+            try:
+                vcf_dict[key].append(output_file)
+            except KeyError:
+                vcf_dict[key]=[output_file]
             comma_list_ids = ','.join(value)
             vcf_subset_executable=config['vcftools']['vcf_subset_executable']
             cmd.append(vcf_subset_executable)
-            cmd.extend(['-f','-c',comma_list_ids,vcf_input])
-            run_subprocess(cmd,'vcf-subset',stdout=vcf_output)
-            vcf_outputs.append(key + '.vcf')
-            vcf_output.close()
+            cmd.extend(['-f','-c',comma_list_ids,vcf])
+            stdouts.append(output_file)
+            #run_subprocess(cmd,'vcf-subset',stdout=vcf_output)
+            cmds.append(list(cmd))
+    queue_jobs(cmds,'vcf-subset',config['system']['cores_avaliable'],stdouts=stdouts)
+    cmds=[]
+    for key, value in vcf_dict.items():
+        # generate the commands for vcf concat for each output file generated
+        cmd=[]
+        output_file = key + '.vcf'
+        # Append to vcf_outputs 
+        vcf_outputs.append(output_file)
+        if(len(value) == 1):
+            os.rename(value[0],output_file)
+        else: 
+            vcf_concat_executable=config['vcftools']['vcf_concat_executable']
+            cmd.append(vcf_concat_executable)
+            cmd.extend(value)
+            cmds.append(list(cmd))
+    if(len(cmds) != 0):
+        queue_jobs(cmds,'vcf-concat',config['system']['cores_avaliable'],stdouts=vcf_outputs)
+    # call the queue jobs to run vcf-subset 
+    # return the population concatenated vcf file
     return vcf_outputs 
 
 def run_selection_pipeline(output_vcfs,options,populations,config):
@@ -226,7 +246,9 @@ def main():
         os.mkdir('logs')    
     os.rename(options.log_file,'logs/'+options.log_file)
     if not options.no_clean_up:
-        clean_folder('.')
+        keep=[options.vcf_input]
+        keep.extend(options.populations)
+        clean_folder('.',keep=keep)
     logger.info("Multi_population Complete")
     logger.info("Goodbye :")
 if __name__=="__main__":main()
