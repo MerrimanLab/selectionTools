@@ -82,6 +82,7 @@ def parse_arguments():
     parser.add_option('--big-gap',dest="big_gap",help="Gap size in kb for not calculating iHH if core SNP spans this gap")
     parser.add_option('--small-gap',dest='small_gap',help="Gap size in kb for applying a penalty to the area calculated by iHH")
     parser.add_option('--small-gap-penalty',dest="small_gap_penalty",help="Penalty multiplier for intergration steps in iHH ( see manual for formula, usually the same as small-gap") 
+    parser.add_option('--cores',dest='cores',help="Override cores avaliable setting")
     (options, args) = parser.parse_args()
     if(options.verbose != None):
         if(options.verbose):
@@ -145,7 +146,8 @@ def main():
     options = parse_arguments()
     config = parse_config(options)
     # set default config
-    print(options.log_file)
+    if options.cores is not None:
+       config['system']['cores_avaliable'] = options.cores 
     logging.basicConfig(format='%(asctime)s     %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
     if('nesi' in config['system']):
         if(config['system']['nesi']=="True"):

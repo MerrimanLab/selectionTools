@@ -283,6 +283,8 @@ Do not clean up intermediate data files.
 Argument is passed directly to the VCF tools command line.
 \item --fst-window-step <FST window step>\\
 Argument is passed directly to the VCF tools command line.
+\item --cores \\
+Number of cores avaliable for the pipeline overrides setting in the config file.
 \end{itemize}
 \subsection{Selection Pipeline}
 \subsubsection{Input Files}
@@ -334,13 +336,17 @@ Derived allele frequencies below this minimum will be discarded.
 
 Gap size in kb for not calculating iHH if the gap is too large.
 
-\item small-gap-
+\item --small-gap
 
 Gap size in kb for applying a penalty to the area calculated by iHH
 
-\item small-gap-penalty
+\item --small-gap-penalty
 
 Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended.
+
+\item --cores 
+
+Number of cores avaliable for the pipeline overrides setting in the config file.
 
 \end{itemize}
 \subsection{Ancestral Annotation}
@@ -381,7 +387,7 @@ The 6-way EPO alignment denotes ancestral alleles with both high and low confide
 The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line argument --config-file <config\_file\_location>. There are two main programs in the selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters. The default config file contains an example of the format.
 \subsubsection{system}
 \begin{itemize}
-\item threads\_avaliable
+\item cores\_avaliable
 
 Certain programs in the pipeline can take advantage of multicore computers. This option instructs the pipeline about the maximum number of concurrent processes it is allowed to use.
 \end{itemize}

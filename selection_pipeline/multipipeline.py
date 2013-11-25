@@ -92,8 +92,6 @@ def check_executables_and_scripts_exist(options,config):
             return False
         return True
     
-def __concat__vcfs__(vcf_inputs,config,populations):
-    return 0
 def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     vcf_dict = {}
@@ -154,6 +152,8 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         extra_args=options.extra_args
     else:
         extra_args='' 
+    if options.cores is not None:
+        extra_args.append('--cores ' + options.cores)
     # Run the selection pipeline for a single run job #
     selection_pipeline_executable=config['selection_pipeline']['selection_pipeline_executable']
     for vcf, population_name in zip(output_vcfs, populations):
@@ -166,6 +166,7 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         cmd.append(selection_pipeline_executable) 
         cmd.extend(['-c',options.chromosome,'-i',os.path.abspath(vcf),'-o',population_name,'--population',population_name,'--config-file',os.path.abspath(options.config_file)])
         cmd.append(extra_args)  
+            
         os.chdir(directory)
         run_subprocess(cmd,'selection_pipeline')
         #running_log.close()
@@ -211,7 +212,7 @@ def main():
     parser.add_option('--fst-window-size',dest="fst_window_size",help="FST window size")
     parser.add_option('--fst-window-step',dest="fst_window_step",help="FST window step size")
     parser.add_option('--no-clean-up',dest="no_clean_up",action="store_true",help="Do not clean up intermediate datafiles")
-    
+    parser.add_option('--cores',dest="cores",help="Overrides number of cores avaliable as provided in the config file") 
     (options,args) = parser.parse_args()
     assert options.vcf_input is not None, "No VCF file has been specified as input"
     assert options.chromosome is not None, "No chromosome has been specified to the script"
@@ -234,6 +235,9 @@ def main():
     else:
         options.fst_window_size = str(options.fst_window_size) 
     logging.basicConfig(format='%(asctime)s %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
+    if options.cores is not None:
+        # HACK to enable user to dynamically change the number of cores with each run
+        config['system']['cores_avaliable'] = options.cores
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)
