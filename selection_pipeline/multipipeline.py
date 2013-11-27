@@ -165,7 +165,7 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         cmd=[]
         cmd.append(selection_pipeline_executable) 
         cmd.extend(['-c',options.chromosome,'-i',os.path.abspath(vcf),'-o',population_name,'--population',population_name,'--config-file',os.path.abspath(options.config_file)])
-        cmd.append(extra_args)  
+        cmd.extend(extra_args.split())  
             
         os.chdir(directory)
         run_subprocess(cmd,'selection_pipeline')
