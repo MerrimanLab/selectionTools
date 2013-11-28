@@ -166,7 +166,7 @@ def queue_jobs(commands,tool_name,threads,stdouts=None):
             q.put(tup)  
     else:
         for cmd in commands:
-            q.put(cmd)
+            q.put([cmd,None])
     q.join()
 
 # clean folder expecting a list containing
