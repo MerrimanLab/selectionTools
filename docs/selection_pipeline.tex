@@ -48,18 +48,24 @@
 The Selection Pipeline utilizes next-generation sequencing \(NGS\) data to generate selective signatures. The tools used to detect selection are dependent on the selection signature being investigated \citep{Sabeti:2006ha}. The pipeline generates various output files containing within and between population selection signatures. The starting point for the analysis is a variant call format \(VCF\) file of the genotype data and populations of interest \citep{Danecek:2011gz}. Both $F_{st}$ and Tajima's D can be calculated from standard genotype data \citep{Weir:1984vn} \citep{Tajima:1989un}. To compute iHS, rsb and Fay and Wu's requires haplotypes, and thus the genotype data must be phased prior to calculation of these statistics \citep{Voight:2006go} \citep{Gautier:2012et} \citep{fayandwush}. For phasing shapeit2 is used and for imputation impute2 is used \citep{impute22009} \citep{Delaneau:2013hi}, furthermore these statistics also require ancestral allele information \citep{Flicek:2012vg}.  The pipeline phases if the VCF files do not contain the phasing information and then performs ancestral allele annotation. Once complete, the rehh package provides a simple interface for implementing EHH-based analyses \citep{Gautier:2012et}, we extended rehh to include penalties for gaps that match those used in the original iHS paper \citep{Voight:2006go}, rehh calculates iHH, iHS, iES and Rsb. To calculate Fay and Wu's H a c program variscan was utilised \citep{variscan2005}. The pipeline implemented in python, takes a VCF file to a set of output files containing selection signatures.
 \section{Getting Started}
 \subsection{Prerequisites}
-The selection pipeline was developed on a 64-bit ubuntu 13.04 system and has been tested on a 64-bit debian wheezy and ubuntu 13.10 installation. The pipeline should work on any 64-bit linux deriviant assuming some basic libraries and tools are installed on your system. 20gb of ram should be sufficient \(required for imputation\).
+The selection pipeline was developed on a 64-bit ubuntu 13.04 system and has been tested on a 64-bit centos and ubuntu 13.10 installation. The pipeline should work on any 64-bit linux deriviant assuming some basic libraries and tools are installed on your system. 20gb of ram should be sufficient \(required for imputation\).
 \begin{itemize}
-\item python2 > 2.7 
+\item python > = 2.6 
 \item bourne-again Shell (Bash)
 \item perl5
-\item R \( >= 3.0.0 \)
-\item build-essential tools 
+\item R \( >= 3.0.0 \) (with a personal library)
+\item build-essential tools
+\end{itemize}
 The software is installed to the user than runs the script, if the user is not root a R local library is required. The program also installs the scripts to the users ~/.local/bin directory this directory should be added to the system path to give to direct access to the programs from the command-line.  
 
+\subsection{Python dependencies}
+\begin{itemize}
+\item python-setuptools
+\item python-numpy
 \end{itemize}
+Most linux distributions provide these packages through the official package management repositories.
 \subsection{Installation}
-To install the package standalone, requiring manual configuration of the config file run the following command.\\
+To install the package standalone, requiring manual configuration of the configuration file run the following command.\\
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh --standalone
