@@ -10,7 +10,10 @@
 # installed.
 #
 
-from collections import OrderedDict
+try:
+	from collections import OrderedDict
+except ImportError:
+	from ordereddict import OrderedDict 
 import math
 import sys
 import os
@@ -217,7 +220,9 @@ def main():
     assert options.vcf_input is not None, "No VCF file has been specified as input"
     assert options.chromosome is not None, "No chromosome has been specified to the script"
     if options.config_file is None:
-	options.config_file = 'defaults.cfg'
+        options.config_file = 'defaults.cfg'
+        if not(os.path.isfile(options.config_file)):
+                sys.exit(CANNOT_FIND_CONFIG)
     config = parse_config(options)
     if not (check_executables_and_scripts_exist(options,config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)

@@ -18,12 +18,12 @@ else
 	echo "Installing Dependencies"
 	echo "Install Zlib"
 	tar xzf src/zlib-1.2.8.tar.gz
-	#(cd zlib-1.2.8/ && ./configure --prefix ${PWD} && make install)	
+	(cd zlib-1.2.8/ && ./configure --prefix ${PWD} && make install)	
 	rm -Rf zlib-1.2.8
 		
 	echo "Installing VCF tools"
 	tar xzf src/vcftools.tar.gz
-	#(cd vcftools_0.1.11/ && make)
+	(cd vcftools_0.1.11/ && make)
 	cp vcftools_0.1.11/bin/* bin/
 	cp vcftools_0.1.11/perl/*pm lib/perl5/
 	rm -Rf vcftools_0.1.11
@@ -46,7 +46,7 @@ else
 	chmod 755 bin/impute2
 	echo "Installing Tabix"
 	tar -xjf src/tabix.tar.bz2
-	#(cd tabix-0.2.6/ && make)
+	(cd tabix-0.2.6/ && make)
 	cp tabix-0.2.6/bgzip bin/
 	cp tabix-0.2.6/tabix bin/
 	rm -Rf tabix-0.2.6
@@ -57,7 +57,7 @@ else
 	mv variscan-2.0.3/src/variscan bin/
 	rm -Rf variscan-2.0.3
 	echo "Install rehh"
-	#R CMD INSTALL src/rehh_1.11.tar.gz
+	R CMD INSTALL src/rehh_1.11.tar.gz
 	echo "Installing R Multicore"
 	R CMD INSTALL src/multicore_0.1-7.tar.gz
     echo "Installing R Get Opt"
