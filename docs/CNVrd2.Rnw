@@ -1,6 +1,0 @@
-%\VignetteIndexEntry{CNVrd2}
-%\VignettePackage{CNVrd2}
-\documentclass[10pt]{article}
-\begin{document}
-This vignette is just a stub. 
-\end{document}
