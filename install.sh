@@ -57,11 +57,12 @@ else
 	mv variscan-2.0.3/src/variscan bin/
 	rm -Rf variscan-2.0.3
 	echo "Install rehh"
+	Rscript src/R_dependencies.R 'gplots'
 	R CMD INSTALL src/rehh_1.11.tar.gz
 	echo "Installing R Multicore"
 	R CMD INSTALL src/multicore_0.1-7.tar.gz
-    echo "Installing R Get Opt"
-    R CMD INSTALL src/getopt_1.20.0.tar.gz	
+    	echo "Installing R Get Opt"
+    	R CMD INSTALL src/getopt_1.20.0.tar.gz	
 	echo "Install Selection Pipeline"
 	git submodule init
 	git submodule update
