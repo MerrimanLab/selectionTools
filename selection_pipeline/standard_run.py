@@ -68,9 +68,6 @@ class StandardRun(CommandTemplate):
             sys.exit(MISSING_EXECUTABLE_ERROR)
         self.threads=config['system']['cores_avaliable']        
         if(options.phased_vcf): 
-            haps = self.ancestral_annotation_vcf(options,config)
-            haps2_haps = self.prepare_haps_for_variscan(options,config,haps,new_sample_file)
-            fayandwus = self.variscan_fayandwus(options,config,haps2_haps)
             (haps,sample) = self.run_aa_annotate_haps(options,config,options.vcf_input,vcf=True)
             haps = self.indel_filter(options,config,haps)
             new_sample_file = self.fix_sample_file(options,config,sample)
