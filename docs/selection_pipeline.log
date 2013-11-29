@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  28 NOV 2013 17:37
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.10.21)  29 NOV 2013 19:11
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -671,30 +671,76 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 44.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 44.
-(./selection_pipeline.toc
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 3.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 3.
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}])
+(./selection_pipeline.toc)
 \tf@toc=\write7
 \openout7 = `selection_pipeline.toc'.
 
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 48.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 48.
 
 
-Package natbib Warning: Citation `fayandwush' on page 2 undefined on input line
+Package natbib Warning: Citation `Sabeti:2006ha' on page 1 undefined on input l
+ine 48.
+
+
+Package natbib Warning: Citation `Danecek:2011gz' on page 1 undefined on input 
+line 48.
+
+
+Package natbib Warning: Citation `Weir:1984vn' on page 1 undefined on input lin
+e 48.
+
+
+Package natbib Warning: Citation `Tajima:1989un' on page 1 undefined on input l
+ine 48.
+
+
+Package natbib Warning: Citation `Voight:2006go' on page 1 undefined on input l
+ine 48.
+
+
+Package natbib Warning: Citation `Gautier:2012et' on page 1 undefined on input 
+line 48.
+
+
+Package natbib Warning: Citation `fayandwush' on page 1 undefined on input line
  48.
 
-[2]
+
+Package natbib Warning: Citation `impute22009' on page 1 undefined on input lin
+e 48.
+
+
+Package natbib Warning: Citation `Delaneau:2013hi' on page 1 undefined on input
+ line 48.
+
+
+Package natbib Warning: Citation `Flicek:2012vg' on page 1 undefined on input l
+ine 48.
+
+
+Package natbib Warning: Citation `Gautier:2012et' on page 1 undefined on input 
+line 48.
+
+
+Package natbib Warning: Citation `Voight:2006go' on page 1 undefined on input l
+ine 48.
+
+
+Package natbib Warning: Citation `variscan2005' on page 1 undefined on input li
+ne 48.
+
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 53.
- (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 53.
+ [1
 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 Underfull \hbox (badness 10000) in paragraph at lines 68--69
 
  []
@@ -705,7 +751,7 @@ runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
 
-[3] (./selection_pipeline.out.pyg
+(./selection_pipeline.out.pyg
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 1.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
@@ -773,13 +819,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 88--97
 
  []
 
+[2]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
 
-(./selection_pipeline.out.pyg
+ (./selection_pipeline.out.pyg
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 3.
 )
@@ -792,14 +839,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 98--107
 
  []
 
-[4]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
 
- (./selection_pipeline.out.pyg)
+(./selection_pipeline.out.pyg)
 runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
@@ -829,13 +875,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 125--126
 
  []
 
+[3]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
 = ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
 d.
 
-(./selection_pipeline.out.pyg)
+ (./selection_pipeline.out.pyg)
 runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
@@ -856,88 +903,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
 
- [5]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
- (./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 158--159
-
- []
-
-<pictures/CEUYRI2.png, id=380, 481.8pt x 481.8pt>
-File: pictures/CEUYRI2.png Graphic file (type png)
- <use pictures/CEUYRI2.png>
-Package pdftex.def Info: pictures/CEUYRI2.png used on input line 162.
-(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-<pictures/CEUFay.png, id=382, 481.8pt x 481.8pt>
-File: pictures/CEUFay.png Graphic file (type png)
- <use pictures/CEUFay.png>
-Package pdftex.def Info: pictures/CEUFay.png used on input line 178.
-(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
-
-
-LaTeX Warning: Reference `fig:fayceu' on page 6 undefined on input line 182.
-
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-
-LaTeX Warning: File `pictures/YRIFay.png' not found on input line 194.
-
-
-! Package pdftex.def Error: File `pictures/YRIFay.png' not found.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.194 \includegraphics{pictures/YRIFay.png}
-                                           
-? 
-! Emergency stop.
- ...                                              
-                                                  
-l.194 \includegraphics{pictures/YRIFay.png}
-                                           
-Using draft setting for this image.
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
- 
-Here is how much of TeX's memory you used:
- 9525 strings out of 495031
- 136006 string characters out of 6181530
- 238783 words of memory out of 5000000
- 12493 multiletter control sequences out of 15000+600000
- 14621 words of font info for 35 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 31i,7n,40p,1643b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
-!  ==> Fatal error occurred, no output PDF file produced!
+frame=lines" 
