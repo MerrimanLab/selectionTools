@@ -77,7 +77,7 @@ class StandardRun(CommandTemplate):
             ihh = self.run_multi_coreihh(options,config,haps)
             tajimaSD = self.vcf_to_tajimas_d(options,config,options.vcf_input)
             haps2_haps = self.prepare_haps_for_variscan(options,config,haps,new_sample_file)
-            fayandwus = self.vcf_to_tajimas_d(options,config,hap2_haps)
+            fayandwus = self.variscan_fayandwus(options,config,hap2s_haps)
         else:
             (ped,map) = self.run_vcf_to_plink(options,config)
             (ped,map) = self.run_plink_filter(options,config,ped,map)
