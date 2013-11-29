@@ -65,20 +65,6 @@ class CommandTemplate(object):
         cmd.extend([haps,str(options.maf),output_name])
         return(cmd,output_name)
 
-    def join_impute2_files(options,config,output_prefix,no_commands):
-        output_haps=open(output_prefix+'.haps','w')
-        output_warnings=open(output_prefix+'.warnings','w')
-        output_info=open(output_prefix+'.info','w')
-        for i in range(no_commands):
-            with open(output_prefix+'_'+str(i)+'.haps_haps','r') as h:
-                with open(output_prefix + '_'+str(i)+'.warnings','r') as w:
-                    with open(output_prefix + '_'+str(i) + '.info','r')as f:
-                        output_haps.write(h.read())
-                        output_warnings.write(w.read())
-                        output_info.write(f.read())
-        output_haps.close()
-        output_warnings.close()
-        output_info.close()
                          
     def run_impute2(self,options,config,haps):
         prefix = options.output_prefix + options.chromosome + '_impute2'

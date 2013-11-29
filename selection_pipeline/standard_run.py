@@ -69,6 +69,8 @@ class StandardRun(CommandTemplate):
         self.threads=config['system']['cores_avaliable']        
         if(options.phased_vcf): 
             haps = self.ancestral_annotation_vcf(options,config)
+            haps2_haps = self.prepare_haps_for_variscan(options,config,haps,new_sample_file)
+            fayandwus = self.variscan_fayandwus(options,config,haps2_haps)
             ihh = self.run_multi_coreihh(options,config,haps)
             tajimaSD = self.vcf_to_tajimas_d(options.config,options.vcf_input)
         else:
@@ -134,7 +136,22 @@ class StandardRun(CommandTemplate):
         (cmd,output_name) = CommandTemplate.haps_to_vcf(self,options,config,haps,new_sample_file)
         run_subprocess(cmd,'hapstovcf')
         return(output_name) 
-
+    
+             
+    def join_impute2_files(self,options,config,output_prefix,no_commands):
+        output_haps=open(output_prefix+'.haps','w')
+        output_warnings=open(output_prefix+'.warnings','w')
+        output_info=open(output_prefix+'.info','w')
+        for i in range(no_commands):
+            with open(output_prefix+'_'+str(i)+'.haps_haps','r') as h:
+                with open(output_prefix + '_'+str(i)+'.warnings','r') as w:
+                    with open(output_prefix + '_'+str(i) + '.info','r')as f:
+                        output_haps.write(h.read())
+                        output_warnings.write(w.read())
+                        output_info.write(f.read())
+        output_haps.close()
+        output_warnings.close()
+        output_info.close()
     def run_impute2(self,options,config,haps):
         (cmd_template,output_prefix) = CommandTemplate.run_impute2(self,options,config,haps)
 
@@ -170,7 +187,7 @@ class StandardRun(CommandTemplate):
             individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
             cmds.append(list(individual_command))
         queue_jobs(cmds,'impute2',config['system']['cores_avaliable'])
-        CommandTemplate.join_impute2_files(self,options,config,output_prefix,no_of_impute_jobs)
+        join_impute2_files(options,config,output_prefix,no_of_impute_jobs)
         return(output_prefix+'.haps') 
          
 
