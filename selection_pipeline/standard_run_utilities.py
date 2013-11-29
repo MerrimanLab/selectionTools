@@ -40,20 +40,20 @@ def split_vcf(input_file,split_positions):
     # the start and the end of the file 
     # and so the file will not change
     i = 0
-    pos1 = split_positions[i] 
-    output_vcf = open(input_file+str(file_id),'w')
-    output_vcfs.append(input_file+str(file_id))
+    pos1 = split_positions[i]
+    output_vcf = open(os.path.basename(input_file)+str(file_id),'w')
+    output_vcfs.append(os.path.basename(input_file)+str(file_id))
     with open(input_file,'r') as vcf:
         for line in vcf:
             if re.match("^#",line) is not None:
                 header += line
             else:
-                output_vcf.write(output_vcf)
+                output_vcf.write(header)
+                output_vcf.write(line)
                 break
         for line in vcf:
             if(line_count < pos1):
-                output_vcf.write(header)
-                output_vcf.write(output_vcf)
+                output_vcf.write(line)
             else:
                 i = i + 1
                 pos1 = split_positions[i]
@@ -62,24 +62,21 @@ def split_vcf(input_file,split_positions):
                 output_vcfs.append(out_name)
                 output_vcf = open(input_file+str(file_id),'w')
                 output_vcf.write(header)
-                output_vcf.write(line_count)
-            pos += 1
-    return 
+                output_vcf.write(line)
+            line_count += 1
+    return(output_vcfs)
 def get_vcf_line_count(input_file):
     with open(input_file,'r') as vcf:
         line_count = 0
         for line in vcf:
             if re.match("^#",line) is not None:
                 line_count = 1
-             else:
+            else:
                 break
         for line in vcf:
             line_count += 1
         return(line_count)
         
-def vcf_start_and_end(file):
-#
-
 def __is_script__(fpath):
         return os.path.isfile(fpath)
 def __is_exe__(fpath):
@@ -105,12 +102,19 @@ def which(program,program_name):
 
 
 def run_subprocess(command,tool,stdout=None):
+        logger.debug(command)
         try:
             if(stdout is None):
                 exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
             else:
             # find out what kind of exception to try here
-                exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
+                if(hasattr(stdout,'read')):
+
+                    exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
+                else:
+                    stdout=open(stdout,'w')
+                    exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
+                    stdout.close()  
         except:
             logger.error(tool + " failed to run " + ' '.join(command))
             sys.exit(SUBPROCESS_FAILED_EXIT)
@@ -136,34 +140,46 @@ def run_subprocess(command,tool,stdout=None):
             logger.info(tool +" STDERR: " + line.strip())
         logger.error("Finished tool " + tool)
 
-def __queue_worker__(q):
+def __queue_worker__(q,tool_name):
+    stdout=None
     while True:
-        cmd=q.get()
+        queue_item=q.get()
         try:
-            cmd=cmd[0]
-            stdout=cmd[1]
-            run_subprocess(cmd,'impute2',stdout=stdout)
+            cmd=queue_item[0]
+            stdout=queue_item[1]
         except IndexError:
-            run_subprocess(cmd,'impute2')
+            cmd=queue_item
+        try:
+            run_subprocess(cmd,tool_name,stdout=stdout)
+        except SystemExit:
+            logger.error(tool_name + ": Failed to run in thread")
+            sys.exit(SUBPROCESS_FAILED_EXIT)
         q.task_done()
 
-def queue_jobs(commands,threads):
-    q = queue.Queue()
-    for i in range(int(self.threads)):
-        t = Thread(target=self.queue_worker,args=[q])
+def queue_jobs(commands,tool_name,threads,stdouts=None):
+    q = Queue.Queue()
+    for i in range(int(threads)):
+        t = Thread(target=__queue_worker__,args=[q,tool_name])
         t.daemon = True
         t.start()
-    
-   if stdouts is None: 
+    if stdouts is not None: 
         for tup in zip(commands,stdouts):
             q.put(tup)  
+    else:
         for cmd in commands:
-            q.put(cmd)
+            q.put([cmd,None])
     q.join()
 
-def clean_folder(folder):
+# clean folder expecting a list containing
+# files to keep from that folder
+# only required if the user 
+# runs the analysis from their root directory
+def clean_folder(folder,keep=None):
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
+        if keep is not None: 
+            if (file_path in [os.path.join(folder,x) for x in keep]):
+                continue
         try:
             if os.path.isfile(file_path):
                 os.unlink(file_path)

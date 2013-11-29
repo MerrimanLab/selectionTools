@@ -48,18 +48,24 @@
 The Selection Pipeline utilizes next-generation sequencing \(NGS\) data to generate selective signatures. The tools used to detect selection are dependent on the selection signature being investigated \citep{Sabeti:2006ha}. The pipeline generates various output files containing within and between population selection signatures. The starting point for the analysis is a variant call format \(VCF\) file of the genotype data and populations of interest \citep{Danecek:2011gz}. Both $F_{st}$ and Tajima's D can be calculated from standard genotype data \citep{Weir:1984vn} \citep{Tajima:1989un}. To compute iHS, rsb and Fay and Wu's requires haplotypes, and thus the genotype data must be phased prior to calculation of these statistics \citep{Voight:2006go} \citep{Gautier:2012et} \citep{fayandwush}. For phasing shapeit2 is used and for imputation impute2 is used \citep{impute22009} \citep{Delaneau:2013hi}, furthermore these statistics also require ancestral allele information \citep{Flicek:2012vg}.  The pipeline phases if the VCF files do not contain the phasing information and then performs ancestral allele annotation. Once complete, the rehh package provides a simple interface for implementing EHH-based analyses \citep{Gautier:2012et}, we extended rehh to include penalties for gaps that match those used in the original iHS paper \citep{Voight:2006go}, rehh calculates iHH, iHS, iES and Rsb. To calculate Fay and Wu's H a c program variscan was utilised \citep{variscan2005}. The pipeline implemented in python, takes a VCF file to a set of output files containing selection signatures.
 \section{Getting Started}
 \subsection{Prerequisites}
-The selection pipeline was developed on a 64-bit ubuntu 13.04 system and has been tested on a 64-bit debian wheezy and ubuntu 13.10 installation. The pipeline should work on any 64-bit linux deriviant assuming some basic libraries and tools are installed on your system. 20gb of ram should be sufficient \(required for imputation\).
+The selection pipeline was developed on a 64-bit ubuntu 13.04 system and has been tested on a 64-bit centos and ubuntu 13.10 installation. The pipeline should work on any 64-bit linux deriviant assuming some basic libraries and tools are installed on your system. 20gb of ram should be sufficient \(required for imputation\).
 \begin{itemize}
-\item python2 > 2.7 
+\item python > = 2.6 
 \item bourne-again Shell (Bash)
 \item perl5
-\item R \( >= 3.0.0 \)
-
+\item R \( >= 3.0.0 \) (with a personal library)
+\item build-essential tools
+\end{itemize}
 The software is installed to the user than runs the script, if the user is not root a R local library is required. The program also installs the scripts to the users ~/.local/bin directory this directory should be added to the system path to give to direct access to the programs from the command-line.  
 
+\subsection{Python dependencies}
+\begin{itemize}
+\item python-setuptools
+\item python-numpy
 \end{itemize}
+Most linux distributions provide these packages through the official package management repositories.
 \subsection{Installation}
-To install the package standalone, requiring manual configuration of the config file run the following command.\\
+To install the package standalone, requiring manual configuration of the configuration file run the following command.\\
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh --standalone
@@ -165,15 +171,31 @@ CEUFay=read.table('CEU/results/CEU2.faw',comment.char="#")
 #Plot Fay and Wu's H
 plot(CEUFay[,15] ~ CEUFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,
 xlab='',ylab="H Statistic")
-rect(136545410,-100,136594750,100,border="Blue") 
+rect(136545410,-1000,136594750,100,border="Blue") 
 \end{minted}
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUFay.png}
 \caption{CEU Fay and Wu's H}
-\label{fig:fay}
+\label{fig:fayceu}
 \end{figure}
-Figure~\ref{fig:fay} show the Fey and Wu's H statistic one megabase downstream and upstream of the lactase gene
+Figure~\ref{fig:fayceu} show the Fey and Wu's H statistic one megabase downstream and upstream of the lactase gene
+
+To plot the Fay and Wu's H values for the YRI population.\\
+\begin{minted}[bgcolor=bg,frame=lines]{r}
+YRIFay=read.table('YRI/results/YRI2.faw',comment.char="#")
+#Plot Fay and Wu's H
+plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,
+xlab='',ylab="H Statistic")
+rect(136545410,-1900,136594750,100,border="Blue") 
+\end{minted}
+\begin{figure}
+\centering
+\includegraphics{pictures/YRIFay.png}
+\caption{YRI Fay and Wu's H}
+\label{fig:fayyri}
+\end{figure}
+Figure~\ref{fig:fayyri} show the Fey and Wu's H statistic one megabase downstream and upstream of the lactase gene
 
 \subsubsection{iHS}
 To plot the iHS values around the lactase gene for the CEU population.\\
@@ -188,12 +210,36 @@ rect(136545410,-10,136594750,10,border="Blue")
 \centering
 \includegraphics{pictures/CEUihs.png}
 \caption{CEU IHS}
-\label{fig:b}
+\label{fig:ceuihs}
 \end{figure}
 
-Figure ~\ref{fig:b} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
+Figure ~\ref{fig:ceuihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
 
+To plot the iHS values around the lactase gene for the YRI population.\\
+\begin{minted}[bgcolor=bg,frame=lines]{r}
+YRIihs = read.table('YRI/results/YRichr2.ihs')
+#plot IHS pvalues
+plot(YRIihs[,4] ~ YRIihs[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
+rect(136545410,-10,136594750,10,border="Blue") 
+\end{minted}
+
+\begin{figure}
+\centering
+\includegraphics{pictures/YRIihs.png}
+\caption{YRI IHS}
+\label{fig:yriihs}
+\end{figure}
+
+Figure ~\ref{fig:yriihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
+
+To visualize individual snps, a haplotype bifurication diagram can be used \citep{Gautier:2012et}. The snp displayed a strong signal of selection using iHS. We construct a bifurcation diagram for both alleles at this snp. \\
+\begin{minted}[bgcolor=bg,frame=lines]{r}
+# Plot  bifurcation diagram.
+
+
+\end{minted}
 \subsubsection{Tajima's D}
+
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 tajimaD=read.table(file="CEU/results/CEU2.taj_d", header=TRUE)
 plot(tajimaD[,4] ~ tajimaD[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
@@ -203,12 +249,26 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUtajimas.png}
-\caption{CEU IHS}
-\label{fig:taj}
+\caption{CEU Tajima's D}
+\label{fig:tajceu}
 \end{figure}
 
-Figure~\ref{fig:taj} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene
+Figure~\ref{fig:tajceu} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the CEU population
 
+\begin{minted}[bgcolor=bg,frame=lines]{r}
+tajimaD=read.table(file="YRI/results/YRI2.taj_d", header=TRUE)
+plot(tajimaD[,4] ~ tajimaD[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
+rect(136545410,-10,136594750,10,border="Blue") 
+\end{minted}
+
+\begin{figure}
+\centering
+\includegraphics{pictures/CEUtajimas.png}
+\caption{YRI Tajima's D}
+\label{fig:tajyri}
+\end{figure}
+
+Figure~\ref{fig:tajyri} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the YRI population
 
 \subsubsection{Rsb}
 \begin{minted}[bgcolor=bg,frame=lines]{R}
@@ -283,6 +343,8 @@ Do not clean up intermediate data files.
 Argument is passed directly to the VCF tools command line.
 \item --fst-window-step <FST window step>\\
 Argument is passed directly to the VCF tools command line.
+\item --cores \\
+Number of cores avaliable for the pipeline overrides setting in the config file.
 \end{itemize}
 \subsection{Selection Pipeline}
 \subsubsection{Input Files}
@@ -313,14 +375,39 @@ Name for the log file. Moved into the logs folder at the end of program run.
 Minor allele frequency filter threshold any SNPs below this threshold will be discarded from the analysis.
 \item --hwe <hardy-weinberg minimum p-value>\\
 A hardy weinberg test is performed on every snp any snps failing the test will be discarded.
-\item --daf <Minimum derived allele frequency>\\
-Derived allele frequencies below this minimum will be discarded.
 \item --remove-missing <Inclusion threshold for missing genotypes>\\
 Inclusion criteria for SNPs with missing data. SNPs with less than this value will be removed from analysis.
 \item --TajimaD <tajimas D bin size>\\
 Tajima's D statistic bin size.
 \item --no-clean-up \\
 Do not clean up intermediate data files
+
+\item --ehh-window-size
+Window size for multicore rehh calculations.  
+
+\item --ehh-overlap
+
+Window overlap for multicore rehh calculations.
+
+\item --daf <Minimum derived allele frequency>\\
+Derived allele frequencies below this minimum will be discarded.
+
+\item --big-gap
+
+Gap size in kb for not calculating iHH if the gap is too large.
+
+\item --small-gap
+
+Gap size in kb for applying a penalty to the area calculated by iHH
+
+\item --small-gap-penalty
+
+Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended.
+
+\item --cores 
+
+Number of cores avaliable for the pipeline overrides setting in the config file.
+
 \end{itemize}
 \subsection{Ancestral Annotation}
 The progam \emph{ancestral\_annotation} is installed on the program path. The program annotates haps and vcfs files with ancestral allele annotation from the 6-way IPO alignment or the human reference genome.
@@ -342,6 +429,10 @@ Ancestral allele annotation file. Currently only works on a the full 1000 genome
 \item -o or --output <Output file name>
 
 Output file name optional argument by default output is sent to the stdout stream.
+
+\item -s or --sample-file <Sample file output>
+
+Sample file output name ( currently only works with phased vcf option)
 \end{itemize}
 \subsubsection{Other parameters}
 \begin{itemize}
@@ -360,7 +451,7 @@ The 6-way EPO alignment denotes ancestral alleles with both high and low confide
 The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line argument --config-file <config\_file\_location>. There are two main programs in the selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters. The default config file contains an example of the format.
 \subsubsection{system}
 \begin{itemize}
-\item threads\_avaliable
+\item cores\_avaliable
 
 Certain programs in the pipeline can take advantage of multicore computers. This option instructs the pipeline about the maximum number of concurrent processes it is allowed to use.
 \end{itemize}
@@ -476,30 +567,6 @@ Location of the qctool executable.
 \item multicore\_ihh
 
 Location of the multicore\_iHH.R script
-
-\item window
-
-Window size for multicore rehh calculations.  
-
-\item overlap
-
-Window overlap for multicore rehh calculations.
-
-\item derived\_allele\_frequency
-
-Filter for derived allele frequency.
-
-\item big\_gap\_threshold
-
-Gap size in bp for not calculating iHH if the gap is too large.
-
-\item small\_gap\_threshold
-
-Gap size in bp for applying a penalty to the area calculated by iHH
-
-\item small\_gap\_multiplier
-
-Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended.
 
 The rehh package source included with the pipeline has been altered to match the output filters used in Voight's paper. If the EHH > 0.05 reaches the end of a chromosome or the start of a gap > big\_gap\_threshold , then no value is returded for the core snp. The small\_gap\_threshold specifies the gap distance to reduce the distance spanned by the gap by a multiplicative factorpecified by small\_gap\_multiplier. The formula for the penalty is $\frac{small\_gap\_multiplier}{gap\_size}$. To match the parameters used by Voight, 200000 should be  used for big\_gap\_threshold, 20000 for small\_gap\_threshold and 20000 for small\_gap\_multiplier \citep{Voight:2006go}.
 

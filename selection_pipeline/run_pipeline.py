@@ -65,20 +65,6 @@ class CommandTemplate(object):
         cmd.extend([haps,str(options.maf),output_name])
         return(cmd,output_name)
 
-    def join_impute2_files(options,config,output_prefix,no_commands):
-        output_haps=open(output_prefix+'.haps','w')
-        output_warnings=open(output_prefix+'.warnings','w')
-        output_info=open(output_prefix+'.info','w')
-        for i in range(no_commands):
-            with open(output_prefix+'_'+str(i)+'.haps_haps','r') as h:
-                with open(output_prefix + '_'+str(i)+'.warnings','r') as w:
-                    with open(output_prefix + '_'+str(i) + '.info','r')as f:
-                        output_haps.write(h.read())
-                        output_warnings.write(w.read())
-                        output_info.write(f.read())
-        output_haps.close()
-        output_warnings.close()
-        output_info.close()
                          
     def run_impute2(self,options,config,haps):
         prefix = options.output_prefix + options.chromosome + '_impute2'
@@ -114,30 +100,37 @@ class CommandTemplate(object):
                     ancestral_fasta = os.path.join(config['ancestral_allele']['ancestral_fasta_dir'],file)
         return ancestral_fasta
 
-    def run_aa_annotate_haps(self,options,config,haps):
+    def run_aa_annotate_haps(self,options,config,in_file,vcf=False):
         cmd = []
-        output_name= options.output_prefix + '_aachanged'
+        output_haps =options.output_prefix.split('.haps')[0] +'_aachanged.haps'
+        if(vcf):
+            output_sample= options.output_prefix.split('.haps')[0]+'_aachanged.sample' 
         py_executable = config['python']['python_executable']
         aa_annotate = config['ancestral_allele']['ancestral_allele_script']
-        logger.debug('Attempting to run ancestral allele annotation')
         cmd.append(py_executable)
         cmd.append(aa_annotate)
         ancestral_fasta = self.get_ancestral_fasta(options,config)
-        cmd.extend(['-i',haps ,'-c', options.chromosome, '-o', output_name,'-a',ancestral_fasta])
-        return (cmd,output_name)
+        cmd.extend(['-c', options.chromosome, '-o', output_haps,'-a',ancestral_fasta])
+        if(vcf):
+            cmd.extend(['-v',in_file,'-s',output_sample])
+            return(cmd,output_haps,output_sample)
+        else:
+            cmd.extend(['-i',in_file])
+            return(cmd,output_haps)
 
     def run_multi_coreihh(self,options,config,haps):
         cmd=[]
         output_name= options.output_prefix + 'chr' + options.chromosome+ '.ihh'
         rscript=config['Rscript']['rscript_executable']
         multicore_ihh=config['multicore_ihh']['multicore_ihh']
-        window=config['multicore_ihh']['window']
-        overlap=config['multicore_ihh']['overlap']
+        window=options.multi_window_size
+        overlap=options.ehh_overlap
         # Default offset is 0 as this is the single pc operation something different happens on nesi
         population=options.population
         cmd.append(rscript)
         # Todo look at MAF in rehh
-        cmd.extend([multicore_ihh,'-p',population,'-i',haps,'-c',str(options.chromosome),'--window',str(window),'--overlap',str(overlap),'--maf',str(config['multicore_ihh']['derived_allele_frequency'])])
+        cmd.extend([multicore_ihh,'-p',population,'-i',haps,'-c',str(options.chromosome),'--window',str(window),'--overlap',str(overlap),'--maf',options.daf])
+        cmd.extend(['--big_gap',options.big_gap,'--small_gap',options.small_gap,'--small_gap_penalty',options.small_gap_penalty])
         return (cmd,output_name)
     
     def fix_sample_file(self,options,config,sample_file):

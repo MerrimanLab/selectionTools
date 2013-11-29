@@ -10,9 +10,6 @@
 
 
 source=$1
-destination=$2
-
-source=~/MerrimanSelectionPipeline/nesi
 destination=`pwd`
 
 ln -s ${source}/multicore_iHH.R ${destination}/

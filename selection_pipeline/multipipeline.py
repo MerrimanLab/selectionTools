@@ -1,5 +1,3 @@
-#
-#
 # Multipopulation script calls the selection
 # pipeline for each population that we need
 # to do then zips up and runs a script to p# each of the cross population statistics once
@@ -12,7 +10,10 @@
 # installed.
 #
 
-from collections import OrderedDict
+try:
+	from collections import OrderedDict
+except ImportError:
+	from ordereddict import OrderedDict 
 import math
 import sys
 import os
@@ -25,12 +26,9 @@ from .environment import set_environment
 from .standard_run_utilities import *
 logger = logging.getLogger(__name__)
 
-
 SUBPROCESS_FAILED_EXIT = 10
 CANNOT_FIND_EXECUTABLE = 20
 CANNOT_FIND_CONFIG = 30
-
-
 
 # generate RSB after we have calculated ihs
 
@@ -58,8 +56,6 @@ def rsb(config,options,populations):
             tmp_cmd.extend(['--chr',options.chromosome]) 
             run_subprocess(tmp_cmd,'rsb_generation') 
     os.chdir(orig_dir)     
-
-
 
 def get_populations(populations):
     pops = {}
@@ -99,21 +95,19 @@ def check_executables_and_scripts_exist(options,config):
             return False
         return True
     
-def __concat__vcfs__(vcf_inputs,config,populations):
-    return 0
 def subset_vcf(vcf_input,config,populations):
     vcf_outputs = []
     vcf_dict = {}
     no_pops = len(populations)
-    threads=config['system']['cores_avaliable']
+    threads=int(config['system']['cores_avaliable'])
     # Take threads and divide by the number of jobs.
-    threads_per_job = math.ceil(threads / no_pops)
+    threads_per_job = int(math.ceil(threads / no_pops))
     # get vcf line count
     line_count = get_vcf_line_count(vcf_input)
     # split length is the size of each chunk
-    split_length = line_count // threads
+    split_length = line_count // threads_per_job
     # split positions
-    split_positions = [split_length* i for i in range(1,threads+1)]
+    split_positions = [split_length* i for i in range(1,threads_per_job+1)]
     remainder_length = line_count % threads 
     split_positions[len(split_positions) - 1] += remainder_length
     vcf_inputs = split_vcf(vcf_input,split_positions)
@@ -122,10 +116,11 @@ def subset_vcf(vcf_input,config,populations):
     for i, vcf in enumerate(vcf_inputs):
         for key, value in populations.items():
             cmd = []
-            output_file= key +str(i) +'.vcf'  
-                vcf_dict[key].append(vcf_output)
+            output_file= key +str(i) +'.vcf' 
+            try:
+                vcf_dict[key].append(output_file)
             except KeyError:
-                vcf_dict[key]=[vcf_output]
+                vcf_dict[key]=[output_file]
             comma_list_ids = ','.join(value)
             vcf_subset_executable=config['vcftools']['vcf_subset_executable']
             cmd.append(vcf_subset_executable)
@@ -133,15 +128,23 @@ def subset_vcf(vcf_input,config,populations):
             stdouts.append(output_file)
             #run_subprocess(cmd,'vcf-subset',stdout=vcf_output)
             cmds.append(list(cmd))
-    queue_jobs(cmds,config['system']['cores_avaliable'],stdouts=stdouts)
+    queue_jobs(cmds,'vcf-subset',config['system']['cores_avaliable'],stdouts=stdouts)
     cmds=[]
     for key, value in vcf_dict.items():
         # generate the commands for vcf concat for each output file generated
         cmd=[]
-        vcf_concat_executable=config['vcf_tools']['vcf_concat_executable']
-        cmd.append(vcf_concat_executable)
-        cmd.extend(value)
-    queue_jobs(cmds,config['system']['cores_avaliable'],stdouts=vcf_outputs)
+        output_file = key + '.vcf'
+        # Append to vcf_outputs 
+        vcf_outputs.append(output_file)
+        if(len(value) == 1):
+            os.rename(value[0],output_file)
+        else: 
+            vcf_concat_executable=config['vcftools']['vcf_concat_executable']
+            cmd.append(vcf_concat_executable)
+            cmd.extend(value)
+            cmds.append(list(cmd))
+    if(len(cmds) != 0):
+        queue_jobs(cmds,'vcf-concat',config['system']['cores_avaliable'],stdouts=vcf_outputs)
     # call the queue jobs to run vcf-subset 
     # return the population concatenated vcf file
     return vcf_outputs 
@@ -152,6 +155,8 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         extra_args=options.extra_args
     else:
         extra_args='' 
+    if options.cores is not None:
+        extra_args+=' --cores ' + options.cores
     # Run the selection pipeline for a single run job #
     selection_pipeline_executable=config['selection_pipeline']['selection_pipeline_executable']
     for vcf, population_name in zip(output_vcfs, populations):
@@ -163,7 +168,8 @@ def run_selection_pipeline(output_vcfs,options,populations,config):
         cmd=[]
         cmd.append(selection_pipeline_executable) 
         cmd.extend(['-c',options.chromosome,'-i',os.path.abspath(vcf),'-o',population_name,'--population',population_name,'--config-file',os.path.abspath(options.config_file)])
-        cmd.append(extra_args)  
+        cmd.extend(extra_args.split())  
+            
         os.chdir(directory)
         run_subprocess(cmd,'selection_pipeline')
         #running_log.close()
@@ -209,12 +215,14 @@ def main():
     parser.add_option('--fst-window-size',dest="fst_window_size",help="FST window size")
     parser.add_option('--fst-window-step',dest="fst_window_step",help="FST window step size")
     parser.add_option('--no-clean-up',dest="no_clean_up",action="store_true",help="Do not clean up intermediate datafiles")
-    
+    parser.add_option('--cores',dest="cores",help="Overrides number of cores avaliable as provided in the config file") 
     (options,args) = parser.parse_args()
     assert options.vcf_input is not None, "No VCF file has been specified as input"
     assert options.chromosome is not None, "No chromosome has been specified to the script"
     if options.config_file is None:
-	options.config_file = 'defaults.cfg'
+        options.config_file = 'defaults.cfg'
+        if not(os.path.isfile(options.config_file)):
+                sys.exit(CANNOT_FIND_CONFIG)
     config = parse_config(options)
     if not (check_executables_and_scripts_exist(options,config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)
@@ -232,6 +240,9 @@ def main():
     else:
         options.fst_window_size = str(options.fst_window_size) 
     logging.basicConfig(format='%(asctime)s %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
+    if options.cores is not None:
+        # HACK to enable user to dynamically change the number of cores with each run
+        config['system']['cores_avaliable'] = options.cores
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations=get_populations(options.populations)
@@ -244,7 +255,9 @@ def main():
         os.mkdir('logs')    
     os.rename(options.log_file,'logs/'+options.log_file)
     if not options.no_clean_up:
-        clean_folder('.')
+        keep=[os.path.basename(options.vcf_input)]
+        keep.extend(options.populations)
+        clean_folder('.',keep=keep)
     logger.info("Multi_population Complete")
     logger.info("Goodbye :")
 if __name__=="__main__":main()
