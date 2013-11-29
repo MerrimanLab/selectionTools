@@ -100,17 +100,23 @@ class CommandTemplate(object):
                     ancestral_fasta = os.path.join(config['ancestral_allele']['ancestral_fasta_dir'],file)
         return ancestral_fasta
 
-    def run_aa_annotate_haps(self,options,config,haps):
+    def run_aa_annotate_haps(self,options,config,in_file,vcf=False):
         cmd = []
-        output_name= options.output_prefix + '_aachanged'
+        output_haps =options.output_prefix.split('.haps')[0] +'_aachanged.haps'
+        if(vcf):
+            output_sample= options.output_prefix.split('.haps')[0]+'_aachanged.sample' 
         py_executable = config['python']['python_executable']
         aa_annotate = config['ancestral_allele']['ancestral_allele_script']
-        logger.debug('Attempting to run ancestral allele annotation')
         cmd.append(py_executable)
         cmd.append(aa_annotate)
         ancestral_fasta = self.get_ancestral_fasta(options,config)
-        cmd.extend(['-i',haps ,'-c', options.chromosome, '-o', output_name,'-a',ancestral_fasta])
-        return (cmd,output_name)
+        cmd.extend(['-c', options.chromosome, '-o', output_haps,'-a',ancestral_fasta])
+        if(vcf):
+            cmd.extend(['-v',in_file,'-s',output_sample])
+            return(cmd,output_haps,output_sample)
+        else:
+            cmd.extend(['-i',in_file])
+            return(cmd,output_haps)
 
     def run_multi_coreihh(self,options,config,haps):
         cmd=[]
