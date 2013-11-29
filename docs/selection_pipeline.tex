@@ -231,7 +231,15 @@ rect(136545410,-10,136594750,10,border="Blue")
 \end{figure}
 
 Figure ~\ref{fig:yriihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
+
+To visualize individual snps, a haplotype bifurication diagram can be used \citep{Gautier:2012et}. The snp displayed a strong signal of selection using iHS. We construct a bifurcation diagram for both alleles at this snp. \\
+\begin{minted}[bgcolor=bg,frame=lines]{r}
+# Plot  bifurcation diagram.
+
+
+\end{minted}
 \subsubsection{Tajima's D}
+
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 tajimaD=read.table(file="CEU/results/CEU2.taj_d", header=TRUE)
 plot(tajimaD[,4] ~ tajimaD[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)

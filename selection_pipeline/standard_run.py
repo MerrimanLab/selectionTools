@@ -68,9 +68,13 @@ class StandardRun(CommandTemplate):
             sys.exit(MISSING_EXECUTABLE_ERROR)
         self.threads=config['system']['cores_avaliable']        
         if(options.phased_vcf): 
-            haps = self.ancestral_annotation_vcf(options,config)
+            (haps,sample) = self.run_aa_annotate_haps(options,config,options.vcf_input,vcf=True)
+            haps = self.indel_filter(options,config,haps)
+            new_sample_file = self.fix_sample_file(options,config,sample)
             ihh = self.run_multi_coreihh(options,config,haps)
-            tajimaSD = self.vcf_to_tajimas_d(options.config,options.vcf_input)
+            tajimaSD = self.vcf_to_tajimas_d(options,config,options.vcf_input)
+            haps2_haps = self.prepare_haps_for_variscan(options,config,haps,new_sample_file)
+            fayandwus = self.vcf_to_tajimas_d(options,config,hap2_haps)
         else:
             (ped,map) = self.run_vcf_to_plink(options,config)
             (ped,map) = self.run_plink_filter(options,config,ped,map)
@@ -178,11 +182,16 @@ class StandardRun(CommandTemplate):
         (cmd,output_name) = CommandTemplate.indel_filter(self,options,config,haps)
         run_subprocess(cmd,'indel_filter')
         return(output_name)
- 
-    def run_aa_annotate_haps(self,options,config,haps):
-        (cmd,output_name) = CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
-        run_subprocess(cmd,'ancestral_annotation')
-        return (output_name)
+    
+    def run_aa_annotate_haps(self,options,config,haps,vcf=False):
+        if(vcf):
+            (cmd,output_name,sample_name) = CommandTemplate.run_aa_annotate_haps(self,options,config,haps,vcf)
+            run_subprocess(cmd,'ancestral_annotation')
+            return(output_name,sample_name)
+        else:
+            (cmd,output_name) = CommandTemplate.run_aa_annotate_haps(self,options,config,haps)
+            run_subprocess(cmd,'ancestral_annotation')
+            return(output_name)
     
     def run_multi_coreihh(self,options,config,haps):
         (cmd,output_name) = CommandTemplate.run_multi_coreihh(self,options,config,haps)

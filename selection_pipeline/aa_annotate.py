@@ -69,11 +69,19 @@ def annotate_vcf(options):
     #TODO MAKE WORK WITH REFERENCE FASTA
     aaSeq = aa_seq(options)
     vcf_reader = vcf.Reader(filename=options.vcf_file)
-    
+    if(options.sample_file != None):
+        sample_file = open(options.sample_file,'w')
+        sample_header = "ID_1 ID_2 missing father mother sex plink_pheno \n 0 0 0 D D D B\n"
+        sample_file.write(sample_header)
+        print(options.sample_file)
+        for sample in vcf_reader.samples:
+            sample_file.write(sample + ' ' + sample + ' 0 0 0 0 -9 ' + '\n')
     for record in vcf_reader:
-        if(record.ID == None):
-            record.ID = str(record.POS)
-        line = record.ID + ' ' + record.ID + ' ' + str(record.POS) + ' ' + str(record.REF) + ' ' + str(record.ALT[0])
+        if(record.ID != None):
+            line = record.ID + ' ' + record.ID + ' ' + str(record.POS) + ' ' + str(record.REF) + ' ' + str(record.ALT[0])
+        else:
+            line = ' . . ' + str(record.POS) + ' ' + str(record.REF) + ' ' + str(record.ALT[0])
+            
         for samples in record.samples:
             gt = samples['GT']
             # Need to skip any snps that have any missing phase data to increase certainty of our results.
@@ -82,16 +90,19 @@ def annotate_vcf(options):
                 gtSplit = gt.split('|')
                 line = line  + ' ' + gtSplit[0] + ' ' + gtSplit[1]
             else:
-                line = None
+                line = line + ' - -'
                 break
         if(line != None):
             output_line = aa_check(aaSeq[record.POS],record.REF,record.ALT,options.format,line)
             if(output_line != None):
                 if (options.output != None):
-                        output.write(output_line)
+                        output.write(output_line + "\n")
                 else:
                         print(output_line)
-
+    if(options.output !=None):
+        output.close()
+    if(options.sample_file !=None):
+        sample_file.close()
 
 
 def aa_check(realAA,ref,alt,format,line):
@@ -144,6 +155,8 @@ def annotate_haps(options):
                 else:
                     print(outputLine)
 
+    if(options.output != None):
+        output.close()
 
 def main():
     parser = OptionParser()
@@ -154,6 +167,7 @@ def main():
     parser.add_option('-o','--output',dest="output",help="Output File (optional)")
     parser.add_option('-f','--format',dest="format",help="Format us High or use Low & High")
     parser.add_option('-v','--phased-vcf',dest="vcf_file",help="Phased VCF file (.vcf)")
+    parser.add_option('-s','--sample-file',dest="sample_file",help="Output sample_file")
     (options,args) = parser.parse_args()
     #print(options)
     if(options.format is None) :
