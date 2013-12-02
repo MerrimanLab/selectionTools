@@ -151,11 +151,14 @@ def main():
     logging.basicConfig(format='%(asctime)s     %(message)s',filename=options.log_file,filemode='w',level=logging.INFO)
     if('nesi' in config['system']):
         if(config['system']['nesi']=="True"):
-            LoadLevelerRun(options,config)
+            l=LoadLevelerRun(options,config)
         else:
-            StandardRun(options,config)        
+            s=StandardRun(options,config=config)       
+            s.run_pipeline() 
+
     else:
-        StandardRun(options,config)
+        s=StandardRun(options,config=config)
+        s.run_pipeline()
                 
 if __name__=="__main__":main()
 
