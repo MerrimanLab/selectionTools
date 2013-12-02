@@ -75,6 +75,7 @@ class StandardRun(CommandTemplate):
             tajimaSD = self.vcf_to_tajimas_d(options,config,options.vcf_input)
             haps2_haps = self.prepare_haps_for_variscan(options,config,haps,new_sample_file)
             fayandwus = self.variscan_fayandwus(options,config,haps2_haps)
+            vcf = os.path.abspath(options.vcf_input)
         else:
             (ped,map) = self.run_vcf_to_plink(options,config)
             (ped,map) = self.run_plink_filter(options,config,ped,map)
