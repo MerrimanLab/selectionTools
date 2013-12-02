@@ -1,5 +1,5 @@
 [console_scripts]
 multi_population = selection_pipeline.multipipeline:main
-selection_pipeline = selection_pipeline.fullprocess:main
 ancestral_annotation = selection_pipeline.aa_annotate:main
+selection_pipeline = selection_pipeline.fullprocess:main
 

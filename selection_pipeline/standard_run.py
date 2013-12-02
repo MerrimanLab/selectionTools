@@ -138,7 +138,7 @@ class StandardRun(CommandTemplate):
         run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
-    def haps_to_vcf(self,self.options,self.config,haps,new_sample_file):
+    def haps_to_vcf(self,haps,new_sample_file):
         (cmd,output_name) = CommandTemplate.haps_to_vcf(self,self.options,self.config,haps,new_sample_file)
         run_subprocess(cmd,'hapstovcf')
         return(output_name) 
@@ -252,7 +252,7 @@ class StandardRun(CommandTemplate):
          
         # get the start and the end of the hapmap2 file
         #
-        varscan_self.config = open(varscan_conf ,'a')
+        varscan_config = open(varscan_conf ,'a')
         try:
             proc = subprocess.Popen("""tail -1 {0}| awk '{{print $4}}'""".format(hap2),stdout=subprocess.PIPE,shell=True) 
         except:
@@ -269,9 +269,9 @@ class StandardRun(CommandTemplate):
         end_position = int(proc.stdout.read())
         
         # Write the start and end of the Fey and Wu's into the self.config file #
-        varscan_self.config.write('StartPos = ' + str(start_position) + "\n")
-        varscan_self.config.write('EndPos = ' + str(end_position)+ '\n')
-        varscan_self.config.close() 
+        varscan_config.write('StartPos = ' + str(start_position) + "\n")
+        varscan_config.write('EndPos = ' + str(end_position)+ '\n')
+        varscan_config.close() 
         run_subprocess(cmd,'variscan',stdout=output_variscan)
         output_variscan.close()
         return(output_name)

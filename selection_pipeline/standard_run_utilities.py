@@ -138,7 +138,7 @@ def run_subprocess(command,tool,stdout=None):
             if not line:
                 break
             logger.info(tool +" STDERR: " + line.strip())
-        logger.error("Finished tool " + tool)
+        logger.info("Finished tool " + tool)
 
 def __queue_worker__(q,tool_name):
     stdout=None
