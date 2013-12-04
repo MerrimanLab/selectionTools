@@ -111,9 +111,10 @@ class StandardRun(CommandTemplate):
             tajimaSD = self.vcf_to_tajimas_d(vcf)
         ihh = self.run_multi_coreihh(haps)
         ihs_file = ihh.split('.ihh')[0]+'.ihs'
-        haplo_hh = ihh.split('.ihh')[0] +'.haphh'
+        haplo_hh = ihh.split('.ihh')[0] +'.hapshh'
         if not os.path.exists('results'):
             os.mkdir('results')
+        os.rename(haplo_hh, 'results/' + haplo_hh)
         os.rename(tajimaSD, 'results/' + tajimaSD)
         os.rename(vcf, 'results/' + vcf)
         os.rename(ihh, 'results/' + ihh)
@@ -195,14 +196,8 @@ class StandardRun(CommandTemplate):
         except:
             logger.error("Head command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
-        #Get the max position from your haps file# 
         start_position = int(head.stdout.read())
         no_of_impute_jobs = (int(proc.stdout.read())-int(start_position))//distance + 1
-        #create the command template
-        #Get the max position from your haps file# 
-
-        # get the start of the first window
-        # 
         first_window = start_position // distance 
         cmds = []
         for i in range(0,no_of_impute_jobs):
@@ -214,12 +209,13 @@ class StandardRun(CommandTemplate):
         queue_jobs(cmds,'impute2',self.config['system']['cores_avaliable'])
         join_impute2_files(self.options,self.config,output_prefix,no_of_impute_jobs)
         return(output_prefix+'.haps') 
-         
+
 
     def indel_filter(self,haps):
         (cmd,output_name) = CommandTemplate.indel_filter(self,self.options,self.config,haps)
         run_subprocess(cmd,'indel_filter')
         return(output_name)
+
     
     def run_aa_annotate_haps(self,haps,vcf=False):
         if(vcf):
@@ -230,6 +226,7 @@ class StandardRun(CommandTemplate):
             (cmd,output_name) = CommandTemplate.run_aa_annotate_haps(self,self.options,self.config,haps)
             run_subprocess(cmd,'ancestral_annotation')
             return(output_name)
+
     
     def run_multi_coreihh(self,haps):
         (cmd,output_name) = CommandTemplate.run_multi_coreihh(self,self.options,self.config,haps)
@@ -243,28 +240,37 @@ class StandardRun(CommandTemplate):
         os.rename(self.options.population+'_chr_'+self.options.chromosome+"_wd_"+'.'+"_.ihh",output_name)
         os.rename(self.options.population+'_chr_'+self.options.chromosome+'_wd_'+'.'+"_.ihs",ihs_output)
         return output_name
+
     def fix_sample_file(self,sample_file):
         (cmd,output_name) = CommandTemplate.fix_sample_file(self,self.options,self.config,sample_file)
         new_sample_file=open(output_name,'w')
         run_subprocess(cmd,'fix sample file',stdout=new_sample_file)
         new_sample_file.close()
         return(output_name) 
+
+
     def vcf_to_tajimas_d(self,vcf):
         (cmd,output_name) = CommandTemplate.vcf_to_tajimas_d(self,self.options,self.config,vcf)
         run_subprocess(cmd,'tajimas_d')
         taj_file =self.options.population + self.options.chromosome + '.taj_d'
         os.rename(output_name,taj_file)
         return(taj_file)
+
+
     def fix_vcf_qctool(self,vcf):
         (cmd,output_name) = CommandTemplate.fix_vcf_qctool(self,self.options,self.config,vcf)
         fixed_vcf = open(output_name,'w')
         run_subprocess(cmd,'fix vcf qctool',stdout=fixed_vcf)
         fixed_vcf.close()
         return(output_name)  
+
+
     def prepare_haps_for_variscan(self,haps,sample):   
         (cmd,output_name) = CommandTemplate.prepare_haps_for_variscan(self,self.options,self.config,haps,sample)
         run_subprocess(cmd,'haps to hapmap') 
         return(output_name)
+
+
     def variscan_fayandwus(self,hap2):
         (cmd,output_name,varscan_conf) = CommandTemplate.variscan_fayandwus(self,self.options,self.config,hap2) 
         output_variscan = open(output_name,'w')

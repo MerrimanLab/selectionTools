@@ -125,12 +125,10 @@ class CommandTemplate(object):
         multicore_ihh=config['multicore_ihh']['multicore_ihh']
         window=options.multi_window_size
         overlap=options.ehh_overlap
-        # Default offset is 0 as this is the single pc operation something different happens on nesi
         population=options.population
         cmd.append(rscript)
-        # Todo look at MAF in rehh
         cmd.extend([multicore_ihh,'-p',population,'-i',haps,'-c',str(options.chromosome),'--window',str(window),'--overlap',str(overlap),'--maf',options.daf])
-        cmd.extend(['--big_gap',options.big_gap,'--small_gap',options.small_gap,'--small_gap_penalty',options.small_gap_penalty])
+        cmd.extend(['--big_gap',options.big_gap,'--small_gap',options.small_gap,'--small_gap_penalty',options.small_gap_penalty,'--haplo_hh])
         return (cmd,output_name)
     
     def fix_sample_file(self,options,config,sample_file):

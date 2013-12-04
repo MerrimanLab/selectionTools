@@ -75,7 +75,6 @@ def parse_arguments():
     # Imputation options
     parser.add_option('--impute-split-size',dest='impute_split_size',help="impute2 split size (Mb)")    
     # Multicore options
-    
     parser.add_option('--ehh-window-size',dest="multi_window_size",help="Multicore window size (bp)")
     parser.add_option('--ehh-overlap',dest="ehh_overlap",help="EHH window overlap")
     parser.add_option('--daf',dest='daf',help="Derived Allele Frequency filter proportion")
