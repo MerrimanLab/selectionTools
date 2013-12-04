@@ -24,7 +24,8 @@ spec = matrix(c(
 	"ihs"  ,    'I', 0, "logical",
 	"big_gap",  'b', 1, "integer",
 	"small_gap", 'S', 1, "integer",
-	"small_gap_penalty", 'P', 1, "integer"
+	"small_gap_penalty", 'P', 1, "integer",
+    "haplo-hh",    "H",   1,   "character"
 ), byrow=T, ncol=4) 
 opt = getopt(spec)
 
@@ -118,7 +119,7 @@ for( i in fileNumber){
 fileNumber = offset:(offset+new_file_number-1)
 
 my_scan_hh = function(x){     
-  d = data2haplohh(hap_file=x[1],map_file=x[2],min_maf=maf)     
+  d = data2haplohh(hap_file=x[1],map_file=x[2],min_maf=maf)    
   res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty)
   write.table(res,paste(x[1],".iHH",sep=""))
   return(res)

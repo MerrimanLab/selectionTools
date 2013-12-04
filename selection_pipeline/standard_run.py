@@ -111,6 +111,7 @@ class StandardRun(CommandTemplate):
             tajimaSD = self.vcf_to_tajimas_d(vcf)
         ihh = self.run_multi_coreihh(haps)
         ihs_file = ihh.split('.ihh')[0]+'.ihs'
+        haplo_hh = ihh.split('.ihh')[0] +'.haphh'
         if not os.path.exists('results'):
             os.mkdir('results')
         os.rename(tajimaSD, 'results/' + tajimaSD)
@@ -134,25 +135,29 @@ class StandardRun(CommandTemplate):
         logger.info("Goodbye :)")
 
     def run_vcf_to_plink(self):
-        (cmd, prefix) = CommandTemplate.run_vcf_to_plink(self, self.options, self.config)
+        (cmd, prefix) = CommandTemplate.run_vcf_to_plink(
+            self, self.options, self.config)
         run_subprocess(cmd, 'vcftools') 
         return(prefix + '.ped', prefix + '.map')
 
     def run_plink_filter(self, ped, map):
-        (cmd,prefix) = CommandTemplate.run_plink_filter(self, self.options, self.config, ped, map)
+        (cmd,prefix) = CommandTemplate.run_plink_filter(
+            self, self.options, self.config, ped, map)
         run_subprocess(cmd,'plink')
         return(prefix+'.ped',prefix+'.map')
 
     # Calls a subprocess to run shape it
 
     def run_shape_it(self,ped,map):
-        (cmd,prefix) = CommandTemplate.run_shape_it(self,self.options,self.config,ped,map)
+        (cmd,prefix) = CommandTemplate.run_shape_it(
+            self,self.options,self.config,ped,map)
         cmd.extend(['--thread',self.threads])
         run_subprocess(cmd,'shapeit')
         return(prefix + '.haps',prefix + '.sample')
 
     def haps_to_vcf(self,haps,new_sample_file):
-        (cmd,output_name) = CommandTemplate.haps_to_vcf(self,self.options,self.config,haps,new_sample_file)
+        (cmd,output_name) = CommandTemplate.haps_to_vcf(
+            self,self.options,self.config,haps,new_sample_file)
         run_subprocess(cmd,'hapstovcf')
         return(output_name) 
     
@@ -172,7 +177,8 @@ class StandardRun(CommandTemplate):
         output_warnings.close()
         output_info.close()
     def run_impute2(self,haps):
-        (cmd_template,output_prefix) = CommandTemplate.run_impute2(self,self.options,self.config,haps)
+        (cmd_template,output_prefix) = CommandTemplate.run_impute2(
+               self,self.options,self.config,haps)
 
         # change from megabases to bp which is what is
         # expected by the impute2 command line self.options
