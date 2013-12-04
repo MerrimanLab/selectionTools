@@ -1,15 +1,7 @@
 import os
 import sys
-import re
 from .standard_run_utilities import *
 from .run_pipeline import CommandTemplate
-
-from threading import Thread
-
-#For matching the file names
-import fnmatch
-
-from optparse import OptionParser
 
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
@@ -18,14 +10,14 @@ logger = logging.getLogger(__name__)
 
 
 class StandardRun(CommandTemplate):
-   
-    def is_script(self,fpath):
+    def is_script(self, fpath):
         return os.path.isfile(fpath)
-    def is_exe(self,fpath):
+
+    def is_exe(self, fpath):
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-    #Stolen code from 
     #http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
-    def which(self,program,program_name):
+
+    def which(self, program, program_name):
         fpath, fname = os.path.split(program)
         if fpath:
             if self.is_exe(program):
@@ -38,42 +30,65 @@ class StandardRun(CommandTemplate):
                 exe_file = os.path.join(path, program)
                 if self.is_exe(exe_file):
                     return exe_file
-        logger.error(program_name +" path = " + fpath+" not locatable path or in the directory specified in your self.config file ")
-        return None    
-  
+        logger.error(program_name + " path = " + fpath +
+                     " not locatable path or in the directory"
+                     " specified in your self.config file")
+        return None
+
     def check_executables_and_scripts_exist(self):
-        executables=['plink','shapeit','impute','Rscript','python','ancestral_allele','indel_filter','multicore_ihh','qctool']
-        if(self.which(self.config['plink']['plink_executable'],'plink')is None): 
+        if(self.which(
+                self.config['plink']['plink_executable'],
+                'plink')is None):
             return False
-        if(self.which(self.config['shapeit']['shapeit_executable'],'shapeit') is None ):
+        if(self.which(
+                self.config['shapeit']['shapeit_executable'],
+                'shapeit') is None):
             return False
-        if(self.which(self.config['ancestral_allele']['ancestral_allele_script'],'ancestral_allele') is None):
+        if(self.which(
+                self.config['ancestral_allele']['ancestral_allele_script'],
+                'ancestral_allele'
+                ) is None):
             return False
-        if(self.which(self.config['impute2']['impute_executable'],'impute2') is None):
+        if(self.which(
+                self.config['impute2']['impute_executable'],
+                'impute2'
+                ) is None):
             return False
-        if(self.which(self.config['Rscript']['indel_filter'],'indel_filter') is None):
+        if(self.which(
+                self.config['Rscript']['indel_filter'],
+                'indel_filter'
+                ) is None):
             return False
-        if(self.which(self.config['Rscript']['rscript_executable'],'Rscript') is None):
+        if(self.which(
+                self.config['Rscript']['rscript_executable'],
+                'Rscript'
+                ) is None):
             return False
-        if(self.which(self.config['multicore_ihh']['multicore_ihh'],'multicore_ihh') is None):
+        if(self.which(
+                self.config['multicore_ihh']['multicore_ihh'],
+                'multicore_ihh'
+                ) is None):
             return False
-        if(self.which(self.config['qctool']['qctool_executable'],'qctool') is None):
+        if(self.which(
+                self.config['qctool']['qctool_executable'],
+                'qctool'
+                ) is None):
             return False
         return True
-        
 
-    def __init__(self,options,config,full_run=True):
-        #Perform local executable check.# 
+    def __init__(self, options, config, full_run=True):
+        #Perform local executable check.#
         self.options = options
         self.config = config
         if(full_run):
-            if( not self.check_executables_and_scripts_exist()):
+            if(not self.check_executables_and_scripts_exist()):
                 sys.exit(MISSING_EXECUTABLE_ERROR)
-            self.threads=self.config['system']['cores_avaliable']        
-    
+            self.threads = self.config['system']['cores_avaliable']
+
     def run_pipeline(self):
-        if(self.options.phased_vcf): 
-            (haps,sample) = self.run_aa_annotate_haps(self.options.vcf_input,vcf=True)
+        if(self.options.phased_vcf):
+            (haps, sample) = self.run_aa_annotate_haps(
+                self.options.vcf_input, vcf=True)
             haps = self.indel_filter(haps)
             new_sample_file = self.fix_sample_file(sample)
             ihh = self.run_multi_coreihh(haps)
@@ -81,34 +96,33 @@ class StandardRun(CommandTemplate):
             haps2_haps = self.prepare_haps_for_variscan(new_sample_file)
             fayandwus = self.variscan_fayandwus(haps2_haps)
         else:
-            (ped,map) = self.run_vcf_to_plink()
-            (ped,map) = self.run_plink_filter(ped,map)
-            (haps,sample) = self.run_shape_it(ped,map) 
+            (ped, map) = self.run_vcf_to_plink()
+            (ped, map) = self.run_plink_filter(ped, map)
+            (haps, sample) = self.run_shape_it(ped, map)
             if(self.options.imputation):
-                (haps)= self.run_impute2(haps)
+                (haps) = self.run_impute2(haps)
             haps = self.indel_filter(haps)
             new_sample_file = self.fix_sample_file(sample)
             vcf = self.haps_to_vcf(new_sample_file)
             vcf = self.fix_vcf_qctool(vcf)
             haps = self.run_aa_annotate_haps(haps)
             haps2_haps = self.prepare_haps_for_variscan(new_sample_file)
-            fayandwus = self.variscan_fayandwus(self.config,haps2_haps)
+            fayandwus = self.variscan_fayandwus(self.config, haps2_haps)
             tajimaSD = self.vcf_to_tajimas_d(vcf)
         ihh = self.run_multi_coreihh(haps)
-         
         ihs_file = ihh.split('.ihh')[0]+'.ihs'
         if not os.path.exists('results'):
             os.mkdir('results')
-        os.rename(tajimaSD,'results/' + tajimaSD)
-        os.rename(vcf,'results/' + vcf)
-        os.rename(ihh,'results/' + ihh)
-        os.rename(ihs_file,'results/'+ihs_file)
-        os.rename(haps,'results/' + haps)
-        os.rename(fayandwus,'results/' + fayandwus)
+        os.rename(tajimaSD, 'results/' + tajimaSD)
+        os.rename(vcf, 'results/' + vcf)
+        os.rename(ihh, 'results/' + ihh)
+        os.rename(ihs_file, 'results/'+ihs_file)
+        os.rename(haps, 'results/' + haps)
+        os.rename(fayandwus, 'results/' + fayandwus)
         if not os.path.exists('log'):
             os.mkdir('log')
         logger.info(self.options.log_file)
-        os.rename(self.options.log_file,'log/' + self.options.log_file)
+        os.rename(self.options.log_file, 'log/' + self.options.log_file)
         if not self.options.no_clean_up:
             clean_folder('.')
         logger.info(tajimaSD)
@@ -118,15 +132,14 @@ class StandardRun(CommandTemplate):
         logger.info(fayandwus)
         logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
+
     def run_vcf_to_plink(self):
-        (cmd,prefix) = CommandTemplate.run_vcf_to_plink(self,self.options,self.config)
-        run_subprocess(cmd,'vcftools') 
+        (cmd, prefix) = CommandTemplate.run_vcf_to_plink(self, self.options, self.config)
+        run_subprocess(cmd, 'vcftools') 
         return(prefix + '.ped', prefix + '.map')
 
-    # Calls a subprocess to run plink
-
-    def run_plink_filter(self,ped,map):
-        (cmd,prefix) = CommandTemplate.run_plink_filter(self,self.options,self.config,ped,map)
+    def run_plink_filter(self, ped, map):
+        (cmd,prefix) = CommandTemplate.run_plink_filter(self, self.options, self.config, ped, map)
         run_subprocess(cmd,'plink')
         return(prefix+'.ped',prefix+'.map')
 
