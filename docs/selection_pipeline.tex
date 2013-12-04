@@ -171,7 +171,7 @@ CEUFay=read.table('CEU/results/CEU2.faw',comment.char="#")
 #Plot Fay and Wu's H
 plot(CEUFay[,15] ~ CEUFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,
 xlab='',ylab="H Statistic")
-rect(136545410,-100,136594750,100,border="Blue") 
+rect(136545410,-1000,136594750,100,border="Blue") 
 \end{minted}
 \begin{figure}
 \centering
@@ -187,7 +187,7 @@ YRIFay=read.table('YRI/results/YRI2.faw',comment.char="#")
 #Plot Fay and Wu's H
 plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,
 xlab='',ylab="H Statistic")
-rect(136545410,-100,136594750,100,border="Blue") 
+rect(136545410,-1900,136594750,100,border="Blue") 
 \end{minted}
 \begin{figure}
 \centering
@@ -429,6 +429,10 @@ Ancestral allele annotation file. Currently only works on a the full 1000 genome
 \item -o or --output <Output file name>
 
 Output file name optional argument by default output is sent to the stdout stream.
+
+\item -s or --sample-file <Sample file output>
+
+Sample file output name ( currently only works with phased vcf option)
 \end{itemize}
 \subsubsection{Other parameters}
 \begin{itemize}

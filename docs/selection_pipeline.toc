@@ -1,0 +1,61 @@
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
+\contentsline {section}{\numberline {2}Getting Started}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Prerequisites}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Python dependencies}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Installation}{4}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Genetic Maps and Impute Haplotypes}{4}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Ancestral Fasta Files}{5}{subsection.2.5}
+\contentsline {section}{\numberline {3}Tutorial}{5}{section.3}
+\contentsline {subsection}{\numberline {3.1}Selection Signatures at the Lactase Locus}{5}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Getting the Data}{5}{subsubsection.3.1.1}
+\contentsline {subsection}{\numberline {3.2}Setting up Pipeline Run}{5}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Population Files}{5}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Run The Tutorial}{6}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}Data Visualisation}{6}{subsection.3.5}
+\contentsline {subsubsection}{\numberline {3.5.1}Fst}{6}{subsubsection.3.5.1}
+\contentsline {subsubsection}{\numberline {3.5.2}Fay and Wu's H}{8}{subsubsection.3.5.2}
+\contentsline {subsubsection}{\numberline {3.5.3}iHS}{10}{subsubsection.3.5.3}
+\contentsline {subsubsection}{\numberline {3.5.4}Tajima's D}{12}{subsubsection.3.5.4}
+\contentsline {subsubsection}{\numberline {3.5.5}Rsb}{14}{subsubsection.3.5.5}
+\contentsline {section}{\numberline {4}Output Files}{14}{section.4}
+\contentsline {subsection}{\numberline {4.1}multi\_population}{14}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}Fst}{14}{subsubsection.4.1.1}
+\contentsline {subsection}{\numberline {4.2}selection\_pipeline}{14}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Fay and Wu's H}{14}{subsubsection.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}iHS}{14}{subsubsection.4.2.2}
+\contentsline {subsubsection}{\numberline {4.2.3}iHH}{14}{subsubsection.4.2.3}
+\contentsline {subsubsection}{\numberline {4.2.4}Tajima's D}{15}{subsubsection.4.2.4}
+\contentsline {section}{\numberline {5}Command line Arguments}{15}{section.5}
+\contentsline {subsection}{\numberline {5.1}Multipopulation}{15}{subsection.5.1}
+\contentsline {subsubsection}{\numberline {5.1.1}Input Files}{15}{subsubsection.5.1.1}
+\contentsline {subsubsection}{\numberline {5.1.2}Output Files}{15}{subsubsection.5.1.2}
+\contentsline {subsubsection}{\numberline {5.1.3}Other parameters (Compulsory)}{15}{subsubsection.5.1.3}
+\contentsline {subsubsection}{\numberline {5.1.4}Other parameters (Optional)}{16}{subsubsection.5.1.4}
+\contentsline {subsection}{\numberline {5.2}Selection Pipeline}{16}{subsection.5.2}
+\contentsline {subsubsection}{\numberline {5.2.1}Input Files}{16}{subsubsection.5.2.1}
+\contentsline {subsubsection}{\numberline {5.2.2}Output Files}{16}{subsubsection.5.2.2}
+\contentsline {subsubsection}{\numberline {5.2.3}Other parameters(Compulsory)}{16}{subsubsection.5.2.3}
+\contentsline {subsubsection}{\numberline {5.2.4}Other parameters(Optional)}{16}{subsubsection.5.2.4}
+\contentsline {subsection}{\numberline {5.3}Ancestral Annotation}{17}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Input Files}{17}{subsubsection.5.3.1}
+\contentsline {subsubsection}{\numberline {5.3.2}Output Files}{18}{subsubsection.5.3.2}
+\contentsline {subsubsection}{\numberline {5.3.3}Other parameters}{18}{subsubsection.5.3.3}
+\contentsline {subsection}{\numberline {5.4}Configuration File}{18}{subsection.5.4}
+\contentsline {subsubsection}{\numberline {5.4.1}system}{18}{subsubsection.5.4.1}
+\contentsline {subsubsection}{\numberline {5.4.2}environment}{18}{subsubsection.5.4.2}
+\contentsline {subsubsection}{\numberline {5.4.3}selection\_pipeline}{19}{subsubsection.5.4.3}
+\contentsline {subsubsection}{\numberline {5.4.4}vcf\_tools}{19}{subsubsection.5.4.4}
+\contentsline {subsubsection}{\numberline {5.4.5}shapeit}{19}{subsubsection.5.4.5}
+\contentsline {subsubsection}{\numberline {5.4.6}impute2}{19}{subsubsection.5.4.6}
+\contentsline {subsubsection}{\numberline {5.4.7}plink}{20}{subsubsection.5.4.7}
+\contentsline {subsubsection}{\numberline {5.4.8}Rscript}{20}{subsubsection.5.4.8}
+\contentsline {subsubsection}{\numberline {5.4.9}python}{20}{subsubsection.5.4.9}
+\contentsline {subsubsection}{\numberline {5.4.10}ancestral\_allele}{20}{subsubsection.5.4.10}
+\contentsline {subsubsection}{\numberline {5.4.11}qctool}{21}{subsubsection.5.4.11}
+\contentsline {subsubsection}{\numberline {5.4.12}multicore\_ihh}{21}{subsubsection.5.4.12}
+\contentsline {section}{\numberline {6}Log Files}{21}{section.6}
+\contentsline {subsection}{\numberline {6.1}multi\_population}{21}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}selection\_pipeline}{21}{subsection.6.2}
+\contentsline {section}{\numberline {7}Extra Features}{21}{section.7}
+\contentsline {subsection}{\numberline {7.1}Galaxy Intergration}{21}{subsection.7.1}
+\contentsline {section}{\numberline {8}F.A.Q}{21}{section.8}
