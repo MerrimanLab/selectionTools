@@ -217,7 +217,7 @@ Figure ~\ref{fig:ceuihs} shows iHS pvalues around the lactase gene one megabase 
 
 To plot the iHS values around the lactase gene for the YRI population.\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
-YRIihs = read.table('YRI/results/YRichr2.ihs')
+YRIihs = read.table('YRI/results/YRIchr2.ihs')
 #plot IHS pvalues
 plot(YRIihs[,3] ~ YRIihs[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
 rect(136545410,-10,136594750,10,border="Blue") 

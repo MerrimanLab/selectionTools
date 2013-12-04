@@ -12,3 +12,4 @@ lib/*
 share/*
 dist/*
 build/*
+cores/*
