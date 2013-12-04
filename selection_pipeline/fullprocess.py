@@ -132,11 +132,11 @@ def parse_arguments():
     if (options.ehh_overlap is None):
         options.ehh_overlap = str(2000000)
     if (options.big_gap is None):
-        options.big_gap = str(200)
+        options.big_gap = str(0)
     if (options.small_gap is None):
-        options.small_gap = str(20)
+        options.small_gap = str(0)
     if (options.small_gap_penalty is None):
-        options.small_gap_penalty = str(20)
+        options.small_gap_penalty = str(0)
     
     return options 
      
