@@ -101,9 +101,9 @@ def subset_vcf(vcf_input,config,populations):
     no_pops = len(populations)
     threads=int(config['system']['cores_avaliable'])
     # Take threads and divide by the number of jobs.
-    threads_per_job = int(math.ceil(threads / no_pops))
+    threads_per_job = int(math.ceil(threads / float(no_pops))) 
     # get vcf line count
-    line_count = get_vcf_line_count(vcf_input)
+    line_count = get_vcf_line_count(vcf_input) 
     # split length is the size of each chunk
     split_length = line_count // threads_per_job
     # split positions
