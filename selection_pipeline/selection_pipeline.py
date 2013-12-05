@@ -11,7 +11,6 @@
 from optparse import OptionParser
 import ConfigParser
 import logging
-from .load_leveler_run import LoadLevelerRun
 from .standard_run import StandardRun
 from .environment import set_environment
 logger = logging.getLogger(__name__)
@@ -182,16 +181,8 @@ def main():
     logging.basicConfig(format='%(asctime)s     %(message)s',
                         filename=options.log_file, filemode='w',
                         level=logging.INFO)
-    if('nesi' in config['system']):
-        if(config['system']['nesi'] == "True"):
-            LoadLevelerRun(options, config)
-        else:
-            s = StandardRun(options, config=config)
-            s.run_pipeline()
-
-    else:
-        s = StandardRun(options, config=config)
-        s.run_pipeline()
+    s = StandardRun(options, config=config)
+    s.run_pipeline()
 
 
 if __name__ == "__main__":
