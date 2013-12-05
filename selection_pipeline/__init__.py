@@ -8,3 +8,4 @@ from .standard_run_utilities import *
 from .environment import *
 from .load_leveler_run import *
 from .selection_pipeline import *
+import version
