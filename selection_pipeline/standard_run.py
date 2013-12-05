@@ -11,13 +11,22 @@ logger = logging.getLogger(__name__)
 
 class StandardRun(CommandTemplate):
     def is_script(self, fpath):
+        """ Determines if the fpath is a file
+
+        """
         return os.path.isfile(fpath)
 
     def is_exe(self, fpath):
+        """ Determines if the fpath is a executable file
+
+        """
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-    #http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
+#http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
 
     def which(self, program, program_name):
+        """ Determines if the specified program or script exist on the path
+
+        """
         fpath, fname = os.path.split(program)
         if fpath:
             if self.is_exe(program):
@@ -36,6 +45,11 @@ class StandardRun(CommandTemplate):
         return None
 
     def check_executables_and_scripts_exist(self):
+        """ Checks to ensure all the scripts and executables exist.
+
+        Uses the config dictionary to determine whether all the required
+        executables and scripts exists where they have been specified.
+        """
         if(self.which(
                 self.config['plink']['plink_executable'],
                 'plink')is None):
@@ -77,7 +91,10 @@ class StandardRun(CommandTemplate):
         return True
 
     def __init__(self, options, config, full_run=True):
-        #Perform local executable check.#
+        """ Constructor for StandardRun class
+
+        """
+        super(StandardRun, self).__init__(options, config)
         self.options = options
         self.config = config
         if(full_run):
@@ -86,6 +103,9 @@ class StandardRun(CommandTemplate):
             self.threads = self.config['system']['cores_avaliable']
 
     def run_pipeline(self):
+        """ Run pipeline runs the pipeline for a standard run
+
+        """
         if(self.options.phased_vcf):
             (haps, sample) = self.run_aa_annotate_haps(
                 self.options.vcf_input, vcf=True)
@@ -110,8 +130,8 @@ class StandardRun(CommandTemplate):
             fayandwus = self.variscan_fayandwus(self.config, haps2_haps)
             tajimaSD = self.vcf_to_tajimas_d(vcf)
         ihh = self.run_multi_coreihh(haps)
-        ihs_file = ihh.split('.ihh')[0]+'.ihs'
-        haplo_hh = ihh.split('.ihh')[0] +'.hapshh'
+        ihs_file = ihh.split('.ihh')[0] + '.ihs'
+        haplo_hh = ihh.split('.ihh')[0] + '.hapshh'
         if not os.path.exists('results'):
             os.mkdir('results')
         os.rename(haplo_hh, 'results/' + haplo_hh)
@@ -136,167 +156,221 @@ class StandardRun(CommandTemplate):
         logger.info("Goodbye :)")
 
     def run_vcf_to_plink(self):
-        (cmd, prefix) = CommandTemplate.run_vcf_to_plink(
-            self, self.options, self.config)
-        run_subprocess(cmd, 'vcftools') 
+        """ Run vcf to plink using subprocess
+
+        """
+        (cmd, prefix) = super(StandardRun, self).run_vcf_to_plink()
+        run_subprocess(cmd, 'vcftools')
         return(prefix + '.ped', prefix + '.map')
 
     def run_plink_filter(self, ped, map):
-        (cmd,prefix) = CommandTemplate.run_plink_filter(
-            self, self.options, self.config, ped, map)
-        run_subprocess(cmd,'plink')
-        return(prefix+'.ped',prefix+'.map')
+        """ Run plink filtering using subprocess
 
-    # Calls a subprocess to run shape it
+        """
+        (cmd, prefix) = super(StandardRun, self).run_plink_filter(ped, map)
+        run_subprocess(cmd, 'plink')
+        return(prefix+'.ped', prefix+'.map')
 
-    def run_shape_it(self,ped,map):
-        (cmd,prefix) = CommandTemplate.run_shape_it(
-            self,self.options,self.config,ped,map)
-        cmd.extend(['--thread',self.threads])
-        run_subprocess(cmd,'shapeit')
-        return(prefix + '.haps',prefix + '.sample')
+    def run_shape_it(self, ped, map):
+        """ Run shape it phasing using subprocess
 
-    def haps_to_vcf(self,haps,new_sample_file):
-        (cmd,output_name) = CommandTemplate.haps_to_vcf(
-            self,self.options,self.config,haps,new_sample_file)
-        run_subprocess(cmd,'hapstovcf')
-        return(output_name) 
-    
-             
-    def join_impute2_files(self,output_prefix,no_commands):
-        output_haps=open(output_prefix+'.haps','w')
-        output_warnings=open(output_prefix+'.warnings','w')
-        output_info=open(output_prefix+'.info','w')
+        """
+        (cmd, prefix) = super(StandardRun, self).run_shape_it(
+            ped, map)
+        cmd.extend(['--thread', self.threads])
+        run_subprocess(cmd, 'shapeit')
+        return(prefix + '.haps', prefix + '.sample')
+
+    def haps_to_vcf(self, haps, new_sample_file):
+        """ Run haps to vcf conversion using subprocess
+
+        """
+        (cmd, output_name) = super(StandardRun, self).haps_to_vcf(
+            haps, new_sample_file)
+        run_subprocess(cmd, 'hapstovcf')
+        return(output_name)
+
+    def join_impute2_files(self, output_prefix, no_commands):
+        """ Join the impute2 output files
+
+            Opens all the haps, warnings and info files
+            for impute2
+        """
+        output_haps = open(output_prefix+'.haps', 'w')
+        output_warnings = open(output_prefix+'.warnings', 'w')
+        output_info = open(output_prefix+'.info', 'w')
         for i in range(no_commands):
-            with open(output_prefix+'_'+str(i)+'.haps_haps','r') as h:
-                with open(output_prefix + '_'+str(i)+'.warnings','r') as w:
-                    with open(output_prefix + '_'+str(i) + '.info','r')as f:
+            with open(output_prefix+'_'+str(i)+'.haps_haps', 'r') as h:
+                with open(output_prefix + '_'+str(i)+'.warnings', 'r') as w:
+                    with open(output_prefix + '_'+str(i) + '.info', 'r')as f:
                         output_haps.write(h.read())
                         output_warnings.write(w.read())
                         output_info.write(f.read())
         output_haps.close()
         output_warnings.close()
         output_info.close()
-    def run_impute2(self,haps):
-        (cmd_template,output_prefix) = CommandTemplate.run_impute2(
-               self,self.options,self.config,haps)
 
-        # change from megabases to bp which is what is
-        # expected by the impute2 command line self.options
-        distance=int(self.options.impute_split_size) * 1000000
-        # Break files into 5 megabase regions.
+    def run_impute2(self, haps):
+        """ Run impute2 using subprocess
+
+            Impute2 splits the files into the region specified in
+            the options by default it is the recommended 5 megabases.
+
+            These chunks are then run in parralel if possible given
+            the users cores setting.
+        """
+        (cmd_template, output_prefix) = super(StandardRun, self).run_impute2(
+            haps)
+        distance = int(self.options.impute_split_size) * 1000000
         try:
-            proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
+            proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'"""
+                                    .format(haps), stdout=subprocess.PIPE,
+                                    shell=True)
         except:
             logger.error("Tail command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
-        # get the start of the haps file 
         try:
-            head = subprocess.Popen("""head -1 {0}| awk '{{print $3}}'""".format(haps),stdout=subprocess.PIPE,shell=True) 
+            head = subprocess.Popen("""head -1 {0}| awk '{{print $3}}'"""
+                                    .format(haps), stdout=subprocess.PIPE,
+                                    shell=True)
         except:
             logger.error("Head command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
         start_position = int(head.stdout.read())
-        no_of_impute_jobs = (int(proc.stdout.read())-int(start_position))//distance + 1
-        first_window = start_position // distance 
+        no_of_impute_jobs = ((int(proc.stdout.read())-int(start_position))
+                             // distance + 1)
+        first_window = start_position // distance
         cmds = []
-        for i in range(0,no_of_impute_jobs):
-            individual_command=list(cmd_template)
-            individual_command.extend(['-int',str((i+first_window)*distance),str((i+first_window+1)*distance)])
-            individual_prefix=output_prefix + '_'+ str(i)
-            individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
+        for i in range(0, no_of_impute_jobs):
+            individual_command = list(cmd_template)
+            individual_command.extend(['-int', str((i+first_window)*distance),
+                                      str((i+first_window+1)*distance)])
+            individual_prefix = output_prefix + '_' + str(i)
+            individual_command.extend(['-o', individual_prefix+'.haps',
+                                      '-w', individual_prefix + '.warnings',
+                                      '-i', individual_prefix + '.info'])
             cmds.append(list(individual_command))
-        queue_jobs(cmds,'impute2',self.config['system']['cores_avaliable'])
-        join_impute2_files(self.options,self.config,output_prefix,no_of_impute_jobs)
-        return(output_prefix+'.haps') 
+        queue_jobs(cmds, 'impute2', self.config['system']['cores_avaliable'])
+        join_impute2_files(self.options, self.config,
+                           output_prefix, no_of_impute_jobs)
+        return(output_prefix+'.haps')
 
+    def indel_filter(self, haps):
+        """ Run the indel filter script using subprocess
 
-    def indel_filter(self,haps):
-        (cmd,output_name) = CommandTemplate.indel_filter(self,self.options,self.config,haps)
-        run_subprocess(cmd,'indel_filter')
+        """
+        (cmd, output_name) = super(StandardRun, self).indel_filter(haps)
+        run_subprocess(cmd, 'indel_filter')
         return(output_name)
 
-    
-    def run_aa_annotate_haps(self,haps,vcf=False):
+    def run_aa_annotate_haps(self, haps, vcf=False):
+        """ Run ancestral annotation using subprocess
+
+        """
         if(vcf):
-            (cmd,output_name,sample_name) = CommandTemplate.run_aa_annotate_haps(self,self.options,self.config,haps,vcf)
-            run_subprocess(cmd,'ancestral_annotation')
-            return(output_name,sample_name)
+            (cmd, output_name, sample_name) = (super(StandardRun, self)
+                                               .run_aa_annotate_haps(
+                                                   haps, vcf))
+            run_subprocess(cmd, 'ancestral_annotation')
+            return(output_name, sample_name)
         else:
-            (cmd,output_name) = CommandTemplate.run_aa_annotate_haps(self,self.options,self.config,haps)
-            run_subprocess(cmd,'ancestral_annotation')
+            (cmd, output_name) = super(StandardRun, self).run_aa_annotate_haps(
+                haps)
+            run_subprocess(cmd, 'ancestral_annotation')
             return(output_name)
 
-    
-    def run_multi_coreihh(self,haps):
-        (cmd,output_name) = CommandTemplate.run_multi_coreihh(self,self.options,self.config,haps)
-        cores=self.threads
-        ihs_output=output_name.split('.ihh')[0]+'.ihs'
-        cmd.extend(['--cores',cores])
-        cmd.extend(['--working_dir','.'])
-        cmd.extend(['--offset','1'])
+    def run_multi_coreihh(self, haps):
+        """ Run multicore ihh using subprocess
+
+            Uses the number of cores to specify the parallelisation
+            to multi_core ihh
+        """
+        (cmd, output_name) = super(StandardRun, self).run_multi_coreihh(haps)
+        cores = self.threads
+        ihs_output = output_name.split('.ihh')[0]+'.ihs'
+        cmd.extend(['--cores', cores])
+        cmd.extend(['--working_dir', '.'])
+        cmd.extend(['--offset', '1'])
         cmd.extend(['--ihs'])
-        run_subprocess(cmd,'multcore_ihh')
-        os.rename(self.options.population+'_chr_'+self.options.chromosome+"_wd_"+'.'+"_.ihh",output_name)
-        os.rename(self.options.population+'_chr_'+self.options.chromosome+'_wd_'+'.'+"_.ihs",ihs_output)
+        run_subprocess(cmd, 'multcore_ihh')
+        os.rename(self.options.population+'_chr_'+self.options.chromosome +
+                  "_wd_"+'.'+"_.ihh", output_name)
+        os.rename(self.options.population+'_chr_'+self.options.chromosome +
+                  '_wd_'+'.'+"_.ihs", ihs_output)
         return output_name
 
-    def fix_sample_file(self,sample_file):
-        (cmd,output_name) = CommandTemplate.fix_sample_file(self,self.options,self.config,sample_file)
-        new_sample_file=open(output_name,'w')
-        run_subprocess(cmd,'fix sample file',stdout=new_sample_file)
+    def fix_sample_file(self, sample_file):
+        """ Run fix sample file using subprocess
+
+        """
+        (cmd, output_name) = super(StandardRun, self).fix_sample_file(
+            sample_file)
+        new_sample_file = open(output_name, 'w')
+        run_subprocess(cmd, 'fix sample file', stdout=new_sample_file)
         new_sample_file.close()
-        return(output_name) 
-
-
-    def vcf_to_tajimas_d(self,vcf):
-        (cmd,output_name) = CommandTemplate.vcf_to_tajimas_d(self,self.options,self.config,vcf)
-        run_subprocess(cmd,'tajimas_d')
-        taj_file =self.options.population + self.options.chromosome + '.taj_d'
-        os.rename(output_name,taj_file)
-        return(taj_file)
-
-
-    def fix_vcf_qctool(self,vcf):
-        (cmd,output_name) = CommandTemplate.fix_vcf_qctool(self,self.options,self.config,vcf)
-        fixed_vcf = open(output_name,'w')
-        run_subprocess(cmd,'fix vcf qctool',stdout=fixed_vcf)
-        fixed_vcf.close()
-        return(output_name)  
-
-
-    def prepare_haps_for_variscan(self,haps,sample):   
-        (cmd,output_name) = CommandTemplate.prepare_haps_for_variscan(self,self.options,self.config,haps,sample)
-        run_subprocess(cmd,'haps to hapmap') 
         return(output_name)
 
+    def vcf_to_tajimas_d(self, vcf):
+        """ Run vcf to tajimas D using subprocess
 
-    def variscan_fayandwus(self,hap2):
-        (cmd,output_name,varscan_conf) = CommandTemplate.variscan_fayandwus(self,self.options,self.config,hap2) 
-        output_variscan = open(output_name,'w')
-         
-        # get the start and the end of the hapmap2 file
-        #
-        varscan_config = open(varscan_conf ,'a')
+        """
+        (cmd, output_name) = super(StandardRun, self).vcf_to_tajimas_d(vcf)
+        run_subprocess(cmd, 'tajimas_d')
+        taj_file = self.options.population + self.options.chromosome + '.taj_d'
+        os.rename(output_name, taj_file)
+        return(taj_file)
+
+    def fix_vcf_qctool(self, vcf):
+        """ Run qctool to vcf fix using subprocess
+
+        """
+        (cmd, output_name) = super(StandardRun, self).fix_vcf_qctool(vcf)
+        fixed_vcf = open(output_name, 'w')
+        run_subprocess(cmd, 'fix vcf qctool', stdout=fixed_vcf)
+        fixed_vcf.close()
+        return(output_name)
+
+    def prepare_haps_for_variscan(self, haps, sample):
+        """ Run prepare haps file for variscan using subprocess
+
+        """
+        (cmd, output_name) = (super(StandardRun, self).
+                              prepare_haps_for_variscan(haps, sample))
+        run_subprocess(cmd, 'haps to hapmap')
+        return(output_name)
+
+    def variscan_fayandwus(self, hap2):
+        """ Run fay and wus variscan
+
+            Gets the start and the end of the haps file
+            to set the StartPos and EndPos variables in the
+            variscan input file
+        """
+        (cmd, output_name, varscan_conf) = (super(StandardRun, self)
+                                            .variscan_fayandwus(hap2))
+        output_variscan = open(output_name, 'w')
+        varscan_config = open(varscan_conf, 'a')
         try:
-            proc = subprocess.Popen("""tail -1 {0}| awk '{{print $4}}'""".format(hap2),stdout=subprocess.PIPE,shell=True) 
+            proc = subprocess.Popen(
+                """tail -1 {0}| awk '{{print $4}}'""".
+                format(hap2), stdout=subprocess.PIPE,
+                shell=True)
         except:
             logger.error("Tail command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
-        # get the start of the haps file 
         try:
-            head = subprocess.Popen("""head -2 {0} | tail -1 | awk '{{print $4}}'""".format(hap2),stdout=subprocess.PIPE,shell=True) 
+            head = subprocess.Popen(
+                """head -2 {0} | tail -1 | awk '{{print $4}}'""".
+                format(hap2), stdout=subprocess.PIPE, shell=True)
         except:
             logger.error("Head command failed on haps file")
             sys.exit(SUBPROCESS_FAILED_EXIT)
         start_pos = head.stdout.read()
         start_position = int(start_pos)
         end_position = int(proc.stdout.read())
-        
-        # Write the start and end of the Fey and Wu's into the self.config file #
         varscan_config.write('StartPos = ' + str(start_position) + "\n")
-        varscan_config.write('EndPos = ' + str(end_position)+ '\n')
-        varscan_config.close() 
-        run_subprocess(cmd,'variscan',stdout=output_variscan)
+        varscan_config.write('EndPos = ' + str(end_position) + '\n')
+        varscan_config.close()
+        run_subprocess(cmd, 'variscan', stdout=output_variscan)
         output_variscan.close()
         return(output_name)
