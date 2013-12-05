@@ -3,8 +3,8 @@
 # Author James Boocock and Murray Cadzow
 # 
 
-from selection_pipeline.standard_run import *
-from selection_pipeline.standard_run_utilities import *
-from selection_pipeline.environment import *
-from selection_pipeline.load_leveler_run import *
-from selection_pipeline.fullprocess import *
+from .standard_run import *
+from .standard_run_utilities import *
+from .environment import *
+from .load_leveler_run import *
+from .selection_pipeline import *

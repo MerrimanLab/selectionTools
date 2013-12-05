@@ -8,9 +8,9 @@ MerrimanSelectionPipeline.egg-info/top_level.txt
 selection_pipeline/__init__.py
 selection_pipeline/aa_annotate.py
 selection_pipeline/environment.py
-selection_pipeline/fullprocess.py
 selection_pipeline/load_leveler_run.py
 selection_pipeline/multipipeline.py
 selection_pipeline/run_pipeline.py
+selection_pipeline/selection_pipeline.py
 selection_pipeline/standard_run.py
 selection_pipeline/standard_run_utilities.py

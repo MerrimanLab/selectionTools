@@ -22,8 +22,8 @@ class CommandTemplate(object):
         """ Initialises the class variables self.config and self.options.
 
         """
-        self.self.config = self.config
-        self.self.options = self.options
+        self.config = config
+        self.options = options
 
     def run_vcf_to_plink(self):
         """ Template for vcf to plink conversion

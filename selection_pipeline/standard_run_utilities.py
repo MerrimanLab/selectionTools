@@ -6,8 +6,10 @@ import re
 #queue for threads
 #regex for hash at start of line
 
-
-import Queue
+try:
+    import Queue
+except ImportError:
+    import queue
 from threading import Thread
 logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT = 10
@@ -226,5 +228,5 @@ def clean_folder(folder, keep=None):
         try:
             if os.path.isfile(file_path):
                 os.unlink(file_path)
-        except Exception, e:
+        except Exception as e:
             logger.error(e)

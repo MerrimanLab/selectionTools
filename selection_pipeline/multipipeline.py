@@ -196,7 +196,8 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     if options.cores is not None:
         extra_args += ' --cores ' + options.cores
     # Run the selection pipeline for a single run job #
-    selection_pipeline_executable = config['selection_pipeline']['selection_pipeline_executable']
+    selection_pipeline_executable = \
+        config['selection_pipeline']['selection_pipeline_executable']
     for vcf, population_name in zip(output_vcfs, populations):
         directory = population_name
         # Create directory for each sub population to run in
