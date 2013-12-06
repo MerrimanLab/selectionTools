@@ -25,7 +25,7 @@ spec = matrix(c(
 	"big_gap",  'b', 1, "integer",
 	"small_gap", 'S', 1, "integer",
 	"small_gap_penalty", 'P', 1, "integer",
-    "haplo_hh",    "H",   1,   "character"
+    "haplo_hh",    "H",   0,   "logical"
 ), byrow=T, ncol=4) 
 opt = getopt(spec)
 
@@ -51,7 +51,8 @@ maf=as.numeric(opt$maf)
 #overlap = 100000
 #haps file
 #hapsPop=read.table("CEU.haps")
-if(!is.null(haplo_hh)){
+if(!is.null(opt$haplo_hh)){
+  bin = hapsPop
   hapsPop.only=bin[,6:ncol(bin)]
   allelesPop=bin[,4:5]
   hapsPop.only[hapsPop.only == 1] = 2
@@ -65,15 +66,11 @@ if(!is.null(haplo_hh)){
   ind[,3] = bin[,3]
   ind[,4] = 1
   ind[,5] = 2
-  ind=subset(ind,!duplicated(bin[,1])&&!duplicated(bin[,3]))
-  ind=subset(ind,!duplicated(ind[,1]))
-  ind=subset(ind,!duplicated(ind[,3]))
   indPop1=ind
-  paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"))#write out entire chromosome
-  write.table(indPop1,file=paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"),col.names=F,row.names=F)
+  write.table(indPop1,file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),col.names=F,row.names=F)
   write.table(t.hapsPop,file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),col.names=F)
-  d = data2haplohh(hap_file=t.hapsPop,map_file=indPop1,min_maf=maf)   
-  write.table(d, paste(pop1,"chr", chr,"wd",working_dir,".hapshh",sep="_"))
+  d = data2haplohh(hap_file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),map_file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),min_maf=maf)   
+  save(d, file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))
 }
 
 #print("Why are you not working")

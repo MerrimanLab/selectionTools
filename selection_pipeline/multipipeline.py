@@ -156,7 +156,6 @@ def subset_vcf(vcf_input, config, populations):
             cmd.append(vcf_subset_executable)
             cmd.extend(['-f', '-c', comma_list_ids, vcf])
             stdouts.append(output_file)
-            run_subprocess(cmd, 'vcf-subset', stdout=vcf_output)
             cmds.append(list(cmd))
     queue_jobs(cmds, 'vcf-subset',
                config['system']['cores_avaliable'], stdouts=stdouts)
@@ -196,8 +195,9 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     if options.cores is not None:
         extra_args += ' --cores ' + options.cores
     # Run the selection pipeline for a single run job #
-    selection_pipeline_executable = config['selection_pipeline']['selection_pipeline_executable']
-    for vcf, population_name in zip(output_vcfs, populations):
+    selection_pipeline_executable = \
+        config['selection_pipeline']['selection_pipeline_executable']
+    for vcf, population_name in zip(sorted(output_vcfs), sorted(populations)):
         directory = population_name
         # Create directory for each sub population to run in
         if not os.path.exists(directory):
@@ -293,6 +293,11 @@ def main():
         if not(os.path.isfile(options.config_file)):
                 sys.exit(CANNOT_FIND_CONFIG)
     config = parse_config(options)
+    if options.log_file is None:
+        options.log_file = 'multi_population.log'
+    logging.basicConfig(format='%(asctime)s %(message)s',
+                        filename=options.log_file, filemode='w',
+                        level=logging.INFO)
     if not (check_executables_and_scripts_exist(options, config)):
         sys.exit(CANNOT_FIND_EXECUTABLE)
     if options.no_clean_up is None:
@@ -301,15 +306,10 @@ def main():
         options.fst_window_step = str(1000)
     else:
         options.fst_window_step = str(options.fst_window_step)
-    if options.log_file is None:
-        options.log_file = 'multi_population.log'
     if options.fst_window_size is None:
         options.fst_window_size = str(1000)
     else:
         options.fst_window_size = str(options.fst_window_size)
-    logging.basicConfig(format='%(asctime)s %(message)s',
-                        filename=options.log_file, filemode='w',
-                        level=logging.INFO)
     if options.cores is not None:
         config['system']['cores_avaliable'] = options.cores
     set_environment(config['environment'])
@@ -322,7 +322,7 @@ def main():
     rsb(config, options, populations)
     if not os.path.exists('logs'):
         os.mkdir('logs')
-    os.rename(options.log_file, 'logs/'+options.log_file)
+    os.rename(options.log_file, 'logs/' + options.log_file)
     if not options.no_clean_up:
         keep = [os.path.basename(options.vcf_input)]
         keep.extend(options.populations)

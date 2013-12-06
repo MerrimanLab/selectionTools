@@ -1,9 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    use_2to3=True,
     name="MerrimanSelectionPipeline",
-    version="0.3",
+    version="0.9",
     packages=find_packages(),
     author="James Boocock",
     author_email="smilefreak@gmx.com",
@@ -18,7 +17,7 @@ setup(
             'multi_population = selection_pipeline.multipipeline:main'
         ]
     },
-    url="github.com/smilefreak/MerrimanSelectionPipeline"
-
+    url="github.com/smilefreak/MerrimanSelectionPipeline",
+    use_2to3=True
 
 )
