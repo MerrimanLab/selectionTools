@@ -122,15 +122,17 @@ def which(program, program_name):
     return None
 
 
-def run_subprocess(command,tool,stdout=None,stderr=None):
+def run_subprocess(command,tool,stdout=None,stderr=None,stdoutlog=False):
     """ Runs a command on the system shell and forks a new process
    
 	also creates a file for stderr and stdout if needed
 	to avoid deadlock. 
     """
     if(stderr is None):
-        standard_err = open('stderr.tmp','w')
-         
+        stderr = 'stderr.tmp'
+        standard_err = open(stderr,'w')
+    else:
+        standard_err = open(stderr,'w')  
     try:
         if(stdout is None):
             standard_out = open('stdout.tmp','w')
@@ -151,7 +153,6 @@ def run_subprocess(command,tool,stdout=None,stderr=None):
         sys.exit(SUBPROCESS_FAILED_EXIT)
     exit_code.wait()
     standard_err.close()
-    standard_err = open('stderr.tmp','r')
     if(exit_code.returncode != 0):
         logger.error(tool + "failed to run " +  ' '.join(command))
         while True:
@@ -160,14 +161,20 @@ def run_subprocess(command,tool,stdout=None,stderr=None):
                 break
             logger.info(tool +" STDERR: " + line.strip())
         sys.exit(SUBPROCESS_FAILED_EXIT)
-    standard_out.close()
-    standard_out = open('stdout.tmp','r')
+    stdout_log = False
+    if(stdout is None):
+        standard_out = open('stdout.tmp', 'r')  
+        stdout_log = True
+    elif(stdoutlog):
+        standard_out = open(stdout, 'r')  
+        stdout_log = True
+    if(stdout_log):
         while True:
             line = standard_out.readline()
             if not line:
                 break
             logger.info(tool + " STDOUT: " +line.strip())
-    standard_out.close()
+        standard_out.close()
     while True:
         line = standard_err.readline()
         if not line:
@@ -175,22 +182,29 @@ def run_subprocess(command,tool,stdout=None,stderr=None):
         logger.info(tool +" STDERR: " + line.strip())
     logger.info("Finished tool " + tool)
     standard_err.close()
+    # Removed stdout if it either was not specified
+    # or the log was specified.
     if(stdout is None):
         os.remove('stdout.tmp')
-    os.remove('stderr.tmp')
+    elif(stdoutlog):
+        os.remove(stdout)
+    os.remove(stderr)
 
 
 def __queue_worker__(q,tool_name):
-    stdout=None
     while True:
         queue_item = q.get()
         try:
             cmd = queue_item[0]
             stdout = queue_item[1]
+            stdout_log = queue_item[2]
         except IndexError:
-            cmd = queue_item
+            cmd = queue_item[0]
+            stdout = queue_item[1] 
+            stdout_log = False
         try:
-            run_subprocess(cmd, tool_name, stdout=stdout)
+            run_subprocess(
+                cmd, tool_name, stdout=stdout, stdout_log=stdout_log)
         except SystemExit:
             logger.error(tool_name + ": Failed to run in thread")
             sys.exit(SUBPROCESS_FAILED_EXIT)
@@ -213,8 +227,9 @@ def queue_jobs(commands, tool_name, threads, stdouts=None):
         for tup in zip(commands, stdouts):
             q.put(tup)
     else:
-        for cmd in commands:
-            q.put([cmd, None])
+        for i, cmd in enumerate(commands):
+            stdout = 'stdout' + str(i) + '.tmp' 
+            q.put([cmd, stdout, True])
     q.join()
 
 # clean folder expecting a list containing
