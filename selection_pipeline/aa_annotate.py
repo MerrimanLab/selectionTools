@@ -59,7 +59,6 @@ def annotate_vcf(options):
         sample_header = ("ID_1 ID_2 missing father mother sex plink_pheno"
                          "\n 0 0 0 D D D B\n")
         sample_file.write(sample_header)
-        print(options.sample_file)
         for sample in vcf_reader.samples:
             sample_file.write(sample + ' ' + sample + ' 0 0 0 0 -9 ' + '\n')
     for record in vcf_reader:
@@ -67,7 +66,7 @@ def annotate_vcf(options):
             line = (record.ID + ' ' + record.ID + ' ' + str(record.POS) +
                     ' ' + str(record.REF) + ' ' + str(record.ALT[0]))
         else:
-            id = options.chromosome + ":" + record.POS
+            id = options.chromosome + ":" + str(record.POS)
             line = (id + ' ' + id + ' ' + str(record.POS) + ' ' +
                     str(record.REF) + ' ' + str(record.ALT[0]))
         for samples in record.samples:

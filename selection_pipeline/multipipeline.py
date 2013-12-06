@@ -200,8 +200,6 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     for vcf, population_name in zip(sorted(output_vcfs), sorted(populations)):
         directory = population_name
         # Create directory for each sub population to run in
-        print(vcf)
-        print(population_name)
         if not os.path.exists(directory):
             os.mkdir(directory)
         cmd = []
