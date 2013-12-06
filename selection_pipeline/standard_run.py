@@ -193,7 +193,7 @@ class StandardRun(CommandTemplate):
             individual_command.extend(['-o',individual_prefix+'.haps','-w',individual_prefix + '.warnings','-i',individual_prefix +'.info'])
             cmds.append(list(individual_command))
         queue_jobs(cmds,'impute2',self.config['system']['cores_avaliable'])
-        join_impute2_files(self.options,self.config,output_prefix,no_of_impute_jobs)
+        self.join_impute2_files(output_prefix,no_of_impute_jobs)
         return(output_prefix+'.haps') 
          
 

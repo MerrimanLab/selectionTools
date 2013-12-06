@@ -14,8 +14,6 @@ SUBPROCESS_FAILED_EXIT=10
 MISSING_EXECUTABLE_ERROR=5
 
 # Get end of haps file
-def haps_start_and_end(file):
-    return 0
 
 # 
 # returns Split VCF files that can be used 
@@ -103,43 +101,53 @@ def which(program,program_name):
 
 def run_subprocess(command,tool,stdout=None):
         logger.debug(command)
+        standard_err = open('stderr.tmp','w')
         try:
             if(stdout is None):
-                exit_code = subprocess.Popen(command,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+                standard_out = open('stdout.tmp','w')
+                exit_code = subprocess.Popen(command,stderr=standard_out,stdout=standard_err)
             else:
             # find out what kind of exception to try here
                 if(hasattr(stdout,'read')):
 
-                    exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
+                    exit_code = subprocess.Popen(command,stdout=stdout,stderr=standard_err)
                 else:
                     stdout=open(stdout,'w')
-                    exit_code = subprocess.Popen(command,stdout=stdout,stderr=subprocess.PIPE)
+                    exit_code = subprocess.Popen(command,stdout=stdout,stderr=standard_err)
                     stdout.close()  
         except:
             logger.error(tool + " failed to run " + ' '.join(command))
             sys.exit(SUBPROCESS_FAILED_EXIT)
         exit_code.wait()
+	standard_err.close()
+	standard_err = open('stderr.tmp','r')
         if(exit_code.returncode != 0):
             logger.error(tool + "failed to run " +  ' '.join(command))
             while True:
-                line = exit_code.stderr.readline()
+                line = standard_err.readline() 
                 if not line:
                     break
                 logger.info(tool +" STDERR: " + line.strip())
             sys.exit(SUBPROCESS_FAILED_EXIT)
         if(stdout is None):
+	    standard_out.close()
+	    standard_out = open('stdout.tmp','r')
             while True:
-                line = exit_code.stdout.readline()
+                line = standard_out.readline()
                 if not line:
                     break
                 logger.info(tool + " STDOUT: " +line.strip())
+	    standard_out.close()
         while True:
-            line = exit_code.stderr.readline()
+            line = standard_err.readline()
             if not line:
                 break
             logger.info(tool +" STDERR: " + line.strip())
         logger.info("Finished tool " + tool)
-
+	standard_err.close()
+        if(stdout is None):
+            os.remove('stdout.tmp')
+        os.remove('stderr.tmp')
 def __queue_worker__(q,tool_name):
     stdout=None
     while True:
