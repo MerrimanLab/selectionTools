@@ -107,9 +107,9 @@ class StandardRun(CommandTemplate):
 
         """
         if(self.options.phased_vcf):
+            vcf = self.run_remove_indels_from_vcf()
             (haps, sample) = self.run_aa_annotate_haps(
-                self.options.vcf_input, vcf=True)
-            haps = self.indel_filter(haps)
+                vcf, vcf=True)
             new_sample_file = self.fix_sample_file(sample)
             ihh = self.run_multi_coreihh(haps)
             tajimaSD = self.vcf_to_tajimas_d(vcf_input)
@@ -154,6 +154,14 @@ class StandardRun(CommandTemplate):
         logger.info(fayandwus)
         logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
+    
+    def run_remove_indels_from_vcf(self):
+        """ Run remove indels from vcf using subprocess
+
+        """
+        (cmd,output_name) = super(StandardRun,self).run_remove_indels_from_vcf()
+        run_subprocess(cmd,'remove indels')
+        return(output_name)
 
     def run_vcf_to_plink(self):
         """ Run vcf to plink using subprocess
@@ -251,8 +259,7 @@ class StandardRun(CommandTemplate):
                                       '-i', individual_prefix + '.info'])
             cmds.append(list(individual_command))
         queue_jobs(cmds, 'impute2', self.config['system']['cores_avaliable'])
-        join_impute2_files(self.options, self.config,
-                           output_prefix, no_of_impute_jobs)
+        self.join_impute2_files(output_prefix, no_of_impute_jobs)
         return(output_prefix+'.haps')
 
     def indel_filter(self, haps):

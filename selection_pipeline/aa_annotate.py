@@ -67,8 +67,9 @@ def annotate_vcf(options):
             line = (record.ID + ' ' + record.ID + ' ' + str(record.POS) +
                     ' ' + str(record.REF) + ' ' + str(record.ALT[0]))
         else:
-            line = (' . . ' + str(record.POS) + ' ' + str(record.REF) + ' '
-                    + str(record.ALT[0]))
+            id = options.chromosome + ":" + record.POS
+            line = (id + ' ' + id + ' ' + str(record.POS) + ' ' +
+                    str(record.REF) + ' ' + str(record.ALT[0]))
         for samples in record.samples:
             gt = samples['GT']
             # Need to skip any snps that have any missing phase data to
@@ -78,7 +79,7 @@ def annotate_vcf(options):
                 gtSplit = gt.split('|')
                 line = line + ' ' + gtSplit[0] + ' ' + gtSplit[1]
             else:
-                line = line + ' - -'
+                line = line + '- -'
                 break
         if(line is not None):
             output_line = aa_check(aaSeq[record.POS], record.REF,
@@ -103,10 +104,8 @@ def aa_check(realAA, ref, alt, format, line):
                 return line.strip()
             elif(realAA == alt):
                 newLine = line.split()
-#                print newLine
                 newLine[3] = alt
                 newLine[4] = ref
-#                print(newLine)
                 for i in range(5, len(newLine)):
                     if((newLine[i]) == "1"):
                         newLine[i] = '0'
@@ -119,7 +118,6 @@ def aa_check(realAA, ref, alt, format, line):
                 for i in range(5, len(newLine)):
                         newLine[i] = '1'
             return ' '.join(newLine)
-            #return line
     else:
         return None
 
@@ -136,7 +134,6 @@ def annotate_haps(options):
             ref = lineSplit[3]
             alt = lineSplit[4]
             tempSeq = aaSeq[pos].decode()
-            #print(lineSplit)
             outputLine = aa_check(tempSeq, ref, alt, options.format, line)
             if(outputLine is not None):
                 if(options.output is not None):

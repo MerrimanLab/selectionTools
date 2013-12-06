@@ -44,6 +44,19 @@ class CommandTemplate(object):
             cmd.extend(self.config['vcftools']['extra_args'].split())
         return (cmd, prefix)
 
+    def run_remove_indels_from_vcf(self):
+        """ Template for running remove indels from vcf
+
+        """
+        cmd = []
+        output_name = \
+            self.options.vcf_input.split('.vcf')[0]
+        vcftools = self.config['vcftools']['vcf_tools_executable']
+        cmd.append(vcftools)
+        cmd.extend(['--vcf', self.options.vcf_input, '--remove-indels',
+                   '--out', output_name, '--recode'])
+        return(cmd, output_name + '.recode.vcf')
+
     def run_plink_filter(self, ped, map):
         """ Template for running the plink filter
 
@@ -182,7 +195,7 @@ class CommandTemplate(object):
             self.config['ancestral_allele']['ancestral_allele_script']
         cmd.append(py_executable)
         cmd.append(aa_annotate)
-        ancestral_fasta = self.get_ancestral_fasta(self.options, self.config)
+        ancestral_fasta = self.get_ancestral_fasta()
         cmd.extend(['-c', self.options.chromosome, '-o',
                    output_haps, '-a', ancestral_fasta])
         if('reference_fasta' in self.config['ancestral_allele'].keys()):
