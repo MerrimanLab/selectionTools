@@ -138,6 +138,7 @@ def run_subprocess(command,tool,stdout=None,stderr=None,stdoutlog=False):
             standard_out = open('stdout.tmp','w')
             exit_code = subprocess.Popen(
                 command,stderr=standard_out,stdout=standard_err)
+            standard_out.close()
         else:
         # find out what kind of exception to try here
             if(hasattr(stdout,'read')):
@@ -151,8 +152,9 @@ def run_subprocess(command,tool,stdout=None,stderr=None,stdoutlog=False):
     except:
         logger.error(tool + " failed to run " + ' '.join(command))
         sys.exit(SUBPROCESS_FAILED_EXIT)
-    exit_code.wait()
     standard_err.close()
+    exit_code.wait()
+    standard_err = open(stderr,'r')
     if(exit_code.returncode != 0):
         logger.error(tool + "failed to run " +  ' '.join(command))
         while True:
@@ -184,6 +186,7 @@ def run_subprocess(command,tool,stdout=None,stderr=None,stdoutlog=False):
     standard_err.close()
     # Removed stdout if it either was not specified
     # or the log was specified.
+    standard_err.close()
     if(stdout is None):
         os.remove('stdout.tmp')
     elif(stdoutlog):
@@ -197,14 +200,17 @@ def __queue_worker__(q,tool_name):
         try:
             cmd = queue_item[0]
             stdout = queue_item[1]
-            stdout_log = queue_item[2]
+            stdoutlog = queue_item[2]
+            stderr = queue_item[3]
         except IndexError:
             cmd = queue_item[0]
             stdout = queue_item[1] 
-            stdout_log = False
+            stdoutlog = False
+            stderr = None
         try:
             run_subprocess(
-                cmd, tool_name, stdout=stdout, stdout_log=stdout_log)
+                cmd, tool_name, stdout=stdout,
+                stdoutlog=stdoutlog,stderr=stderr)
         except SystemExit:
             logger.error(tool_name + ": Failed to run in thread")
             sys.exit(SUBPROCESS_FAILED_EXIT)
@@ -229,7 +235,8 @@ def queue_jobs(commands, tool_name, threads, stdouts=None):
     else:
         for i, cmd in enumerate(commands):
             stdout = 'stdout' + str(i) + '.tmp' 
-            q.put([cmd, stdout, True])
+            stderr = 'stderr' + str(i) + '.tmp'
+            q.put([cmd, stdout, True, stderr])
     q.join()
 
 # clean folder expecting a list containing
@@ -246,6 +253,7 @@ def clean_folder(folder, keep=None):
     """
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
+        print(keep)
         if keep is not None:
             if (file_path in [os.path.join(folder, x) for x in keep]):
                 continue

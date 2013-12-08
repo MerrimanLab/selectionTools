@@ -322,8 +322,8 @@ def main():
     rsb(config, options, populations)
     if not os.path.exists('logs'):
         os.mkdir('logs')
-    os.rename(options.log_file, 'logs/' + options.log_file)
-    if not options.no_clean_up:
+    os.rename(optioNs.log_file, 'logs/' + options.log_file)
+    if not options.No_clean_up:
         keep = [os.path.basename(options.vcf_input)]
         keep.extend(options.populations)
         clean_folder('.', keep=keep)
