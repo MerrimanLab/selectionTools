@@ -187,31 +187,44 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
         Uses the population dictionary and the output vcfs from the subset
         process to run the selection pipeline on each population.
     """
+    cores = config['system']['cores_avaliable']    
+    # Arbitrary cut off for parralelising each population
+    parralelise_populations = False
+    if(len(populations) > 4):
+        parralelise_populations = True 
     orig_dir = os.getcwd()
     if(options.extra_args is not None):
         extra_args = options.extra_args
     else:
         extra_args = ''
     if options.cores is not None:
-        extra_args += ' --cores ' + options.cores
+        extra_args += ' --cores ' + cores
     # Run the selection pipeline for a single run job #
     selection_pipeline_executable = \
         config['selection_pipeline']['selection_pipeline_executable']
+    cmds=[]
     for vcf, population_name in zip(sorted(output_vcfs), sorted(populations)):
-        directory = population_name
-        # Create directory for each sub population to run in
-        if not os.path.exists(directory):
-            os.mkdir(directory)
         cmd = []
         cmd.append(selection_pipeline_executable)
         cmd.extend(['-c', options.chromosome, '-i', os.path.abspath(vcf),
                    '-o', population_name, '--population', population_name,
                    '--config-file', os.path.abspath(options.config_file)])
         cmd.extend(extra_args.split())
-        os.chdir(directory)
-        run_subprocess(cmd, 'selection_pipeline')
-        os.chdir(orig_dir)
-
+        cmds.append(cmd)
+        if parralelise_populations:
+            folder_names = []
+        for vcf, population_name in zip(sorted(output_vcfs), sorted(populations)):
+            directory = population_name
+            if not os.path.exists(directory):
+                os.mkdir(directory)
+            if parralelise_populations:
+                folder_names.append(directory) 
+            else:
+            # Create directory for each sub population to run in
+                os.chdir(directory)
+                run_subprocess(cmd,'selection_pipeline') 
+                os.chdir(orig_dir)
+    queue_jobs(cmds,'selection_pipeline',cores,folder_names=folder_names)
 
 def fst_vcf(input_vcf, config, options, populations):
     """ Generates FST statistics for every pair of populations

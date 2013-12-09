@@ -122,12 +122,18 @@ def which(program, program_name):
     return None
 
 
-def run_subprocess(command,tool,stdout=None,stderr=None,stdoutlog=False):
+def run_subprocess(
+    command,tool,stdout=None,
+    stderr=None,stdoutlog=False,
+    working_dir = None):
     """ Runs a command on the system shell and forks a new process
    
 	also creates a file for stderr and stdout if needed
 	to avoid deadlock. 
     """
+    if (working_dir is not None):
+        orig_dir = os.getcwd()
+        os.chdir(working_dir)
     if(stderr is None):
         stderr = 'stderr.tmp'
         standard_err = open(stderr,'w')
@@ -195,6 +201,8 @@ def run_subprocess(command,tool,stdout=None,stderr=None,stdoutlog=False):
     elif(stdoutlog):
         os.remove(stdout)
     os.remove(stderr)
+    if (working_dir is not None):
+        os.chdir(orig_dir)
 
 
 def __queue_worker__(q,tool_name):
@@ -205,6 +213,7 @@ def __queue_worker__(q,tool_name):
             stdout = queue_item[1]
             stdoutlog = queue_item[2]
             stderr = queue_item[3]
+            folder_names = queue_item[4]
         except IndexError:
             cmd = queue_item[0]
             stdout = queue_item[1] 
@@ -220,7 +229,7 @@ def __queue_worker__(q,tool_name):
         q.task_done()
 
 
-def queue_jobs(commands, tool_name, threads, stdouts=None):
+def queue_jobs(commands, tool_name, threads, stdouts=None,folder_names=None):
     """ Creates a queue for running jobs
 
         Using a synchronized queue to spawn jobs equal
@@ -232,14 +241,17 @@ def queue_jobs(commands, tool_name, threads, stdouts=None):
         t = Thread(target=__queue_worker__, args=[q, tool_name])
         t.daemon = True
         t.start()
-    if stdouts is not None:
-        for tup in zip(commands, stdouts):
-            q.put(tup)
-    else:
-        for i, cmd in enumerate(commands):
+    for i, cmd in enumerate(commands):
+        stderr = 'stderr' + str(i) + '.tmp'
+        if(folder_names is None):
+            folder_name = '.'
+        else:
+            folder_name = folder_names[i]
+        if (stdouts is not None):
+            q.put([cmd, stdouts[i], False, stderr,folder_name])
+        else:
             stdout = 'stdout' + str(i) + '.tmp' 
-            stderr = 'stderr' + str(i) + '.tmp'
-            q.put([cmd, stdout, True, stderr])
+            q.put([cmd, stdout, True, stderr,folder_name])
     q.join()
 
 # clean folder expecting a list containing
