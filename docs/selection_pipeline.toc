@@ -1,15 +1,15 @@
 \contentsline {section}{\numberline {1}Introduction}{3}{section.1}
 \contentsline {section}{\numberline {2}Getting Started}{3}{section.2}
 \contentsline {subsection}{\numberline {2.1}Prerequisites}{3}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Python dependencies}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.2}Python dependencies}{4}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Installation}{4}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Genetic Maps and Impute Haplotypes}{4}{subsection.2.4}
 \contentsline {subsection}{\numberline {2.5}Ancestral Fasta Files}{5}{subsection.2.5}
 \contentsline {section}{\numberline {3}Tutorial}{5}{section.3}
 \contentsline {subsection}{\numberline {3.1}Selection Signatures at the Lactase Locus}{5}{subsection.3.1}
 \contentsline {subsubsection}{\numberline {3.1.1}Getting the Data}{5}{subsubsection.3.1.1}
-\contentsline {subsection}{\numberline {3.2}Setting up Pipeline Run}{5}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Population Files}{5}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.2}Setting up Pipeline Run}{6}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Population Files}{6}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Run The Tutorial}{6}{subsection.3.4}
 \contentsline {subsection}{\numberline {3.5}Data Visualisation}{6}{subsection.3.5}
 \contentsline {subsubsection}{\numberline {3.5.1}Fst}{6}{subsubsection.3.5.1}
@@ -51,7 +51,7 @@
 \contentsline {subsubsection}{\numberline {5.4.8}Rscript}{20}{subsubsection.5.4.8}
 \contentsline {subsubsection}{\numberline {5.4.9}python}{20}{subsubsection.5.4.9}
 \contentsline {subsubsection}{\numberline {5.4.10}ancestral\_allele}{20}{subsubsection.5.4.10}
-\contentsline {subsubsection}{\numberline {5.4.11}qctool}{21}{subsubsection.5.4.11}
+\contentsline {subsubsection}{\numberline {5.4.11}qctool}{20}{subsubsection.5.4.11}
 \contentsline {subsubsection}{\numberline {5.4.12}multicore\_ihh}{21}{subsubsection.5.4.12}
 \contentsline {section}{\numberline {6}Log Files}{21}{section.6}
 \contentsline {subsection}{\numberline {6.1}multi\_population}{21}{subsection.6.1}
