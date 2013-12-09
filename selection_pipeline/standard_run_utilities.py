@@ -229,13 +229,12 @@ def queue_jobs(commands, tool_name, threads, stdouts=None):
         t = Thread(target=__queue_worker__, args=[q, tool_name])
         t.daemon = True
         t.start()
-    if stdouts is not None:
-        for tup in zip(commands, stdouts):
-            q.put(tup)
-    else:
-        for i, cmd in enumerate(commands):
+    for i, cmd in enumerate(commands):
+        stderr = 'stderr' + str(i) + '.tmp'
+        if(stdouts is None):
+            q.put([cmd,stdouts[i],False,stderr])
+        else:
             stdout = 'stdout' + str(i) + '.tmp' 
-            stderr = 'stderr' + str(i) + '.tmp'
             q.put([cmd, stdout, True, stderr])
     q.join()
 
