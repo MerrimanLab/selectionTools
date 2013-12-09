@@ -188,9 +188,11 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
         process to run the selection pipeline on each population.
     """
     cores = config['system']['cores_avaliable']    
-    # Arbitrary cut off for parralelising each population
     parralelise_populations = False
-    if(len(populations) > 4):
+    # Arbitrary cut off for parralelising each population
+    # 4 at the moment could be calculated given the amount
+    # of parralelisation needed in each run.
+    if(len(populations) >= 4 and int(cores) >= 4):
         parralelise_populations = True 
     orig_dir = os.getcwd()
     if(options.extra_args is not None):
