@@ -11,7 +11,7 @@
 \usepackage{float}
 \hypersetup{colorlinks = true, linkcolor = blue}
 \lstset{language=Python}
-\usepackage[margin=0.5in]{geometry}
+\usepackage[margin=0.75in]{geometry}
 
 \usepackage{listings}
 \usepackage{makeidx}
@@ -27,12 +27,12 @@
 
 
 \title{\textbf{A bioinformatics workflow for detecting signatures of selection in genomic data}}
-\date{September 9, 2013}
+\date{December 9, 2013}
 
-\author[1,2]{Murray Cadzow}
-\author[1,2]{James Boocock}
+\author[1]{Murray Cadzow}
+\author[1]{James Boocock}
 \author[1,2]{Hoang Tan Nguyen}
-\author[2,3]{Phillip Wilcox}
+\author[1,3]{Phillip Wilcox}
 \author[1]{Tony R Merriman}
 \author[1]{Michael A Black}
 \affil[1]{Department of Biochemistry, University of Otago}
@@ -41,51 +41,137 @@
 \renewcommand\Authands{ and }
 \begin{document}
 
-\maketitle{}
-\doublespacing
+\maketitle{}\textmd{}
+\spacing{1.5}
+%\doublespacing
 \tableofcontents
+
+\pagebreak
 \section{Introduction}
-The Selection Pipeline utilizes next-generation sequencing \(NGS\) data to generate selective signatures. The tools used to detect selection are dependent on the selection signature being investigated \citep{Sabeti:2006ha}. The pipeline generates various output files containing within and between population selection signatures. The starting point for the analysis is a variant call format \(VCF\) file of the genotype data and populations of interest \citep{Danecek:2011gz}. Both $F_{st}$ and Tajima's D can be calculated from standard genotype data \citep{Weir:1984vn} \citep{Tajima:1989un}. To compute iHS, rsb and Fay and Wu's requires haplotypes, and thus the genotype data must be phased prior to calculation of these statistics \citep{Voight:2006go} \citep{Gautier:2012et} \citep{fayandwush}. For phasing shapeit2 is used and for imputation impute2 is used \citep{impute22009} \citep{Delaneau:2013hi}, furthermore these statistics also require ancestral allele information \citep{Flicek:2012vg}.  The pipeline phases if the VCF files do not contain the phasing information and then performs ancestral allele annotation. Once complete, the rehh package provides a simple interface for implementing EHH-based analyses \citep{Gautier:2012et}, we extended rehh to include penalties for gaps that match those used in the original iHS paper \citep{Voight:2006go}, rehh calculates iHH, iHS, iES and Rsb. To calculate Fay and Wu's H a c program variscan was utilised \citep{variscan2005}. The pipeline implemented in python, takes a VCF file to a set of output files containing selection signatures.
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - WHATS UP WITH THE UGLY GREEN LINKS FOR
+  CITATIONS?  ;) ***]}
+
+\noindent
+This selection analysis workflow utilizes genotype data derived from
+next-generation sequencing (NGS) or high-denisity microarray (e.g.,
+``SNP chip'') experiments to identify the presence of signatures of
+selection. The tools used to detect selection are dependent on the
+selection signature being investigated \citep{Sabeti:2006ha}. The
+pipeline presented here generates various output files containing
+within- and between-population selection signatures. The starting
+point for the analysis
+is a variant call format (VCF) file of the genotype data and
+populations of interest \citep{Danecek:2011gz}. Both $F_{st}$ and
+Tajima's D can be calculated from standard genotype data
+\citep{Weir:1984vn} \citep{Tajima:1989un}. To compute iHS, rSB and Fay
+and Wu's H requires haplotype information, and thus the genotype data must be
+phased prior to calculation of these statistics \citep{Voight:2006go}
+\citep{Gautier:2012et} \citep{fayandwush}. For phasing, shapeit2 is
+used, and for imputation impute2 is used \citep{impute22009}
+\citep{Delaneau:2013hi}. Furthermore these statistics also require
+ancestral allele information \citep{Flicek:2012vg}.  The pipeline
+performs phasing if the VCF files do not contain phase information, and
+then performs ancestral allele annotation. Once complete, the rehh
+package for R provides a simple interface for implementing EHH-based
+analyses \citep{Gautier:2012et}. Here we have extended rehh to include penalties
+for gaps that match those used in the original iHS paper
+\citep{Voight:2006go}. rehh is used to calculate iHH, iHS, iES and Rsb. To
+calculate Fay and Wu's H, a C program, variscan, was utilised
+\citep{variscan2005}. The pipeline is implemented in Python, and takes a VCF
+file as input. The output is a colection of files relating to selection
+signatures dected by the various software tools.
+
 \section{Getting Started}
 \subsection{Prerequisites}
-The selection pipeline was developed on a 64-bit ubuntu 13.04 system and has been tested on a 64-bit centos and ubuntu 13.10 installation. The pipeline should work on any 64-bit linux deriviant assuming some basic libraries and tools are installed on your system. 20gb of ram should be sufficient \(required for imputation\).
-\begin{itemize}
-\item python > = 2.6 
-\item bourne-again Shell (Bash)
-\item perl5
-\item R \( >= 3.0.0 \) (with a personal library)
-\item build-essential tools
-\end{itemize}
-The software is installed to the user than runs the script, if the user is not root a R local library is required. The program also installs the scripts to the users ~/.local/bin directory this directory should be added to the system path to give to direct access to the programs from the command-line.  
+The selection pipeline was developed on a 64-bit ubuntu 13.04 system
+and has been tested on 64-bit centos and ubuntu 13.10
+installations. The pipeline should work on any 64-bit linux derivative
+assuming some basic libraries and tools are installed on the
+system. 20GB of RAM should be sufficient for all computation steps
+(imputation is the most RAM-intensive component of the pipeline).
 
+\begin{itemize}
+\item Python > = 2.6 
+\item Bourne-again Shell (Bash)
+\item Perl5
+\item R \( >= 3.0.0 \) (with a personal library) {\bf\small\color{blue} [*** JAMES
+    - WHAT IS A ``PERSONAL LIBRARY''? ***]}
+\item Build-essential tools {\bf\small\color{blue} [*** JAMES
+    - SPECIFICALLY...? ***]}
+\end{itemize}
+The software is installed with the same permissions as the user than
+runs the script: if the user is not root then a local R library is
+required. The program also installs the scripts to the user's
+~/.local/bin directory.  This directory should be added to the system
+PATH to give direct access to the programs from the command-line. 
+ 
 \subsection{Python dependencies}
+The following Python packages are required for the pipeline:
 \begin{itemize}
 \item python-setuptools
 \item python-numpy
 \end{itemize}
-Most linux distributions provide these packages through the official package management repositories.
+Most linux distributions provide these packages through the official
+package management repositories.
+
 \subsection{Installation}
-To install the package standalone, requiring manual configuration of the configuration file run the following command.\\
+
+{\bf\small\color{blue}  [*** JAMES - NEED TO TELL THEM HOW TO GET THE FILES ***]}
+
+\noindent
+To install a standalone version of the pipeline (which will require
+manual adjustment of the configuration file), run the following command:\\
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh --standalone
 \end{minted}
 
-The rest of this section will be dedicated to the automatic installation. To perform an automatic installation of the selection pipeline run the command.\\
+\noindent
+{\bf\small\color{blue} [*** JAMES - NEED TO EXPLAIN THE DIFFERENCE BETWEEN MANUAL
+  AND AUTOMATIC INSTALLATION ***]}
+
+\noindent
+The remainder of this section is dedicated to the automatic
+installation. To perform an automatic installation of the selection
+analysis pipeline, run the command.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh
 \end{minted}
 
-Installation creates a default configuration file located in the base directory of the pipeline. Installation adds a program called selection\_pipeline to the system path. To test the program is installed correctly run the following command at a terminal prompt.
+\noindent
+The installation process creates a default configuration file located in the base
+directory of the pipeline. It also adds a program called
+selection\_pipeline to the system path. To test that the program is
+installed correctly, run the following command at a terminal prompt.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 selection_pipeline -h
 \end{minted}
 
 \subsection{Genetic Maps and Impute Haplotypes}
-To use the phasing and imputation features of the pipeline requires both genetic map files and haplotype files. For humans these files that conform to the format required for shapeit and impute2 can be found \href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. For impute2 one reference is available \href{http://mathgen.stats.ox.ac.uk/impute/ALL_1000G_phase1integrated_v3_impute_macGT1.tgz}{here}, download and extract the archive to referencefiles/impute\_ref and uncompress the contents. For shapeit2 a genetic map can be found \href{http://www.shapeit.fr/files/genetic_map_b37.tar.gz}{here}, download and extract the archive to referencefiles/shapeit\_ref.\\
+To use the phasing and imputation features of the pipeline requires
+both genetic map files and haplotype files. For humans, files
+that conform to the format required for shapeit and impute2 can be
+found
+\href{http://mathgen.stats.ox.ac.uk/impute/impute_v2.html#reference}{here}. For
+impute2, one reference is available
+\href{http://mathgen.stats.ox.ac.uk/impute/ALL_1000G_phase1integrated_v3_impute_macGT1.tgz}{here}.
+Download and extract the archive to referencefiles/impute\_ref and
+uncompress the contents. For shapeit2, a genetic map can be found
+\href{http://www.shapeit.fr/files/genetic_map_b37.tar.gz}{here}.
+Download and extract the archive to referencefiles/shapeit\_ref.\\
 
-To use other reference files with the selection pipeline requires setting a few options in the config file. The question mark character "?" in the config is substituted by the chromosome number, this is used for reference files that are split on chromosomes.\\
+To use other reference files with the selection pipeline requires
+setting some options in the config file. The question mark character
+"?" in the config is substituted by the chromosome number: this is
+used for reference files that are split on chromosomes.\\
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - IS THAT ENOUGH DETAIL FOR USING
+  OTHER REFERENCE FILES? ***]}
+
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
 genetic_map_prefix=genetic_map_chr?_combined_b37.txt
@@ -95,7 +181,9 @@ impute_reference_prefix=ALL_1000G_phase1integrated_v3_chr?_impute
 ...
 \end{minted}
 
-If you decide to store you reference files in another location, further options will require alterations.\\ 
+\noindent
+If you decide to store the reference files in another location,
+further options require alteration in the config file:\\ 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
 genetic_map_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/shapeit_ref
@@ -106,9 +194,19 @@ impute_reference_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_r
 \end{minted}
 
 \subsection{Ancestral Fasta Files}
-The generation of results for iHS requires assigning the ancestral allele. The selection pipeline uses the ancestral alleles from the 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be downloaded from \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. Make sure to extract contents of the archive after download. The default directory to store the ancestral reference files is referencefiles/ancestral\_ref/.
+The generation of results for iHS requires assigning the ancestral
+allele. The selection pipeline uses the ancestral alleles from the
+6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be
+downloaded from
+\href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. Be
+sure to extract contents of the archive after download. The default
+directory to store the ancestral reference files is
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+referencefiles/ancestral_ref/.
+\end{minted}
 
-If you downloaded your reference to a different location you can set the following setting in your config file.\\
+\noindent
+If you downloaded your reference to a different location you can alter the following setting in your config file.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
 ancestral_fasta_dir = # directory you downloaded alignment to #
@@ -118,17 +216,37 @@ ancestral_fasta_dir = # directory you downloaded alignment to #
 \section{Tutorial}
 \subsection{Selection Signatures at the Lactase Locus}
 \subsubsection{Getting the Data}
-The lactase gene is located on Chromosome 2 between 136,545,410-136,594,750 positions. For the example we will use a 10 megabase region containing the Lactase gene and the CEU and YRI populations from the 1000 genomes. In order to demonstrate how to use the pipeline we will use the chromosome 2 region 130,000,000-140,000,000. To download the example dataset enter the command below. The lactase gene is an example of strong selection in the last 5,000-10,000 years in human populations specifically European-derived populations (cite).  \\
+In humans, lactase is encoded by the LCT gene, which is located on
+Chromosome 2 at the coordinates:
+136,545,410-136,594,750. For this example we will use a 10
+megabase region containing the LCT, and genotype data from the CEU and YRI
+populations from the 1000 Genomes Project. In order to demonstrate the
+functionality of the pipeline we will use the chromosome 2 region
+130,000,000-140,000,000. To download the example dataset enter the
+command below. The lactase gene is an example of strong selection in
+the last 5,000-10,000 years in human populations, specifically
+those of European ancestory.  
+{\bf\small\color{blue} [*** JAMES - CITATION? ***]}.  \\
 
 \begin{minted}[bgcolor=bg]{bash}
 wget http://tutorial_file_location.com 
 \end{minted}
-
+\noindent
+{\bf\small\color{blue} [*** JAMES - I RECKON THATS NOT THE REAL
+  LOCATION.  :)  ***]}.  \\
+\noindent
 Extract the example data into a new folder.
 
-\subsection{Setting up Pipeline Run}
+
+
+\subsection{Setting up the Pipeline Run}
 \subsection{Population Files}
-Population files are required for any cross population comparisions. The commands below will initiate the data generation step. Population files are line seperated files the first line contains the population name every successive line contains and individual ID from that population.\\
+Population files are required for any cross population
+comparisions. The commands below will initiate the data generation
+step. Population files are line seperated files, where the first line
+contains the population name, and every successive line contains an
+individual ID from that population.\\
+
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 <POPULATION\_IDENTIFIER>
 <INDIVIDUAL ID 1>
@@ -137,22 +255,52 @@ Population files are required for any cross population comparisions. The command
 <INDIVIDUAL ID N>
 \end{minted}
 \subsection{Run The Tutorial}
-The default configuration file is located in the base directory of the selection pipeline. To run the pipeline run the command below in the folder you extracted the example data and change the --config-file parameter to match the location you have installed the pipeline.\\
+The default configuration file is located in the base directory of the
+selection pipeline. To run the pipeline, execute the command below in
+the folder in which the exaple data were extracted, and change the
+--config-file parameter to match the location where the pipeline is installed.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-multipop\_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt 
+multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt 
 -i CEU_YRI_lactase.vcf --config-file defaults.cfg
 --fst-window-size 1000 --fst-window-step 1000
 \end{minted}
-The generated folders and current folder have all the data required to perform further selection analysis. Within each population folder 4 output files are generated these contain Tajima's D, iHH, an updated VCF and Fay and Wu's H statistic these files are located in the results folder inside each population subfolder. Fst is calculated between each population and results are located in the fst folder. Fst results are calculated using the Weir and Cockerham estimator.
+
+\noindent
+The generated folders and current folder have all the data required to
+perform further selection analysis. Within each population folder four
+output files are generated.  These contain Tajima's D, iHH, an updated
+VCF, and Fay and Wu's H statistic. The files are located in the
+results folder inside each population subfolder. $F_{ST}$ is calculated
+between each population and results are located in the fst folder. $F_{ST}$
+results are calculated using the Weir and Cockerham estimator.
+
 \subsection{Data Visualisation}
-The purpose of the pipeline is to generate standard signatures of selection from a VCF formatted input file. In order to express the usefulness of the pipeline it is pertinent to illustrate the effectiveness of the pipeline. The next section describes some basic plotting of these data using the R programming language. All following commands are run in a R session with the working directory in the base directory you are running the tutorial in. In each case the blue lines outline the lactase gene.
-\subsubsection{Fst}
+The purpose of the analysis pipeline is to generate standard signatures of
+selection from a VCF formatted input file. In order to assist with
+exploring/interpretting the results, visualization of the pipeline
+output can be extrenely useful.
+%In order to express the
+%usefulness of the pipeline it is pertinent to illustrate the
+%effectiveness of the pipeline. 
+The next section describes some basic approaches to 
+plotting these data using the R programming language. All of the following
+commands are run in a R session with the working directory set as the base
+directory from which the tutorial is being run. In each of the plots
+that follow, the vertical blue lines indicate the position of the
+lactase gene (LCT).
 
+\subsubsection{Visualizing $F_{ST}$ values}
 
+\noindent
+Read in the $F_{ST}$ data:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUYRIfst=read.table("fst/2CEUYRI.fst", header=TRUE)
-# Plot FST 1 megabase each side of the lactase gene
-# Plot the weighted fst value for each region
+\end{minted}
+
+\noindent
+Plot the $F_{ST}$ results across a region 1 megabase on each side of
+the lactase gene.  Weighted $F_{ST}$ is being plotted in each case.\\
+\begin{minted}[bgcolor=bg,frame=lines]{r}
 plot(CEUYRIfst[,5]~CEUYRIfst[,2], pch=16, cex=.4, type="p",xlab='',ylab='FST') 
 rect(136545410,0,136594750,1,border="Blue") 
 \end{minted}
@@ -160,12 +308,26 @@ rect(136545410,0,136594750,1,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUYRI2.png}
-\caption{CEU YRI Fst Values}
+\caption{Values of $F_{ST}$ generated for comparing the YRI and CEU
+  populations across a ten megabase region around the LCT gene.}
 \label{fig:a}
 \end{figure}
-Figure~\ref{fig:a} shows clustering of high FST values close to the lactase gene plotting one megabase downstream and upstream either side of the gene. 
+
+\noindent
+Figure~\ref{fig:a} shows clustering of high $F_{ST}$ values close to
+the lactase gene plotting one megabase downstream and upstream either
+side of the gene. 
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - HOW INTERESTING IS THIS?  THERE
+  ARE A LOT OF APPARENT SPIKES. :)  Also, the axis labels for the graphs
+  could be improved by using the ``expression'' function in R.  Within
+  the plot command, ``ylab=expression(F[ST])'', will produce a
+  subscript for ``ST''. Also, a label is needed for the x axis (I'd
+  suggest ``Chromosome 2, position (bp)''). ***]}
+
 \subsubsection{Fay and Wu's H}
-To plot the Fay and Wu's H values for the CEU population.\\
+Plot the Fay and Wu's H values for the CEU population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUFay=read.table('CEU/results/CEU2.faw',comment.char="#")
 #Plot Fay and Wu's H
@@ -176,12 +338,18 @@ rect(136545410,-1000,136594750,100,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUFay.png}
-\caption{CEU Fay and Wu's H}
+\caption{Fay and Wu's H statistic in the CEU population, across a two
+  megabase region around the LCT gene.
+  {\bf\small\color{blue} [*** NEED X-AXIS LABEL.
+    Also, code for plot has blue rectangle extending down to
+    -1000, but figure only has it to -100: need to update figure. ***]}}
 \label{fig:fayceu}
 \end{figure}
-Figure~\ref{fig:fayceu} show the Fey and Wu's H statistic one megabase downstream and upstream of the lactase gene
 
-To plot the Fay and Wu's H values for the YRI population.\\
+\noindent
+Figure~\ref{fig:fayceu} shows the Fay and Wu's H statistic one
+megabase downstream and upstream of the lactase gene.  Plot the Fay
+and Wu's H values for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIFay=read.table('YRI/results/YRI2.faw',comment.char="#")
 #Plot Fay and Wu's H
@@ -192,13 +360,19 @@ rect(136545410,-1900,136594750,100,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/YRIFay.png}
-\caption{YRI Fay and Wu's H}
+\caption{Fay and Wu's H statistic in the YRI population, across a two
+  megabase region around the LCT gene. 
+  {\bf\small\color{blue} [*** NEED X-AXIS
+    LABEL. ***]}}
 \label{fig:fayyri}
 \end{figure}
-Figure~\ref{fig:fayyri} show the Fey and Wu's H statistic one megabase downstream and upstream of the lactase gene
+
+\noindent
+Figure~\ref{fig:fayyri} shows Fay and Wu's H statistic one megabase
+downstream and upstream of the lactase gene.
 
 \subsubsection{iHS}
-To plot the iHS values around the lactase gene for the CEU population.\\
+Plot the iHS values around the lactase gene for the CEU population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUihs = read.table('CEU/results/CEUchr2.ihs')
 #plot IHS pvalues
@@ -209,13 +383,14 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUihs.png}
-\caption{CEU IHS}
+\caption{iHS statistic in the CEU population, across a two megabase region around the LCT gene.  
+{\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
 \label{fig:ceuihs}
 \end{figure}
 
+\noindent
 Figure ~\ref{fig:ceuihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
-
-To plot the iHS values around the lactase gene for the YRI population.\\
+Plot the iHS values around the lactase gene for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIihs = read.table('YRI/results/YRIchr2.ihs')
 #plot IHS pvalues
@@ -226,18 +401,29 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/YRIihs.png}
-\caption{YRI IHS}
+\caption{iHS statistic in the YRI population, across a two megabase region around the LCT gene.  
+  {\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
 \label{fig:yriihs}
 \end{figure}
 
+\noindent
 Figure ~\ref{fig:yriihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
 
-To visualize individual snps, a haplotype bifurication diagram can be used \citep{Gautier:2012et}. The snp displayed a strong signal of selection using iHS. We construct a bifurcation diagram for both alleles at this snp. \\
+To visualize individual SNPs, a haplotype bifurication diagram can be
+used \citep{Gautier:2012et}. The SNP displayed a strong signal of
+selection using iHS. We construct a bifurcation diagram for both
+alleles at this SNP. \\
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - STILL NEED CODE FOR THIS (AND A
+  PLOT).  :) ***]}
+
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 # Plot  bifurcation diagram.
 
-
 \end{minted}
+
+
 \subsubsection{Tajima's D}
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
@@ -249,10 +435,13 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUtajimas.png}
-\caption{CEU Tajima's D}
+\caption{Tajima's D statistic in the CEU population, across a two
+  megabase region around the LCT gene.  
+  {\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
 \label{fig:tajceu}
 \end{figure}
 
+\noindent
 Figure~\ref{fig:tajceu} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the CEU population
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
@@ -264,15 +453,27 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUtajimas.png}
-\caption{YRI Tajima's D}
+\caption{Tajima's D statistic in the YRI population, across a two
+  megabase region around the LCT gene.  
+  {\bf\small\color{blue} [*** NEED BETTER AXISLABELS ***]}}
 \label{fig:tajyri}
 \end{figure}
 
+\noindent
 Figure~\ref{fig:tajyri} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the YRI population
 
-\subsubsection{Rsb}
+\subsubsection{rSB}
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - WHAT IS HAPPENING HERE? ***]}
 \begin{minted}[bgcolor=bg,frame=lines]{R}
 \end{minted}
+
+\noindent
+{\bf\small\color{blue} [*** THIS IS AS FAR AS I'VE EDITED (MIK - 1PM,
+  10 DEC 2013). ***]}
+
+\pagebreak
 \section{Output Files}
 The output files are preserved in the same state as the original output from the program used to generate the data.
 \subsection{multi\_population}

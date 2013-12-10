@@ -8,15 +8,15 @@
 \BOOKMARK [1][-]{section.3}{Tutorial}{}% 8
 \BOOKMARK [2][-]{subsection.3.1}{Selection Signatures at the Lactase Locus}{section.3}% 9
 \BOOKMARK [3][-]{subsubsection.3.1.1}{Getting the Data}{subsection.3.1}% 10
-\BOOKMARK [2][-]{subsection.3.2}{Setting up Pipeline Run}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.2}{Setting up the Pipeline Run}{section.3}% 11
 \BOOKMARK [2][-]{subsection.3.3}{Population Files}{section.3}% 12
 \BOOKMARK [2][-]{subsection.3.4}{Run The Tutorial}{section.3}% 13
 \BOOKMARK [2][-]{subsection.3.5}{Data Visualisation}{section.3}% 14
-\BOOKMARK [3][-]{subsubsection.3.5.1}{Fst}{subsection.3.5}% 15
+\BOOKMARK [3][-]{subsubsection.3.5.1}{Visualizing FST values}{subsection.3.5}% 15
 \BOOKMARK [3][-]{subsubsection.3.5.2}{Fay and Wu's H}{subsection.3.5}% 16
 \BOOKMARK [3][-]{subsubsection.3.5.3}{iHS}{subsection.3.5}% 17
 \BOOKMARK [3][-]{subsubsection.3.5.4}{Tajima's D}{subsection.3.5}% 18
-\BOOKMARK [3][-]{subsubsection.3.5.5}{Rsb}{subsection.3.5}% 19
+\BOOKMARK [3][-]{subsubsection.3.5.5}{rSB}{subsection.3.5}% 19
 \BOOKMARK [1][-]{section.4}{Output Files}{}% 20
 \BOOKMARK [2][-]{subsection.4.1}{multi\137population}{section.4}% 21
 \BOOKMARK [3][-]{subsubsection.4.1.1}{Fst}{subsection.4.1}% 22
