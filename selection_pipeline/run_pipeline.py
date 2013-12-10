@@ -163,9 +163,10 @@ class CommandTemplate(object):
             Reads the config file and gets the ancestral fasta file
             to be used for ancestral annotation.
         """
-        if('reference_fasta' in self.config['ancestral_allele'].keys()):
+        if( not self.config['ancestral_allele']['split_by_chromosome']):
             ancestral_fasta = \
-                self.config['ancestral_allele']['reference_fasta']
+                self.config['ancestral_allele']['ancestral_fasta_file']
+            regex = self.config['ancestral_allele']['ancestral_fasta_header_regex']
         else:
             for file in os.listdir(
                     self.config['ancestral_allele']['ancestral_fasta_dir']):
@@ -176,6 +177,7 @@ class CommandTemplate(object):
                     ancestral_fasta = os.path.join(
                         self.config['ancestral_allele']['ancestral_fasta_dir'],
                         file)
+            regex = None
         return ancestral_fasta
 
     def run_aa_annotate_haps(self, in_file, vcf=False):
@@ -195,11 +197,13 @@ class CommandTemplate(object):
             self.config['ancestral_allele']['ancestral_allele_script']
         cmd.append(py_executable)
         cmd.append(aa_annotate)
-        ancestral_fasta = self.get_ancestral_fasta()
+        (ancestral_fasta ,regex)= self.get_ancestral_fasta()
         cmd.extend(['-c', self.options.chromosome, '-o',
                    output_haps, '-a', ancestral_fasta])
-        if('reference_fasta' in self.config['ancestral_allele'].keys()):
-            cmd.append('--ref-fasta')
+        if(regex is not None):
+            cmd.extend(['--header-regex',regex])
+        else:
+            cmd.extend(['--single-chromosome'])
         if(vcf):
             cmd.extend(['-v', in_file, '-s', output_sample])
             return(cmd, output_haps, output_sample)
@@ -253,6 +257,25 @@ class CommandTemplate(object):
                    haps, '-s', new_sample_file, '-og', output_name])
         return (cmd, output_name)
 
+    def vcf_to_haps(self,vcf):
+        """ Return the template for running vcf to haps ( no annotation )
+
+        """
+        cmd = []
+        haps = self.options.output_prefix + \
+            self.options.chromosome + 'vcf_to_haps' + '.haps'    
+     
+        sample = self.options.output_prefix + \
+            self.options.chromosome + 'vcf_to_haps' + '.sample'    
+        py_executable = self.config['python']['python_executable']
+        aa_annotate = \
+            self.config['ancestral_allele']['ancestral_allele_script']
+        cmd.append(py_executable)
+        cmd.append(aa_annotate)
+        cmd.extend(['-c',self.options.chromosome, '-v', vcf, '-s', sample, '-o', 
+                   haps, '--no-annotation'])
+        return(cmd,sample,haps)
+
     def fix_vcf_qctool(self, vcf):
         """ Return the template for running fix vcf qctool
 
@@ -283,6 +306,10 @@ class CommandTemplate(object):
         haps_executable = self.config['variscan']['haps_to_hapmap_executable']
         (ancestral_fasta, regex) = self.get_ancestral_fasta()
         cmd.append(haps_executable)
+        if(regex is not None):
+            cmd.extend(['--header-regex',regex])
+        else:
+            cmd.extend(['--single-chromosome'])
         cmd.extend(['-i', haps, '-s', sample, '-o', output_name, '--id',
                    'ANCESTOR', '-a', ancestral_fasta, '-c',
                    self.options.chromosome])

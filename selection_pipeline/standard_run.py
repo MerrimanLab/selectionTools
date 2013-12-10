@@ -106,30 +106,27 @@ class StandardRun(CommandTemplate):
         """ Run pipeline runs the pipeline for a standard run
 
         """
+        vcf = self.run_remove_indels_from_vcf()
         if(self.options.phased_vcf):
-            vcf = self.run_remove_indels_from_vcf()
-            (haps, sample) = self.run_aa_annotate_haps(
-                vcf, vcf=True)
-            new_sample_file = self.fix_sample_file(sample)
-            ihh = self.run_multi_coreihh(haps)
-            tajimaSD = self.vcf_to_tajimas_d(vcf_input)
-            haps2_haps = self.prepare_haps_for_variscan(new_sample_file)
-            fayandwus = self.variscan_fayandwus(haps2_haps)
+            (haps, sample) = self.vcf_to_haps(vcf)
         else:
             (ped, map) = self.run_vcf_to_plink()
             (ped, map) = self.run_plink_filter(ped, map)
             (haps, sample) = self.run_shape_it(ped, map)
             if(self.options.imputation):
                 (haps) = self.run_impute2(haps)
-            haps = self.indel_filter(haps)
-            new_sample_file = self.fix_sample_file(sample)
-            vcf = self.haps_to_vcf(new_sample_file)
-            vcf = self.fix_vcf_qctool(vcf)
-            haps = self.run_aa_annotate_haps(haps)
-            haps2_haps = self.prepare_haps_for_variscan(new_sample_file)
-            fayandwus = self.variscan_fayandwus(self.config, haps2_haps)
-            tajimaSD = self.vcf_to_tajimas_d(vcf)
+                haps = self.indel_filter(haps)
+        # No more copy pasting of methods just one 
+        # set of calls to all the methods in order
+        new_sample_file = self.fix_sample_file(sample)
+        haps2_haps = self.prepare_haps_for_variscan(haps,new_sample_file)
+        fayandwus = self.variscan_fayandwus(self.config, haps2_haps)
+        vcf = self.haps_to_vcf(haps,new_sample_file)
+        vcf = self.fix_vcf_qctool(vcf)
+        haps = self.run_aa_annotate_haps(haps)
+        tajimaSD = self.vcf_to_tajimas_d(vcf)
         ihh = self.run_multi_coreihh(haps)
+        # Dealing with output
         ihs_file = ihh.split('.ihh')[0] + '.ihs'
         haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if not os.path.exists('results'):
@@ -160,8 +157,16 @@ class StandardRun(CommandTemplate):
 
         """
         (cmd,output_name) = super(StandardRun,self).run_remove_indels_from_vcf()
-        run_subprocess(cmd,'remove indels')
+        #run_subprocess(cmd,'remove indels')
         return(output_name)
+
+    def vcf_to_haps(self,vcf):
+        """ Run vcf to haps usng subprocess
+
+        """
+        (cmd,haps,sample) = super(StandardRun,self).vcf_to_haps(vcf)
+        #run_subprocess(cmd,'haps to vcf')
+        return(haps,sample)
 
     def run_vcf_to_plink(self):
         """ Run vcf to plink using subprocess

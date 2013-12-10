@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="MerrimanSelectionPipeline",
+    name="selectionTools",
     version="0.9",
     packages=find_packages(),
     author="James Boocock",

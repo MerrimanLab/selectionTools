@@ -157,8 +157,8 @@ def subset_vcf(vcf_input, config, populations):
             cmd.extend(['-f', '-c', comma_list_ids, vcf])
             stdouts.append(output_file)
             cmds.append(list(cmd))
-    queue_jobs(cmds, 'vcf-subset',
-               config['system']['cores_avaliable'], stdouts=stdouts)
+    #queue_jobs(cmds, 'vcf-subset',
+ #              config['system']['cores_avaliable'], stdouts=stdouts)
     cmds = []
     for key, value in vcf_dict.items():
         # generate the commands for vcf concat for each output file generated
@@ -167,15 +167,16 @@ def subset_vcf(vcf_input, config, populations):
         # Append to vcf_outputs
         vcf_outputs.append(output_file)
         if(len(value) == 1):
-            os.rename(value[0], output_file)
+            print('waa')
+            #os.rename(value[0], output_file)
         else:
             vcf_concat_executable = config['vcftools']['vcf_concat_executable']
             cmd.append(vcf_concat_executable)
             cmd.extend(value)
             cmds.append(list(cmd))
-    if(len(cmds) != 0):
-        queue_jobs(cmds, 'vcf-concat', config['system']['cores_avaliable'],
-                   stdouts=vcf_outputs)
+  #  if(len(cmds) != 0):
+  #      queue_jobs(cmds, 'vcf-concat', config['system']['cores_avaliable'],
+  #                 stdouts=vcf_outputs)
     # call the queue jobs to run vcf-subset
     # return the population concatenated vcf file
     return vcf_outputs
@@ -336,6 +337,7 @@ def main():
     fst_vcf(options.vcf_input, config, options, populations)
     output_vcfs = subset_vcf(options.vcf_input, config, populations)
     run_selection_pipeline(output_vcfs, options, populations, config)
+    # TODO move FST to here on filtered dataset
     rsb(config, options, populations)
     if not os.path.exists('logs'):
         os.mkdir('logs')

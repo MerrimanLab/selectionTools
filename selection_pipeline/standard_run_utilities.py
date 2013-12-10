@@ -131,6 +131,9 @@ def run_subprocess(
 	also creates a file for stderr and stdout if needed
 	to avoid deadlock. 
     """
+    # Very dirty hack 
+    if(tool== 'selection_pipeline'):
+        stderr = 'selection_stderr.tmp'
     if (working_dir is not None):
         orig_dir = os.getcwd()
         os.chdir(working_dir)

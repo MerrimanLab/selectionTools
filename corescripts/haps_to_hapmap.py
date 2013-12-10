@@ -48,7 +48,7 @@ def main():
     parser.add_option('-a',dest="ancestral_fasta",help="Outgroup fasta file")
     parser.add_option('--id',dest="ancestral_indivdual_id",help="Name of the ancestral Individual")
     parser.add_option('--header-regex',dest='header',
-                      help('To determine which chromosome to extract"
+                      help("To determine which chromosome to extract"
                       "is a regex with a ? for the chromosome number"))
     parser.add_option('--single-chromosome',action="store_true",dest="single_chromosome")
     if(options.single_chromosome is None):

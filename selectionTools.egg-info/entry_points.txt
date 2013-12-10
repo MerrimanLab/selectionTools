@@ -1,0 +1,5 @@
+[console_scripts]
+ancestral_annotation = selection_pipeline.aa_annotate:main
+multi_population = selection_pipeline.multipipeline:main
+selection_pipeline = selection_pipeline.selection_pipeline:main
+

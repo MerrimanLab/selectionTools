@@ -155,7 +155,6 @@ def parse_arguments():
             options.chromosome + "_selection_pipeline.log"
     if (options.impute_split_size is None):
         options.impute_split_size = str(5)
-    # TODO give sensible defaults kilobases ?
     if (options.multi_window_size is None):
         options.multi_window_size = str(5000000)
     if (options.ehh_overlap is None):

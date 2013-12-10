@@ -769,6 +769,10 @@ Option determines whether our ancestral fasta file is split by chromosome or not
 
 This options specifies a regular expression that will extract each chromosome from the fasta file. The '?' denotes the chromosome number and will be replaced in the regular expression for the chromosome number of interest. Even when using one fasta per chromosome this is required as the python library used to extract the sequence uses the fasta header for extraction. Only required if your fasta file is not split by chromosome.
 
+\item ancestral\_fasta\_file
+
+Ancestral fasta file used if the split\_by\_chromosome is set to false.
+
 \item ancestral\_allele\_script
 
 Location of the ancestral\_annotation script (aa\_annotate.py)

@@ -56,12 +56,7 @@ def aa_seq(options):
     aaSeq = f[key]
     return(aaSeq)
 
-
-def annotate_vcf(options):
-    if(options.output is not None):
-        output = open(options.output, 'w')
-    aaSeq = aa_seq(options)
-    vcf_reader = vcf.Reader(filename=options.vcf_file)
+def write_sample_file(options,vcf_reader):
     if(options.sample_file is not None):
         sample_file = open(options.sample_file, 'w')
         sample_header = ("ID_1 ID_2 missing father mother sex plink_pheno"
@@ -69,38 +64,66 @@ def annotate_vcf(options):
         sample_file.write(sample_header)
         for sample in vcf_reader.samples:
             sample_file.write(sample + ' ' + sample + ' 0 0 0 0 -9 ' + '\n')
-    for record in vcf_reader:
-        if(record.ID is not None):
-            line = (record.ID + ' ' + record.ID + ' ' + str(record.POS) +
-                    ' ' + str(record.REF) + ' ' + str(record.ALT[0]))
+        sample_file.close()
+def get_haps_line(options,record):
+    if(record.ID is not None):
+        line = (record.ID + ' ' + record.ID + ' ' + str(record.POS) +
+            ' ' + str(record.REF) + ' ' + str(record.ALT[0]))
+    else:
+        id = options.chromosome + ":" + str(record.POS)
+        line = (id + ' ' + id + ' ' + str(record.POS) + ' ' +
+                str(record.REF) + ' ' + str(record.ALT[0]))
+
+    for samples in record.samples:
+        gt = samples['GT']
+        # Need to skip any snps that have any missing phase data to
+        # increase certainty of our results.
+        # If every snp will indeed be phased
+        if('|' in gt):
+            gtSplit = gt.split('|')
+            line = line + ' ' + gtSplit[0] + ' ' + gtSplit[1]
         else:
-            id = options.chromosome + ":" + str(record.POS)
-            line = (id + ' ' + id + ' ' + str(record.POS) + ' ' +
-                    str(record.REF) + ' ' + str(record.ALT[0]))
-        for samples in record.samples:
-            gt = samples['GT']
-            # Need to skip any snps that have any missing phase data to
-            # increase certainty of our results.
-            # If every snp will indeed be phased
-            if('|' in gt):
-                gtSplit = gt.split('|')
-                line = line + ' ' + gtSplit[0] + ' ' + gtSplit[1]
-            else:
-                line = line + '- -'
-                break
+            line = line + '- -'
+            break
+    return line
+
+def write_hap_line(options,output_line,output=None):
+    if(output_line is not None):
+        if (options.output is not None):
+                output.write(output_line + "\n")
+        else:
+                print(output_line)
+
+
+def close_files(options,output=None):
+    if(options.output is not None):
+        output.close()
+
+def vcf_to_haps(options):
+    if(options.output is not None):
+        output = open(options.output, 'w')
+    else:
+        output = None
+    vcf_reader = vcf.Reader(filename=options.vcf_file)
+    write_sample_file(options,vcf_reader)
+    for record in vcf_reader:
+        write_hap_line(options,get_haps_line(options,record),output)
+    close_files(options,output)
+        
+
+def annotate_vcf(options):
+    if(options.output is not None):
+        output = open(options.output, 'w')
+    else:
+        output = None
+    aaSeq = aa_seq(options)
+    for record in vcf_reader:
+        line = get_haps_line(options,record)
         if(line is not None):
             output_line = aa_check(aaSeq[record.POS], record.REF,
                                    record.ALT, options.format, line)
-            if(output_line is not None):
-                if (options.output is not None):
-                        output.write(output_line + "\n")
-                else:
-                        print(output_line)
-    if(options.output is not None):
-        output.close()
-    if(options.sample_file is not None):
-        sample_file.close()
-
+            write_hap_line(options,output_line,output)
+    close_files(options,output)
 
 def aa_check(realAA, ref, alt, format, line):
     if(re.match('[ACTGactg]', realAA)):
@@ -174,7 +197,11 @@ def main():
     parser.add_option('--header-regex',dest="header",
                       help=("To determine which chromosome to extract "
                       "is a regex with a ? for the chromosome number"))
-    parser.add_option('--single-chromosome',action='store_true',dest='single_chromosome') 
+    parser.add_option('--single-chromosome',action='store_true',dest='single_chromosome')
+    parser.add_option('--no-annotation',action="store_true",
+                      dest="no_annotation",
+                      help=("No annotation of VCF file just"
+                            " convert to haps"))
     (options, args) = parser.parse_args()
     if(options.format is None):
         options.format = 'lower'
@@ -186,7 +213,10 @@ def main():
     if(options.haps is not None):
         annotate_haps(options)
     elif(options.vcf_file is not None):
-        annotate_vcf(options)
+        if(options.no_annotation is None):
+            annotate_vcf(options)
+        else:
+            vcf_to_haps(options)
     if(options.single_chromosome is None):
         options.single_chromosome = False
         assert options.header is None, \

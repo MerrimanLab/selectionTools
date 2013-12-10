@@ -1,0 +1,16 @@
+setup.py
+selectionTools.egg-info/PKG-INFO
+selectionTools.egg-info/SOURCES.txt
+selectionTools.egg-info/dependency_links.txt
+selectionTools.egg-info/entry_points.txt
+selectionTools.egg-info/not-zip-safe
+selectionTools.egg-info/top_level.txt
+selection_pipeline/__init__.py
+selection_pipeline/aa_annotate.py
+selection_pipeline/environment.py
+selection_pipeline/multipipeline.py
+selection_pipeline/run_pipeline.py
+selection_pipeline/selection_pipeline.py
+selection_pipeline/standard_run.py
+selection_pipeline/standard_run_utilities.py
+selection_pipeline/version.py
