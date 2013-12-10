@@ -199,7 +199,7 @@ def run_subprocess(
     if(stdout is None):
         os.remove('stdout.tmp')
     elif(stdoutlog):
-        os.remove(stdout)
+        os.remove(standard_out.name)
     os.remove(stderr)
     if (working_dir is not None):
         os.chdir(orig_dir)

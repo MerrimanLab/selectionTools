@@ -222,8 +222,8 @@ those of European ancestory \citep{lactase2004}.
 \begin{minted}[bgcolor=bg]{bash}
 wget https://github.com/smilefreak/SelectionPipelineTestData/blob/master/selection_pipeline_tutorial.tar.gz
 \end{minted}
-Extract the example data into a new folder.
 
+Extract the example data into a new folder.
 
 \subsection{Setting up the Pipeline Run}
 \subsection{Population Files}
@@ -647,6 +647,10 @@ Sample file output name ( currently only works with phased vcf option)
 
 Compulsory argument it is a regex with a question mark denoting substitution for the chromosome number. The regex should match the header in the fasta file and when the question mark is replaced selectively return only the chromosome of interest. Optional for single chromosome fasta files.
 
+\item --single-chromosome
+
+Single chromosome pipeline run option.
+
 \item -c <chromosome number>
 
 The number or symbol of the chromosome being used.
@@ -655,7 +659,7 @@ The number or symbol of the chromosome being used.
 
 The 6-way EPO alignment denotes ancestral alleles with both high and low confidence. To use only ancestral alleles with high confidence use --format upper. To use both high and low confident alleles use --format lower. By default the program will use only highly confident alleles. The highly confident alleles are in uppercase. 
 
-By default it uses all the valid bases in the file an of ATCGatcg.
+By default it uses all the valid bases in the file that are one  of either A,T,C,G,a,t,c or g.
 
 \end{itemize}
 \subsection{Configuration File}
@@ -812,7 +816,7 @@ In the -a argument for multi\_population merely add --phased-vcf between the quo
 
 To run the pipeline you will need to merge the VCF-files into one large multipopulation VCF file and generate the appropriate population files. 
 
-To merge your vcfs you can use the vcf-merge program for this to work correctly outside the selection pipeline you will need to add the following to your .bashrc file.\\
+To merge your vcfs you can use the vcf-merge program for this to work correctly outside the selection pipeline you will need to add the following to your .bashrc file or equivalent dot-file for another shell.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 
 export PERL5LIB=\${PERL5LIB}:<path to selection pipeline>/lib/perl5

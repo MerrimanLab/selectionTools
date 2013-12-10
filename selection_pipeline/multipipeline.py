@@ -306,7 +306,9 @@ def main():
     if options.config_file is None:
         options.config_file = 'defaults.cfg'
         if not(os.path.isfile(options.config_file)):
-                sys.exit(CANNOT_FIND_CONFIG)
+            raise Exception("Cannot find config file")
+    elif not(os.path.isfile(options.config_file)):
+        raise Exception("Cannot find config file")
     config = parse_config(options)
     if options.log_file is None:
         options.log_file = 'multi_population.log'
