@@ -165,7 +165,7 @@ def run_subprocess(
     standard_out.close()
     standard_err = open(stderr,'r')
     if(exit_code.returncode != 0):
-        logger.error(tool + "failed to run " +  ' '.join(command))
+        logger.error(tool + " failed to run " +  ' '.join(command))
         while True:
             line = standard_err.readline() 
             if not line:

@@ -265,10 +265,8 @@ class CommandTemplate(object):
      
         sample = self.options.output_prefix + \
             self.options.chromosome + 'vcf_to_haps' + '.sample'    
-        py_executable = self.config['python']['python_executable']
         aa_annotate = \
             self.config['ancestral_allele']['ancestral_allele_script']
-        cmd.append(py_executable)
         cmd.append(aa_annotate)
         cmd.extend(['-c',self.options.chromosome, '-v', vcf, '-s', sample, '-o', 
                    haps, '--no-annotation'])

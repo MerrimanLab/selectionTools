@@ -165,7 +165,7 @@ class StandardRun(CommandTemplate):
 
         """
         (cmd,haps,sample) = super(StandardRun,self).vcf_to_haps(vcf)
-        run_subprocess(cmd,'haps to vcf')
+        run_subprocess(cmd,'vcf to haps')
         return(haps,sample)
 
     def run_vcf_to_plink(self):
