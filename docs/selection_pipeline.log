@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/MacPorts 2013_4) (format=pdflatex 2013.11.14)  10 DEC 2013 09:28
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/MacPorts 2013_4) (format=pdflatex 2013.11.14)  10 DEC 2013 13:10
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -809,12 +809,34 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 206--212
+Underfull \hbox (badness 10000) in paragraph at lines 197--207
+
+ []
+
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
+= ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
+d.
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 208--215
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 216--227
+Overfull \hbox (2.3038pt too wide) in paragraph at lines 219--230
+\T1/cmr/m/n/10 In hu-mans, lac-tase is en-coded by the LCT gene, which is lo-ca
+ted on Chro-mo-some 2 at the co-or-di-nates: 136,545,410-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 219--230
 
  []
 
@@ -828,25 +850,8 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 241--246
-
- []
-
-[5]
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
-= ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
-d.
-
- (./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 253--254
+ [5]
+Underfull \hbox (badness 10000) in paragraph at lines 244--249
 
  []
 
@@ -861,6 +866,75 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 256--257
+
+ []
+
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
+= ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
+d.
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--267
+
+ []
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 292.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `subscript' on input line 292.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 292.
+
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
+frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 294--299
+
+ []
+
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
+frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 300--307
+
+ []
+
+[6] <pictures/CEUYRI2.png, id=391, 481.8pt x 481.8pt>
+File: pictures/CEUYRI2.png Graphic file (type png)
+
+<use pictures/CEUYRI2.png>
+Package pdftex.def Info: pictures/CEUYRI2.png used on input line 310.
+(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
@@ -872,133 +946,97 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 273--274
+<pictures/CEUFay.png, id=393, 481.8pt x 481.8pt>
+File: pictures/CEUFay.png Graphic file (type png)
+ <use pictures/CEUFay.png>
+Package pdftex.def Info: pictures/CEUFay.png used on input line 340.
+(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
+frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
+
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+<pictures/YRIFay.png, id=395, 481.8pt x 481.8pt>
+File: pictures/YRIFay.png Graphic file (type png)
+ <use pictures/YRIFay.png>
+Package pdftex.def Info: pictures/YRIFay.png used on input line 362.
+(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
+frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
+
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 375--382
 
  []
 
-<pictures/CEUYRI2.png, id=387, 481.8pt x 481.8pt>
-File: pictures/CEUYRI2.png Graphic file (type png)
- <use pictures/CEUYRI2.png>
-Package pdftex.def Info: pictures/CEUYRI2.png used on input line 277.
+<pictures/CEUihs.png, id=397, 481.8pt x 481.8pt>
+File: pictures/CEUihs.png Graphic file (type png)
+ <use pictures/CEUihs.png>
+Package pdftex.def Info: pictures/CEUihs.png used on input line 385.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
+\openout3 = `selection_pipeline.pyg'.
 
-[6] [7pdfTeX warning (ext4): destination with the same identifier (name{figure.
+runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
+frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
+
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 391--400
+
+ []
+
+[7] [8pdfTeX warning (ext4): destination with the same identifier (name{figure.
 1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.282 \subsubsection{Fay and Wu's H}
-                                     <./pictures/CEUYRI2.png>]
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-<pictures/CEUFay.png, id=400, 481.8pt x 481.8pt>
-File: pictures/CEUFay.png Graphic file (type png)
- <use pictures/CEUFay.png>
-Package pdftex.def Info: pictures/CEUFay.png used on input line 293.
-(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-<pictures/YRIFay.png, id=402, 481.8pt x 481.8pt>
-File: pictures/YRIFay.png Graphic file (type png)
- <use pictures/YRIFay.png>
-Package pdftex.def Info: pictures/YRIFay.png used on input line 309.
-(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
-
-[8pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
-has been already used, duplicate ignored
+l.400 
+       <./pictures/CEUYRI2.png>] [9pdfTeX warning (ext4): destination with the 
+same identifier (name{figure.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.314 
-       <./pictures/CEUFay.png>]
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
- (./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 316--323
-
- []
-
-[9pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
-has been already used, duplicate ignored
+l.400 
+       <./pictures/CEUFay.png>] [10pdfTeX warning (ext4): destination with the 
+same identifier (name{figure.3}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.323 
-       <./pictures/YRIFay.png>]
-<pictures/CEUihs.png, id=416, 481.8pt x 481.8pt>
-File: pictures/CEUihs.png Graphic file (type png)
- <use pictures/CEUihs.png>
-Package pdftex.def Info: pictures/CEUihs.png used on input line 326.
-(pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 333--340
-
- []
-
-[10pdfTeX warning (ext4): destination with the same identifier (name{figure.4})
- has been already used, duplicate ignored
+l.400 
+       <./pictures/YRIFay.png>] [11pdfTeX warning (ext4): destination with the 
+same identifier (name{figure.4}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.340 
+l.400 
        <./pictures/CEUihs.png>]
-<pictures/YRIihs.png, id=424, 481.8pt x 481.8pt>
+<pictures/YRIihs.png, id=428, 481.8pt x 481.8pt>
 File: pictures/YRIihs.png Graphic file (type png)
  <use pictures/YRIihs.png>
-Package pdftex.def Info: pictures/YRIihs.png used on input line 343.
+Package pdftex.def Info: pictures/YRIihs.png used on input line 403.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
-\openout3 = `selection_pipeline.pyg'.
 
-runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
-frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
-
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 350--356
+Underfull \hbox (badness 10000) in paragraph at lines 412--416
 
  []
 
@@ -1013,22 +1051,30 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--363
+Underfull \hbox (badness 10000) in paragraph at lines 424--425
 
  []
 
-[11pdfTeX warning (ext4): destination with the same identifier (name{figure.5})
- has been already used, duplicate ignored
+\openout3 = `selection_pipeline.pyg'.
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.363 
-       <./pictures/YRIihs.png>]
-<pictures/CEUtajimas.png, id=434, 481.8pt x 481.8pt>
+runsystem(pygmentize -l r -f latex -F tokenmerge             -P "verboptions= ,
+frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed.
+
+(./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 433--434
+
+ []
+
+<pictures/CEUtajimas.png, id=432, 481.8pt x 481.8pt>
 File: pictures/CEUtajimas.png Graphic file (type png)
 
 <use pictures/CEUtajimas.png>
-Package pdftex.def Info: pictures/CEUtajimas.png used on input line 366.
+Package pdftex.def Info: pictures/CEUtajimas.png used on input line 437.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
 \openout3 = `selection_pipeline.pyg'.
 
@@ -1041,28 +1087,14 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 377--378
+Underfull \hbox (badness 10000) in paragraph at lines 451--452
 
  []
 
 File: pictures/CEUtajimas.png Graphic file (type png)
 <use pictures/CEUtajimas.png>
-Package pdftex.def Info: pictures/CEUtajimas.png used on input line 381.
+Package pdftex.def Info: pictures/CEUtajimas.png used on input line 455.
 (pdftex.def)             Requested size: 481.79881pt x 481.79881pt.
- [12pdfTeX warning (ext4): destination with the same identifier (name{figure.6}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.388 \subsubsection{Rsb}
-                          <./pictures/CEUtajimas.png>] [13pdfTeX warning (ext4)
-: destination with the same identifier (name{figure.7}) has been already used, 
-duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.388 \subsubsection{Rsb}
-                         ]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l R -f latex -F tokenmerge             -P "verboptions= ,
@@ -1073,20 +1105,40 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
 
+ [12] [13pdfTeX warning (ext4): destination with the same identifier (name{figu
+re.5}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.477 \section
+              {Output Files} <./pictures/YRIihs.png>] [14pdfTeX warning (ext4):
+ destination with the same identifier (name{figure.6}) has been already used, d
+uplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.477 \section
+              {Output Files} <./pictures/CEUtajimas.png>] [15pdfTeX warning (ex
+t4): destination with the same identifier (name{figure.7}) has been already use
+d, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.477 \section
+              {Output Files}]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l rst -f latex -F tokenmerge             -P "verboptions=
  ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...executed
 .
 
-
-(./selection_pipeline.out.pyg)
+ (./selection_pipeline.out.pyg)
 runsystem(rm selection_pipeline.out.pyg)...executed.
 
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--400
+Underfull \hbox (badness 10000) in paragraph at lines 481--486
 
  []
 
@@ -1102,7 +1154,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 403--408
+Underfull \hbox (badness 10000) in paragraph at lines 489--494
 
  []
 
@@ -1118,7 +1170,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 409--414
+Underfull \hbox (badness 10000) in paragraph at lines 495--500
 
  []
 
@@ -1134,7 +1186,7 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 415--420
+Underfull \hbox (badness 10000) in paragraph at lines 501--506
 
  []
 
@@ -1150,33 +1202,17 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 421--426
+Underfull \hbox (badness 10000) in paragraph at lines 507--512
 
  []
 
-[14] [15] [16] [17] [18] [19] [20]
-Overfull \hbox (5.43881pt too wide) in paragraph at lines 686--687
+[16] [17] [18] [19] [20] [21]
+Overfull \hbox (5.43881pt too wide) in paragraph at lines 772--773
 \T1/cmr/m/n/10 Voight's pa-per. If the EHH > 0.05 reaches the end of a chro-mo-
 some or the start of a gap > big_gap_threshold
  []
 
-\openout3 = `selection_pipeline.pyg'.
-
-runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
-= ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
-d.
-
-(./selection_pipeline.out.pyg)
-runsystem(rm selection_pipeline.out.pyg)...executed.
-
-runsystem(rm selection_pipeline.pyg)...executed.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 709--715
-
- []
-
-[21]
+[22]
 \openout3 = `selection_pipeline.pyg'.
 
 runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
@@ -1189,7 +1225,24 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 722--723
+Underfull \hbox (badness 10000) in paragraph at lines 795--801
+
+ []
+
+[23]
+\openout3 = `selection_pipeline.pyg'.
+
+runsystem(pygmentize -l bash -f latex -F tokenmerge             -P "verboptions
+= ,frame=lines" -o selection_pipeline.out.pyg selection_pipeline.pyg)...execute
+d.
+
+ (./selection_pipeline.out.pyg)
+runsystem(rm selection_pipeline.out.pyg)...executed.
+
+runsystem(rm selection_pipeline.pyg)...executed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 808--809
 
  []
 
@@ -1205,38 +1258,48 @@ runsystem(rm selection_pipeline.out.pyg)...executed.
 runsystem(rm selection_pipeline.pyg)...executed.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 732--733
+Underfull \hbox (badness 10000) in paragraph at lines 818--819
 
  []
 
-[22] (./selection_pipeline.bbl)
+[24] (./selection_pipeline.bbl)
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 741.
-[23
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 827.
+[25
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 741.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 827.
  (./selection_pipeline.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 741.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 741.
-Package rerunfilecheck Info: File `selection_pipeline.out' has not changed.
-(rerunfilecheck)             Checksum: AF4E759333AB9E3AECEA66A367EAE215;4160.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 741.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 827.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 827.
+
+
+Package rerunfilecheck Warning: File `selection_pipeline.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `selection_pipeline.out':
+(rerunfilecheck)             Before: AF4E759333AB9E3AECEA66A367EAE215;4160
+(rerunfilecheck)             After:  AA20889B913596AA8534F5ADB1FDDEC0;4183.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 827.
  )
 (\end occurred inside a group at level 1)
 
 ### semi simple group (level 1) entered at line 45 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 9637 strings out of 494735
- 138120 string characters out of 6171705
+ 9643 strings out of 494735
+ 138242 string characters out of 6171705
  237949 words of memory out of 5000000
  12586 multiletter control sequences out of 15000+600000
  15397 words of font info for 36 fonts, out of 8000000 for 9000
  134 hyphenation exceptions out of 8191
- 31i,7n,40p,754b,679s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,7n,40p,828b,679s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/opt/local/share/texmf-texlive/fonts/enc/dvips/cm-super/cm-sup
 er-t1.enc}</opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10
 .pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb><
@@ -1253,10 +1316,10 @@ super/sfrm1000.pfb></opt/local/share/texmf-texlive/fonts/type1/public/cm-super/
 sfrm1200.pfb></opt/local/share/texmf-texlive/fonts/type1/public/cm-super/sfti10
 00.pfb></opt/local/share/texmf-texlive/fonts/type1/public/cm-super/sftt1000.pfb
 >
-Output written on selection_pipeline.pdf (23 pages, 366548 bytes).
+Output written on selection_pipeline.pdf (25 pages, 377123 bytes).
 PDF statistics:
- 571 PDF objects out of 1000 (max. 8388607)
- 513 compressed objects within 6 object streams
- 105 named destinations out of 1000 (max. 500000)
+ 580 PDF objects out of 1000 (max. 8388607)
+ 520 compressed objects within 6 object streams
+ 107 named destinations out of 1000 (max. 500000)
  519 words of extra memory for PDF output out of 10000 (max. 10000000)
 

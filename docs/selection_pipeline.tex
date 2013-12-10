@@ -41,7 +41,7 @@
 \renewcommand\Authands{ and }
 \begin{document}
 
-\maketitle{}
+\maketitle{}\textmd{}
 \spacing{1.5}
 %\doublespacing
 \tableofcontents
@@ -201,8 +201,11 @@ downloaded from
 \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. Be
 sure to extract contents of the archive after download. The default
 directory to store the ancestral reference files is
-referencefiles/ancestral\_ref/.
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+referencefiles/ancestral_ref/.
+\end{minted}
 
+\noindent
 If you downloaded your reference to a different location you can alter the following setting in your config file.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
@@ -213,7 +216,7 @@ ancestral_fasta_dir = # directory you downloaded alignment to #
 \section{Tutorial}
 \subsection{Selection Signatures at the Lactase Locus}
 \subsubsection{Getting the Data}
-In humans, the lactase is encoded by the LCT gene, which is located on
+In humans, lactase is encoded by the LCT gene, which is located on
 Chromosome 2 at the coordinates:
 136,545,410-136,594,750. For this example we will use a 10
 megabase region containing the LCT, and genotype data from the CEU and YRI
@@ -236,12 +239,12 @@ Extract the example data into a new folder.
 
 
 
-\subsection{Setting up Pipeline Run}
+\subsection{Setting up the Pipeline Run}
 \subsection{Population Files}
 Population files are required for any cross population
 comparisions. The commands below will initiate the data generation
-step. Population files are line seperated files the first line
-contains the population name every successive line contains and
+step. Population files are line seperated files, where the first line
+contains the population name, and every successive line contains an
 individual ID from that population.\\
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
@@ -252,22 +255,52 @@ individual ID from that population.\\
 <INDIVIDUAL ID N>
 \end{minted}
 \subsection{Run The Tutorial}
-The default configuration file is located in the base directory of the selection pipeline. To run the pipeline run the command below in the folder you extracted the example data and change the --config-file parameter to match the location you have installed the pipeline.\\
+The default configuration file is located in the base directory of the
+selection pipeline. To run the pipeline, execute the command below in
+the folder in which the exaple data were extracted, and change the
+--config-file parameter to match the location where the pipeline is installed.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-multipop\_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt 
+multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt 
 -i CEU_YRI_lactase.vcf --config-file defaults.cfg
 --fst-window-size 1000 --fst-window-step 1000
 \end{minted}
-The generated folders and current folder have all the data required to perform further selection analysis. Within each population folder 4 output files are generated these contain Tajima's D, iHH, an updated VCF and Fay and Wu's H statistic these files are located in the results folder inside each population subfolder. Fst is calculated between each population and results are located in the fst folder. Fst results are calculated using the Weir and Cockerham estimator.
+
+\noindent
+The generated folders and current folder have all the data required to
+perform further selection analysis. Within each population folder four
+output files are generated.  These contain Tajima's D, iHH, an updated
+VCF, and Fay and Wu's H statistic. The files are located in the
+results folder inside each population subfolder. $F_{ST}$ is calculated
+between each population and results are located in the fst folder. $F_{ST}$
+results are calculated using the Weir and Cockerham estimator.
+
 \subsection{Data Visualisation}
-The purpose of the pipeline is to generate standard signatures of selection from a VCF formatted input file. In order to express the usefulness of the pipeline it is pertinent to illustrate the effectiveness of the pipeline. The next section describes some basic plotting of these data using the R programming language. All following commands are run in a R session with the working directory in the base directory you are running the tutorial in. In each case the blue lines outline the lactase gene.
-\subsubsection{Fst}
+The purpose of the analysis pipeline is to generate standard signatures of
+selection from a VCF formatted input file. In order to assist with
+exploring/interpretting the results, visualization of the pipeline
+output can be extrenely useful.
+%In order to express the
+%usefulness of the pipeline it is pertinent to illustrate the
+%effectiveness of the pipeline. 
+The next section describes some basic approaches to 
+plotting these data using the R programming language. All of the following
+commands are run in a R session with the working directory set as the base
+directory from which the tutorial is being run. In each of the plots
+that follow, the vertical blue lines indicate the position of the
+lactase gene (LCT).
 
+\subsubsection{Visualizing $F_{ST}$ values}
 
+\noindent
+Read in the $F_{ST}$ data:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUYRIfst=read.table("fst/2CEUYRI.fst", header=TRUE)
-# Plot FST 1 megabase each side of the lactase gene
-# Plot the weighted fst value for each region
+\end{minted}
+
+\noindent
+Plot the $F_{ST}$ results across a region 1 megabase on each side of
+the lactase gene.  Weighted $F_{ST}$ is being plotted in each case.\\
+\begin{minted}[bgcolor=bg,frame=lines]{r}
 plot(CEUYRIfst[,5]~CEUYRIfst[,2], pch=16, cex=.4, type="p",xlab='',ylab='FST') 
 rect(136545410,0,136594750,1,border="Blue") 
 \end{minted}
@@ -275,12 +308,26 @@ rect(136545410,0,136594750,1,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUYRI2.png}
-\caption{CEU YRI Fst Values}
+\caption{Values of $F_{ST}$ generated for comparing the YRI and CEU
+  populations across a ten megabase region around the LCT gene.}
 \label{fig:a}
 \end{figure}
-Figure~\ref{fig:a} shows clustering of high FST values close to the lactase gene plotting one megabase downstream and upstream either side of the gene. 
+
+\noindent
+Figure~\ref{fig:a} shows clustering of high $F_{ST}$ values close to
+the lactase gene plotting one megabase downstream and upstream either
+side of the gene. 
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - HOW INTERESTING IS THIS?  THERE
+  ARE A LOT OF APPARENT SPIKES. :)  Also, the axis labels for the graphs
+  could be improved by using the ``expression'' function in R.  Within
+  the plot command, ``ylab=expression(F[ST])'', will produce a
+  subscript for ``ST''. Also, a label is needed for the x axis (I'd
+  suggest ``Chromosome 2, position (bp)''). ***]}
+
 \subsubsection{Fay and Wu's H}
-To plot the Fay and Wu's H values for the CEU population.\\
+Plot the Fay and Wu's H values for the CEU population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUFay=read.table('CEU/results/CEU2.faw',comment.char="#")
 #Plot Fay and Wu's H
@@ -291,12 +338,18 @@ rect(136545410,-1000,136594750,100,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUFay.png}
-\caption{CEU Fay and Wu's H}
+\caption{Fay and Wu's H statistic in the CEU population, across a two
+  megabase region around the LCT gene.
+  {\bf\small\color{blue} [*** NEED X-AXIS LABEL.
+    Also, code for plot has blue rectangle extending down to
+    -1000, but figure only has it to -100: need to update figure. ***]}}
 \label{fig:fayceu}
 \end{figure}
-Figure~\ref{fig:fayceu} show the Fey and Wu's H statistic one megabase downstream and upstream of the lactase gene
 
-To plot the Fay and Wu's H values for the YRI population.\\
+\noindent
+Figure~\ref{fig:fayceu} shows the Fay and Wu's H statistic one
+megabase downstream and upstream of the lactase gene.  Plot the Fay
+and Wu's H values for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIFay=read.table('YRI/results/YRI2.faw',comment.char="#")
 #Plot Fay and Wu's H
@@ -307,13 +360,19 @@ rect(136545410,-1900,136594750,100,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/YRIFay.png}
-\caption{YRI Fay and Wu's H}
+\caption{Fay and Wu's H statistic in the YRI population, across a two
+  megabase region around the LCT gene. 
+  {\bf\small\color{blue} [*** NEED X-AXIS
+    LABEL. ***]}}
 \label{fig:fayyri}
 \end{figure}
-Figure~\ref{fig:fayyri} show the Fey and Wu's H statistic one megabase downstream and upstream of the lactase gene
+
+\noindent
+Figure~\ref{fig:fayyri} shows Fay and Wu's H statistic one megabase
+downstream and upstream of the lactase gene.
 
 \subsubsection{iHS}
-To plot the iHS values around the lactase gene for the CEU population.\\
+Plot the iHS values around the lactase gene for the CEU population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUihs = read.table('CEU/results/CEUchr2.ihs')
 #plot IHS pvalues
@@ -324,13 +383,14 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUihs.png}
-\caption{CEU IHS}
+\caption{iHS statistic in the CEU population, across a two megabase region around the LCT gene.  
+{\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
 \label{fig:ceuihs}
 \end{figure}
 
+\noindent
 Figure ~\ref{fig:ceuihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
-
-To plot the iHS values around the lactase gene for the YRI population.\\
+Plot the iHS values around the lactase gene for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIihs = read.table('YRI/results/YRIchr2.ihs')
 #plot IHS pvalues
@@ -341,18 +401,29 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/YRIihs.png}
-\caption{YRI IHS}
+\caption{iHS statistic in the YRI population, across a two megabase region around the LCT gene.  
+  {\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
 \label{fig:yriihs}
 \end{figure}
 
+\noindent
 Figure ~\ref{fig:yriihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
 
-To visualize individual snps, a haplotype bifurication diagram can be used \citep{Gautier:2012et}. The snp displayed a strong signal of selection using iHS. We construct a bifurcation diagram for both alleles at this snp. \\
+To visualize individual SNPs, a haplotype bifurication diagram can be
+used \citep{Gautier:2012et}. The SNP displayed a strong signal of
+selection using iHS. We construct a bifurcation diagram for both
+alleles at this SNP. \\
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - STILL NEED CODE FOR THIS (AND A
+  PLOT).  :) ***]}
+
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 # Plot  bifurcation diagram.
 
-
 \end{minted}
+
+
 \subsubsection{Tajima's D}
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
@@ -364,10 +435,13 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUtajimas.png}
-\caption{CEU Tajima's D}
+\caption{Tajima's D statistic in the CEU population, across a two
+  megabase region around the LCT gene.  
+  {\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
 \label{fig:tajceu}
 \end{figure}
 
+\noindent
 Figure~\ref{fig:tajceu} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the CEU population
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
@@ -379,15 +453,27 @@ rect(136545410,-10,136594750,10,border="Blue")
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUtajimas.png}
-\caption{YRI Tajima's D}
+\caption{Tajima's D statistic in the YRI population, across a two
+  megabase region around the LCT gene.  
+  {\bf\small\color{blue} [*** NEED BETTER AXISLABELS ***]}}
 \label{fig:tajyri}
 \end{figure}
 
+\noindent
 Figure~\ref{fig:tajyri} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the YRI population
 
-\subsubsection{Rsb}
+\subsubsection{rSB}
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - WHAT IS HAPPENING HERE? ***]}
 \begin{minted}[bgcolor=bg,frame=lines]{R}
 \end{minted}
+
+\noindent
+{\bf\small\color{blue} [*** THIS IS AS FAR AS I'VE EDITED (MIK - 1PM,
+  10 DEC 2013). ***]}
+
+\pagebreak
 \section{Output Files}
 The output files are preserved in the same state as the original output from the program used to generate the data.
 \subsection{multi\_population}
