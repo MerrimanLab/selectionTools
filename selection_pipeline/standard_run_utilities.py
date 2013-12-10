@@ -144,7 +144,6 @@ def run_subprocess(
             standard_out = open('stdout.tmp','w')
             exit_code = subprocess.Popen(
                 command,stderr=standard_out,stdout=standard_err)
-            standard_out.close()
         else:
         # find out what kind of exception to try here
             if(hasattr(stdout,'read')):
@@ -154,12 +153,13 @@ def run_subprocess(
                 stdout=open(stdout,'w')
                 exit_code = subprocess.Popen(
                     command,stdout=stdout,stderr=standard_err)
-                stdout.close()  
+            standard_out = stdout
     except:
         logger.error(tool + " failed to run " + ' '.join(command))
         sys.exit(SUBPROCESS_FAILED_EXIT)
-    standard_err.close()
     exit_code.wait()
+    standard_err.close()
+    standard_out.close()
     standard_err = open(stderr,'r')
     if(exit_code.returncode != 0):
         logger.error(tool + "failed to run " +  ' '.join(command))
@@ -174,10 +174,7 @@ def run_subprocess(
         standard_out = open('stdout.tmp', 'r')  
         stdout_log = True
     elif(stdoutlog):
-        if(hasattr(stdout,'write')):
-            standard_out = stdout
-        else:
-            standard_out = open(stdout, 'r')  
+        standard_out = open(stdout, 'r')  
         stdout_log = True
     if(stdout_log):
         while True:
@@ -195,7 +192,6 @@ def run_subprocess(
     standard_err.close()
     # Removed stdout if it either was not specified
     # or the log was specified.
-    standard_err.close()
     if(stdout is None):
         os.remove('stdout.tmp')
     elif(stdoutlog):

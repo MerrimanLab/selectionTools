@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{article}
+[a4paper,10pt]{article}
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -334,15 +334,15 @@ Integer for the chromosome being used.
 Quoted string containing any extra arguments to the selection\_pipeline program. e.g "--imputation"
 \item --config-file <path to config file>\\
 Path to the selection pipeline config file an example config file is located in the base directory of the extracted package.
-\item --no-clean-up\\ 
-Do not clean up intermediate data files.
 \end{itemize}
 \subsubsection{Other parameters (Optional)}
 \begin{itemize}
+\item --no-clean-up\\ 
+Do not clean up intermediate data files.
 \item --fst-window-size <FST window size>\\
-Argument is passed directly to the VCF tools command line.
+Argument is passed directly to the VCF tools command line. Default = 1000
 \item --fst-window-step <FST window step>\\
-Argument is passed directly to the VCF tools command line.
+Argument is passed directly to the VCF tools command line. Default = 1000
 \item --cores \\
 Number of cores avaliable for the pipeline overrides setting in the config file.
 \end{itemize}
@@ -378,7 +378,7 @@ A hardy weinberg test is performed on every snp any snps failing the test will b
 \item --remove-missing <Inclusion threshold for missing genotypes>\\
 Inclusion criteria for SNPs with missing data. SNPs with less than this value will be removed from analysis.
 \item --TajimaD <tajimas D bin size>\\
-Tajima's D statistic bin size.
+Tajima's D statistic bin size. (Default = 5000)
 \item --no-clean-up \\
 Do not clean up intermediate data files
 
