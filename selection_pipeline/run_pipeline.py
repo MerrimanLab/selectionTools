@@ -178,7 +178,7 @@ class CommandTemplate(object):
                         self.config['ancestral_allele']['ancestral_fasta_dir'],
                         file)
             regex = None
-        return ancestral_fasta
+        return (ancestral_fasta, regex)
 
     def run_aa_annotate_haps(self, in_file, vcf=False):
         """ Return the template for running ancestral annotation
@@ -192,10 +192,8 @@ class CommandTemplate(object):
         if(vcf):
             output_sample = self.options.output_prefix.split('.haps')[0] + \
                 '_aachanged.sample'
-        py_executable = self.config['python']['python_executable']
         aa_annotate = \
             self.config['ancestral_allele']['ancestral_allele_script']
-        cmd.append(py_executable)
         cmd.append(aa_annotate)
         (ancestral_fasta ,regex)= self.get_ancestral_fasta()
         cmd.extend(['-c', self.options.chromosome, '-o',
@@ -274,7 +272,7 @@ class CommandTemplate(object):
         cmd.append(aa_annotate)
         cmd.extend(['-c',self.options.chromosome, '-v', vcf, '-s', sample, '-o', 
                    haps, '--no-annotation'])
-        return(cmd,sample,haps)
+        return(cmd, haps, sample)
 
     def fix_vcf_qctool(self, vcf):
         """ Return the template for running fix vcf qctool

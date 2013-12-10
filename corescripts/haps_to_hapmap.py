@@ -24,6 +24,7 @@ def aa_seq(options):
     if (options.single_chromosome):
         # Single chromosome fasta should only have one sequence.
         # that sequence should be the sequence of interest.
+        keyz = (list(keyz))
         key=keyz[0]
     else:
         get_chromosome_from_header = options.header
@@ -32,9 +33,9 @@ def aa_seq(options):
             if(re.match(get_chromosome_from_header,key) is not None):
                 match = key 
         if( match is '' ):
-            raise Exception("No match possible is something wrong with the
-regex"
-                            "specified to the program as --header-regex")
+            raise Exception("No match possible is something wrong with "
+                            " the regex specified to the program as "
+                            "--header-regex")
     aaSeq = f[key]
     return(aaSeq)
 
@@ -45,20 +46,19 @@ def main():
     parser.add_option('-s',dest="sample_file",help="Sample Input File")
     parser.add_option('-c',dest="chromosome",help="Chromosome")
     parser.add_option('-o',dest="output_file_name",help="Output File name")
-    parser.add_option('-a',dest="ancestral_fasta",help="Outgroup fasta file")
+    parser.add_option('-a',dest="ancestralfasta",help="Outgroup fasta file")
     parser.add_option('--id',dest="ancestral_indivdual_id",help="Name of the ancestral Individual")
     parser.add_option('--header-regex',dest='header',
-                      help("To determine which chromosome to extract"
+                      help=("To determine which chromosome to extract"
                       "is a regex with a ? for the chromosome number"))
     parser.add_option('--single-chromosome',action="store_true",dest="single_chromosome")
+    (options,args) = parser.parse_args() 
+    options.chromosome = str(options.chromosome)
     if(options.single_chromosome is None):
         options.single_chromosome = False
         assert options.header is None, \
             "Option header_regex required if the fasta file is"\
             "split by chromosome"
-    (options,args) = parser.parse_args() 
-    options.chromosome = str(options.chromosome)
-    print(options)
     # Set default ancestral ID#
     if (options.ancestral_indivdual_id is None):
         options.ancestral_indivdual_id = 'ANCESTOR' 
@@ -87,8 +87,10 @@ def main():
             else: 
                 a1 = line[3]
                 a2 = line[4]
-                ancestral_genotypes = ancestral_allele + ancestral_allele
+                ancestral_genotypes = ancestral_allele.upper() + \
+                    ancestral_allele.upper()
                 change_alleles=map(lambda x: a1 if(int(x) == 0) else a2,line[5:])
+                change_alleles = list(change_alleles)
                 zipa=change_alleles[0::2]
                 zipb=change_alleles[1::2]
                 change_alleles = zip(zipa,zipb)

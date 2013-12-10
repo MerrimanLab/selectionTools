@@ -120,7 +120,7 @@ class StandardRun(CommandTemplate):
         # set of calls to all the methods in order
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps,new_sample_file)
-        fayandwus = self.variscan_fayandwus(self.config, haps2_haps)
+        fayandwus = self.variscan_fayandwus(haps2_haps)
         vcf = self.haps_to_vcf(haps,new_sample_file)
         vcf = self.fix_vcf_qctool(vcf)
         haps = self.run_aa_annotate_haps(haps)
@@ -157,7 +157,7 @@ class StandardRun(CommandTemplate):
 
         """
         (cmd,output_name) = super(StandardRun,self).run_remove_indels_from_vcf()
-        #run_subprocess(cmd,'remove indels')
+        run_subprocess(cmd,'remove indels')
         return(output_name)
 
     def vcf_to_haps(self,vcf):
@@ -165,7 +165,7 @@ class StandardRun(CommandTemplate):
 
         """
         (cmd,haps,sample) = super(StandardRun,self).vcf_to_haps(vcf)
-        #run_subprocess(cmd,'haps to vcf')
+        run_subprocess(cmd,'haps to vcf')
         return(haps,sample)
 
     def run_vcf_to_plink(self):
@@ -300,6 +300,7 @@ class StandardRun(CommandTemplate):
         (cmd, output_name) = super(StandardRun, self).run_multi_coreihh(haps)
         cores = self.threads
         ihs_output = output_name.split('.ihh')[0]+'.ihs'
+        rdata_output = output_name.split('.ihh')[0]+'.RData'
         cmd.extend(['--cores', cores])
         cmd.extend(['--working_dir', '.'])
         cmd.extend(['--offset', '1'])
@@ -309,6 +310,8 @@ class StandardRun(CommandTemplate):
                   "_wd_"+'.'+"_.ihh", output_name)
         os.rename(self.options.population+'_chr_'+self.options.chromosome +
                   '_wd_'+'.'+"_.ihs", ihs_output)
+        os.rename(self.options.population+'_chr_'+self.options.chromosome +
+                  '_wd_'+'.'+"_.RData", rdata_output)
         return output_name
 
     def fix_sample_file(self, sample_file):

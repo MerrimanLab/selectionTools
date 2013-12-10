@@ -43,6 +43,7 @@ def aa_seq(options):
     if (options.single_chromosome):
         # Single chromosome fasta should only have one sequence.
         # that sequence should be the sequence of interest.
+        keyz=list(keyz)
         key=keyz[0]
     else:
         get_chromosome_from_header = options.header
@@ -60,7 +61,7 @@ def write_sample_file(options,vcf_reader):
     if(options.sample_file is not None):
         sample_file = open(options.sample_file, 'w')
         sample_header = ("ID_1 ID_2 missing father mother sex plink_pheno"
-                         "\n 0 0 0 D D D B\n")
+                         "\n0 0 0 D D D B\n")
         sample_file.write(sample_header)
         for sample in vcf_reader.samples:
             sample_file.write(sample + ' ' + sample + ' 0 0 0 0 -9 ' + '\n')
@@ -163,7 +164,7 @@ def annotate_haps(options):
             pos = int(lineSplit[2])
             ref = lineSplit[3]
             alt = lineSplit[4]
-            tempSeq = aaSeq[pos].decode()
+            tempSeq = aaSeq[pos]
             outputLine = aa_check(tempSeq, ref, alt, options.format, line)
             if(outputLine is not None):
                 if(options.output is not None):
