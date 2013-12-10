@@ -174,7 +174,10 @@ def run_subprocess(
         standard_out = open('stdout.tmp', 'r')  
         stdout_log = True
     elif(stdoutlog):
-        standard_out = open(stdout, 'r')  
+        if(hasattr(stdout,'write')):   
+            standard_out = open(stdout.name,'r')
+        else: 
+            standard_out = open(stdout, 'r')  
         stdout_log = True
     if(stdout_log):
         while True:
@@ -190,6 +193,7 @@ def run_subprocess(
         logger.info(tool +" STDERR: " + line.strip())
     logger.info("Finished tool " + tool)
     standard_err.close()
+    standard_out.close()
     # Removed stdout if it either was not specified
     # or the log was specified.
     if(stdout is None):

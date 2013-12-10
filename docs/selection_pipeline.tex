@@ -1,4 +1,4 @@
-[a4paper,10pt]{article}
+\documentclass[a4paper,10pt]{article}
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -9,7 +9,7 @@
 \usepackage[round]{natbib}
 \usepackage{minted}
 \usepackage{float}
-\hypersetup{colorlinks = true, linkcolor = blue}
+\hypersetup{colorlinks = true, linkcolor = blue, citecolor = black}
 \lstset{language=Python}
 \usepackage[margin=0.75in]{geometry}
 
@@ -89,17 +89,16 @@ The selection pipeline was developed on a 64-bit ubuntu 13.04 system
 and has been tested on 64-bit centos and ubuntu 13.10
 installations. The pipeline should work on any 64-bit linux derivative
 assuming some basic libraries and tools are installed on the
-system. 20GB of RAM should be sufficient for all computation steps
+system. 8GB of RAM should be sufficient for all computation steps
 (imputation is the most RAM-intensive component of the pipeline).
 
 \begin{itemize}
 \item Python > = 2.6 
 \item Bourne-again Shell (Bash)
 \item Perl5
-\item R \( >= 3.0.0 \) (with a personal library) {\bf\small\color{blue} [*** JAMES
-    - WHAT IS A ``PERSONAL LIBRARY''? ***]}
-\item Build-essential tools {\bf\small\color{blue} [*** JAMES
-    - SPECIFICALLY...? ***]}
+\item R \( >= 3.0.0 \) (with a personal library)
+\item Autotools
+\item GCC 
 \end{itemize}
 The software is installed with the same permissions as the user than
 runs the script: if the user is not root then a local R library is
@@ -115,27 +114,26 @@ The following Python packages are required for the pipeline:
 \end{itemize}
 Most linux distributions provide these packages through the official
 package management repositories.
+\subsection{Downloading}
+The selection pipeline can be obtained at the url \href{https://github.com/smilefreak/MerrimanSelectionPipeline}{MerrimanSelectionPipeline}. 
+
+For git users the following command will obtain the pipeline.
+
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+git clone https://github.com/smilefreak/MerrimanSelectionPipeline
+\end{minted}
+
+Or with wget.
+
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+wget https://github.com/smilefreak/MerrimanSelectionPipeline/archive/master.zip
+\end{minted}
 
 \subsection{Installation}
 
-{\bf\small\color{blue}  [*** JAMES - NEED TO TELL THEM HOW TO GET THE FILES ***]}
-
 \noindent
-To install a standalone version of the pipeline (which will require
-manual adjustment of the configuration file), run the following command:\\
-
-\begin{minted}[bgcolor=bg,frame=lines]{bash}
-./install.sh --standalone
-\end{minted}
-
-\noindent
-{\bf\small\color{blue} [*** JAMES - NEED TO EXPLAIN THE DIFFERENCE BETWEEN MANUAL
-  AND AUTOMATIC INSTALLATION ***]}
-
-\noindent
-The remainder of this section is dedicated to the automatic
-installation. To perform an automatic installation of the selection
-analysis pipeline, run the command.\\
+To perform an automatic installation of the selection
+analysis pipeline, run the command in the root of the directory you installed the pipeline in.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh
 \end{minted}
@@ -150,6 +148,8 @@ installed correctly, run the following command at a terminal prompt.
 selection_pipeline -h
 \end{minted}
 
+If the above command does not work make sure that ~/.local/bin/ is part of the PATH environment variable.
+
 \subsection{Genetic Maps and Impute Haplotypes}
 To use the phasing and imputation features of the pipeline requires
 both genetic map files and haplotype files. For humans, files
@@ -163,14 +163,12 @@ uncompress the contents. For shapeit2, a genetic map can be found
 \href{http://www.shapeit.fr/files/genetic_map_b37.tar.gz}{here}.
 Download and extract the archive to referencefiles/shapeit\_ref.\\
 
+
 To use other reference files with the selection pipeline requires
 setting some options in the config file. The question mark character
 "?" in the config is substituted by the chromosome number: this is
 used for reference files that are split on chromosomes.\\
 
-\noindent
-{\bf\small\color{blue} [*** JAMES - IS THAT ENOUGH DETAIL FOR USING
-  OTHER REFERENCE FILES? ***]}
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
@@ -181,7 +179,6 @@ impute_reference_prefix=ALL_1000G_phase1integrated_v3_chr?_impute
 ...
 \end{minted}
 
-\noindent
 If you decide to store the reference files in another location,
 further options require alteration in the config file:\\ 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
@@ -225,18 +222,12 @@ functionality of the pipeline we will use the chromosome 2 region
 130,000,000-140,000,000. To download the example dataset enter the
 command below. The lactase gene is an example of strong selection in
 the last 5,000-10,000 years in human populations, specifically
-those of European ancestory.  
-{\bf\small\color{blue} [*** JAMES - CITATION? ***]}.  \\
+those of European ancestory \citep{lactase2004}. 
 
 \begin{minted}[bgcolor=bg]{bash}
 wget http://tutorial_file_location.com 
 \end{minted}
-\noindent
-{\bf\small\color{blue} [*** JAMES - I RECKON THATS NOT THE REAL
-  LOCATION.  :)  ***]}.  \\
-\noindent
 Extract the example data into a new folder.
-
 
 
 \subsection{Setting up the Pipeline Run}

@@ -29,12 +29,6 @@ for multicore processing the R package multicore is required.
 Installation
 ------------
 
-To install the package standalone (no dependencies)
-
-In the root directory run `./install.sh --standalone` 
-
-To install the package and as many dependencies as possible
-
 In the root directory run `./install.sh` will attempt to install as many dependencies as can be possible.
 
 

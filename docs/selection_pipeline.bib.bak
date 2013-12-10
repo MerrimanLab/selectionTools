@@ -50,6 +50,18 @@
   Volume                   = {10}
 }
 
+@Article{fayandwush,
+  Title                    = {{{H}itchhiking under positive {D}arwinian selection}},
+  Author                   = {Fay, J. C. and Wu, C. I.},
+  Journal                  = {Genetics},
+  Year                     = {2000},
+
+  Month                    = {Jul},
+  Number                   = {3},
+  Pages                    = {1405--1413},
+  Volume                   = {155}
+}
+
 @Article{Flicek:2012vg,
   Title                    = {{Ensembl 2012}},
   Author                   = {Flicek, Paul and Amode, M Ridwan and Barrell, Daniel and Beal, Kathryn and Brent, Simon and Carvalho-Silva, Denise and Clapham, Peter and Coates, Guy and Fairley, Susan and Fitzgerald, Stephen and Gil, Laurent and Gordon, Leo and Hendrix, Maurice and Hourlier, Thibaut and Johnson, Nathan and K{\"a}h{\"a}ri, Andreas K and Keefe, Damian and Keenan, Stephen and Kinsella, Rhoda and Komorowska, Monika and Koscielny, Gautier and Kulesha, Eugene and Larsson, Pontus and Longden, Ian and McLaren, William and Muffato, Matthieu and Overduin, Bert and Pignatelli, Miguel and Pritchard, Bethan and Riat, Harpreet Singh and Ritchie, Graham R S and Ruffier, Magali and Schuster, Michael and Sobral, Daniel and Tang, Y Amy and Taylor, Kieron and Trevanion, Stephen and Vandrovcova, Jana and White, Simon and Wilson, Mark and Wilder, Steven P and Aken, Bronwen L and Birney, Ewan and Cunningham, Fiona and Dunham, Ian and Durbin, Richard and Fern{\'a}ndez-Su{\'a}rez, Xos{\'e} M and Harrow, Jennifer and Herrero, Javier and Hubbard, Tim J P and Parker, Anne and Proctor, Glenn and Spudich, Giulietta and Vogel, Jan and Yates, Andy and Zadissa, Amonida and Searle, Stephen M J},
