@@ -16,15 +16,26 @@ from pyfasta import Fasta
 # regex for determining we have a valid SNP #
 
 
-def aa_fasta(options):
-    f = Fasta(options.ancestral_fasta)
+def aa_seq(options):
+    f = Fasta(options.ancestralfasta)
+    keyz = (f.keys())
     chroms = {}
-    for key in f.keys():
-        if(options.ref_fasta != None):
-            chroms[(key.split(' '))[0]] = key
-        else:
-            chroms[(key.split(':'))[2]] = key
-    aaSeq = f[chroms[options.chromosome]]
+    match = ''
+    if (options.single_chromosome):
+        # Single chromosome fasta should only have one sequence.
+        # that sequence should be the sequence of interest.
+        key=keyz[0]
+    else:
+        get_chromosome_from_header = options.header
+        get_chromosome_from_header.replace('?',options.chromosome)
+        for key in keyz:
+            if(re.match(get_chromosome_from_header,key) is not None):
+                match = key 
+        if( match is '' ):
+            raise Exception("No match possible is something wrong with the
+regex"
+                            "specified to the program as --header-regex")
+    aaSeq = f[key]
     return(aaSeq)
 
 def main():
@@ -36,7 +47,15 @@ def main():
     parser.add_option('-o',dest="output_file_name",help="Output File name")
     parser.add_option('-a',dest="ancestral_fasta",help="Outgroup fasta file")
     parser.add_option('--id',dest="ancestral_indivdual_id",help="Name of the ancestral Individual")
-    parser.add_option('--ref-fasta',dest="ref_fasta",help="Reference fasta")
+    parser.add_option('--header-regex',dest='header',
+                      help('To determine which chromosome to extract"
+                      "is a regex with a ? for the chromosome number"))
+    parser.add_option('--single-chromosome',action="store_true",dest="single_chromosome")
+    if(options.single_chromosome is None):
+        options.single_chromosome = False
+        assert options.header is None, \
+            "Option header_regex required if the fasta file is"\
+            "split by chromosome"
     (options,args) = parser.parse_args() 
     options.chromosome = str(options.chromosome)
     print(options)
@@ -46,7 +65,7 @@ def main():
     sample_ids = []
     output = open(options.output_file_name,'w')
     failed_snps = open('failed_snps.txt','w')
-    aaSeq=aa_fasta(options)
+    aaSeq=aa_seq(options)
     with open(options.sample_file,'r') as f:
         for i, line in enumerate(f):
             if(i > 1):

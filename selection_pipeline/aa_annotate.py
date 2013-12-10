@@ -39,19 +39,27 @@ def aa_seq(options):
     f = Fasta(options.ancestralfasta)
     keyz = (f.keys())
     chroms = {}
-    for key in keyz:
-        if(options.ref_fasta is not None):
-            chroms[(key.split(' '))[0]] = key
-        else:
-            chroms[(key.split(':'))[2]] = key
-    aaSeq = f[chroms[options.chromosome]]
+    match = ''
+    if (options.single_chromosome):
+        # Single chromosome fasta should only have one sequence.
+        # that sequence should be the sequence of interest.
+        key=keyz[0]
+    else:
+        get_chromosome_from_header = options.header
+        get_chromosome_from_header.replace('?',options.chromosome)
+        for key in keyz:
+            if(re.match(get_chromosome_from_header,key) is not None):
+                match = key
+        if( match is '' ):
+            raise Exception("No match possible is something wrong with the regex"
+                            "specified to the program as --header-regex")
+    aaSeq = f[key]
     return(aaSeq)
 
 
 def annotate_vcf(options):
     if(options.output is not None):
         output = open(options.output, 'w')
-    #TODO MAKE WORK WITH REFERENCE FASTA
     aaSeq = aa_seq(options)
     vcf_reader = vcf.Reader(filename=options.vcf_file)
     if(options.sample_file is not None):
@@ -96,7 +104,7 @@ def annotate_vcf(options):
 
 def aa_check(realAA, ref, alt, format, line):
     if(re.match('[ACTGactg]', realAA)):
-        if(realAA.islower() and format == "high"):
+        if(realAA.islower() and format == "upper"):
             return None
         else:
             if(realAA == ref):
@@ -158,23 +166,32 @@ def main():
     parser.add_option('-o', '--output', dest="output",
                       help="Output File (optional)")
     parser.add_option('-f', '--format', dest="format",
-                      help="Format us High or use Low & High")
+                      help="Format use upper case or upper and lower case bases")
     parser.add_option('-v', '--phased-vcf', dest="vcf_file",
                       help="Phased VCF file (.vcf)")
     parser.add_option('-s', '--sample-file', dest="sample_file",
                       help="Output sample_file")
+    parser.add_option('--header-regex',dest="header",
+                      help=("To determine which chromosome to extract "
+                      "is a regex with a ? for the chromosome number"))
+    parser.add_option('--single-chromosome',action='store_true',dest='single_chromosome') 
     (options, args) = parser.parse_args()
-    #print(options)
     if(options.format is None):
-        options.format = 'high'
+        options.format = 'lower'
     # Will annotate the haps file with exactly what is required
     # More options could be added later covering a wider range of file types
     # andy maybe different input ancestral alleles.
+    assert options.haps is not None or options.vcf is not None,\
+        "Haps or VCF input file required to run ancestral annotation."
     if(options.haps is not None):
         annotate_haps(options)
     elif(options.vcf_file is not None):
         annotate_vcf(options)
-
+    if(options.single_chromosome is None):
+        options.single_chromosome = False
+        assert options.header is None, \
+            "Option header_regex required if the fasta file is"\
+            "split by chromosome"
 
 if __name__ == "__main__":
     main()

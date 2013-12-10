@@ -14,3 +14,4 @@ dist/*
 build/*
 cores/*
 MerrimanSelection*/*
+defaults.cfg

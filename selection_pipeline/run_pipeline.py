@@ -281,7 +281,7 @@ class CommandTemplate(object):
         output_name = self.options.output_prefix + self.options.chromosome + \
             '.hapmap'
         haps_executable = self.config['variscan']['haps_to_hapmap_executable']
-        ancestral_fasta = self.get_ancestral_fasta(self.options, self.config)
+        (ancestral_fasta, regex) = self.get_ancestral_fasta()
         cmd.append(haps_executable)
         cmd.extend(['-i', haps, '-s', sample, '-o', output_name, '--id',
                    'ANCESTOR', '-a', ancestral_fasta, '-c',
