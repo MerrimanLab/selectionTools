@@ -181,7 +181,7 @@ def main():
     # Will annotate the haps file with exactly what is required
     # More options could be added later covering a wider range of file types
     # andy maybe different input ancestral alleles.
-    assert options.haps is not None or options.vcf is not None,\
+    assert options.haps is not None or options.vcf_file is not None,\
         "Haps or VCF input file required to run ancestral annotation."
     if(options.haps is not None):
         annotate_haps(options)
