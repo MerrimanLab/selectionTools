@@ -49,11 +49,6 @@
 \pagebreak
 \section{Introduction}
 
-\noindent
-{\bf\small\color{blue} [*** JAMES - WHATS UP WITH THE UGLY GREEN LINKS FOR
-  CITATIONS?  ;) ***]}
-
-\noindent
 This selection analysis workflow utilizes genotype data derived from
 next-generation sequencing (NGS) or high-denisity microarray (e.g.,
 ``SNP chip'') experiments to identify the presence of signatures of
@@ -96,8 +91,8 @@ system. 8GB of RAM should be sufficient for all computation steps
 \item Python > = 2.6 
 \item Bourne-again Shell (Bash)
 \item Perl5
-\item R \( >= 3.0.0 \) (with a personal library)
-\item Autotools
+\item R \( >= 3.0.0 \) (with a local library in your home directory)
+\item GNU Autotools
 \item GCC 
 \end{itemize}
 The software is installed with the same permissions as the user than
@@ -165,7 +160,7 @@ Download and extract the archive to referencefiles/shapeit\_ref.\\
 
 
 To use other reference files with the selection pipeline requires
-setting some options in the config file. The question mark character
+setting the following options in the config file. The question mark character
 "?" in the config is substituted by the chromosome number: this is
 used for reference files that are split on chromosomes.\\
 
@@ -196,7 +191,7 @@ allele. The selection pipeline uses the ancestral alleles from the
 6-way EPO (Enredo-Pecan-Ortheus) alignment pipeline. The files can be
 downloaded from
 \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. Be
-sure to extract contents of the archive after download. The default
+sure to extract the contents of the archive after download. The default
 directory to store the ancestral reference files is
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 referencefiles/ancestral_ref/.
@@ -225,7 +220,7 @@ the last 5,000-10,000 years in human populations, specifically
 those of European ancestory \citep{lactase2004}. 
 
 \begin{minted}[bgcolor=bg]{bash}
-wget http://tutorial_file_location.com 
+wget https://github.com/smilefreak/SelectionPipelineTestData/blob/master/selection_pipeline_tutorial.tar.gz
 \end{minted}
 Extract the example data into a new folder.
 
@@ -532,9 +527,9 @@ Path to the selection pipeline config file an example config file is located in 
 \item --no-clean-up\\ 
 Do not clean up intermediate data files.
 \item --fst-window-size <FST window size>\\
-Argument is passed directly to the VCF tools command line. Default = 1000
+Fst calculation sliding window size in kilobases. (default = 1kb)
 \item --fst-window-step <FST window step>\\
-Argument is passed directly to the VCF tools command line. Default = 1000
+Fst calculation windoow jump in kilobases, if window size is equal to the jump size non-overlapping windows are used. (default = 1kb)
 \item --cores \\
 Number of cores avaliable for the pipeline overrides setting in the config file.
 \end{itemize}
@@ -542,7 +537,7 @@ Number of cores avaliable for the pipeline overrides setting in the config file.
 \subsubsection{Input Files}
 \begin{itemize}
 \item -i <VCF input file>\\
-Single population single chromosome VCF input file. VCF should be bgzipped and tabix indexed.
+Single population single chromosome VCF input file. VCf should be unzipped
 \end{itemize}
 \subsubsection{Output Files}
 The Results directory contains all the output files.
@@ -561,44 +556,64 @@ Path to the selection pipeline config file an example config file is located in 
 \end{itemize}
 \subsubsection{Other parameters(Optional)}
 \begin{itemize}
-\item -l <log\_file> \\
+\item -l <log\_file> 
+
 Name for the log file. Moved into the logs folder at the end of program run.
-\item --maf <minimum MAF>\\
-Minor allele frequency filter threshold any SNPs below this threshold will be discarded from the analysis.
-\item --hwe <hardy-weinberg minimum p-value>\\
-A hardy weinberg test is performed on every snp any snps failing the test will be discarded.
-\item --remove-missing <Inclusion threshold for missing genotypes>\\
-Inclusion criteria for SNPs with missing data. SNPs with less than this value will be removed from analysis.
-\item --TajimaD <tajimas D bin size>\\
-Tajima's D statistic bin size. (Default = 5000)
-\item --no-clean-up \\
+
+\item --maf <minimum MAF>
+
+Minor allele frequency filter threshold any SNPs below this threshold will be discarded from the analysis. (default = 0.01)
+
+\item --hwe <hardy-weinberg minimum p-value>
+
+A hardy weinberg test is performed on every snp any snps failing the test will be discarded. (default = 0.001)
+
+\item --remove-missing <Inclusion threshold for missing genotypes>
+
+Inclusion criteria for SNPs with missing data. SNPs with less than this value will be removed from analysis. (default = 0.99)
+
+\item --fay-Window-Width <window width>
+
+Sliding window width for Fay and Wu's H calculation in kb (default = 5kb)
+
+\item --fay-Window-Jump <Window Jump>
+
+Window jump for Fay and Wu's H calculation, if equal to fay-Window-Width non-overlapping windows will be used. (default = 5kb)
+
+\item --TajimaD <tajimas D bin size>
+
+Tajima's D statistic bin size in kb. (default = 5kb)
+\item --no-clean-up 
+
 Do not clean up intermediate data files
 
 \item --ehh-window-size
-Window size for multicore rehh calculations.  
+
+Window size for multicore rehh calculations in Megabases (Mb). (default = 5Mb) 
 
 \item --ehh-overlap
 
-Window overlap for multicore rehh calculations.
+Window overlap for multicore rehh calculations in Megabases (Mb). (defaut = 2Mb)
 
-\item --daf <Minimum derived allele frequency>\\
-Derived allele frequencies below this minimum will be discarded.
+\item --daf <Minimum derived allele frequency>
+
+Derived allele frequencies below this minimum will be discarded. (default = 0.0)
 
 \item --big-gap
 
-Gap size in kb for not calculating iHH if the gap is too large.
+Gap size in kb for not calculating iHH if the gap is too large. If set to zero the big-gap rule is not applied. (default = 0kb)
 
 \item --small-gap
 
-Gap size in kb for applying a penalty to the area calculated by iHH
+Gap size in kb for applying a penalty to the area calculated by iHH. If set to zero the small-gap rule is not applied. ( default = 0kb)
 
 \item --small-gap-penalty
 
-Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended.
+Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended. (default = 0kb)
 
 \item --cores 
 
-Number of cores avaliable for the pipeline overrides setting in the config file.
+Number of cores avaliable for the pipeline overrides setting in the config file. 
 
 \end{itemize}
 \subsection{Ancestral Annotation}
@@ -628,16 +643,20 @@ Sample file output name ( currently only works with phased vcf option)
 \end{itemize}
 \subsubsection{Other parameters}
 \begin{itemize}
+\item --header-regex 
+
+Compulsory argument it is a regex with a question mark denoting substitution for the chromosome number. The regex should match the header in the fasta file and when the question mark is replaced selectively return only the chromosome of interest. Optional for single chromosome fasta files.
+
 \item -c <chromosome number>
 
-The number of the chromosome being used.
+The number or symbol of the chromosome being used.
 
-\item --ref-fasta
-
-Denoting that you are using the human reference allele as the ancestral allele. 
 \item -f or --format <format>
 
-The 6-way EPO alignment denotes ancestral alleles with both high and low confidence. To use only ancestral alleles with high confidence use --format high. To use both high and low confident alleles use --format low. By default the program will use only highly confident alleles.
+The 6-way EPO alignment denotes ancestral alleles with both high and low confidence. To use only ancestral alleles with high confidence use --format upper. To use both high and low confident alleles use --format lower. By default the program will use only highly confident alleles. The highly confident alleles are in uppercase. 
+
+By default it uses all the valid bases in the file an of ATCGatcg.
+
 \end{itemize}
 \subsection{Configuration File}
 The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line argument --config-file <config\_file\_location>. There are two main programs in the selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters. The default config file contains an example of the format.
@@ -738,15 +757,25 @@ location of the python executable (2 or 3)
 \end{itemize}
 \subsubsection{ancestral\_allele}
 \begin{itemize}
+\item split\_by\_chromosome
+
+Option determines whether our ancestral fasta file is split by chromosome or not. If the ancestral fasta is split by chromosome the ancestral\_fasta\_dir and ancestral\_prefix arguments are required. If the ancestral fasta is just one flat file the ancestral\_fasta\_file options is required which is just merely the location of the ancestral fasta option.
+
+\item ancestral\_fasta\_header\_regex
+
+This options specifies a regular expression that will extract each chromosome from the fasta file. The '?' denotes the chromosome number and will be replaced in the regular expression for the chromosome number of interest. Even when using one fasta per chromosome this is required as the python library used to extract the sequence uses the fasta header for extraction. Only required if your fasta file is not split by chromosome.
+
 \item ancestral\_allele\_script
 
 Location of the ancestral\_annotation script (aa\_annotate.py)
+
 \item ancestral\_fasta\_dir 
 
 Directory containing the ancestral reference files
 \item ancestral\_prefix 
 
 Full file name for ancestral fasta files containing a "?" character
+
 \end{itemize}
 \subsubsection{qctool}
 \begin{itemize}
@@ -807,6 +836,7 @@ The vcftools program can be used to extract each chromosome from your full vcf f
 vcf-tools --vcf big\_vcf.vcf --chr 2 --out chr2 --recode
 
 \end{minted}
+
 
 The command will generate a vcf file name chr2.recode.vcf containing only data from chromosome 2.
 
