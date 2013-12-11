@@ -1,6 +1,6 @@
 [submodule "pyfasta"]
 	path = pyfasta
-	url = git@github.com:brentp/pyfasta.git
+	url = https://github.com/brentp/pyfasta.git
 [submodule "PyVCF"]
 	path = PyVCF
-	url = git@github.com:jamescasbon/PyVCF.git
+	url = https://github.com/jamescasbon/PyVCF.git

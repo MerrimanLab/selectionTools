@@ -166,7 +166,7 @@ def parse_arguments():
         options.impute_split_size = str(
             int(float(options.impute_split_size) * 1e6))
     if (options.multi_window_size is None):
-        options.multi_window_size = str(5000000)
+        options.multi_window_size = str(10000000)
     else:
         options.multi_window_size = str(
             int(float(options.multi_window_size) * 1e6))

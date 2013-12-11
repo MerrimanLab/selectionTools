@@ -116,12 +116,12 @@ class StandardRun(CommandTemplate):
         if(self.options.imputation):
             (haps) = self.run_impute2(haps)
             haps = self.indel_filter(haps)
-        # No more copy pasting of methods just one 
+        # No more copy pasting of methods just one
         # set of calls to all the methods in order
         new_sample_file = self.fix_sample_file(sample)
-        haps2_haps = self.prepare_haps_for_variscan(haps,new_sample_file)
+        haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
         fayandwus = self.variscan_fayandwus(haps2_haps)
-        vcf = self.haps_to_vcf(haps,new_sample_file)
+        vcf = self.haps_to_vcf(haps, new_sample_file)
         vcf = self.fix_vcf_qctool(vcf)
         haps = self.run_aa_annotate_haps(haps)
         tajimaSD = self.vcf_to_tajimas_d(vcf)
@@ -143,7 +143,8 @@ class StandardRun(CommandTemplate):
         logger.info(self.options.log_file)
         os.rename(self.options.log_file, 'log/' + self.options.log_file)
         if not self.options.no_clean_up:
-            clean_folder('.')
+            keep = ['selection_stderr.tmp','selection_stdout.tmp']
+            clean_folder('.',keep=keep)
         logger.info(tajimaSD)
         logger.info(vcf)
         logger.info(haps)
@@ -151,22 +152,23 @@ class StandardRun(CommandTemplate):
         logger.info(fayandwus)
         logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
-    
+
     def run_remove_indels_from_vcf(self):
         """ Run remove indels from vcf using subprocess
 
         """
-        (cmd,output_name) = super(StandardRun,self).run_remove_indels_from_vcf()
-        run_subprocess(cmd,'remove indels')
+        (cmd, output_name) = \
+            super(StandardRun, self).run_remove_indels_from_vcf()
+        run_subprocess(cmd, 'remove indels')
         return(output_name)
 
-    def vcf_to_haps(self,vcf):
+    def vcf_to_haps(self, vcf):
         """ Run vcf to haps usng subprocess
 
         """
-        (cmd,haps,sample) = super(StandardRun,self).vcf_to_haps(vcf)
-        run_subprocess(cmd,'vcf to haps')
-        return(haps,sample)
+        (cmd, haps, sample) = super(StandardRun, self).vcf_to_haps(vcf)
+        run_subprocess(cmd, 'vcf to haps')
+        return(haps, sample)
 
     def run_vcf_to_plink(self):
         """ Run vcf to plink using subprocess
@@ -203,13 +205,14 @@ class StandardRun(CommandTemplate):
         run_subprocess(cmd, 'hapstovcf')
         return(output_name)
 
-    def haps_filter(self,haps):
+    def haps_filter(self, haps):
         """ Runs haps filter using subprocess
 
         """
-        (cmd,output_name) = super(StandardRun,self).haps_filter(haps)
-        run_subprocess(cmd,'haps filter')
+        (cmd, output_name) = super(StandardRun, self).haps_filter(haps)
+        run_subprocess(cmd, 'haps filter')
         return(output_name)
+
     def join_impute2_files(self, output_prefix, no_commands):
         """ Join the impute2 output files
 
@@ -241,7 +244,7 @@ class StandardRun(CommandTemplate):
         """
         (cmd_template, output_prefix) = super(StandardRun, self).run_impute2(
             haps)
-        distance = int(self.options.impute_split_size) 
+        distance = int(self.options.impute_split_size)
         try:
             proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'"""
                                     .format(haps), stdout=subprocess.PIPE,

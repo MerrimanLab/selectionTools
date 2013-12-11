@@ -306,7 +306,7 @@ class CommandTemplate(object):
         cmd.extend(['--maf', self.options.maf, '--hwe', self.options.hwe,
                    '--asymptotic', '--missing', self.options.remove_missing,
                    '--output', output_name, '--haps', haps])
-        return(cmd,output_name)
+        return(cmd, output_name)
 
     def prepare_haps_for_variscan(self, haps, sample):
         """ Return the template for running haps to variscan
