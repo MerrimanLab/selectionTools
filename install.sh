@@ -49,7 +49,7 @@ tar -xzf src/variscan-2.0.3.tar.gz
 mv variscan-2.0.3/src/variscan bin/
 rm -Rf variscan-2.0.3
 echo "Install rehh"
-Rscript src/R_dependencies.R 'gplots'
+Rscript src/R_dependencies.R 'rehh'
 R CMD INSTALL src/rehh_1.11.tar.gz
 echo "Installing R Multicore"
 R CMD INSTALL src/multicore_0.1-7.tar.gz
