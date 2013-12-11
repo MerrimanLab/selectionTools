@@ -126,14 +126,21 @@ def parse_arguments():
         "Population code has not been specified."
     if(options.fayandWuWindowJump is None):
         options.fayandWuWindowJump = str(5000)
+    else:
+        options.fayandWuWindowJump = str(
+            int(float(options.fayandWuWindowJump) * 1e3))
     if(options.fayandWuWindowWidth is None):
         options.fayandWuWindowWidth = str(5000)
+    else:
+        options.fayandWuWindowWidth = str(
+            int(float(options.fayandWuWindowWidth) * 1e3))
     if(options.no_clean_up is None):
         options.no_clean_up = False
     if(options.tajimas_d is None):
         options.tajimas_d = str(5000)
     else:
-        options.tajimas_d = str(options.tajimas_d)
+        options.tajimas_d = str(
+            int(float(options.tajimas_d) * 1e3))
     if(options.imputation is None):
         options.imputation = False
     if(options.hwe is None):
@@ -154,17 +161,35 @@ def parse_arguments():
         options.log_file = options.population + \
             options.chromosome + "_selection_pipeline.log"
     if (options.impute_split_size is None):
-        options.impute_split_size = str(5)
+        options.impute_split_size = str(5000000)
+    else:
+        options.impute_split_size = str(
+            int(float(options.impute_split_size) * 1e6))
     if (options.multi_window_size is None):
         options.multi_window_size = str(5000000)
+    else:
+        options.multi_window_size = str(
+            int(float(options.multi_window_size) * 1e6))
     if (options.ehh_overlap is None):
         options.ehh_overlap = str(2000000)
+    else:
+        options.ehh_overlap = str(
+            int(float(options.ehh_overlap) * 1e6))
     if (options.big_gap is None):
-        options.big_gap = str(0)
+        options.big_gap = str(200000)
+    else:
+        options.big_gap = str(
+            int(float(options.big_gap) * 1e3))
     if (options.small_gap is None):
-        options.small_gap = str(0)
+        options.small_gap = str(20000)
+    else:
+         options.small_gap = str(
+            int(float(options.small_gap) * 1e3))
     if (options.small_gap_penalty is None):
-        options.small_gap_penalty = str(0)
+        options.small_gap_penalty = str(20000)
+    else:
+        options.small_gap_penalty = str(
+            int(float(options.small_gap_penalty) * 1e3))
     return options
 
 

@@ -113,9 +113,9 @@ class StandardRun(CommandTemplate):
             (ped, map) = self.run_vcf_to_plink()
             (ped, map) = self.run_plink_filter(ped, map)
             (haps, sample) = self.run_shape_it(ped, map)
-            if(self.options.imputation):
-                (haps) = self.run_impute2(haps)
-                haps = self.indel_filter(haps)
+        if(self.options.imputation):
+            (haps) = self.run_impute2(haps)
+            haps = self.indel_filter(haps)
         # No more copy pasting of methods just one 
         # set of calls to all the methods in order
         new_sample_file = self.fix_sample_file(sample)
@@ -234,7 +234,7 @@ class StandardRun(CommandTemplate):
         """
         (cmd_template, output_prefix) = super(StandardRun, self).run_impute2(
             haps)
-        distance = int(self.options.impute_split_size) * 1000000
+        distance = int(self.options.impute_split_size) 
         try:
             proc = subprocess.Popen("""tail -1 {0}| awk '{{print $3}}'"""
                                     .format(haps), stdout=subprocess.PIPE,

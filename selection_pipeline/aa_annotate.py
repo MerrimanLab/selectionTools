@@ -36,6 +36,9 @@ from pyfasta import Fasta
 
 
 def aa_seq(options):
+    """ Gets the ancestral sequence from a Fasta file
+
+    """
     f = Fasta(options.ancestralfasta)
     keyz = (f.keys())
     match = ''
@@ -85,27 +88,40 @@ def get_haps_line(options, record):
         # If every snp will indeed be phased
         if('|' in gt):
             gtSplit = gt.split('|')
+            if(gtSplit[0] == '.'):
+                gtSplit[0] = '?'
+            if(gtSplit[1] == '?'):
+                gtSplit[1] = '?'
             line = line + ' ' + gtSplit[0] + ' ' + gtSplit[1]
         else:
-            line = line + '- -'
+            line = line + '? ?'
             break
     return line
 
 
-def write_hap_line(options, output_line, output=None):
+def write_hap_line(options,output_line,output=None):
+    """ Writes a haps file out
+
+        Either writes a haps file to stdout or stderr.
+    """
     if(output_line is not None):
         if (options.output is not None):
                 output.write(output_line + "\n")
         else:
                 print(output_line)
 
+def close_files(options,output=None):
+    """ Close output haps file.
 
-def close_files(options, output=None):
+    """
     if(options.output is not None):
         output.close()
 
 
 def vcf_to_haps(options):
+    """ Converts a VCF file to haps format
+
+    """
     if(options.output is not None):
         output = open(options.output, 'w')
     else:

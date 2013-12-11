@@ -134,6 +134,7 @@ def run_subprocess(
     # Very dirty hack 
     if(tool== 'selection_pipeline'):
         stderr = 'selection_stderr.tmp'
+        stdout = 'selection_stdout.tmp'
     if (working_dir is not None):
         orig_dir = os.getcwd()
         os.chdir(working_dir)
@@ -159,6 +160,13 @@ def run_subprocess(
             standard_out = stdout
     except:
         logger.error(tool + " failed to run " + ' '.join(command))
+        standard_err = open(stderr,'r')
+        while True:
+            line = standard_err.readline() 
+            if not line:
+                break
+            logger.info(tool +" STDERR: " + line.strip())
+        standard_err.close()
         sys.exit(SUBPROCESS_FAILED_EXIT)
     exit_code.wait()
     standard_err.close()
