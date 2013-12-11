@@ -2,20 +2,35 @@
 # and MAF
 
 import argparse
-import scipy.stats.fisher_exact
+try:
+    from  scipy import stats
+except ImportError as inst:
+    print "Could not import scipy install to use haps filters"
+    raise inst
+
 
 def hardy_weinberg_asymptotic(obs_het, obs_a , obs_b):
     obs_het = float(obs_het)
     obs_a = float(obs_a)
     obs_b = float(obs_b)
     sample_size = obs_het + obs_a + obs_b
-    p = (((2 * obs_a) + obs_het) / ( 2 * (sample_size))
+    p = (((2 * obs_a) + obs_het) / ( 2 * (sample_size)))
     q = 1 - p 
     exp_a = p * p * sample_size 
     exp_b = q * q * sample_size
     exp_ab = 2 * p * q * sample_size
     
-    chi_sq_1
+    # get chiSquare values
+    chi_a = ((obs_a - exp_a) * 2.0) / exp_a
+    chi_b = ((obs_b - exp_b) * 2.0) / exp_b
+    chi_ab = ((obs_het - exp_ab) * 2.0 ) / exp_ab
+    print(chi_a)
+    chi_sq_total = chi_a + chi_b + chi_ab
+    print(chi_sq_total)
+    return stats.chisqprob(chi_sq_total, 1)    
+    
+def hardy_weinberg_exact(obs_het, obs_a, obs_b):
+    return 1
 
 def filter_haps_file(args):
     with open(args.haps,'r') as input_haps:
@@ -28,7 +43,7 @@ def filter_haps_file(args):
                 if((1- (line.count('?')/total)) <  args.missing):
                     continue
                 zipa = line[0::2]
-                zipb = line[0::1]
+                zipb = line[1::2]
                 #count the occurence of AA AB BB alleles
                 countAA = 0
                 countAB = 0
@@ -45,7 +60,12 @@ def filter_haps_file(args):
                 countAA = float(countAA)
                 countAB = float(countAB)
                 countBB = float(countBB)
-                hwe_pvalue = hardy_weinberg_asymptotic(obs_het,obs_a,obs_b)
+                if(args.asymptotic):
+                    hwe_pvalue = \
+                         hardy_weinberg_asymptotic(countAB, countAA, countBB)
+                else:
+                    hwe_pvalue = \
+                        hardy_weinberg_exact(countAB,countAA,countBB)
                 if(hwe_pvalue < args.hwe):
                     continue
                 output_haps.write(snp_data)
@@ -60,8 +80,9 @@ def main():
     parser.add_argument('--hwe',dest='hwe')
     parser.add_argument('--haps',dest='haps')
     parser.add_argument('--output',dest='output')
-    parser.add_argument('--maf',dest='hwe')
+    parser.add_argument('--maf',dest='maf')
     parser.add_argument('--missing',dest='missing')    
+    parser.add_argument('--asymptotic',action='store_true',dest='asymptotic',default=False)
     args = parser.parse_args()
     if(args.hwe is None):
         args.hwe = 0.0
@@ -73,10 +94,11 @@ def main():
         args.maf = float(args.maf)
     if(args.missing is None):
         args.missing = 1
-    else 
+    else: 
         args.missing = float(args.missing)
     assert args.haps is not None, \
-        "Haps file is required to run haps filters"    assert args.output is not None, \
+        "Haps file is required to run haps filters"    
+    assert args.output is not None, \
         "Output file name is required to haps filter" 
     filter_haps_file(args) 
     

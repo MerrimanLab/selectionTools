@@ -226,7 +226,8 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
                 os.chdir(directory)
                 run_subprocess(cmd,'selection_pipeline') 
                 os.chdir(orig_dir)
-    queue_jobs(cmds,'selection_pipeline',cores,folder_names=folder_names)
+    if parralelise_populations:
+        queue_jobs(cmds,'selection_pipeline',cores,folder_names=folder_names)
 
 def fst_vcf(input_vcf, config, options, populations):
     """ Generates FST statistics for every pair of populations

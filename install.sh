@@ -61,6 +61,9 @@ git submodule update
 echo "Generating Default Config File"
 # Because PWD contains slashes (/) need to use # as substitution
 sed 's#!SELECT_PIPELINE!#'"${PWD}"'#g' src/defaults.cfg > defaults.cfg
+
+
+
 if [[ $EUID -eq 0 ]]; then
     (cd pyfasta && python setup.py install)
     (cd PyVCF && python setup.py install)

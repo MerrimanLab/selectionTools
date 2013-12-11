@@ -203,6 +203,13 @@ class StandardRun(CommandTemplate):
         run_subprocess(cmd, 'hapstovcf')
         return(output_name)
 
+    def haps_filter(self,haps):
+        """ Runs haps filter using subprocess
+
+        """
+        (cmd,output_name) = super(StandardRun,self).haps_filter(haps)
+        run_subprocess(cmd,'haps filter')
+        return(output_name)
     def join_impute2_files(self, output_prefix, no_commands):
         """ Join the impute2 output files
 

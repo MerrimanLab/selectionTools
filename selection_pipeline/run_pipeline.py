@@ -163,10 +163,11 @@ class CommandTemplate(object):
             Reads the config file and gets the ancestral fasta file
             to be used for ancestral annotation.
         """
-        if( not self.config['ancestral_allele']['split_by_chromosome']):
+        if(not self.config['ancestral_allele']['split_by_chromosome']):
             ancestral_fasta = \
                 self.config['ancestral_allele']['ancestral_fasta_file']
-            regex = self.config['ancestral_allele']['ancestral_fasta_header_regex']
+            regex = \
+                self.config['ancestral_allele']['ancestral_fasta_header_regex']
         else:
             for file in os.listdir(
                     self.config['ancestral_allele']['ancestral_fasta_dir']):
@@ -195,11 +196,11 @@ class CommandTemplate(object):
         aa_annotate = \
             self.config['ancestral_allele']['ancestral_allele_script']
         cmd.append(aa_annotate)
-        (ancestral_fasta ,regex)= self.get_ancestral_fasta()
+        (ancestral_fasta, regex) = self.get_ancestral_fasta()
         cmd.extend(['-c', self.options.chromosome, '-o',
                    output_haps, '-a', ancestral_fasta])
         if(regex is not None):
-            cmd.extend(['--header-regex',regex])
+            cmd.extend(['--header-regex', regex])
         else:
             cmd.extend(['--single-chromosome'])
         if(vcf):
@@ -255,21 +256,20 @@ class CommandTemplate(object):
                    haps, '-s', new_sample_file, '-og', output_name])
         return (cmd, output_name)
 
-    def vcf_to_haps(self,vcf):
+    def vcf_to_haps(self, vcf):
         """ Return the template for running vcf to haps ( no annotation )
 
         """
         cmd = []
         haps = self.options.output_prefix + \
-            self.options.chromosome + 'vcf_to_haps' + '.haps'    
-     
+            self.options.chromosome + 'vcf_to_haps' + '.haps'
         sample = self.options.output_prefix + \
-            self.options.chromosome + 'vcf_to_haps' + '.sample'    
+            self.options.chromosome + 'vcf_to_haps' + '.sample'
         aa_annotate = \
             self.config['ancestral_allele']['ancestral_allele_script']
         cmd.append(aa_annotate)
-        cmd.extend(['-c',self.options.chromosome, '-v', vcf, '-s', sample, '-o', 
-                   haps, '--no-annotation'])
+        cmd.extend(['-c', self.options.chromosome, '-v', vcf, '-s', sample,
+                   '-o', haps, '--no-annotation'])
         return(cmd, haps, sample)
 
     def fix_vcf_qctool(self, vcf):
@@ -292,6 +292,22 @@ class CommandTemplate(object):
         cmd.extend(['--TajimaD', self.options.tajimas_d, '--vcf', vcf])
         return(cmd, output_name)
 
+    def haps_filter(self, haps):
+        """  Return the template for running haps filter
+
+        """
+        cmd = []
+        output_name = self.options.output_prefix + self.options.chromosome + \
+            '_filtered' + '.haps'
+        python = self.config['python']['python_executable']
+        haps_filter_script = self.config['python']['haps_filter_script']
+        cmd.append(python)
+        cmd.append(haps_filter_script)
+        cmd.extend(['--maf', self.options.maf, '--hwe', self.options.hwe,
+                   '--asymptotic', '--missing', self.options.remove_missing,
+                   '--output', output_name, '--haps', haps])
+        return(cmd,output_name)
+
     def prepare_haps_for_variscan(self, haps, sample):
         """ Return the template for running haps to variscan
 
@@ -299,11 +315,13 @@ class CommandTemplate(object):
         cmd = []
         output_name = self.options.output_prefix + self.options.chromosome + \
             '.hapmap'
-        haps_executable = self.config['variscan']['haps_to_hapmap_executable']
+        python = self.config['python']['python_executable']
+        haps_executable = self.config['python']['haps_to_hapmap_script']
         (ancestral_fasta, regex) = self.get_ancestral_fasta()
+        cmd.append(python)
         cmd.append(haps_executable)
         if(regex is not None):
-            cmd.extend(['--header-regex',regex])
+            cmd.extend(['--header-regex', regex])
         else:
             cmd.extend(['--single-chromosome'])
         cmd.extend(['-i', haps, '-s', sample, '-o', output_name, '--id',
