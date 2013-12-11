@@ -187,13 +187,13 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
         Uses the population dictionary and the output vcfs from the subset
         process to run the selection pipeline on each population.
     """
-    cores = config['system']['cores_avaliable']    
+    cores = config['system']['cores_avaliable']
     parralelise_populations = False
     # Arbitrary cut off for parralelising each population
     # 4 at the moment could be calculated given the amount
     # of parralelisation needed in each run.
     if(len(populations) >= 4 and int(cores) >= 4):
-        parralelise_populations = True 
+        parralelise_populations = True
     orig_dir = os.getcwd()
     if(options.extra_args is not None):
         extra_args = options.extra_args
@@ -204,7 +204,7 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     # Run the selection pipeline for a single run job #
     selection_pipeline_executable = \
         config['selection_pipeline']['selection_pipeline_executable']
-    cmds=[]
+    cmds = []
     for vcf, population_name in zip(sorted(output_vcfs), sorted(populations)):
         cmd = []
         cmd.append(selection_pipeline_executable)
@@ -215,19 +215,22 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
         cmds.append(cmd)
         if parralelise_populations:
             folder_names = []
-        for vcf, population_name in zip(sorted(output_vcfs), sorted(populations)):
+        for vcf, population_name in zip(
+                sorted(output_vcfs), sorted(populations)):
             directory = population_name
             if not os.path.exists(directory):
                 os.mkdir(directory)
             if parralelise_populations:
-                folder_names.append(directory) 
+                folder_names.append(directory)
             else:
             # Create directory for each sub population to run in
                 os.chdir(directory)
-                run_subprocess(cmd,'selection_pipeline') 
+                run_subprocess(cmd, 'selection_pipeline')
                 os.chdir(orig_dir)
     if parralelise_populations:
-        queue_jobs(cmds,'selection_pipeline',cores,folder_names=folder_names)
+        queue_jobs(cmds, 'selection_pipeline',
+                   cores, folder_names=folder_names)
+
 
 def fst_vcf(input_vcf, config, options, populations):
     """ Generates FST statistics for every pair of populations
