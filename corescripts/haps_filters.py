@@ -30,7 +30,7 @@ def hardy_weinberg_asymptotic(obs_het, obs_a , obs_b):
     return stats.chisqprob(chi_sq_total, 1)    
     
 def hardy_weinberg_exact(obs_het, obs_a, obs_b):
-    
+   raise Exception("Not Implemented")
 
 def filter_haps_file(args):
     with open(args.haps,'r') as input_haps:
