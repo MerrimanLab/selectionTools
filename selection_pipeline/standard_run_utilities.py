@@ -134,6 +134,7 @@ def run_subprocess(
     # Very dirty hack 
     if(tool== 'selection_pipeline'):
         stderr = 'selection_stderr.tmp'
+        stdout = 'selection_stdout.tmp'
     if (working_dir is not None):
         orig_dir = os.getcwd()
         os.chdir(working_dir)
