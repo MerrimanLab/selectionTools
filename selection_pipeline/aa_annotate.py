@@ -38,26 +38,27 @@ from pyfasta import Fasta
 def aa_seq(options):
     f = Fasta(options.ancestralfasta)
     keyz = (f.keys())
-    chroms = {}
     match = ''
     if (options.single_chromosome):
         # Single chromosome fasta should only have one sequence.
         # that sequence should be the sequence of interest.
-        keyz=list(keyz)
-        key=keyz[0]
+        keyz = list(keyz)
+        key = keyz[0]
     else:
         get_chromosome_from_header = options.header
-        get_chromosome_from_header.replace('?',options.chromosome)
+        get_chromosome_from_header.replace('?', options.chromosome)
         for key in keyz:
-            if(re.match(get_chromosome_from_header,key) is not None):
+            if(re.match(get_chromosome_from_header, key) is not None):
                 match = key
-        if( match is '' ):
-            raise Exception("No match possible is something wrong with the regex"
-                            "specified to the program as --header-regex")
+        if(match is ''):
+            raise Exception("No match possible is something wrong with the"
+                            " regex specified to the program as"
+                            "--header-regex")
     aaSeq = f[key]
     return(aaSeq)
 
-def write_sample_file(options,vcf_reader):
+
+def write_sample_file(options, vcf_reader):
     if(options.sample_file is not None):
         sample_file = open(options.sample_file, 'w')
         sample_header = ("ID_1 ID_2 missing father mother sex plink_pheno"
@@ -66,10 +67,12 @@ def write_sample_file(options,vcf_reader):
         for sample in vcf_reader.samples:
             sample_file.write(sample + ' ' + sample + ' 0 0 0 0 -9 ' + '\n')
         sample_file.close()
-def get_haps_line(options,record):
+
+
+def get_haps_line(options, record):
     if(record.ID is not None):
         line = (record.ID + ' ' + record.ID + ' ' + str(record.POS) +
-            ' ' + str(record.REF) + ' ' + str(record.ALT[0]))
+                ' ' + str(record.REF) + ' ' + str(record.ALT[0]))
     else:
         id = options.chromosome + ":" + str(record.POS)
         line = (id + ' ' + id + ' ' + str(record.POS) + ' ' +
@@ -88,7 +91,8 @@ def get_haps_line(options,record):
             break
     return line
 
-def write_hap_line(options,output_line,output=None):
+
+def write_hap_line(options, output_line, output=None):
     if(output_line is not None):
         if (options.output is not None):
                 output.write(output_line + "\n")
@@ -96,9 +100,10 @@ def write_hap_line(options,output_line,output=None):
                 print(output_line)
 
 
-def close_files(options,output=None):
+def close_files(options, output=None):
     if(options.output is not None):
         output.close()
+
 
 def vcf_to_haps(options):
     if(options.output is not None):
@@ -106,25 +111,28 @@ def vcf_to_haps(options):
     else:
         output = None
     vcf_reader = vcf.Reader(filename=options.vcf_file)
-    write_sample_file(options,vcf_reader)
+    write_sample_file(options, vcf_reader)
     for record in vcf_reader:
-        write_hap_line(options,get_haps_line(options,record),output)
-    close_files(options,output)
-        
+        write_hap_line(options, get_haps_line(options, record), output)
+    close_files(options, output)
+
 
 def annotate_vcf(options):
     if(options.output is not None):
         output = open(options.output, 'w')
     else:
         output = None
+    vcf_reader = vcf.Reader(filename=options.vcf_file)
+    write_sample_file(options, vcf_reader)
     aaSeq = aa_seq(options)
     for record in vcf_reader:
-        line = get_haps_line(options,record)
+        line = get_haps_line(options, record)
         if(line is not None):
             output_line = aa_check(aaSeq[record.POS], record.REF,
                                    record.ALT, options.format, line)
-            write_hap_line(options,output_line,output)
-    close_files(options,output)
+            write_hap_line(options, output_line, output)
+    close_files(options, output)
+
 
 def aa_check(realAA, ref, alt, format, line):
     if(re.match('[ACTGactg]', realAA)):
@@ -190,16 +198,18 @@ def main():
     parser.add_option('-o', '--output', dest="output",
                       help="Output File (optional)")
     parser.add_option('-f', '--format', dest="format",
-                      help="Format use upper case or upper and lower case bases")
+                      help=("Format use upper case or upper "
+                            "and lower case bases"))
     parser.add_option('-v', '--phased-vcf', dest="vcf_file",
                       help="Phased VCF file (.vcf)")
     parser.add_option('-s', '--sample-file', dest="sample_file",
                       help="Output sample_file")
-    parser.add_option('--header-regex',dest="header",
+    parser.add_option('--header-regex', dest="header",
                       help=("To determine which chromosome to extract "
-                      "is a regex with a ? for the chromosome number"))
-    parser.add_option('--single-chromosome',action='store_true',dest='single_chromosome')
-    parser.add_option('--no-annotation',action="store_true",
+                            "is a regex with a ? for the chromosome number"))
+    parser.add_option('--single-chromosome', action='store_true',
+                      dest='single_chromosome')
+    parser.add_option('--no-annotation', action="store_true",
                       dest="no_annotation",
                       help=("No annotation of VCF file just"
                             " convert to haps"))
