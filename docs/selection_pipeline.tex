@@ -27,7 +27,7 @@
 
 
 \title{\textbf{A bioinformatics workflow for detecting signatures of selection in genomic data}}
-\date{December 9, 2013}
+\date{December 12, 2013}
 
 \author[1]{Murray Cadzow}
 \author[1]{James Boocock}
@@ -58,17 +58,19 @@ pipeline presented here generates various output files containing
 within- and between-population selection signatures. The starting
 point for the analysis
 is a variant call format (VCF) file of the genotype data and
-populations of interest \citep{Danecek:2011gz}. Both $F_{st}$ and
+populations of interest \citep{Danecek:2011gz}. Both $F_{ST}$ and
 Tajima's D can be calculated from standard genotype data
-\citep{Weir:1984vn} \citep{Tajima:1989un}. To compute iHS, rSB and Fay
+\citep{Weir:1984vn, Tajima:1989un}. To compute iHS, Rsb and Fay
 and Wu's H requires haplotype information, and thus the genotype data must be
-phased prior to calculation of these statistics \citep{Voight:2006go}
-\citep{Gautier:2012et} \citep{fayandwush}. For phasing, shapeit2 is
-used, and for imputation impute2 is used \citep{impute22009}
-\citep{Delaneau:2013hi}. Furthermore these statistics also require
+phased prior to calculation of these statistics \citep{Voight:2006go,
+  Gautier:2012et,fayandwush}. For phasing, shapeit2 is
+used, and for imputation impute2 is used \citep{impute22009,
+  Delaneau:2013hi}. Furthermore these statistics also require
 ancestral allele information \citep{Flicek:2012vg}.  The pipeline
 performs phasing if the VCF files do not contain phase information, and
-then performs ancestral allele annotation. Once complete, the rehh
+then performs ancestral allele annotation. 
+{\bf\color{blue}\small [*** JAMES - IS THIS ONLY TRUE FOR HUMAN DATA?  ***]}
+Once complete, the rehh
 package for R provides a simple interface for implementing EHH-based
 analyses \citep{Gautier:2012et}. Here we have extended rehh to include penalties
 for gaps that match those used in the original iHS paper
@@ -80,8 +82,8 @@ signatures dected by the various software tools.
 
 \section{Getting Started}
 \subsection{Prerequisites}
-The selection pipeline was developed on a 64-bit ubuntu 13.04 system
-and has been tested on 64-bit centos and ubuntu 13.10
+The selection pipeline was developed on a 64-bit Ubuntu 13.04 system
+and has been tested on 64-bit Centos and Ubuntu 13.10
 installations. The pipeline should work on any 64-bit linux derivative
 assuming some basic libraries and tools are installed on the
 system. 8GB of RAM should be sufficient for all computation steps
@@ -91,13 +93,15 @@ system. 8GB of RAM should be sufficient for all computation steps
 \item Python > = 2.6 
 \item Bourne-again Shell (Bash)
 \item Perl5
-\item R \( >= 3.0.0 \) (with a local library in your home directory)
+\item R \( >= 3.0.0 \) (with the ability to install packages into a
+  library within your home directory structure)
 \item GNU Autotools
 \item GCC 
 \item Git
 \end{itemize}
 The software is installed with the same permissions as the user than
-runs the script: if the user is not root then a local R library is
+runs the script: if the user is not root then a local (i.e.,
+user-writeable) R library is
 required. The program also installs the scripts to the user's
 ~/.local/bin directory.  This directory should be added to the system
 PATH to give direct access to the programs from the command-line. 
@@ -112,19 +116,24 @@ The following Python packages are required for the pipeline:
 Most linux distributions provide these packages through the official
 package management repositories.
 \subsection{Downloading}
-The selection pipeline can be obtained at the url \href{https://github.com/smilefreak/MerrimanSelectionPipeline}{MerrimanSelectionPipeline}. 
+The selection pipeline can be obtained at the url:
+\href{https://github.com/smilefreak/selectionTools}
+{https://github.com/smilefreak/selectionTools}
 
+\noindent
 To download run the following command in a terminal.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-git clone https://github.com/smilefreak/MerrimanSelectionPipeline
+git clone https://github.com/smilefreak/selectionTools
 \end{minted}
 
 \subsection{Installation}
 
 \noindent
 To perform an automatic installation of the selection
-analysis pipeline, run the command in the root of the directory you installed the pipeline in.\\
+analysis pipeline, run the following command in the root of the
+directory in which the pipeline was installed (i.e., within the
+``selectionTools'' directory).\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ./install.sh
 \end{minted}
@@ -139,7 +148,8 @@ installed correctly, run the following command at a terminal prompt.
 selection_pipeline -h
 \end{minted}
 
-If the above command does not work make sure that ~/.local/bin/ is part of the PATH environment variable.
+\noindent
+If the above command does not work, make sure that ~/.local/bin/ is included in the PATH environment variable.
 
 \subsection{Genetic Maps and Impute Haplotypes}
 To use the phasing and imputation features of the pipeline requires
@@ -170,6 +180,7 @@ impute_reference_prefix=ALL_1000G_phase1integrated_v3_chr?_impute
 ...
 \end{minted}
 
+\noindent
 If you decide to store the reference files in another location,
 further options require alteration in the config file:\\ 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
@@ -188,9 +199,9 @@ allele. The selection pipeline uses the ancestral alleles from the
 downloaded from
 \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2}{here}. Be
 sure to extract the contents of the archive after download. The default
-directory to store the ancestral reference files is
+directory to store the ancestral reference files is\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-referencefiles/ancestral_ref/.
+referencefiles/ancestral_ref/
 \end{minted}
 
 \noindent
@@ -210,15 +221,19 @@ Chromosome 2 at the coordinates:
 megabase region containing the LCT, and genotype data from the CEU and YRI
 populations from the 1000 Genomes Project. In order to demonstrate the
 functionality of the pipeline we will use the chromosome 2 region
-130,000,000-140,000,000. To download the example dataset enter the
-command below. The lactase gene is an example of strong selection in
+130,000,000-140,000,000. The lactase gene is an example of strong selection in
 the last 5,000-10,000 years in human populations, specifically
 those of European ancestory \citep{lactase2004}. 
+To download the example dataset enter the
+following command:
 
+{\small
 \begin{minted}[bgcolor=bg]{bash}
 wget https://github.com/smilefreak/SelectionPipelineTestData/blob/master/selection_pipeline_tutorial.tar.gz
 \end{minted}
+}
 
+\noindent
 Extract the example data into a new folder.
 
 \subsection{Setting up the Pipeline Run}
@@ -230,7 +245,7 @@ contains the population name, and every successive line contains an
 individual ID from that population.\\
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-<POPULATION\_IDENTIFIER>
+<POPULATION_IDENTIFIER>
 <INDIVIDUAL ID 1>
 <INDIVIDUAL ID 2>
 .......
@@ -239,13 +254,17 @@ individual ID from that population.\\
 \subsection{Run The Tutorial}
 The default configuration file is located in the base directory of the
 selection pipeline. To run the pipeline, execute the command below in
-the folder in which the exaple data were extracted, and change the
+the folder in which the example data were extracted, and change the
 --config-file parameter to match the location where the pipeline is installed.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt 
--i CEU_YRI_lactase.vcf --config-file defaults.cfg
---fst-window-size 1000 --fst-window-step 1000
+multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt \
+  -i CEU_YRI_lactase.vcf --config-file defaults.cfg \
+  --fst-window-size 1000 --fst-window-step 1000
 \end{minted}
+\noindent
+{\bf\small\color{blue} [*** JAMES - I added backslashes to the code
+  above in case people try to paste directly in the command line -
+  good or stupid?  ***]} 
 
 \noindent
 The generated folders and current folder have all the data required to
@@ -266,7 +285,7 @@ output can be extrenely useful.
 %effectiveness of the pipeline. 
 The next section describes some basic approaches to 
 plotting these data using the R programming language. All of the following
-commands are run in a R session with the working directory set as the base
+commands are run in an R session with the working directory set as the base
 directory from which the tutorial is being run. In each of the plots
 that follow, the vertical blue lines indicate the position of the
 lactase gene (LCT).
@@ -444,16 +463,12 @@ rect(136545410,-10,136594750,10,border="Blue")
 \noindent
 Figure~\ref{fig:tajyri} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the YRI population
 
-\subsubsection{rSB}
+\subsubsection{Rsb}
 
 \noindent
 {\bf\small\color{blue} [*** JAMES - WHAT IS HAPPENING HERE? ***]}
 \begin{minted}[bgcolor=bg,frame=lines]{R}
 \end{minted}
-
-\noindent
-{\bf\small\color{blue} [*** THIS IS AS FAR AS I'VE EDITED (MIK - 1PM,
-  10 DEC 2013). ***]}
 
 \pagebreak
 \section{Output Files}
@@ -468,9 +483,9 @@ CHROM   BIN_START       BIN_END N_VARIANTS      WEIGHTED_FST    MEAN_FST
 \subsection{selection\_pipeline}
 All the outputs for each population are contained in the results folder. If you ran the tool using \emph{multi\_population} the outputs are located in <pop name>/results. 
 \subsubsection{Fay and Wu's H}
-Space-delimited data file containing header line that start with a hash character (\#). Contains lots of columns if you are only interested in Fay and Wu's H, column 1 provides the position and column 15 provides the H statistic. \\
+Space-delimited data file containing header line that start with a hash character (\#). Contains lots of columns. If you are only interested in Fay and Wu's H, column 1 provides the position and column 15 provides the H statistic. \\
 \begin{minted}[bgcolor=bg,frame=lines]{rst}
-# RefStart   Refend ... FayWu\_H
+# RefStart   Refend ... FayWu_H
 130000040 130005039 ... -22.2438460
 \end{minted}
 \subsubsection{iHS}
@@ -488,12 +503,21 @@ Space-delimited data file containing one header line followed by data on each su
 \subsubsection{Tajima's D}
 Space-delimited data file containing one header line followed by data on each subsequent line.\\
 \begin{minted}[bgcolor=bg,frame=lines]{rst}
-CHROM   BIN\_START       N\_SNPS  TajimaD
+CHROM   BIN_START       N_SNPS  TajimaD
 2       130000000       22      0.775224
 \end{minted}
 
 \section{Command line Arguments}
-The selection pipeline contains three programs: \emph selection\_pipeline,\emph aa\_annotate, and\emph multipopulation. The selection pipeline does all the intra-population statistics calculations. The multipopulation program calculates all the inter-population statistics and calls the selection pipeline. The aa\_annotate program annotates a haplotype file or a phased vcf file with the ancestral allele from the 6-way EPO alignment, for other species or alternative ancestral annotation the feauture will be added promptly.
+The selection pipeline contains three programs:
+\emph{selection\_pipeline}, \emph{aa\_annotate} and
+\emph{multi\_population}. The selection pipeline does all the
+intra-population statistics calculations. The multi\_population program
+calculates all the inter-population statistics and calls the selection
+pipeline. The aa\_annotate program annotates a haplotype file or a
+phased vcf file with the ancestral allele from the 6-way EPO
+alignment, for other species or alternative ancestral annotation, the
+feauture will be added in the future.
+
 \subsection{Multipopulation}
 \subsubsection{Input Files}
 \begin{itemize}
@@ -523,9 +547,10 @@ Path to the selection pipeline config file an example config file is located in 
 \item --no-clean-up\\ 
 Do not clean up intermediate data files.
 \item --fst-window-size <FST window size>\\
-Fst calculation sliding window size in kilobases. (default = 1kb)
+Fst calculation sliding window size in kilobases (default = 1kb).
 \item --fst-window-step <FST window step>\\
-Fst calculation windoow jump in kilobases, if window size is equal to the jump size non-overlapping windows are used. (default = 1kb)
+Fst calculation windoow jump in kilobases, if window size is equal to
+the jump size non-overlapping windows are used (default = 1kb).
 \item --cores \\
 Number of cores avaliable for the pipeline overrides setting in the config file.
 \end{itemize}
@@ -548,7 +573,8 @@ Single population VCF updated by the pipeline, can contain.
 \subsubsection{Other parameters(Compulsory)}
 \begin{itemize}
 \item --config-file <Config File path>\\
-Path to the selection pipeline config file an example config file is located in the base directory of the extracted package.
+Path to the selection pipeline config file an example config file is
+located in the base directory of the extracted package.
 \end{itemize}
 \subsubsection{Other parameters(Optional)}
 \begin{itemize}
@@ -558,54 +584,64 @@ Name for the log file. Moved into the logs folder at the end of program run.
 
 \item --maf <minimum MAF>
 
-Minor allele frequency filter threshold any SNPs below this threshold will be discarded from the analysis. (default = 0.01)
+Minor allele frequency filter threshold any SNPs below this threshold
+will be discarded from the analysis (default = 0.01).
 
 \item --hwe <hardy-weinberg minimum p-value>
 
-A hardy weinberg test is performed on every snp any snps failing the test will be discarded. (default = 0.001)
+A hardy weinberg test is performed on every snp any snps failing the
+test will be discarded (default = 0.001).
 
 \item --remove-missing <Inclusion threshold for missing genotypes>
 
-Inclusion criteria for SNPs with missing data. SNPs with less than this value will be removed from analysis. (default = 0.99)
+Inclusion criteria for SNPs with missing data. SNPs with less than
+this value will be removed from analysis (default = 0.99).
 
 \item --fay-Window-Width <window width>
 
-Sliding window width for Fay and Wu's H calculation in kb (default = 5kb)
+Sliding window width for Fay and Wu's H calculation in kb (default = 5kb).
 
 \item --fay-Window-Jump <Window Jump>
 
-Window jump for Fay and Wu's H calculation, if equal to fay-Window-Width non-overlapping windows will be used. (default = 5kb)
+Window jump for Fay and Wu's H calculation, if equal to
+fay-Window-Width non-overlapping windows will be used (default =
+5kb).
 
 \item --TajimaD <tajimas D bin size>
 
-Tajima's D statistic bin size in kb. (default = 5kb)
+Tajima's D statistic bin size in kb (default = 5kb).
 \item --no-clean-up 
 
 Do not clean up intermediate data files
 
 \item --ehh-window-size
 
-Window size for multicore rehh calculations in Megabases (Mb). (default = 5Mb) 
+Window size for multicore rehh calculations in Megabases (Mb) (default = 5Mb). 
 
 \item --ehh-overlap
 
-Window overlap for multicore rehh calculations in Megabases (Mb). (defaut = 2Mb)
+Window overlap for multicore rehh calculations in Megabases (Mb) (defaut = 2Mb).
 
 \item --daf <Minimum derived allele frequency>
 
-Derived allele frequencies below this minimum will be discarded. (default = 0.0)
+Derived allele frequencies below this minimum will be discarded (default = 0.0).
 
 \item --big-gap
 
-Gap size in kb for not calculating iHH if the gap is too large. If set to zero the big-gap rule is not applied. (default = 0kb)
+Gap size in kb for not calculating iHH if the gap is too large. If set
+to zero the big-gap rule is not applied (default = 0kb).
 
 \item --small-gap
 
-Gap size in kb for applying a penalty to the area calculated by iHH. If set to zero the small-gap rule is not applied. ( default = 0kb)
+Gap size in kb for applying a penalty to the area calculated by
+iHH. If set to zero the small-gap rule is not applied (default = 0kb).
 
 \item --small-gap-penalty
 
-Penalty multiplier for intergration step in iHH calculation. $multiplier/gap\_size * area$ is the formula we use. Setting the multiplier to the same value as the small gap threshold is recommended. (default = 0kb)
+Penalty multiplier for intergration step in iHH
+calculation. $multiplier/gap\_size * area$ is the formula we
+use. Setting the multiplier to the same value as the small gap
+threshold is recommended (default = 0kb).
 
 \item --cores 
 
@@ -613,7 +649,9 @@ Number of cores avaliable for the pipeline overrides setting in the config file.
 
 \end{itemize}
 \subsection{Ancestral Annotation}
-The progam \emph{ancestral\_annotation} is installed on the program path. The program annotates haps and vcfs files with ancestral allele annotation from the 6-way IPO alignment or the human reference genome.
+The progam \emph{ancestral\_annotation} is installed in the program
+path. The program annotates .haps and .vcf files with ancestral allele
+annotation from the 6-way IPO alignment or the human reference genome.
 \subsubsection{Input Files}
 \begin{itemize}
 \item -i or --haps <HAPS File>
@@ -625,7 +663,10 @@ Haplotype File (.haps)
 Phased VCF file (.vcf), phased VCF genotypes denoted by a bar ( | ) for each sample.
 \item -a or -aa <Ancestral allele fasta>
 
-Ancestral allele annotation file. Currently only works on a the full 1000 genomes GRCh37\.64 reference file or the single chromosome fasta files from the 6-way EPO alignment.
+Ancestral allele annotation file. Currently only works on a the full
+1000 Genomes Project GRCh37\.64 reference file or the single chromosome fasta
+files from the 6-way EPO alignment.
+
 \end{itemize}
 \subsubsection{Output Files}
 \begin{itemize}
@@ -641,7 +682,11 @@ Sample file output name ( currently only works with phased vcf option)
 \begin{itemize}
 \item --header-regex 
 
-Compulsory argument it is a regex with a question mark denoting substitution for the chromosome number. The regex should match the header in the fasta file and when the question mark is replaced selectively return only the chromosome of interest. Optional for single chromosome fasta files.
+Compulsory argument: it is a regex (regular expression) with a question mark denoting
+substitution for the chromosome number. The regex should match the
+header in the fasta file and when the question mark is replaced
+selectively return only the chromosome of interest. Optional for
+single chromosome fasta files.
 
 \item --single-chromosome
 
@@ -653,27 +698,55 @@ The number or symbol of the chromosome being used.
 
 \item -f or --format <format>
 
-The 6-way EPO alignment denotes ancestral alleles with both high and low confidence. To use only ancestral alleles with high confidence use --format upper. To use both high and low confident alleles use --format lower. By default the program will use only highly confident alleles. The highly confident alleles are in uppercase. 
+The 6-way EPO alignment denotes ancestral alleles with both high and
+low confidence. To use only ancestral alleles with high confidence use
+--format upper. To use both high and low confident alleles use
+--format lower. By default the program will use only highly confident
+alleles. The highly confident alleles are in uppercase. 
 
+<<<<<<< HEAD
 By default it uses all the valid bases in the file that are one  of either A, T, C, G, a, t, c or g
+=======
+
+By default it uses all the valid bases in the file that are one  of
+either A,T,C,G,a,t,c or g.
+>>>>>>> 412695b4cae8b7ea5fc7f907d86642e8a45a7b2f
 
 \end{itemize}
 \subsection{Configuration File}
-The selection pipeline requires a configuration file, by default the program looks in the current working directory for a file named defaults.cfg but you can point the program to any file using command line argument --config-file <config\_file\_location>. There are two main programs in the selection pipeline namely \emph{selection\_pipeline} and \emph{multi\_population}. These programs share a config file but certain configuration parameters can be ommitted when using the \emph{selection\_pipeline} program exclusively. A clean install of the program generates an example configuration file containing default arguments for all the compulsory parameters. The default config file contains an example of the format.
+The selection pipeline requires a configuration file. By default the
+program looks in the current working directory for a file named
+defaults.cfg but you can point the program to any file using command
+line argument --config-file <config\_file\_location>. There are two
+main programs in the selection pipeline namely
+\emph{selection\_pipeline} and \emph{multi\_population}. These
+programs share a config file but certain configuration parameters can
+be ommitted when using the \emph{selection\_pipeline} program
+exclusively. A clean install of the pipeline generates an example
+configuration file containing default arguments for all the compulsory
+parameters. The default config file contains an example of the format.
 \subsubsection{system}
 \begin{itemize}
 \item cores\_avaliable
 
-Certain programs in the pipeline can take advantage of multicore computers. This option instructs the pipeline about the maximum number of concurrent processes it is allowed to use.
+Certain programs in the pipeline can take advantage of multicore
+computers. This option instructs the pipeline about the maximum number
+of concurrent processes it is allowed to use.
 \end{itemize}
 \subsubsection{environment}
 \begin{itemize}
 \item LD\_LIBRARY\_PATH
 
-Set the library path when running the pipeline, this enables the pipeline to use the shared libraries that are used for some programs in the pipeline. (alter this option with caution!)
+Set the library path when running the pipeline, this enables the
+pipeline to use the shared libraries that are used for some programs
+in the pipeline (alter this option with caution!)
+
 \item PERL5LIB
 
-Sets the PERL5LIB environment variable, this enables the pipeline to use the perl libraries required by VCFTOOLS. (alter this option with caution!)
+Sets the PERL5LIB environment variable, this enables the pipeline to
+use the perl libraries required by VCFTOOLS (alter this option with
+caution!)
+
 \end{itemize}
 \subsubsection{selection\_pipeline}
 \begin{itemize}
@@ -685,13 +758,16 @@ Points to the location of the selection\_pipeline\_executable.
 \begin{itemize}
 \item vcf\_tools\_executable 
 
-Points to the vcftools executable, by default it points to the vcftools executable installed with the pipeline.
+Points to the vcftools executable, by default it points to the
+vcftools executable installed with the pipeline.
 \item vcf\_subset\_executable 
 
-Points to the vcf-subset executable, by default pointing to the vcf-subset installed with the pipeline.
+Points to the vcf-subset executable, by default pointing to the
+vcf-subset installed with the pipeline.
 \item vcf\_merge\_executable
 
-Points to the vcf-merge executable, by default pointing to the vcf-subset installed with the pipeline.
+Points to the vcf-merge executable, by default pointing to the
+vcf-subset installed with the pipeline.
 \item extra\_args 
 
 A quoted string containing extra arguments to send to the vcf\_tools executable.
@@ -708,7 +784,8 @@ Directory containing the genetic map for shapeit.
 
 The full file for the genetic map files with a "?" character representing the changing chromosome number.
 \item extra\_args 
-extra arguments to send to shapeit. (Warning: Certain options could potentially break to pipeline use with caution)
+extra arguments to send to shapeit (Warning: Certain options could
+potentially break the pipeline  - use with caution).
 \end{itemize}
 \subsubsection{impute2}
 \begin{itemize}
@@ -726,13 +803,16 @@ Directory containing the reference panel ( .legend and .hap) files for impute2.
 Window size for imputation calculation.
 \item impute\_map\_prefix
 
-The full file name for the genetic map files with a "?" character representing the changing chromosome number
+The full file name for the genetic map files with a "?" character
+representing the changing chromosome number
 \item impute\_reference\_prefix
 
-The full file name for the reference panels minus the extension with a "?" character representing the changing chromosome number.
+The full file name for the reference panels minus the extension with a
+"?" character representing the changing chromosome number.
 \item extra\_args
 
- extra arguments to send to impute2. (Warning: Certain options could potentially break to pipeline use with caution)
+extra arguments to send to impute2 (Warning: Certain options could
+potentially break to pipeline use with caution).
 \end{itemize}
 \subsubsection{plink}
 \begin{itemize}
@@ -744,7 +824,7 @@ Location of the plink executable
 \begin{itemize}
 \item rscript\_executable
 
-Location of the rscript executable. (Program usually on path so just Rscript is the default)
+Location of the rscript executable (Program usually in path so just Rscript is the default).
 \item indel\_filter
 
 Location of the rscript indel\_filter (hap\_indel\_and\_maf\_filter.R)i
@@ -759,11 +839,22 @@ location of the python executable (2 or 3)
 \begin{itemize}
 \item split\_by\_chromosome
 
-Option determines whether our ancestral fasta file is split by chromosome or not. If the ancestral fasta is split by chromosome the ancestral\_fasta\_dir and ancestral\_prefix arguments are required. If the ancestral fasta is just one flat file the ancestral\_fasta\_file options is required which is just merely the location of the ancestral fasta option.
+Option determines whether the ancestral fasta file is split by
+chromosome or not. If the ancestral fasta is split by chromosome the
+ancestral\_fasta\_dir and ancestral\_prefix arguments are required. If
+the ancestral fasta is just one flat file the ancestral\_fasta\_file
+options is required which is just merely the location of the ancestral
+fasta option.
 
 \item ancestral\_fasta\_header\_regex
 
-This options specifies a regular expression that will extract each chromosome from the fasta file. The '?' denotes the chromosome number and will be replaced in the regular expression for the chromosome number of interest. Even when using one fasta per chromosome this is required as the python library used to extract the sequence uses the fasta header for extraction. Only required if your fasta file is not split by chromosome.
+This options specifies a regular expression that will extract each
+chromosome from the fasta file. The '?' denotes the chromosome number
+and will be replaced in the regular expression for the chromosome
+number of interest. Even when using one fasta per chromosome this is
+required as the python library used to extract the sequence uses the
+fasta header for extraction. Only required if your fasta file is not
+split by chromosome.
 
 \item ancestral\_fasta\_file
 
@@ -793,31 +884,65 @@ Location of the qctool executable.
 
 Location of the multicore\_iHH.R script
 
-The rehh package source included with the pipeline has been altered to match the output filters used in Voight's paper. If the EHH > 0.05 reaches the end of a chromosome or the start of a gap > big\_gap\_threshold , then no value is returded for the core snp. The small\_gap\_threshold specifies the gap distance to reduce the distance spanned by the gap by a multiplicative factorpecified by small\_gap\_multiplier. The formula for the penalty is $\frac{small\_gap\_multiplier}{gap\_size}$. To match the parameters used by Voight, 200000 should be  used for big\_gap\_threshold, 20000 for small\_gap\_threshold and 20000 for small\_gap\_multiplier \citep{Voight:2006go}.
+The rehh package source included with the pipeline has been altered to
+match the output filters used in Voight's paper. If the EHH > 0.05
+reaches the end of a chromosome or the start of a gap >
+big\_gap\_threshold , then no value is returded for the core snp. The
+small\_gap\_threshold specifies the gap distance to reduce the
+distance spanned by the gap by a multiplicative factorpecified by
+small\_gap\_multiplier. The formula for the penalty is
+$\frac{small\_gap\_multiplier}{gap\_size}$. To match the parameters
+used by Voight, a value of 200,000 should be  used for big\_gap\_threshold, 20,000
+for small\_gap\_threshold and 20,000 for small\_gap\_multiplier
+\citep{Voight:2006go}.
+
 
 \end{itemize}
 \section{Log Files}
 The log files contain all the information for a pipeline run including any errors if for some reason some part of the pipeline does not complete.
 \subsection{multi\_population}
-The location of the log file for  \emph{multi\_population} defaults is located in the log directory. Contains all the logging information for the between population selection signature calculations.
+The location of the log file for  \emph{multi\_population} defaults is
+located in the log directory. It contains all the logging information
+for the between population selection signature calculations.
+
 \subsection{selection\_pipeline}
-The location of the log file for \emph{selection\_pipeline} is located in the log directory The log file contains all the logging information for the within population selection signature calculations.
+The location of the log file for \emph{selection\_pipeline} is located
+in the log directory. The log file contains all the logging
+information for the within population selection signature
+calculations.
 
 \section{Extra Features}
 
 \subsection{Galaxy Intergration}
-The galaxy folder contains the scripts required to add the selection pipeline to your local galaxy installation. The pipeline is also avaliable on the galaxy toolshed at galaxy\_url. To do intergrate the pipeline into galaxy.
+The galaxy folder contains the scripts required to add the selection
+pipeline to a local galaxy installation. The pipeline is also
+avaliable on the galaxy toolshed at galaxy\_url. To do intergrate the
+pipeline into galaxy.
+
+\noindent
+{\bf\small\color{blue} [*** JAMES - is this stuff available for
+  Galaxy? ***]}
+
 \section{F.A.Q}
 \begin{enumerate}
 \item How do I run \emph{multi\_population} with a phased VCF?
 
-In the -a argument for multi\_population merely add --phased-vcf between the quotes this will ensure phasing and imputation will be skipped when \emph{selection\_pipeline} is called.
+In the -a argument for multi\_population merely add --phased-vcf
+between the quotes. This will ensure phasing and imputation will be
+skipped when \emph{selection\_pipeline} is called.
 
-\item My populations are in seperate VCF-Files how do I run \emph{multi\_population}?
 
-To run the pipeline you will need to merge the VCF-files into one large multipopulation VCF file and generate the appropriate population files. 
+\item My populations are in seperate VCF-Files: how do I run \emph{multi\_population}?
 
-To merge your vcfs you can use the vcf-merge program for this to work correctly outside the selection pipeline you will need to add the following to your .bashrc file or equivalent dot-file for another shell.\\
+To run the pipeline you will need to merge the VCF-files into one
+large multipopulation VCF file and generate the appropriate population
+files. 
+
+To merge your vcfs you can use the vcf-merge program. For this to work
+correctly outside the selection pipeline you will need to add the
+following to your .bashrc file or equivalent dot-file for another
+shell.\\
+
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 
 export PERL5LIB=\${PERL5LIB}:<path to selection pipeline>/lib/perl5
@@ -828,22 +953,25 @@ The command to run vcf-merge is as follows.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 
-vcf-merge <vcf1.vcf> <vcf2.vcf> ..... > big\_vcf.vcf
+vcf-merge <vcf1.vcf> <vcf2.vcf> ..... > big_vcf.vcf
 
 \end{minted}
 
 \item My VCF file is not split by chromosome how do I get my VCF into a single chromosome?
 
-The vcftools program can be used to extract each chromosome from your full vcf file. If you do not have the vcftools program installed the bin/ directory  contains exactly what you need. For example for human 1000 genomes data to extract chromosome 2 from your VCF file use the following command. 
+The vcftools program can be used to extract each chromosome from your
+full vcf file. If you do not have the vcftools program installed the
+bin/ directory  contains exactly what you need. For example, for human
+1000 genomes data to extract chromosome 2 from your VCF file use the
+following command. 
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 
-vcf-tools --vcf big\_vcf.vcf --chr 2 --out chr2 --recode
+vcf-tools --vcf big_vcf.vcf --chr 2 --out chr2 --recode
 
 \end{minted}
 
-
-The command will generate a vcf file name chr2.recode.vcf containing only data from chromosome 2.
+The command will generate a vcf file named chr2.recode.vcf containing only data from chromosome 2.
 
 \end{enumerate}
 \clearpage
