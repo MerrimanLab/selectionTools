@@ -299,9 +299,7 @@ class CommandTemplate(object):
         cmd = []
         output_name = self.options.output_prefix + self.options.chromosome + \
             '_filtered' + '.haps'
-        python = self.config['python']['python_executable']
-        haps_filter_script = self.config['python']['haps_filter_script']
-        cmd.append(python)
+        haps_filter_script = self.config['haps_scripts']['haps_filter_script']
         cmd.append(haps_filter_script)
         cmd.extend(['--maf', self.options.maf, '--hwe', self.options.hwe,
                    '--asymptotic', '--missing', self.options.remove_missing,
@@ -315,10 +313,8 @@ class CommandTemplate(object):
         cmd = []
         output_name = self.options.output_prefix + self.options.chromosome + \
             '.hapmap'
-        python = self.config['python']['python_executable']
-        haps_executable = self.config['python']['haps_to_hapmap_script']
+        haps_executable = self.config['haps_scripts']['haps_to_hapmap_script']
         (ancestral_fasta, regex) = self.get_ancestral_fasta()
-        cmd.append(python)
         cmd.append(haps_executable)
         if(regex is not None):
             cmd.extend(['--header-regex', regex])

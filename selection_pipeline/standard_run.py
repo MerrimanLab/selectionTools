@@ -53,40 +53,61 @@ class StandardRun(CommandTemplate):
         if(self.which(
                 self.config['plink']['plink_executable'],
                 'plink')is None):
+            logger.error("plink not found check config file")
             return False
         if(self.which(
                 self.config['shapeit']['shapeit_executable'],
                 'shapeit') is None):
+            logger.error("shapeit not found check config file")
+            
             return False
         if(self.which(
                 self.config['ancestral_allele']['ancestral_allele_script'],
                 'ancestral_allele'
                 ) is None):
+            logger.error("ancestral_allele not found check config file")
             return False
         if(self.which(
                 self.config['impute2']['impute_executable'],
                 'impute2'
                 ) is None):
+            logger.error("impute2 not found check config file")
             return False
         if(self.which(
                 self.config['Rscript']['indel_filter'],
                 'indel_filter'
                 ) is None):
+            logger.error("indel_filter not found check config file")
             return False
         if(self.which(
                 self.config['Rscript']['rscript_executable'],
                 'Rscript'
                 ) is None):
+            logger.error("Rscript not found check config file")
             return False
         if(self.which(
                 self.config['multicore_ihh']['multicore_ihh'],
                 'multicore_ihh'
                 ) is None):
+            logger.error("multicore_ihh not found check config file")    
             return False
         if(self.which(
                 self.config['qctool']['qctool_executable'],
                 'qctool'
                 ) is None):
+            logger.error("qctool not found check config file")
+            return False
+        if(self.which(
+                self.config['haps_scripts']['haps_to_hapmap_script'],
+                'haps_to_hapmap'
+                ) is None):
+            logger.error("haps_to_hapmap not found check config file")
+            return False
+        if(self.which(
+                self.config['haps_scripts']['haps_filter_script'],
+                'haps_filter'
+                ) is None):
+            logger.error('haps_filter not found check config file')
             return False
         return True
 
@@ -99,7 +120,8 @@ class StandardRun(CommandTemplate):
         self.config = config
         if(full_run):
             if(not self.check_executables_and_scripts_exist()):
-                sys.exit(MISSING_EXECUTABLE_ERROR)
+                raise Exception("Executable missing check logs "
+                                "for more information")
             self.threads = self.config['system']['cores_avaliable']
 
     def run_pipeline(self):

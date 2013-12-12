@@ -94,6 +94,7 @@ system. 8GB of RAM should be sufficient for all computation steps
 \item R \( >= 3.0.0 \) (with a local library in your home directory)
 \item GNU Autotools
 \item GCC 
+\item Git
 \end{itemize}
 The software is installed with the same permissions as the user than
 runs the script: if the user is not root then a local R library is
@@ -113,16 +114,10 @@ package management repositories.
 \subsection{Downloading}
 The selection pipeline can be obtained at the url \href{https://github.com/smilefreak/MerrimanSelectionPipeline}{MerrimanSelectionPipeline}. 
 
-For git users the following command will obtain the pipeline.
+To download run the following command in a terminal.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 git clone https://github.com/smilefreak/MerrimanSelectionPipeline
-\end{minted}
-
-Or with wget.
-
-\begin{minted}[bgcolor=bg,frame=lines]{bash}
-wget https://github.com/smilefreak/MerrimanSelectionPipeline/archive/master.zip
 \end{minted}
 
 \subsection{Installation}
@@ -660,7 +655,7 @@ The number or symbol of the chromosome being used.
 
 The 6-way EPO alignment denotes ancestral alleles with both high and low confidence. To use only ancestral alleles with high confidence use --format upper. To use both high and low confident alleles use --format lower. By default the program will use only highly confident alleles. The highly confident alleles are in uppercase. 
 
-By default it uses all the valid bases in the file that are one  of either A,T,C,G,a,t,c or g.
+By default it uses all the valid bases in the file that are one  of either A, T, C, G, a, t, c or g
 
 \end{itemize}
 \subsection{Configuration File}
@@ -802,6 +797,7 @@ The rehh package source included with the pipeline has been altered to match the
 
 \end{itemize}
 \section{Log Files}
+The log files contain all the information for a pipeline run including any errors if for some reason some part of the pipeline does not complete.
 \subsection{multi\_population}
 The location of the log file for  \emph{multi\_population} defaults is located in the log directory. Contains all the logging information for the between population selection signature calculations.
 \subsection{selection\_pipeline}

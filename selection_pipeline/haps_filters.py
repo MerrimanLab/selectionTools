@@ -21,12 +21,19 @@ def hardy_weinberg_asymptotic(obs_het, obs_a , obs_b):
     exp_ab = 2 * p * q * sample_size
     
     # get chiSquare values
-    chi_a = ((obs_a - exp_a) * 2.0) / exp_a
-    chi_b = ((obs_b - exp_b) * 2.0) / exp_b
-    chi_ab = ((obs_het - exp_ab) * 2.0 ) / exp_ab
-    print(chi_a)
+    if(exp_a == 0):
+        chi_a = 0
+    else:
+        chi_a = ((obs_a - exp_a) * 2.0) / exp_a
+    if(exp_b == 0):
+        chi_b = 0
+    else:
+        chi_b = ((obs_b - exp_b) * 2.0) / exp_b
+    if(exp_ab == 0):
+        chi_ab = 0
+    else:
+        chi_ab = ((obs_het - exp_ab) * 2.0 ) / exp_ab
     chi_sq_total = chi_a + chi_b + chi_ab
-    print(chi_sq_total)
     return stats.chisqprob(chi_sq_total, 1)    
     
 def hardy_weinberg_exact(obs_het, obs_a, obs_b):
@@ -34,17 +41,24 @@ def hardy_weinberg_exact(obs_het, obs_a, obs_b):
 
 def filter_haps_file(args):
     with open(args.haps,'r') as input_haps:
-        with open(args.output,'r') as output_haps:
+        with open(args.output,'w') as output_haps:
             for snp_data in input_haps:
                 line = snp_data.split()[5:]
-                total = len(line.split)
-                if(sum(line)/total < args.maf):
+                total = float(len(line))
+                if(((line.count('?')/total)) > args.missing):
                     continue
-                if((1- (line.count('?')/total)) <  args.missing):
+                p = line.count('0')
+                q = line.count('1')
+                major = p
+                minor = q
+                if(q > major):
+                    major = q
+                    minor = p
+                total = float(p + q)
+                if(minor/total < args.maf):
                     continue
                 zipa = line[0::2]
                 zipb = line[1::2]
-                #count the occurence of AA AB BB alleles
                 countAA = 0
                 countAB = 0
                 countBB = 0
@@ -54,7 +68,7 @@ def filter_haps_file(args):
                     elif(a == '1' and b == '1'):
                         countBB += 1
                     elif(a == '1' and b == '0'):
-                        countAA += 1
+                        countAB += 1
                     elif(a == '0' and b == '1'):
                         countAB += 1
                 countAA = float(countAA)
@@ -66,7 +80,7 @@ def filter_haps_file(args):
                 else:
                     hwe_pvalue = \
                         hardy_weinberg_exact(countAB,countAA,countBB)
-                if(hwe_pvalue < args.hwe):
+                if(hwe_pvalue <= args.hwe):
                     continue
                 output_haps.write(snp_data)
                 
@@ -103,5 +117,3 @@ def main():
     filter_haps_file(args) 
     
 
-if __name__ == "__main__": 
-    main()
