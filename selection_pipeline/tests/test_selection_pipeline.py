@@ -58,13 +58,14 @@ class TestRunPipeline(unittest.TestCase):
         assert prefix == \
             self.options.output_prefix + self.options.chromosome +\
             '_impute2'
-        assert cmd_template[0] == '/home/smilefreak/selectionTools/bin/impute2'
+        assert cmd_template[0] == '/home/sfk/selectionTools/bin/impute2'
         assert len(cmd_template) == 10
 
     def test_remove_indels_vcf(self):
         (cmd,output_name) = self.template.run_remove_indels_from_vcf()
         assert output_name == 'testcase.recode.vcf'
         assert len(cmd) == 7
+        assert cmd[0] == '/home/sfk/selectionTools/bin/vcftools'
 
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestHapsFilter))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestRunPipeline))
