@@ -3,14 +3,13 @@ import subprocess
 import sys
 import logging
 import re
-import time
 #queue for threads
 #regex for hash at start of line
 
 try:
-    import Queue
+    import Queue as Queue
 except ImportError:
-    import queue
+    import queue as Queue
 from threading import Thread
 logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT = 10
@@ -123,16 +122,16 @@ def which(program, program_name):
 
 
 def run_subprocess(
-    command,tool,stdout=None,
-    stderr=None,stdoutlog=False,
-    working_dir = None):
+    command, tool, stdout=None,
+    stderr=None, stdoutlog=False,
+        working_dir=None):
     """ Runs a command on the system shell and forks a new process
-   
-	also creates a file for stderr and stdout if needed
-	to avoid deadlock. 
+
+        also creates a file for stderr and stdout if needed
+        to avoid deadlock.
     """
-    # Very dirty hack 
-    if(tool== 'selection_pipeline'):
+    # Very dirty hack
+    if(tool == 'selection_pipeline'):
         stderr = 'selection_stderr.tmp'
         stdout = 'selection_stdout.tmp'
     if (working_dir is not None):
@@ -140,74 +139,74 @@ def run_subprocess(
         os.chdir(working_dir)
     if(stderr is None):
         stderr = 'stderr.tmp'
-        standard_err = open(stderr,'w')
+        standard_err = open(stderr, 'w')
     else:
-        standard_err = open(stderr,'w')  
+        standard_err = open(stderr, 'w')
     try:
         if(stdout is None):
-            standard_out = open('stdout.tmp','w')
+            standard_out = open('stdout.tmp', 'w')
             exit_code = subprocess.Popen(
-                command,stderr=standard_out,stdout=standard_err)
+                command, stderr=standard_out, stdout=standard_err)
         else:
         # find out what kind of exception to try here
-            if(hasattr(stdout,'read')):
+            if(hasattr(stdout, 'read')):
                 exit_code = subprocess.Popen(
-                    command,stdout=stdout,stderr=standard_err)
+                    command, stdout=stdout, stderr=standard_err)
             else:
-                stdout=open(stdout,'w')
+                stdout = open(stdout, 'w')
                 exit_code = subprocess.Popen(
-                    command,stdout=stdout,stderr=standard_err)
+                    command, stdout=stdout, stderr=standard_err)
             standard_out = stdout
     except:
         logger.error(tool + " failed to run " + ' '.join(command))
-        standard_err = open(stderr,'r')
+        standard_err = open(stderr, 'r')
         while True:
-            line = standard_err.readline() 
+            line = standard_err.readline()
             if not line:
                 break
-            logger.info(tool +" STDERR: " + line.strip())
+            logger.info(tool + " STDERR: " + line.strip())
         standard_err.close()
         sys.exit(SUBPROCESS_FAILED_EXIT)
     exit_code.wait()
     standard_err.close()
     standard_out.close()
-    standard_err = open(stderr,'r')
+    standard_err = open(stderr, 'r')
     if(exit_code.returncode != 0):
-        logger.error(tool + " failed to run " +  ' '.join(command))
+        logger.error(tool + " failed to run " + ' '.join(command))
         while True:
-            line = standard_err.readline() 
+            line = standard_err.readline()
             if not line:
                 break
-            logger.info(tool +" STDERR: " + line.strip())
+            logger.info(tool + " STDERR: " + line.strip())
         sys.exit(SUBPROCESS_FAILED_EXIT)
     stdout_log = False
     if(stdout is None):
-        standard_out = open('stdout.tmp', 'r')  
+        standard_out = open('stdout.tmp', 'r')
         stdout_log = True
     elif(stdoutlog):
-        if(hasattr(stdout,'write')):   
-            standard_out = open(stdout.name,'r')
-        else: 
-            standard_out = open(stdout, 'r')  
+        if(hasattr(stdout, 'write')):
+            standard_out = open(stdout.name, 'r')
+        else:
+            standard_out = open(stdout, 'r')
         stdout_log = True
     if(stdout_log):
         while True:
             line = standard_out.readline()
             if not line:
                 break
-            logger.info(tool + " STDOUT: " +line.strip())
+            logger.info(tool + " STDOUT: " + line.strip())
         standard_out.close()
     while True:
         line = standard_err.readline()
         if not line:
             break
-        logger.info(tool +" STDERR: " + line.strip())
+        logger.info(tool + " STDERR: " + line.strip())
     logger.info("Finished tool " + tool)
     standard_err.close()
     standard_out.close()
     # Removed stdout if it either was not specified
     # or the log was specified.
-    if(stdout is None):
+    if(stdout is None or stdout is 'selection_stdout.tmp'):
         os.remove('stdout.tmp')
     elif(stdoutlog):
         os.remove(standard_out.name)
@@ -216,7 +215,7 @@ def run_subprocess(
         os.chdir(orig_dir)
 
 
-def __queue_worker__(q,tool_name):
+def __queue_worker__(q, tool_name):
     while True:
         queue_item = q.get()
         try:
@@ -227,20 +226,21 @@ def __queue_worker__(q,tool_name):
             folder_names = queue_item[4]
         except IndexError:
             cmd = queue_item[0]
-            stdout = queue_item[1] 
+            stdout = queue_item[1]
             stdoutlog = False
             stderr = None
+            folder_names = '.'
         try:
             run_subprocess(
                 cmd, tool_name, stdout=stdout,
-                stdoutlog=stdoutlog,stderr=stderr)
+                stdoutlog=stdoutlog, stderr=stderr, working_dir=folder_names)
         except SystemExit:
             logger.error(tool_name + ": Failed to run in thread")
             sys.exit(SUBPROCESS_FAILED_EXIT)
         q.task_done()
 
 
-def queue_jobs(commands, tool_name, threads, stdouts=None,folder_names=None):
+def queue_jobs(commands, tool_name, threads, stdouts=None, folder_names=None):
     """ Creates a queue for running jobs
 
         Using a synchronized queue to spawn jobs equal
@@ -259,10 +259,10 @@ def queue_jobs(commands, tool_name, threads, stdouts=None,folder_names=None):
         else:
             folder_name = folder_names[i]
         if (stdouts is not None):
-            q.put([cmd, stdouts[i], False, stderr,folder_name])
+            q.put([cmd, stdouts[i], False, stderr, folder_name])
         else:
-            stdout = 'stdout' + str(i) + '.tmp' 
-            q.put([cmd, stdout, True, stderr,folder_name])
+            stdout = 'stdout' + str(i) + '.tmp'
+            q.put([cmd, stdout, True, stderr, folder_name])
     q.join()
 
 # clean folder expecting a list containing

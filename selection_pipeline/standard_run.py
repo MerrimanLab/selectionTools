@@ -8,6 +8,8 @@ import subprocess
 import logging
 logger = logging.getLogger(__name__)
 
+MISSING_EXECUTABLE = 50
+
 
 class StandardRun(CommandTemplate):
     def is_script(self, fpath):
@@ -59,7 +61,6 @@ class StandardRun(CommandTemplate):
                 self.config['shapeit']['shapeit_executable'],
                 'shapeit') is None):
             logger.error("shapeit not found check config file")
-            
             return False
         if(self.which(
                 self.config['ancestral_allele']['ancestral_allele_script'],
@@ -89,7 +90,7 @@ class StandardRun(CommandTemplate):
                 self.config['multicore_ihh']['multicore_ihh'],
                 'multicore_ihh'
                 ) is None):
-            logger.error("multicore_ihh not found check config file")    
+            logger.error("multicore_ihh not found check config file")
             return False
         if(self.which(
                 self.config['qctool']['qctool_executable'],
@@ -120,8 +121,7 @@ class StandardRun(CommandTemplate):
         self.config = config
         if(full_run):
             if(not self.check_executables_and_scripts_exist()):
-                raise Exception("Executable missing check logs "
-                                "for more information")
+                sys.exit(MISSING_EXECUTABLE)
             self.threads = self.config['system']['cores_avaliable']
 
     def run_pipeline(self):
@@ -138,8 +138,7 @@ class StandardRun(CommandTemplate):
         if(self.options.imputation):
             (haps) = self.run_impute2(haps)
             haps = self.indel_filter(haps)
-        # No more copy pasting of methods just one
-        # set of calls to all the methods in order
+        haps = self.haps_filter(haps)
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
         fayandwus = self.variscan_fayandwus(haps2_haps)
@@ -148,7 +147,6 @@ class StandardRun(CommandTemplate):
         haps = self.run_aa_annotate_haps(haps)
         tajimaSD = self.vcf_to_tajimas_d(vcf)
         ihh = self.run_multi_coreihh(haps)
-        # Dealing with output
         ihs_file = ihh.split('.ihh')[0] + '.ihs'
         haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if not os.path.exists('results'):
@@ -165,8 +163,8 @@ class StandardRun(CommandTemplate):
         logger.info(self.options.log_file)
         os.rename(self.options.log_file, 'log/' + self.options.log_file)
         if not self.options.no_clean_up:
-            keep = ['selection_stderr.tmp','selection_stdout.tmp']
-            clean_folder('.',keep=keep)
+            keep = ['selection_stderr.tmp', 'selection_stdout.tmp']
+            clean_folder('.', keep=keep)
         logger.info(tajimaSD)
         logger.info(vcf)
         logger.info(haps)

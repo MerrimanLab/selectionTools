@@ -299,33 +299,36 @@ CEUYRIfst=read.table("fst/2CEUYRI.fst", header=TRUE)
 \end{minted}
 
 \noindent
-Plot the $F_{ST}$ results across a region 1 megabase on each side of
-the lactase gene.  Weighted $F_{ST}$ is being plotted in each case.\\
+Plot the $F_{ST}$ results across the entire 10 megabase region for the tutorial.  Mean $F_{ST}$ is being plotted in each case.\\
+
+\noindent
+Plot mean Weir FST values.
 \begin{minted}[bgcolor=bg,frame=lines]{r}
-plot(CEUYRIfst[,5]~CEUYRIfst[,2], pch=16, cex=.4, type="p",xlab='',ylab='FST') 
-rect(136545410,0,136594750,1,border="Blue") 
+weirFST = read.table('fst/2CEUYRI.weir.fst',header=T) 
+plot(weirFST[,6]~ weirFST[,2], pch=16, cex=.4, type="p",xlab='',ylab=expression("F[ST]")) 
+abline(mean(weirFST[,6]) + 3 * sd (weirFST[,6])col='red')
 \end{minted}
 
 \begin{figure}
 \centering
-\includegraphics{pictures/CEUYRI2.png}
-\caption{Values of $F_{ST}$ generated for comparing the YRI and CEU
-  populations across a ten megabase region around the LCT gene.}
+\includegraphics{pictures/yriCEUYRI.png}
+\caption{Values of Weir $F_{ST}$ mean FST between the CEU and YRI populations}
 \label{fig:a}
 \end{figure}
 
 \noindent
-Figure~\ref{fig:a} shows clustering of high $F_{ST}$ values close to
-the lactase gene plotting one megabase downstream and upstream either
-side of the gene. 
-
-\noindent
-{\bf\small\color{blue} [*** JAMES - HOW INTERESTING IS THIS?  THERE
-  ARE A LOT OF APPARENT SPIKES. :)  Also, the axis labels for the graphs
-  could be improved by using the ``expression'' function in R.  Within
-  the plot command, ``ylab=expression(F[ST])'', will produce a
-  subscript for ``ST''. Also, a label is needed for the x axis (I'd
-  suggest ``Chromosome 2, position (bp)''). ***]}
+Plot mean HapMap FST values.
+\begin{minted}[bgcolor=bg,frame=lines]{r}
+hapmapFST = read.table('fst/2CEUYRI.hapmap.fst',header=T) 
+plot(hapmapFST[,6]~ hapmapFST[,2], pch=16, cex=.4, type="p",xlab='',ylab=expression("F[ST]")) 
+abline(mean(hapmapFST[,6]) + 3 * sd (hapmapFST[,6])col='red')
+\end{minted}
+\begin{figure}
+\centering
+\includegraphics{pictures/hapmapCEUYRI.png}
+\caption{Values of HapMap $F_{ST}$ mean FST between the CEU and YRI populations}
+\label{fig:hapmapfst}
+\end{figure}
 
 \subsubsection{Fay and Wu's H}
 Plot the Fay and Wu's H values for the CEU population:\\
@@ -341,9 +344,6 @@ rect(136545410,-1000,136594750,100,border="Blue")
 \includegraphics{pictures/CEUFay.png}
 \caption{Fay and Wu's H statistic in the CEU population, across a two
   megabase region around the LCT gene.
-  {\bf\small\color{blue} [*** NEED X-AXIS LABEL.
-    Also, code for plot has blue rectangle extending down to
-    -1000, but figure only has it to -100: need to update figure. ***]}}
 \label{fig:fayceu}
 \end{figure}
 
@@ -354,7 +354,7 @@ and Wu's H values for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIFay=read.table('YRI/results/YRI2.faw',comment.char="#")
 #Plot Fay and Wu's H
-plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,
+plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,ylim=c(-100,0)
 xlab='',ylab="H Statistic")
 rect(136545410,-1900,136594750,100,border="Blue") 
 \end{minted}
@@ -363,8 +363,6 @@ rect(136545410,-1900,136594750,100,border="Blue")
 \includegraphics{pictures/YRIFay.png}
 \caption{Fay and Wu's H statistic in the YRI population, across a two
   megabase region around the LCT gene. 
-  {\bf\small\color{blue} [*** NEED X-AXIS
-    LABEL. ***]}}
 \label{fig:fayyri}
 \end{figure}
 
@@ -377,38 +375,40 @@ Plot the iHS values around the lactase gene for the CEU population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUihs = read.table('CEU/results/CEUchr2.ihs')
 #plot IHS pvalues
-plot(CEUihs[,3] ~ CEUihs[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
+plot(CEUihs[,4] ~ CEUihs[,2],xlim=c(1.364e8,1.368e8),pch='.',cex=.5,ylab=expression("-" * log[10] * "[" ~ "1-2|" * Phi[scriptstyle(italic(iHS))] * "-0.5|" ~ "]"),xlab="Chromosome Position BP") 
 rect(136545410,-10,136594750,10,border="Blue") 
+abline(h=2,col="red")
 \end{minted}
 
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUihs.png}
-\caption{iHS statistic in the CEU population, across a two megabase region around the LCT gene.  
-{\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
+\caption{iHS statistic in the CEU population, across a 400 kilobase region around the LCT gene. }  
 \label{fig:ceuihs}
 \end{figure}
 
 \noindent
-Figure ~\ref{fig:ceuihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
+Figure ~\ref{fig:ceuihs} shows iHS pvalues around the lactase gene in the CEU population.
+
+\noindent
 Plot the iHS values around the lactase gene for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIihs = read.table('YRI/results/YRIchr2.ihs')
 #plot IHS pvalues
-plot(YRIihs[,3] ~ YRIihs[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
+plot(YRIihs[,4] ~ YRIihs[,2],xlim=c(1.364e8,1.368e8),pch='.',cex=.5,ylab=expression("-" * log[10] * "[" ~ "1-2|" * Phi[scriptstyle(italic(iHS))] * "-0.5|" ~ "]"),xlab="Chromosome Position BP") 
 rect(136545410,-10,136594750,10,border="Blue") 
+abline(h=2,col="red")
 \end{minted}
 
 \begin{figure}
 \centering
 \includegraphics{pictures/YRIihs.png}
-\caption{iHS statistic in the YRI population, across a two megabase region around the LCT gene.  
-  {\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
+\caption{iHS statistic in the YRI population, across a 400 kilobase region around the LCT gene. }
 \label{fig:yriihs}
 \end{figure}
 
 \noindent
-Figure ~\ref{fig:yriihs} shows iHS pvalues around the lactase gene one megabase upstream and downstream.
+Figure ~\ref{fig:yriihs} shows iHS pvalues around the lactase.
 
 To visualize individual SNPs, a haplotype bifurication diagram can be
 used \citep{Gautier:2012et}. The SNP displayed a strong signal of
@@ -416,8 +416,6 @@ selection using iHS. We construct a bifurcation diagram for both
 alleles at this SNP. \\
 
 \noindent
-{\bf\small\color{blue} [*** JAMES - STILL NEED CODE FOR THIS (AND A
-  PLOT).  :) ***]}
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 # Plot  bifurcation diagram.
@@ -429,16 +427,14 @@ alleles at this SNP. \\
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 tajimaD=read.table(file="CEU/results/CEU2.taj_d", header=TRUE)
-plot(tajimaD[,4] ~ tajimaD[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
+plot(tajimaD[,4] ~ tajimaD[,2],pch='.',cex=2)
 rect(136545410,-10,136594750,10,border="Blue") 
 \end{minted}
 
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUtajimas.png}
-\caption{Tajima's D statistic in the CEU population, across a two
-  megabase region around the LCT gene.  
-  {\bf\small\color{blue} [*** NEED BETTER AXIS LABELS ***]}}
+\caption{Tajima's D statistic in the CEU population, across the full 10 megabase pipeline region.}
 \label{fig:tajceu}
 \end{figure}
 
@@ -453,10 +449,8 @@ rect(136545410,-10,136594750,10,border="Blue")
 
 \begin{figure}
 \centering
-\includegraphics{pictures/CEUtajimas.png}
-\caption{Tajima's D statistic in the YRI population, across a two
-  megabase region around the LCT gene.  
-  {\bf\small\color{blue} [*** NEED BETTER AXISLABELS ***]}}
+\includegraphics{pictures/YRItajimas.png}
+\caption{Tajima's D statistic in the YRI population for the tutorial region} 
 \label{fig:tajyri}
 \end{figure}
 
@@ -465,10 +459,24 @@ Figure~\ref{fig:tajyri} show the Tajima's D statistic one megabase downstream an
 
 \subsubsection{Rsb}
 
+Rsb makes the differeneces between the two populations very clear. The following code shows how to plot the Rsb bilateral P-values for the 10 megabase tutorial region.
 \noindent
-{\bf\small\color{blue} [*** JAMES - WHAT IS HAPPENING HERE? ***]}
 \begin{minted}[bgcolor=bg,frame=lines]{R}
+rsb = read.table('rsb/2CEUYRI.rsb',header=T)
+plot(rsb[,4] ~ rsb[,2],pch='.',cex=2)
+abline(h=2,col='red')
+# Plotting the lactase gene.
+rect(136545410,-10,136594750,10,border="Blue")
 \end{minted}
+
+\noident
+\begin{figure}
+\centering
+\includegraphics{pictures/RSBCEUYRI.png}
+\caption{RSB statistic between the CEU and YRI population for the tutorial region} 
+\label{fig:rsb}
+\end{figure}
+Figure ~\ref{fig:rsb} shows the Rsb statistic for the entire region for the tutorial, it is visually striking the difference at the LCT locus.
 
 \pagebreak
 \section{Output Files}
@@ -704,13 +712,7 @@ low confidence. To use only ancestral alleles with high confidence use
 --format lower. By default the program will use only highly confident
 alleles. The highly confident alleles are in uppercase. 
 
-<<<<<<< HEAD
 By default it uses all the valid bases in the file that are one  of either A, T, C, G, a, t, c or g
-=======
-
-By default it uses all the valid bases in the file that are one  of
-either A,T,C,G,a,t,c or g.
->>>>>>> 412695b4cae8b7ea5fc7f907d86642e8a45a7b2f
 
 \end{itemize}
 \subsection{Configuration File}

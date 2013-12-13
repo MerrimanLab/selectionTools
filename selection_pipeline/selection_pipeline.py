@@ -166,12 +166,12 @@ def parse_arguments():
         options.impute_split_size = str(
             int(float(options.impute_split_size) * 1e6))
     if (options.multi_window_size is None):
-        options.multi_window_size = str(10000000)
+        options.multi_window_size = str(int(5*1e6))
     else:
         options.multi_window_size = str(
             int(float(options.multi_window_size) * 1e6))
     if (options.ehh_overlap is None):
-        options.ehh_overlap = str(2000000)
+        options.ehh_overlap = str(int(2*1e6))
     else:
         options.ehh_overlap = str(
             int(float(options.ehh_overlap) * 1e6))

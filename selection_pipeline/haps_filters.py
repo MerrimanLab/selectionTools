@@ -74,7 +74,7 @@ def filter_haps_file(args):
                 countAA = float(countAA)
                 countAB = float(countAB)
                 countBB = float(countBB)
-                if(args.asymptotic):
+                if(args.chi_square):
                     hwe_pvalue = \
                          hardy_weinberg_asymptotic(countAB, countAA, countBB)
                 else:
@@ -96,7 +96,9 @@ def main():
     parser.add_argument('--output',dest='output')
     parser.add_argument('--maf',dest='maf')
     parser.add_argument('--missing',dest='missing')    
-    parser.add_argument('--asymptotic',action='store_true',dest='asymptotic',default=False)
+    parser.add_argument('--chi-sq',action='store_true',
+                        dest='chi_square',default=False,
+                        help="Use a chi-square test instead of an exact test")
     args = parser.parse_args()
     if(args.hwe is None):
         args.hwe = 0.0

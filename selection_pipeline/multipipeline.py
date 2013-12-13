@@ -215,18 +215,16 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
         cmds.append(cmd)
         if parralelise_populations:
             folder_names = []
-        for vcf, population_name in zip(
-                sorted(output_vcfs), sorted(populations)):
-            directory = population_name
-            if not os.path.exists(directory):
-                os.mkdir(directory)
-            if parralelise_populations:
-                folder_names.append(directory)
-            else:
-            # Create directory for each sub population to run in
-                os.chdir(directory)
-                run_subprocess(cmd, 'selection_pipeline')
-                os.chdir(orig_dir)
+        directory = population_name
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+        if parralelise_populations:
+            folder_names.append(directory)
+        else:
+        # Create directory for each sub population to run in
+            os.chdir(directory)
+            run_subprocess(cmd, 'selection_pipeline')
+            os.chdir(orig_dir)
     if parralelise_populations:
         queue_jobs(cmds, 'selection_pipeline',
                    cores, folder_names=folder_names)
@@ -248,24 +246,34 @@ def fst_vcf(input_vcf, config, options, populations):
     for i in range(0, len(pops)-1):
         p = pops[i]
         cmd = []
+        cmd_hapmap = [] 
         cmd.append(vcf_tools)
         first_pop_name = open('first_pop.tmp', 'w')
         first_pop_name.write('\n'.join(populations[p]))
         first_pop_name.close()
-        cmd.extend(['--fst-window-size', options.fst_window_size,
-                   '--fst-window-step', options.fst_window_step,
-                   '--weir-fst-pop', 'first_pop.tmp', '--vcf', input_vcf])
+        cmd.extend(['--fst-window-size', options.fst_window_size, 
+                    '--fst-window-step', options.fst_window_step,
+                    '--vcf',input_vcf])
+        cmd_hapmap.extend(cmd)
+        cmd.extend(['--weir-fst-pop', 'first_pop.tmp'])
+        cmd_hapmap.extend(['--hapmap-fst-pop','first_pop.tmp'])
         for j in range(i+1, len(pops)):
             s = pops[j]
+            tmp_cmd_hapmap = []
             tmp_cmd = []
+            tmp_cmd_hapmap.extend(cmd_hapmap)
             tmp_cmd.extend(cmd)
             tmp_cmd.extend(['--weir-fst-pop', 'second_pop.tmp'])
+            tmp_cmd_hapmap.extend(['--hapmap-fst-pop','second_pop.tmp'])
             second_pop_name = open('second_pop.tmp', 'w')
             second_pop_name.write('\n'.join(populations[s]))
             second_pop_name.close()
-            run_subprocess(tmp_cmd, 'fst_calculation')
+            run_subprocess(tmp_cmd, 'fst_calculation_weir')
+            run_subprocess(tmp_cmd_hapmap,'fst_calculation_hapmap')
             os.rename('out.windowed.weir.fst',
-                      options.chromosome + p + s + '.fst')
+                      options.chromosome + p + s + '.weir.fst')
+            os.rename('out.windowed.hapmap.fst',
+                      options.chromosome + p + s +'.hapmap.fst')
     os.remove('second_pop.tmp')
     os.remove('first_pop.tmp')
     os.remove('out.log')
@@ -304,9 +312,9 @@ def main():
                       "cores avaliable as provided in the config file"))
     (options, args) = parser.parse_args()
     assert options.vcf_input is not None, \
-        "No VCF file has been specified as input"
+        "no VCF file has been specified as input"
     assert options.chromosome is not None, \
-        "No chromosome has been specified to the script"
+        "no chromosome has been specified to the script"
     if options.config_file is None:
         options.config_file = 'defaults.cfg'
         if not(os.path.isfile(options.config_file)):
@@ -344,8 +352,8 @@ def main():
     rsb(config, options, populations)
     if not os.path.exists('logs'):
         os.mkdir('logs')
-    os.rename(optioNs.log_file, 'logs/' + options.log_file)
-    if not options.No_clean_up:
+    os.rename(options.log_file, 'logs/' + options.log_file)
+    if not options.no_clean_up:
         keep = [os.path.basename(options.vcf_input)]
         keep.extend(options.populations)
         clean_folder('.', keep=keep)

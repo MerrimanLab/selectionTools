@@ -49,7 +49,8 @@ def aa_seq(options):
         key = keyz[0]
     else:
         get_chromosome_from_header = options.header
-        get_chromosome_from_header.replace('?', options.chromosome)
+        get_chromosome_from_header = \
+            get_chromosome_from_header.replace('?', options.chromosome)
         for key in keyz:
             if(re.match(get_chromosome_from_header, key) is not None):
                 match = key

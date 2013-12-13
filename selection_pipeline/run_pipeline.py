@@ -302,7 +302,7 @@ class CommandTemplate(object):
         haps_filter_script = self.config['haps_scripts']['haps_filter_script']
         cmd.append(haps_filter_script)
         cmd.extend(['--maf', self.options.maf, '--hwe', self.options.hwe,
-                   '--asymptotic', '--missing', self.options.remove_missing,
+                   '--chi-sq', '--missing', self.options.remove_missing,
                    '--output', output_name, '--haps', haps])
         return(cmd, output_name)
 
