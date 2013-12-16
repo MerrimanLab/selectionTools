@@ -223,18 +223,22 @@ populations from the 1000 Genomes Project. In order to demonstrate the
 functionality of the pipeline we will use the chromosome 2 region
 130,000,000-140,000,000. The lactase gene is an example of strong selection in
 the last 5,000-10,000 years in human populations, specifically
-those of European ancestory \citep{lactase2004}. 
-To download the example dataset enter the
-following command:
+those of European ancestory \citep{lactase2004}. The tutorial commands will be given as examples using phasing and imputation or taking advantage of the fact that the 1000 genomes VCF files actually contain phasing information. If you choose to run the tutorial without using phasing and imputation you will only need to download the Ancestral allele information.
+To download the example dataset enter the following command:
 
 {\small
 \begin{minted}[bgcolor=bg]{bash}
-wget https://github.com/smilefreak/SelectionPipelineTestData/blob/master/selection_pipeline_tutorial.tar.gz
+git clone https://github.com/smilefreak/SelectionPipelineTestData
 \end{minted}
 }
 
 \noindent
-Extract the example data into a new folder.
+Navigate to the created SelectionPipelineTestData folder and extract \emph{selection\_pipeline\_tutorial.tar.gz}. 
+
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+cd SelectionPipelineTestData
+tar xzf selection_pipeline_tutorial.tar.gz
+\end{minted}
 
 \subsection{Setting up the Pipeline Run}
 \subsection{Population Files}
@@ -253,18 +257,22 @@ individual ID from that population.\\
 \end{minted}
 \subsection{Run The Tutorial}
 The default configuration file is located in the base directory of the
-selection pipeline. To run the pipeline, execute the command below in
-the folder in which the example data were extracted, and change the
+selection pipeline. To run the pipeline with phasing and imputation, execute the command below in the folder in which the example data were extracted, and change the
 --config-file parameter to match the location where the pipeline is installed.\\
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt \
   -i CEU_YRI_lactase.vcf --config-file defaults.cfg \
-  --fst-window-size 1000 --fst-window-step 1000
+  -a "--imputation"
 \end{minted}
+
 \noindent
-{\bf\small\color{blue} [*** JAMES - I added backslashes to the code
-  above in case people try to paste directly in the command line -
-  good or stupid?  ***]} 
+As the 1000 genomes datasets are actually phased VCF to run the pipeline without phasing run the following command. The --phased-vcf option significantly speeds up the selection pipeline.
+
+\begin{minted}[bgcolor=bg,frame=lines]{bash}
+multipop_selection_pipeline -p CEU_id.txt -p YRI_ids.txt \
+    -i CEU_YRI_lactase.vcf --config-file defaults.cfg \
+    --a "--phased-vcf"    
+\end{minted} 
 
 \noindent
 The generated folders and current folder have all the data required to
