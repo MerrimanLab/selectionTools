@@ -185,11 +185,12 @@ If you decide to store the reference files in another location,
 further options require alteration in the config file:\\ 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
-genetic_map_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/shapeit_ref
+genetic_map_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/shapeit_ref
 ...
-impute_map_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
-impute_reference_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
+impute_map_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
+impute_reference_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
 ...
+$
 \end{minted}
 
 \subsection{Ancestral Fasta Files}
@@ -310,26 +311,29 @@ CEUYRIfst=read.table("fst/2CEUYRI.fst", header=TRUE)
 Plot the $F_{ST}$ results across the entire 10 megabase region for the tutorial.  Mean $F_{ST}$ is being plotted in each case.\\
 
 \noindent
-Plot mean Weir FST values.
+Plot mean Weir FST values.\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 weirFST = read.table('fst/2CEUYRI.weir.fst',header=T) 
-plot(weirFST[,6]~ weirFST[,2], pch=16, cex=.4, type="p",xlab='',ylab=expression("F[ST]")) 
-abline(mean(weirFST[,6]) + 3 * sd (weirFST[,6])col='red')
+plot(weirFST[,6]~ weirFST[,2], pch=16, cex=.4, type="p",ylab=expression(F[ST]),xlab="Chromosome position (bp)") 
+abline(h=mean(weirFST[,6]) + 3 * sd (weirFST[,6]),col='red')
+rect(136545410,-1900,136594750,100,border="Blue") 
 \end{minted}
 
 \begin{figure}
 \centering
-\includegraphics{pictures/yriCEUYRI.png}
+\includegraphics{pictures/WeirCEUYRI.png}
 \caption{Values of Weir $F_{ST}$ mean FST between the CEU and YRI populations}
 \label{fig:a}
 \end{figure}
 
 \noindent
-Plot mean HapMap FST values.
+Plot mean HapMap FST values.\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 hapmapFST = read.table('fst/2CEUYRI.hapmap.fst',header=T) 
-plot(hapmapFST[,6]~ hapmapFST[,2], pch=16, cex=.4, type="p",xlab='',ylab=expression("F[ST]")) 
-abline(mean(hapmapFST[,6]) + 3 * sd (hapmapFST[,6])col='red')
+plot(hapmapFST[,6]~ hapmapFST[,2], pch=16, cex=.4, 
+type="p",ylab=expression(F[ST]),xlab="Chromosome position (bp)") 
+abline(h=mean(hapmapFST[,6]) + 3 * sd (hapmapFST[,6]),col='red')
+rect(136545410,-1900,136594750,100,border="Blue") 
 \end{minted}
 \begin{figure}
 \centering
@@ -338,20 +342,24 @@ abline(mean(hapmapFST[,6]) + 3 * sd (hapmapFST[,6])col='red')
 \label{fig:hapmapfst}
 \end{figure}
 
+\noindent 
+Figures (~\ref{fig:a} and ~\ref{fig:hapmapfst}) show the weir and hapmap FST values for the tutorial region.
+
 \subsubsection{Fay and Wu's H}
 Plot the Fay and Wu's H values for the CEU population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUFay=read.table('CEU/results/CEU2.faw',comment.char="#")
 #Plot Fay and Wu's H
-plot(CEUFay[,15] ~ CEUFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,
-xlab='',ylab="H Statistic")
+plot(CEUFay[,15] ~ CEUFay[,1],xlim=c(136545410-1e6,136594750+1e6),
+pch='.',cex=2,ylim=c(-50,0),
+xlab='Chromosome position (bp)',ylab="H Statistic")
 rect(136545410,-1000,136594750,100,border="Blue") 
 \end{minted}
 \begin{figure}
 \centering
 \includegraphics{pictures/CEUFay.png}
 \caption{Fay and Wu's H statistic in the CEU population, across a two
-  megabase region around the LCT gene.
+  megabase region around the LCT gene.}
 \label{fig:fayceu}
 \end{figure}
 
@@ -362,7 +370,7 @@ and Wu's H values for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIFay=read.table('YRI/results/YRI2.faw',comment.char="#")
 #Plot Fay and Wu's H
-plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,ylim=c(-100,0)
+plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,ylim=c(-50,0),
 xlab='',ylab="H Statistic")
 rect(136545410,-1900,136594750,100,border="Blue") 
 \end{minted}
@@ -370,7 +378,7 @@ rect(136545410,-1900,136594750,100,border="Blue")
 \centering
 \includegraphics{pictures/YRIFay.png}
 \caption{Fay and Wu's H statistic in the YRI population, across a two
-  megabase region around the LCT gene. 
+  megabase region around the LCT gene.} 
 \label{fig:fayyri}
 \end{figure}
 
@@ -383,7 +391,9 @@ Plot the iHS values around the lactase gene for the CEU population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 CEUihs = read.table('CEU/results/CEUchr2.ihs')
 #plot IHS pvalues
-plot(CEUihs[,4] ~ CEUihs[,2],xlim=c(1.364e8,1.368e8),pch='.',cex=.5,ylab=expression("-" * log[10] * "[" ~ "1-2|" * Phi[scriptstyle(italic(iHS))] * "-0.5|" ~ "]"),xlab="Chromosome Position BP") 
+plot(CEUihs[,4] ~ CEUihs[,2],xlim=c(1.364e8,1.368e8),pch='.',cex=2,
+ylab=expression("-" * log[10] * "[" ~ "1-2|" * Phi[scriptstyle(italic(iHS))] * "-0.5|" ~ "]"),
+xlab="Chromosome Position BP") 
 rect(136545410,-10,136594750,10,border="Blue") 
 abline(h=2,col="red")
 \end{minted}
@@ -403,7 +413,9 @@ Plot the iHS values around the lactase gene for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIihs = read.table('YRI/results/YRIchr2.ihs')
 #plot IHS pvalues
-plot(YRIihs[,4] ~ YRIihs[,2],xlim=c(1.364e8,1.368e8),pch='.',cex=.5,ylab=expression("-" * log[10] * "[" ~ "1-2|" * Phi[scriptstyle(italic(iHS))] * "-0.5|" ~ "]"),xlab="Chromosome Position BP") 
+plot(YRIihs[,4] ~ YRIihs[,2],xlim=c(1.364e8,1.368e8),pch='.',cex=2,
+ylab=expression("-" * log[10] * "[" ~ "1-2|" * Phi[scriptstyle(italic(iHS))] * "-0.5|" ~ "]"),
+xlab="Chromosome Position BP") 
 rect(136545410,-10,136594750,10,border="Blue") 
 abline(h=2,col="red")
 \end{minted}
@@ -419,23 +431,34 @@ abline(h=2,col="red")
 Figure ~\ref{fig:yriihs} shows iHS pvalues around the lactase.
 
 To visualize individual SNPs, a haplotype bifurication diagram can be
-used \citep{Gautier:2012et}. The SNP displayed a strong signal of
-selection using iHS. We construct a bifurcation diagram for both
-alleles at this SNP. \\
+used \citep{Gautier:2012et}. The SNP rs28453840 displayed a strong signal of
+selection using iHS in the CEU population. The following commands construct a bifurcation diagram for both
+alleles at this SNP using rehh. \\
 
 \noindent
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 # Plot  bifurcation diagram.
-
+load('CEU/results/CEUchr2.RData')
+par(mfrow=c(2,1))
+bifurcation.diagram(haplohh=d,mrk_foc=13750,all_foc=1)
+bifurcation.diagram(haplohh=d,mrk_foc=13750,all_foc=2)
 \end{minted}
+\begin{figure}
+\centering
+\includegraphics{pictures/bifurcationCEU.png}
+\caption{Bifurcation Diagram for rs28453840}
+\label{fig:bifurcationceu}
+\end{figure}
 
+\noindent
+Figure ~\ref{fig:bifurcationceu} shows the bifurcation plot for rs28453840 a snp that had a iHS score greater that 3 at position 136522941 on chromosome 2 just upstream of lactase.
 
 \subsubsection{Tajima's D}
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 tajimaD=read.table(file="CEU/results/CEU2.taj_d", header=TRUE)
-plot(tajimaD[,4] ~ tajimaD[,2],pch='.',cex=2)
+plot(tajimaD[,4] ~ tajimaD[,2],pch='.',cex=2,xlab="Chromosome position (bp)", ylab="D statistic")
 rect(136545410,-10,136594750,10,border="Blue") 
 \end{minted}
 
@@ -447,11 +470,11 @@ rect(136545410,-10,136594750,10,border="Blue")
 \end{figure}
 
 \noindent
-Figure~\ref{fig:tajceu} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the CEU population
+Figure~\ref{fig:tajceu} show the Tajima's D statistic across the full tutorial region.
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 tajimaD=read.table(file="YRI/results/YRI2.taj_d", header=TRUE)
-plot(tajimaD[,4] ~ tajimaD[,2],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2)
+plot(tajimaD[,4] ~ tajimaD[,2],pch='.',cex=2,xlab="Chromosome position (bp)", ylab="D statistic")
 rect(136545410,-10,136594750,10,border="Blue") 
 \end{minted}
 
@@ -463,7 +486,7 @@ rect(136545410,-10,136594750,10,border="Blue")
 \end{figure}
 
 \noindent
-Figure~\ref{fig:tajyri} show the Tajima's D statistic one megabase downstream and upstream of the lactase gene in the YRI population
+Figure~\ref{fig:tajyri} show the Tajima's D statistic across the full tutorial region.
 
 \subsubsection{Rsb}
 
@@ -477,7 +500,6 @@ abline(h=2,col='red')
 rect(136545410,-10,136594750,10,border="Blue")
 \end{minted}
 
-\noident
 \begin{figure}
 \centering
 \includegraphics{pictures/RSBCEUYRI.png}
@@ -632,11 +654,11 @@ Do not clean up intermediate data files
 
 \item --ehh-window-size
 
-Window size for multicore rehh calculations in Megabases (Mb) (default = 5Mb). 
+Window size for multicore rehh calculations in megabases (Mb) (default = 5Mb). 
 
 \item --ehh-overlap
 
-Window overlap for multicore rehh calculations in Megabases (Mb) (defaut = 2Mb).
+Window overlap for multicore rehh calculations in megabases (Mb) (defaut = 2Mb).
 
 \item --daf <Minimum derived allele frequency>
 
@@ -839,11 +861,16 @@ Location of the rscript executable (Program usually in path so just Rscript is t
 
 Location of the rscript indel\_filter (hap\_indel\_and\_maf\_filter.R)i
 \end{itemize}
-\subsubsection{python}
+\subsubsection{haps\_scripts}
 \begin{itemize}
-\item python\_executable 
+\item haps\_to\_hapmap\_script 
 
-location of the python executable (2 or 3)
+Location of the haps\_to\_hapmap script
+
+\item haps\_filter\_script
+
+Location of the haps\_filter script
+
 \end{itemize}
 \subsubsection{ancestral\_allele}
 \begin{itemize}
@@ -872,8 +899,7 @@ Ancestral fasta file used if the split\_by\_chromosome is set to false.
 
 \item ancestral\_allele\_script
 
-Location of the ancestral\_annotation script (aa\_annotate.py)
-
+Location of the ancestral\_annotation script (ancestral\_annotation)
 \item ancestral\_fasta\_dir 
 
 Directory containing the ancestral reference files
@@ -894,17 +920,6 @@ Location of the qctool executable.
 
 Location of the multicore\_iHH.R script
 
-The rehh package source included with the pipeline has been altered to
-match the output filters used in Voight's paper. If the EHH > 0.05
-reaches the end of a chromosome or the start of a gap >
-big\_gap\_threshold , then no value is returded for the core snp. The
-small\_gap\_threshold specifies the gap distance to reduce the
-distance spanned by the gap by a multiplicative factorpecified by
-small\_gap\_multiplier. The formula for the penalty is
-$\frac{small\_gap\_multiplier}{gap\_size}$. To match the parameters
-used by Voight, a value of 200,000 should be  used for big\_gap\_threshold, 20,000
-for small\_gap\_threshold and 20,000 for small\_gap\_multiplier
-\citep{Voight:2006go}.
 
 
 \end{itemize}
@@ -983,9 +998,22 @@ vcf-tools --vcf big_vcf.vcf --chr 2 --out chr2 --recode
 
 The command will generate a vcf file named chr2.recode.vcf containing only data from chromosome 2.
 
+\item Rehh alterations
+
+The rehh package source included with the pipeline has been altered to match the output filters used in Voight's paper. If the EHH > 0.05
+reaches the end of a chromosome or the start of a gap >
+big\_gap , then no value is returded for the core snp. The
+small\_gap specifies the gap distance to reduce the
+distance spanned by the gap by a multiplicative factor specified by
+small\_gap\_multiplier. The formula for the penalty is
+$\frac{small\_gap\_multiplier}{gap\_size}$. To match the parameters
+used by Voight, a value of 200,000 should be  used for big\_gap\_threshold, 20,000
+for small\_gap\_threshold and 20,000 for small\_gap\_multiplier
+\citep{Voight:2006go}.
+
 \end{enumerate}
 \clearpage
-\bibliographystyle{jss}
+\bibliographystyle{jss2}
 \bibliography{selection_pipeline}
 
 \end{document}
