@@ -75,10 +75,7 @@ class TestRunPipeline(unittest.TestCase):
 class TestAncestralAnnotation(unittest.TestCase):
 
     def __verify_sequence__(self,aaSeq):
-        assert aaSeq[0] == 'G'
-        assert aaSeq[1] == 'C'
-        assert aaSeq[2] == 'C'
-        assert aaSeq[3] == 'G'
+        assert ''.join(aaSeq) == 'GCCG'
 
     def test_aa_seq_single_chromosome(self):
         options = Args()
