@@ -3,19 +3,48 @@
 # Install all the programs required for the install of the program.
 #
 
-PWD=`pwd`
+ORIG_DIR=`pwd`
+
+# Argument to build each function
+# $1 program name
+# $2 folder
+change_folder(){
+    cd $1
+}
+
+check_success(){
+    "$@"
+    status=$?
+     if [ $status -ne 0 ]; then
+        echo "error with $1"
+        exit 1
+    fi
+    return $status
+}
+
+orig_dir(){
+    cd $ORIG_DIR
+}
 
 mkdir -p bin
 mkdir -p lib/perl5
 echo "Installing Dependencies"
 echo "Install Zlib"
 tar xzf src/zlib-1.2.8.tar.gz
-(cd zlib-1.2.8/ && ./configure --prefix ${PWD} && make install)	
+prefix_zlib=${ORIG_DIR}
+change_folder zlib-1.2.8 
+echo $PWD
+check_success ./configure --prefix=${ORIG_DIR}
+check_success make install
+orig_dir
 rm -Rf zlib-1.2.8
-    
+
 echo "Installing VCF tools"
 tar xzf src/vcftools.tar.gz
-(cd vcftools_0.1.11/ && make)
+LIB_VAR="-lz -L${ORIG_DIR}/lib -I${ORIG_DIR}/include"
+change_folder vcftools_0.1.11
+check_success make LIB="${LIB_VAR}"
+orig_dir
 cp vcftools_0.1.11/bin/* bin/
 cp vcftools_0.1.11/perl/*pm lib/perl5/
 rm -Rf vcftools_0.1.11
@@ -38,24 +67,29 @@ rm -Rf impute_v2.3.0_x86_64_static/
 chmod 755 bin/impute2
 echo "Installing Tabix"
 tar -xjf src/tabix.tar.bz2
-(cd tabix-0.2.6/ && make)
+change_folder tabix-0.2.6
+check_success make
+orig_dir
 cp tabix-0.2.6/bgzip bin/
 cp tabix-0.2.6/tabix bin/
 rm -Rf tabix-0.2.6
 echo "Installing Variscan"
 tar -xzf src/variscan-2.0.3.tar.gz
 (cd variscan-2.0.3/src/ && rm *o)
-(cd variscan-2.0.3 && bash autogen.sh && make )
+change_folder  variscan-2.0.3
+check_success bash autogen.sh && make
 mv variscan-2.0.3/src/variscan bin/
+orig_dir
 rm -Rf variscan-2.0.3
-echo "Install rehh"
-Rscript src/R_dependencies.R 'rehh'
-R CMD INSTALL src/rehh_1.11.tar.gz
+echo "Installing getopt"
+check_success Rscript src/R_dependencies.R 'getopt'
 echo "Installing R Multicore"
-R CMD INSTALL src/multicore_0.1-7.tar.gz
-echo "Installing R Get Opt"
-R CMD INSTALL src/getopt_1.20.0.tar.gz	
-echo "Install Selection Pipeline"
+check_success Rscript src/R_dependencies.R 'multicore'
+echo "Installing old rehh"
+check_success Rscript src/R_dependencies.R 'rehh'
+echo "Install rehh"
+check_success R CMD INSTALL src/rehh_1.11.tar.gz
+echo "Updating submodules"
 git submodule init
 git submodule update
 echo "Generating Default Config File"
@@ -64,11 +98,25 @@ sed 's#!SELECT_PIPELINE!#'"${PWD}"'#g' src/defaults.cfg > defaults.cfg
 
 
 if [[ $EUID -eq 0 ]]; then
-    (cd pyfasta && python setup.py install)
-    (cd PyVCF && python setup.py install)
-    python setup.py install
+    echo "Installing PyFasta"
+    change_folder pyfasta
+    check_success python setup.py install
+    orig_dir
+    echo "Installing PyVCF"
+    change_folder PyVCF
+    check_success python setup.py install
+    orig_dir
+    echo "Installing selection_pipeline"
+    check_success python setup.py install
     else
-    (cd pyfasta && python setup.py install --user)
-    (cd PyVCF && python setup.py install --user)
-    python setup.py install --user
+    echo "Installing PyFasta"
+    change_folder pyfasta
+    check_success python setup.py install --user
+    orig_dir
+    change_folder PyVCF
+    echo "Install PyVCF"
+    check_success python setup.py install --user
+    orig_dir
+    echo "Installing selection_pipeline"
+    check_success python setup.py install --user
 fi
