@@ -15,7 +15,7 @@ setup(
         'console_scripts': [
             'ancestral_annotation = selection_pipeline.aa_annotate:main',
             'selection_pipeline = selection_pipeline.selection_pipeline:main',
-            'multi_population = selection_pipeline.multipipeline:main',
+            'multipop_selection_pipeline = selection_pipeline.multipipeline:main',
             'haps_to_hapmap = selection_pipeline.haps_to_hapmap:main',
             'haps_filters = selection_pipeline.haps_filters:main'
         ]

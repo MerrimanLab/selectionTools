@@ -6,7 +6,8 @@ import selection_pipeline
 import os
 from selection_pipeline.selection_pipeline import parse_config
 from selection_pipeline.run_pipeline import CommandTemplate
-from selection_pipeline.aa_annotate import aa_seq, write_sample_file
+from selection_pipeline.aa_annotate import aa_seq, write_sample_file, \
+    get_haps_line, aa_check
 
 import vcf
 
@@ -92,6 +93,7 @@ class TestAncestralAnnotation(unittest.TestCase):
         options.single_chromosome = False
         aaSeq = aa_seq(options)
         self.__verify_sequence__(aaSeq)
+
     def test_write_sample_file(self):
         options = Args()
         options.sample_file = get_file('test_sample.sample')
@@ -108,7 +110,37 @@ class TestAncestralAnnotation(unittest.TestCase):
         for s1, s2 in zip(sorted(sample_names),sorted(vcf_reader.samples)):
             assert s1 == s2
         os.remove(options.sample_file)
-        
+
+    def test_get_haps_line(self):
+        options = Args()
+        vcf_reader = vcf.Reader(filename=get_file("CEU_test.vcf"))
+        record = vcf_reader.next()
+        line = get_haps_line(options,record)
+        line = line.split()
+        assert line[0] == "rs147096179"
+        assert line[2] == "130000004"
+        assert line[3] == 'C'
+        assert line[4] == 'T' 
+    
+    def test_aa_check(self):
+        options = Args()
+        realAA= 'G'
+        ref = 'C'
+        alt = 'T'
+        format = "lower"
+        line = '2 rs1000 1 C T 0 1'
+        # Test ancestral allele != ref
+        new_line = aa_check(realAA,ref,alt,format,line)
+        for item in new_line.split()[5:]:
+            assert item == '1' 
+        # Test ancestral allele == ref
+        realAA = 'C'
+        new_line = aa_check(realAA,ref,alt,format,line)
+        assert new_line == '2 rs1000 1 C T 0 1'
+        realAA = 'T'
+        new_line = aa_check(realAA,ref,alt,format,line)
+        assert new_line == '2 rs1000 1 T C 1 0' 
+    
             
         
             

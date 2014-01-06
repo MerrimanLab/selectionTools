@@ -1,4 +1,4 @@
-#
+#!/bin/env Rscript
 # Murray Cadzow and James Boocock
 # July 2013
 # University of Otago
@@ -61,7 +61,7 @@ if(!is.null(opt$haplo_hh)){
   
   ##Construct the ind file
   ind=matrix(ncol=5,nrow=nrow(bin))
-  ind[,1] = as.character(bin[,1])
+  ind[,1] = as.character(bin[,2])
   ind[,2] = chr
   ind[,3] = bin[,3]
   ind[,4] = 1
@@ -100,7 +100,7 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
   
   ##Construct the ind file
   ind=matrix(ncol=5,nrow=nrow(bin))
-  ind[,1] = as.character(bin[,1])
+  ind[,1] = as.character(bin[,2])
   ind[,2] = chr
   ind[,3] = bin[,3]
   ind[,4] = 1
@@ -114,7 +114,6 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
   write.table(t.hapsPop,file=paste("t_",pop1,".haps",i, sep=""),col.names=F)
   }
   i = i + 1
-  
 }
 fileNumber = offset:i 
 map_file=paste("ind_",pop1,".test",sep="")

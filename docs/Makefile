@@ -1,3 +1,7 @@
+# Make file for making manual
+#
+# author James Boocock
+
 PDFLATEX=pdflatex
 LATEX_OPTS=-shell-escape
 BIBTEXT=bibtex
