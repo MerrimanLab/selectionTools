@@ -176,17 +176,17 @@ def parse_arguments():
         options.ehh_overlap = str(
             int(float(options.ehh_overlap) * 1e6))
     if (options.big_gap is None):
-        options.big_gap = str(200000)
+        options.big_gap = str(0)
     else:
         options.big_gap = str(
             int(float(options.big_gap) * 1e3))
     if (options.small_gap is None):
-        options.small_gap = str(20000)
+        options.small_gap = str(0)
     else:
          options.small_gap = str(
             int(float(options.small_gap) * 1e3))
     if (options.small_gap_penalty is None):
-        options.small_gap_penalty = str(20000)
+        options.small_gap_penalty = str(0)
     else:
         options.small_gap_penalty = str(
             int(float(options.small_gap_penalty) * 1e3))
