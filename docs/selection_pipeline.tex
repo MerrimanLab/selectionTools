@@ -11,6 +11,10 @@
 \usepackage{float}
 \hypersetup{colorlinks = true, linkcolor = blue, citecolor = black}
 \lstset{language=Python}
+\usepackage{upquote}
+\AtBeginDocument{%
+\def\PYZsq{\textquotesingle}%
+}
 \usepackage[margin=0.75in]{geometry}
 
 \usepackage{listings}
@@ -270,7 +274,7 @@ selection pipeline. To run the pipeline with phasing and imputation, execute the
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt \
   -i CEU_YRI_lactase.vcf --config-file defaults.cfg \
-  -a "--imputation"
+  -a "--imputation" -c 2
 \end{minted}
 
 \noindent
@@ -279,7 +283,7 @@ As the 1000 genomes datasets are actually phased VCF to run the pipeline without
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 multipop_selection_pipeline -p CEU_id.txt -p YRI_ids.txt \
     -i CEU_YRI_lactase.vcf --config-file defaults.cfg \
-    --a "--phased-vcf"    
+    --a "--phased-vcf"  -c 2  
 \end{minted} 
 
 \noindent
@@ -372,8 +376,9 @@ and Wu's H values for the YRI population:\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 YRIFay=read.table('YRI/results/YRI2.faw',comment.char="#")
 #Plot Fay and Wu's H
-plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),pch='.',cex=2,ylim=c(-50,0),
-xlab='',ylab="H Statistic")
+plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),
+pch='.',cex=2,ylim=c(-50,0),
+xlab='Chromosome position (bp)',ylab="H Statistic")
 rect(136545410,-1900,136594750,100,border="Blue") 
 \end{minted}
 \begin{figure}
@@ -441,6 +446,8 @@ alleles at this SNP using rehh. \\
 
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 # Plot  bifurcation diagram.
+# Import rehh 
+library(rehh)
 load('CEU/results/CEUchr2.RData')
 par(mfrow=c(2,1))
 bifurcation.diagram(haplohh=d,mrk_foc=13750,all_foc=1)
@@ -493,7 +500,7 @@ Figure~\ref{fig:tajyri} show the Tajima's D statistic across the full tutorial r
 \subsubsection{Rsb}
 
 Rsb makes the differeneces between the two populations very clear. The following code shows how to plot the Rsb bilateral P-values for the 10 megabase tutorial region.
-\noindent
+
 \begin{minted}[bgcolor=bg,frame=lines]{R}
 rsb = read.table('rsb/2CEUYRI.rsb',header=T)
 plot(rsb[,4] ~ rsb[,2],pch='.',cex=2)
