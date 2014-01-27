@@ -32,7 +32,7 @@ class CommandTemplate(object):
             to ped/map plink format.
         """
         cmd = []
-        prefix = self.options.output_prefix + self.options.chromosome
+        prefix = self.options.population + self.options.chromosome
         vcf_tools = self.config['vcftools']['vcf_tools_executable']
         cmd.append(vcf_tools)
         if(self.options.vcf_gz):
@@ -87,7 +87,7 @@ class CommandTemplate(object):
             genetic_map
         """
         cmd = []
-        prefix = self.options.output_prefix + \
+        prefix = self.options.population + \
             self.options.chromosome + '.phased'
         genetic_map = ''
         for file in os.listdir(self.config['shapeit']['genetic_map_dir']):
@@ -110,7 +110,7 @@ class CommandTemplate(object):
             indel_filter.
         """
         cmd = []
-        output_name = self.options.output_prefix + \
+        output_name = self.options.population + \
             self.options.chromosome + '_indel_filter.haps'
         rscript = self.config['Rscript']['rscript_executable']
         indel_filter = self.config['Rscript']['indel_filter']
@@ -126,7 +126,7 @@ class CommandTemplate(object):
             specified in the config file for the genetic_map
             and the known haps and legend files.
         """
-        prefix = self.options.output_prefix + self.options.chromosome + \
+        prefix = self.options.population + self.options.chromosome + \
             '_impute2'
         impute2 = self.config['impute2']['impute_executable']
         genetic_map = ''
@@ -188,10 +188,10 @@ class CommandTemplate(object):
             the haps file to derived / ancestral alleles
         """
         cmd = []
-        output_haps = self.options.output_prefix.split('.haps')[0] + \
+        output_haps = self.options.population.split('.haps')[0] + \
             '_aachanged.haps'
         if(vcf):
-            output_sample = self.options.output_prefix.split('.haps')[0] + \
+            output_sample = self.options.population.split('.haps')[0] + \
                 '_aachanged.sample'
         aa_annotate = \
             self.config['ancestral_allele']['ancestral_allele_script']
@@ -215,7 +215,7 @@ class CommandTemplate(object):
 
         """
         cmd = []
-        output_name = self.options.output_prefix + 'chr' + \
+        output_name = self.options.population + 'chr' + \
             self.options.chromosome + '.ihh'
         rscript = self.config['Rscript']['rscript_executable']
         multicore_ihh = self.config['multicore_ihh']['multicore_ihh']
@@ -248,7 +248,7 @@ class CommandTemplate(object):
 
         """
         cmd = []
-        output_name = self.options.output_prefix + \
+        output_name = self.options.population + \
             self.options.chromosome + '.vcf'
         qctool_executable = self.config['qctool']['qctool_executable']
         cmd.append(qctool_executable)
@@ -261,9 +261,9 @@ class CommandTemplate(object):
 
         """
         cmd = []
-        haps = self.options.output_prefix + \
+        haps = self.options.population + \
             self.options.chromosome + 'vcf_to_haps' + '.haps'
-        sample = self.options.output_prefix + \
+        sample = self.options.population + \
             self.options.chromosome + 'vcf_to_haps' + '.sample'
         aa_annotate = \
             self.config['ancestral_allele']['ancestral_allele_script']
@@ -297,7 +297,7 @@ class CommandTemplate(object):
 
         """
         cmd = []
-        output_name = self.options.output_prefix + self.options.chromosome + \
+        output_name = self.options.population + self.options.chromosome + \
             '_filtered' + '.haps'
         haps_filter_script = self.config['haps_scripts']['haps_filter_script']
         cmd.append(haps_filter_script)
@@ -311,7 +311,7 @@ class CommandTemplate(object):
 
         """
         cmd = []
-        output_name = self.options.output_prefix + self.options.chromosome + \
+        output_name = self.options.population + self.options.chromosome + \
             '.hapmap'
         haps_executable = self.config['haps_scripts']['haps_to_hapmap_script']
         (ancestral_fasta, regex) = self.get_ancestral_fasta()
@@ -331,7 +331,7 @@ class CommandTemplate(object):
         """
         cmd = []
         v_config_name = 'variscan.conf'
-        output_name = self.options.output_prefix + self.options.chromosome + \
+        output_name = self.options.population + self.options.chromosome + \
             '.faw'
         variscan_config = open(v_config_name, 'w')
         variscan_executable = self.config['variscan']['variscan_executable']
