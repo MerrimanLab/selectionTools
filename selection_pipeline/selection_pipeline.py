@@ -55,8 +55,6 @@ def parse_arguments():
                       dest='verbose', help="Run Silently")
     parser.add_option('-i', '--vcf',
                       dest='vcf_input', help="VCF input file")
-    parser.add_option('-o', '--out',
-                      dest='output_prefix', help="Output file prefix")
     parser.add_option('-c', '--chromosome',
                       dest='chromosome', help="Chromosome")
     parser.add_option('-l', '--log-fire', dest='log_file',
@@ -120,8 +118,6 @@ def parse_arguments():
         "No VCF file has been specified as input"
     assert options.chromosome is not None, \
         "No chromosome has been specified to the script"
-    assert options.output_prefix is not None, \
-        "Output file prefix has not been specified."
     assert options.population is not None, \
         "Population code has not been specified."
     if(options.fayandWuWindowJump is None):
