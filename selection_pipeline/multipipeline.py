@@ -302,9 +302,9 @@ def main():
     parser.add_option('--config-file', dest='config_file',
                       help='Configuration File')
     parser.add_option('--fst-window-size', dest="fst_window_size",
-                      help="FST window size")
+                      help="FST window size (kb)")
     parser.add_option('--fst-window-step', dest="fst_window_step",
-                      help="FST window step size")
+                      help="FST window step size (kb)")
     parser.add_option('--no-clean-up', dest="no_clean_up",
                       action="store_true",
                       help="Do not clean up intermediate datafiles")
