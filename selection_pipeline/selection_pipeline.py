@@ -78,29 +78,29 @@ def parse_arguments():
     parser.add_option('--gzvcf', action="store_true",
                       dest="vcf_gz", help="VCF input is in GZ file (optional)")
     parser.add_option('--TajimaD', dest='tajimas_d',
-                      help="Output Tajima's D statistic in bins of size <int>")
+                      help="Output Tajima's D statistic in bins of size (bp)")
     parser.add_option('--fay-Window-Width', dest='fayandWuWindowWidth',
-                      help="Sliding window width for Fay and Wu's H")
+                      help="Sliding window width for Fay and Wu's H (kb)")
     parser.add_option('--fay-Window-Jump', dest="fayandWuWindowJump",
                       help=("Window Jump for Fay and Wus ( if fay-Window-Width"
                             " = fay-Window-Jump non-overlapping windows "
-                            "are used"))
+                            "are used (kb)"))
     parser.add_option('--no-clean-up', dest="no_clean_up", action="store_true",
                       help="Do not clean up intermediate datafiles")
     parser.add_option('--impute-split-size', dest='impute_split_size',
                       help="impute2 split size (Mb)")
     parser.add_option('--ehh-window-size', dest="multi_window_size",
-                      help="Multicore window size (bp)")
+                      help="Multicore window size (Mp)")
     parser.add_option('--ehh-overlap', dest="ehh_overlap",
-                      help="EHH window overlap")
+                      help="EHH window overlap (Mb)")
     parser.add_option('--daf', dest='daf',
                       help="Derived Allele Frequency filter proportion")
     parser.add_option('--big-gap', dest="big_gap",
-                      help=("Gap size in kb for not calculating iHH if "
-                            "core SNP spans this gap"))
+                      help=("Gap size for not calculating iHH if "
+                            "core SNP spans this gap (kb)"))
     parser.add_option('--small-gap', dest='small_gap',
-                      help=("Gap size in kb for applying a penalty to "
-                            "the area calculated by iHH"))
+                      help=("Gap size for applying a penalty to "
+                            "the area calculated by iHH (kb)"))
     parser.add_option('--small-gap-penalty', dest="small_gap_penalty",
                       help=("Penalty multiplier for intergration steps"
                             "in iHH see manual for formula, usually the "
