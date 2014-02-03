@@ -120,6 +120,8 @@ def parse_arguments():
         "No chromosome has been specified to the script"
     assert options.population is not None, \
         "Population code has not been specified."
+    assert options.config_file is not None, \
+        "Config file has not been specified."
     if(options.fayandWuWindowJump is None):
         options.fayandWuWindowJump = str(5000)
     else:
