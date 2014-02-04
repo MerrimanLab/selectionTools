@@ -334,11 +334,11 @@ def main():
     if options.fst_window_step is None:
         options.fst_window_step = str(1000)
     else:
-        options.fst_window_step = str(options.fst_window_step)
+        options.fst_window_step = str(float(options.fst_window_step) * 1e3)
     if options.fst_window_size is None:
         options.fst_window_size = str(1000)
     else:
-        options.fst_window_size = str(options.fst_window_size)
+        options.fst_window_size = str(float(options.fst_window_size) * 1e3)
     if options.cores is not None:
         config['system']['cores_avaliable'] = options.cores
     set_environment(config['environment'])

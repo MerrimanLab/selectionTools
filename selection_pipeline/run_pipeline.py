@@ -352,7 +352,7 @@ class CommandTemplate(object):
         config_string += 'SlidingWindow = 1 \n'
         config_string += 'WidthSW = {0} \n'.format(
             self.options.fayandWuWindowWidth)
-        config_string += 'JumpSW = 5000 \n'.format(
+        config_string += 'JumpSW = {0} \n'.format(
             self.options.fayandWuWindowJump)
         config_string += 'WindowType = 0 \n'
         config_string += 'UseLDSinglets = 0 \n'
