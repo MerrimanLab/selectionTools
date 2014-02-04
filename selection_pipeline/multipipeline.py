@@ -302,9 +302,9 @@ def main():
     parser.add_option('--config-file', dest='config_file',
                       help='Configuration File')
     parser.add_option('--fst-window-size', dest="fst_window_size",
-                      help="FST window size")
+                      help="FST window size (kb)")
     parser.add_option('--fst-window-step', dest="fst_window_step",
-                      help="FST window step size")
+                      help="FST window step size (kb)")
     parser.add_option('--no-clean-up', dest="no_clean_up",
                       action="store_true",
                       help="Do not clean up intermediate datafiles")
@@ -334,11 +334,13 @@ def main():
     if options.fst_window_step is None:
         options.fst_window_step = str(1000)
     else:
-        options.fst_window_step = str(float(options.fst_window_step) * 1e3)
+        options.fst_window_step = str(
+                float(options.fst_window_step) * 1e3)
     if options.fst_window_size is None:
         options.fst_window_size = str(1000)
     else:
-        options.fst_window_size = str(float(options.fst_window_size) * 1e3)
+        options.fst_window_size = str(
+                float(options.fst_window_size) * 1e3)
     if options.cores is not None:
         config['system']['cores_avaliable'] = options.cores
     set_environment(config['environment'])
