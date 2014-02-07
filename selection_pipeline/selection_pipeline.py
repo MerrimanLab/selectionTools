@@ -107,6 +107,8 @@ def parse_arguments():
                             "same as small-gap"))
     parser.add_option('--cores', dest='cores',
                       help="Override cores avaliable setting")
+    parser.add_option('--no-ihs',dest='no_ihs',action="store_true"
+                      , help='Disable iHS and iHH calculation')
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.verbose):
@@ -155,6 +157,8 @@ def parse_arguments():
         options.full_process = False
     if (options.vcf_gz is None):
         options.vcf_gz = False
+    if (options.no_ihs is None):
+        options.no_ihs = False
     if(options.log_file is None):
         options.log_file = options.population + \
             options.chromosome + "_selection_pipeline.log"

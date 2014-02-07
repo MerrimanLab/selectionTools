@@ -205,6 +205,11 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     selection_pipeline_executable = \
         config['selection_pipeline']['selection_pipeline_executable']
     cmds = []
+    # check whether we should disable rsb given that iHS could have potentially
+    # been disabled and if that is the case we cannot perform rsb calculation
+    if options.extra_args is not None:
+        if '--no-ihs' in options.extra_args:
+            options.no_rsb = True
     for vcf, population_name in zip(sorted(output_vcfs), sorted(populations)):
         cmd = []
         cmd.append(selection_pipeline_executable)
@@ -310,6 +315,8 @@ def main():
                       help="Do not clean up intermediate datafiles")
     parser.add_option('--cores', dest="cores", help=("Overrides number of "
                       "cores avaliable as provided in the config file"))
+    parser.add_option('--no-rsb',dest="no_rsb", action="store_true",
+                      help="Do not run calculate RSB")
     (options, args) = parser.parse_args()
     assert options.vcf_input is not None, \
         "no VCF file has been specified as input"
@@ -341,6 +348,8 @@ def main():
     else:
         options.fst_window_size = str(
                 float(options.fst_window_size) * 1e3)
+    if options.no_rsb is None:
+        options.no_rsb = False
     if options.cores is not None:
         config['system']['cores_avaliable'] = options.cores
     set_environment(config['environment'])
@@ -351,7 +360,8 @@ def main():
     output_vcfs = subset_vcf(options.vcf_input, config, populations)
     run_selection_pipeline(output_vcfs, options, populations, config)
     # TODO move FST to here on filtered dataset
-    rsb(config, options, populations)
+    if (options.no_rsb):
+        rsb(config, options, populations)
     if not os.path.exists('logs'):
         os.mkdir('logs')
     os.rename(options.log_file, 'logs/' + options.log_file)
