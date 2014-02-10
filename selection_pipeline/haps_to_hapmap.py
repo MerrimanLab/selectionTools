@@ -89,8 +89,16 @@ def main():
                 a2 = line[4]
                 ancestral_genotypes = ancestral_allele.upper() + \
                     ancestral_allele.upper()
-                change_alleles = map(lambda x: a1 if(int(x) == 0)
-                                     else a2, line[5:])
+                def check_alleles(x):
+                    try:
+                        x = int(x)
+                        if(x == 0):
+                            return a1
+                        else:
+                            return a2
+                    except:
+                        return "0"
+                change_alleles = map(check_alleles, line[5:])
                 change_alleles = list(change_alleles)
                 zipa = change_alleles[0::2]
                 zipb = change_alleles[1::2]

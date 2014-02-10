@@ -91,13 +91,12 @@ def get_haps_line(options, record):
         if(gt != None and '|' in gt):
             gtSplit = gt.split('|')
             if(gtSplit[0] == '.'):
-                gtSplit[0] = '?'
-            if(gtSplit[1] == '?'):
-                gtSplit[1] = '?'
+                gtSplit[0] = options.missing_data_code
+            if(gtSplit[1] == '.'):
+                gtSplit[1] = options.missing_data_code
             line = line + ' ' + gtSplit[0] + ' ' + gtSplit[1]
         else:
-            line = line + '? ?'
-            break
+            line = line + ' '+options.missing_data_code +  ' '+ options.missing_data_code
     return line
 
 
@@ -231,6 +230,10 @@ def main():
                       dest="no_annotation",
                       help=("No annotation of VCF file just"
                             " convert to haps"))
+    parser.add_option('--missing-code',dest='missing_data_code',
+                      help='Missing code for output file')
+    if(options.missing_data_code is None):
+        options.missing_data_code = '.'
     (options, args) = parser.parse_args()
     if(options.format is None):
         options.format = 'lower'

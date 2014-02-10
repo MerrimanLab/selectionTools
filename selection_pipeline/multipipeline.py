@@ -315,6 +315,9 @@ def main():
         "no VCF file has been specified as input"
     assert options.chromosome is not None, \
         "no chromosome has been specified to the script"
+    assert options.populations is not None and \
+        len(options.populations) >= 2, \
+        "Atleast two population files are required"
     if options.config_file is None:
         options.config_file = 'defaults.cfg'
         if not(os.path.isfile(options.config_file)):
