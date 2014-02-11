@@ -10,6 +10,7 @@ require(rehh)
 require(multicore) #package for run in parallel in R.
 #script to split chromosome into x sized segments to compute iHH on
 args<-commandArgs(TRUE)
+missing_code='.'
 spec = matrix(c(
 	'help', 	'h', 	0, 	"logical",
 	'input',   'i', 1,  "character",
@@ -25,10 +26,11 @@ spec = matrix(c(
 	"big_gap",  'b', 1, "integer",
 	"small_gap", 'S', 1, "integer",
 	"small_gap_penalty", 'P', 1, "integer",
-    "haplo_hh",    "H",   0,   "logical"
+    "haplo_hh",    "H",   0,   "logical",
+    "missing_code", "M",  1,   "character"
 ), byrow=T, ncol=4) 
 opt = getopt(spec)
-
+print(missing_code)
 
 if (!is.null(opt$help)){
 	cat(getopt(spec,usage=TRUE));
@@ -37,7 +39,7 @@ if (!is.null(opt$help)){
 #read in haps file from shapeit
 pop1=as.character(opt$pop)
 #print("*")
-hapsPop=read.table(opt$input)
+hapsPop=read.table(opt$input,stringsAsFactors=F)
 hapsPop=hapsPop[nchar(as.character(hapsPop[,4]))==1 & nchar(as.character(hapsPop[,5]))==1, ] #remove indels
 chr=as.numeric(opt$chr)
 window=as.numeric(opt$window)
@@ -46,6 +48,9 @@ cores=as.numeric(opt$cores)
 working_dir=as.character(opt$working_dir)
 offset=as.numeric(opt$offset)
 maf=as.numeric(opt$maf)
+if(!is.null(opt$missing_code)){
+    missing_code = opt$missing_code
+}
 #size of each region
 #window=500000
 #overlap = 100000
@@ -55,10 +60,10 @@ if(!is.null(opt$haplo_hh)){
   bin = hapsPop
   hapsPop.only=bin[,6:ncol(bin)]
   allelesPop=bin[,4:5]
-  hapsPop.only[hapsPop.only == 1] = 2
-  hapsPop.only[hapsPop.only == 0] = 1
+  hapsPop.only[hapsPop.only == "1"] = 2
+  hapsPop.only[hapsPop.only == "0"] = 1
+  hapsPop.only[hapsPop.only == missing_code] = 0
   t.hapsPop=t(hapsPop.only)
-  
   ##Construct the ind file
   ind=matrix(ncol=5,nrow=nrow(bin))
   ind[,1] = as.character(bin[,2])
@@ -72,7 +77,6 @@ if(!is.null(opt$haplo_hh)){
   d = data2haplohh(hap_file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),map_file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),min_maf=maf)   
   save(d, file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))
 }
-
 #print("Why are you not working")
 #want to create overlapping bins
 #column 3 is base position
@@ -94,8 +98,9 @@ while((i-1) * (window - overlap) <= hapsPop[length(hapsPop[,3]),3]){
   if(length(bin[,3]) > 0){
   hapsPop.only=bin[,6:ncol(bin)]
   allelesPop=bin[,4:5]
-  hapsPop.only[hapsPop.only == 1] = 2
-  hapsPop.only[hapsPop.only == 0] = 1
+  hapsPop.only[hapsPop.only == "1"] = 2
+  hapsPop.only[hapsPop.only == "0"] = 1
+  hapsPop.only[hapsPop.only == missing_code] = 0
   t.hapsPop=t(hapsPop.only)
   
   ##Construct the ind file

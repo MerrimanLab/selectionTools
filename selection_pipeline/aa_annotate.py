@@ -165,8 +165,9 @@ def aa_check(realAA, ref, alt, format, line):
                 for i in range(5, len(newLine)):
                     if((newLine[i]) == "1"):
                         newLine[i] = '0'
-                    else:
+                    elif((newLine[i]) == "0"):
                         newLine[i] = '1'
+                    # DO nothing leave it as missing
             else:
                 newLine = line.split()
                 newLine[3] = realAA
@@ -232,9 +233,9 @@ def main():
                             " convert to haps"))
     parser.add_option('--missing-code',dest='missing_data_code',
                       help='Missing code for output file')
+    (options, args) = parser.parse_args()
     if(options.missing_data_code is None):
         options.missing_data_code = '.'
-    (options, args) = parser.parse_args()
     if(options.format is None):
         options.format = 'lower'
     # Will annotate the haps file with exactly what is required
