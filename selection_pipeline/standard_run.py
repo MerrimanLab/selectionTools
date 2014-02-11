@@ -146,15 +146,17 @@ class StandardRun(CommandTemplate):
         vcf = self.fix_vcf_qctool(vcf)
         haps = self.run_aa_annotate_haps(haps)
         tajimaSD = self.vcf_to_tajimas_d(vcf)
-        ihh = self.run_multi_coreihh(haps)
+        if (not self.options.no_ihs):
+            ihh = self.run_multi_coreihh(haps)
         ihs_file = ihh.split('.ihh')[0] + '.ihs'
         haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if not os.path.exists('results'):
             os.mkdir('results')
-        os.rename(haplo_hh, 'results/' + haplo_hh)
         os.rename(tajimaSD, 'results/' + tajimaSD)
-        os.rename(vcf, 'results/' + vcf)
-        os.rename(ihh, 'results/' + ihh)
+        if (not self.options.no_ihs):
+            os.rename(haplo_hh, 'results/' + haplo_hh)
+            os.rename(vcf, 'results/' + vcf)
+            os.rename(ihh, 'results/' + ihh)
         os.rename(ihs_file, 'results/'+ihs_file)
         os.rename(haps, 'results/' + haps)
         os.rename(fayandwus, 'results/' + fayandwus)
