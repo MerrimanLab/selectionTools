@@ -78,8 +78,8 @@ tar -xzf src/variscan-2.0.3.tar.gz
 (cd variscan-2.0.3/src/ && rm *o)
 change_folder  variscan-2.0.3
 check_success bash autogen.sh && make
-mv variscan-2.0.3/src/variscan bin/
 orig_dir
+mv variscan-2.0.3/src/variscan bin/
 rm -Rf variscan-2.0.3
 echo "Installing getopt"
 check_success Rscript src/R_dependencies.R 'getopt'
