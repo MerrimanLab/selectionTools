@@ -53,9 +53,15 @@ tar xzf src/qctool_v1.3-linux-x86_64.tgz
 mv qctool_v1.3-linux-x86_64/qctool bin/
 rm -Rf qctool_v1.3-linux-x86_64
 echo "Installing PLINK"
-unzip src/plink-1.07-x86_64.zip
-cp plink-1.07-x86_64/plink bin/
-rm -Rf plink-1.07-x86_64
+if [ `uname` = "Darwin" ]; then
+	unzip src/plink-1.07-mac-intel.zip
+	cp plink-1.07-mac-intel/plink bin/
+	rm -Rf plink-1.07-mac-intel
+else
+	unzip src/plink-1.07-x86_64.zip
+	cp plink-1.07-x86_64/plink bin/
+	rm -Rf plink-1.07-x86_64
+fi
 echo "Installing shapeit"
 tar xzf src/shapeit.v2.r727.linux.x64.tar.gz
 mv shapeit.v2.r727.linux.x64 bin/shapeit
