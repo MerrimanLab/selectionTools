@@ -520,7 +520,7 @@ Figure ~\ref{fig:rsb} shows the Rsb statistic for the entire region for the tuto
 \pagebreak
 \section{Output Files}
 The output files are preserved in the same state as the original output from the program used to generate the data.
-\subsection{multi\_population}
+\subsection{multipop\_selection_pipeline}
 \subsubsection{Fst}
 Located in the fst folder. Tab-delimited data file containing 1 header line followed data on each subsequent line\\
 \begin{minted}[bgcolor=bg,frame=lines]{rst}
@@ -528,7 +528,7 @@ CHROM   BIN_START       BIN_END N_VARIANTS      WEIGHTED_FST    MEAN_FST
 2       130000001       130010000       94      0.133102        0.0680276 
 \end{minted}
 \subsection{selection\_pipeline}
-All the outputs for each population are contained in the results folder. If you ran the tool using \emph{multi\_population} the outputs are located in <pop name>/results. 
+All the outputs for each population are contained in the results folder. If you ran the tool using \emph{multipop\_selection_pipeline} the outputs are located in <pop name>/results. 
 \subsubsection{Fay and Wu's H}
 Space-delimited data file containing header line that start with a hash character (\#). Contains lots of columns. If you are only interested in Fay and Wu's H, column 1 provides the position and column 15 provides the H statistic. \\
 \begin{minted}[bgcolor=bg,frame=lines]{rst}
@@ -557,8 +557,8 @@ CHROM   BIN_START       N_SNPS  TajimaD
 \section{Command line Arguments}
 The selection pipeline contains three programs:
 \emph{selection\_pipeline}, \emph{aa\_annotate} and
-\emph{multi\_population}. The selection pipeline does all the
-intra-population statistics calculations. The multi\_population program
+\emph{multipop\_selection_pipeline}. The selection pipeline does all the
+intra-population statistics calculations. The multipop\_selection_pipeline program
 calculates all the inter-population statistics and calls the selection
 pipeline. The aa\_annotate program annotates a haplotype file or a
 phased vcf file with the ancestral allele from the 6-way EPO
@@ -580,18 +580,18 @@ All single population pipeline results are stored in the subdirectory of the pop
 \end{itemize}
 \subsubsection{Other parameters (Compulsory)}
 \begin{itemize}
-\item -l <log\_file> \\
-Name for the log file. Moved into the logs folder at the end of program run.
 \item -c <Chromosome>\\
 Integer for the chromosome being used.
-\item -a <Arguments to the selection pipeline>\\
-Quoted string containing any extra arguments to the selection\_pipeline program. e.g "--imputation"
 \item --config-file <path to config file>\\
 Path to the selection pipeline config file an example config file is located in the base directory of the extracted package.
 \end{itemize}
 \subsubsection{Other parameters (Optional)}
 \begin{itemize}
+\item -l <log\_file> \\
+Name for the log file. Moved into the logs folder at the end of program run.
 \item --no-clean-up\\ 
+\item -a <Arguments to the selection pipeline>\\
+Quoted string containing any extra arguments to the selection\_pipeline program. e.g "--imputation"
 Do not clean up intermediate data files.
 \item --fst-window-size <FST window size>\\
 Fst calculation sliding window size in kilobases (default = 1kb).
@@ -768,7 +768,7 @@ program looks in the current working directory for a file named
 defaults.cfg but you can point the program to any file using command
 line argument --config-file <config\_file\_location>. There are two
 main programs in the selection pipeline namely
-\emph{selection\_pipeline} and \emph{multi\_population}. These
+\emph{selection\_pipeline} and \emph{multipop\_selection_pipeline}. These
 programs share a config file but certain configuration parameters can
 be ommitted when using the \emph{selection\_pipeline} program
 exclusively. A clean install of the pipeline generates an example
@@ -942,8 +942,8 @@ Location of the multicore\_iHH.R script
 \end{itemize}
 \section{Log Files}
 The log files contain all the information for a pipeline run including any errors if for some reason some part of the pipeline does not complete.
-\subsection{multi\_population}
-The location of the log file for  \emph{multi\_population} defaults is
+\subsection{multipop\_selection_pipeline}
+The location of the log file for  \emph{multipop\_selection_pipeline} defaults is
 located in the log directory. It contains all the logging information
 for the between population selection signature calculations.
 
@@ -967,14 +967,14 @@ pipeline into galaxy.
 
 \section{F.A.Q}
 \begin{enumerate}
-\item How do I run \emph{multi\_population} with a phased VCF?
+\item How do I run \emph{multipop\_selection_pipeline} with a phased VCF?
 
-In the -a argument for multi\_population merely add --phased-vcf
+In the -a argument for multipop\_selection_pipeline merely add --phased-vcf
 between the quotes. This will ensure phasing and imputation will be
 skipped when \emph{selection\_pipeline} is called.
 
 
-\item My populations are in seperate VCF-Files: how do I run \emph{multi\_population}?
+\item My populations are in seperate VCF-Files: how do I run \emph{multipop\_selection_pipeline}?
 
 To run the pipeline you will need to merge the VCF-files into one
 large multipopulation VCF file and generate the appropriate population
