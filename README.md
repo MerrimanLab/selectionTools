@@ -1,4 +1,4 @@
-Merriman Selection Pipeline
+selectionTools 1.0
 =========================
 Pipeline to take VCF through to Selection Analysis.
 
@@ -22,10 +22,10 @@ Python Dependencies
 * python-scipy
 
 If you are using python < 2.7 the python package argparse will need to be installed. 
-
 Installation
 ------------
 
+<<<<<<< HEAD
 After cloning or downloading and extracting running `./install.sh` in the root directory will attempt to install the pipeline and all required dependencies.
 
 By default the pipeline executables will be added to $HOME/.local/bin.
@@ -40,6 +40,4 @@ Single Population
 
 
 Multiple Populations
---------------------
-
 

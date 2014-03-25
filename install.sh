@@ -53,9 +53,15 @@ tar xzf src/qctool_v1.3-linux-x86_64.tgz
 mv qctool_v1.3-linux-x86_64/qctool bin/
 rm -Rf qctool_v1.3-linux-x86_64
 echo "Installing PLINK"
-unzip src/plink-1.07-x86_64.zip
-cp plink-1.07-x86_64/plink bin/
-rm -Rf plink-1.07-x86_64
+if [ `uname` = "Darwin" ]; then
+	unzip src/plink-1.07-mac-intel.zip
+	cp plink-1.07-mac-intel/plink bin/
+	rm -Rf plink-1.07-mac-intel
+else
+	unzip src/plink-1.07-x86_64.zip
+	cp plink-1.07-x86_64/plink bin/
+	rm -Rf plink-1.07-x86_64
+fi
 echo "Installing shapeit"
 tar xzf src/shapeit.v2.r727.linux.x64.tar.gz
 mv shapeit.v2.r727.linux.x64 bin/shapeit
@@ -78,8 +84,8 @@ tar -xzf src/variscan-2.0.3.tar.gz
 (cd variscan-2.0.3/src/ && rm *o)
 change_folder  variscan-2.0.3
 check_success bash autogen.sh && make
-mv variscan-2.0.3/src/variscan bin/
 orig_dir
+mv variscan-2.0.3/src/variscan bin/
 rm -Rf variscan-2.0.3
 echo "Installing getopt"
 check_success Rscript src/R_dependencies.R 'getopt'
