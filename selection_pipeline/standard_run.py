@@ -128,7 +128,8 @@ class StandardRun(CommandTemplate):
         """ Run pipeline runs the pipeline for a standard run
 
         """
-        vcf = self.run_remove_indels_from_vcf()
+        if(self.options.vcf_input):
+            vcf = self.run_remove_indels_from_vcf()
         if(self.options.phased_vcf):
             (haps, sample) = self.vcf_to_haps(vcf)
         elif(self.options.haps and self.options.sample):

@@ -120,8 +120,8 @@ def parse_arguments():
         else:
             logger.setLevel(logging.ERROR)
     # Obligatory arguments
-    assert options.vcf_input is not None, \
-        "No VCF file has been specified as input"
+    assert options.vcf_input or (options.haps and options.sample) is not None, \
+        "No VCF or haps/sample file has been specified as input"
     assert options.chromosome is not None, \
         "No chromosome has been specified to the script"
     assert options.population is not None, \
