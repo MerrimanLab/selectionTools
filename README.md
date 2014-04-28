@@ -25,7 +25,6 @@ If you are using python < 2.7 the python package argparse will need to be instal
 Installation
 ------------
 
-<<<<<<< HEAD
 After cloning or downloading and extracting running `./install.sh` in the root directory will attempt to install the pipeline and all required dependencies.
 
 By default the pipeline executables will be added to $HOME/.local/bin.
