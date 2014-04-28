@@ -129,7 +129,9 @@ class CommandTemplate(object):
         prefix = self.options.population + self.options.chromosome + \
             '_impute2'
         impute2 = self.config['impute2']['impute_executable']
-        genetic_map = ''
+        genetic_map = None
+        legend_file = None
+        hap_file = None
         for file in os.listdir(self.config['impute2']['impute_map_dir']):
             if fnmatch.fnmatch(file, (
                 self.config['impute2']['impute_map_prefix'].replace(
@@ -152,6 +154,12 @@ class CommandTemplate(object):
                     self.config['impute2']['impute_reference_dir'], file)
         #create the command template
         cmd_template = []
+        assert genetic_map is not None, \
+                "Could not find a impute genetic map, check your impute settings in you .cfg file"
+        assert legend_file is not None, \
+                "Could not find a impute legend map, check your impute settings in you .cfg file"
+        assert hap_file is not None, \ 
+                "Could not find a impute hap, check your impute settings in you .cfg file"
         cmd_template.append(impute2)
         cmd_template.extend(['-m', genetic_map, '-h', hap_file, '-l',
                             legend_file, '-known_haps_g', haps, '-phase'])
