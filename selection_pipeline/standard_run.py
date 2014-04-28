@@ -131,6 +131,9 @@ class StandardRun(CommandTemplate):
         vcf = self.run_remove_indels_from_vcf()
         if(self.options.phased_vcf):
             (haps, sample) = self.vcf_to_haps(vcf)
+        elif(self.options.haps and self.options.sample):
+            haps = self.options.haps
+            sample = self.options.sample
         else:
             (ped, map) = self.run_vcf_to_plink()
             (ped, map) = self.run_plink_filter(ped, map)

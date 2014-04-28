@@ -109,6 +109,10 @@ def parse_arguments():
                       help="Override cores avaliable setting")
     parser.add_option('--no-ihs',dest='no_ihs',action="store_true"
                       , help='Disable iHS and iHH calculation')
+    parser.add_option('--haps' dest='haps',
+                        help="Shapeit haps file")
+    parser.add_option('--sample', dest='sample',
+                        help='Corresponding sample file to accompany haps')
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.verbose):
