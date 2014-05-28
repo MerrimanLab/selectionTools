@@ -16,3 +16,4 @@ build/*
 cores/*
 MerrimanSelection*/*
 /defaults.cfg
+.DS_Store

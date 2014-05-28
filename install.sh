@@ -52,6 +52,20 @@ echo "Installing QCTool"
 tar xzf src/qctool_v1.3-linux-x86_64.tgz
 mv qctool_v1.3-linux-x86_64/qctool bin/
 rm -Rf qctool_v1.3-linux-x86_64
+echo "Installing Shapeit"
+
+if [ `uname` = "Darwin" ]; then
+    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.MacOSX.tgz
+    tar xzf shapeit.v2.r778.MacOSX.tgz
+    mv shapeit bin/
+else
+    echo `uname`
+    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
+    tar xzf shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
+    mv shapeit bin/
+fi
+rm -Rf example
+rm -f LICENCE
 echo "Installing PLINK"
 if [ `uname` = "Darwin" ]; then
 	unzip src/plink-1.07-mac-intel.zip
@@ -62,10 +76,6 @@ else
 	cp plink-1.07-x86_64/plink bin/
 	rm -Rf plink-1.07-x86_64
 fi
-echo "Installing shapeit"
-tar xzf src/shapeit.v2.r727.linux.x64.tar.gz
-mv shapeit.v2.r727.linux.x64 bin/shapeit
-rm -Rf example
 echo "Installing Impute2"
 tar xzf src/impute_v2.3.0_x86_64_static.tgz
 mv impute_v2.3.0_x86_64_static/impute2 bin/
