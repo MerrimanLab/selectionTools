@@ -27,16 +27,35 @@ Installation
 
 After cloning or downloading and extracting running `./install.sh` in the root directory will attempt to install the pipeline and all required dependencies.
 
-By default the pipeline executables will be added to $HOME/.local/bin.
+By default the pipeline executables will be added to $HOME/.local/bin, you should add this directory to your executable path.
 
 Config File
 -----------
 
-Each run of the pipeline requires the specification of config file
+Each run of the pipeline requires the specification of settings in a config file. A default config file is generated after installation in the selectionTools directory
+named defaults.cfg. Detailed information on what the settings do and how to change them is avaliable in the pdf manual in the docs/ directory.
 
 Single Population
 -----------------
 
+To run the selection pipeline on a single population
 
-Multiple Populations
+    selection_pipeline -c <chromosome number> -i <vcf input> --population <population name> --config-file <config_file> --cores <cpu cores>
 
+To view the other options run the help.
+    
+    selection_pipeline -h
+
+Multiple Population
+--------------------
+
+To run the multiple population pipeline.
+
+    multipop_selection_pipeline -p <population file1> -p <population file2> \
+    -i <merged input vcf> --config-file <config file> 
+
+For more information on population filess consult the PDF manual specifically section 3.3.
+
+To view the other options run the help.
+
+    multipop_selection_pipeline -h

@@ -72,8 +72,7 @@ used, and for imputation impute2 is used \citep{impute22009,
   Delaneau:2013hi}. Furthermore these statistics also require
 ancestral allele information \citep{Flicek:2012vg}.  The pipeline
 performs phasing if the VCF files do not contain phase information, and
-then performs ancestral allele annotation. 
-{\bf\color{blue}\small [*** JAMES - IS THIS ONLY TRUE FOR HUMAN DATA?  ***]}
+then performs ancestral allele annotation. Phasing can be performed on species other than humans, provided you have genetic maps in the format shapeit expects. 
 Once complete, the rehh
 package for R provides a simple interface for implementing EHH-based
 analyses \citep{Gautier:2012et}. Here we have extended rehh to include penalties
