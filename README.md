@@ -40,16 +40,17 @@ Single Population
 
 To run the selection pipeline on a single population
 
-    selection_pipeline -c <chromosome number> -i <vcf input> --population <population name> --config-file <config_file> --cores <cpu cores>
+    selection_pipeline -c <chromosome number> -i <vcf input> --population <population name> \
+    --config-file <config_file> --cores <cpu cores>
 
 To view the other options run the help.
     
     selection_pipeline -h
 
-Multiple Population
+Multiple Populations
 --------------------
 
-To run the multiple population pipeline.
+To run the selection pipeline on multiple populations.
 
     multipop_selection_pipeline -p <population file1> -p <population file2> \
     -i <merged input vcf> --config-file <config file> 
