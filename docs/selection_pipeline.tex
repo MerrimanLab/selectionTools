@@ -198,7 +198,7 @@ further options require alteration in the config file:\\
 genetic_map_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/shapeit_ref
 ...
 impute_map_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
-impute_reference_dir= \${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
+impute_reference_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
 ...
 \end{minted}
 
@@ -518,7 +518,7 @@ Figure ~\ref{fig:rsb} shows the Rsb statistic for the entire region for the tuto
 \pagebreak
 \section{Output Files}
 The output files are preserved in the same state as the original output from the program used to generate the data.
-\subsection{multipop\_selection_pipeline}
+\subsection{multipop\_selection\_pipeline}
 \subsubsection{Fst}
 Located in the fst folder. Tab-delimited data file containing 1 header line followed data on each subsequent line\\
 \begin{minted}[bgcolor=bg,frame=lines]{rst}
@@ -526,7 +526,7 @@ CHROM   BIN_START       BIN_END N_VARIANTS      WEIGHTED_FST    MEAN_FST
 2       130000001       130010000       94      0.133102        0.0680276 
 \end{minted}
 \subsection{selection\_pipeline}
-All the outputs for each population are contained in the results folder. If you ran the tool using \emph{multipop\_selection_pipeline} the outputs are located in <pop name>/results. 
+All the outputs for each population are contained in the results folder. If you ran the tool using \emph{multipop\_selection\_pipeline} the outputs are located in <pop name>/results. 
 \subsubsection{Fay and Wu's H}
 Space-delimited data file containing header line that start with a hash character (\#). Contains lots of columns. If you are only interested in Fay and Wu's H, column 1 provides the position and column 15 provides the H statistic. \\
 \begin{minted}[bgcolor=bg,frame=lines]{rst}
@@ -555,8 +555,8 @@ CHROM   BIN_START       N_SNPS  TajimaD
 \section{Command line Arguments}
 The selection pipeline contains three programs:
 \emph{selection\_pipeline}, \emph{aa\_annotate} and
-\emph{multipop\_selection_pipeline}. The selection pipeline does all the
-intra-population statistics calculations. The multipop\_selection_pipeline program
+\emph{multipop\_selection\_pipeline}. The selection pipeline does all the
+intra-population statistics calculations. The multipop\_selection\_pipeline program
 calculates all the inter-population statistics and calls the selection
 pipeline. The aa\_annotate program annotates a haplotype file or a
 phased vcf file with the ancestral allele from the 6-way EPO
@@ -766,7 +766,7 @@ program looks in the current working directory for a file named
 defaults.cfg but you can point the program to any file using command
 line argument --config-file <config\_file\_location>. There are two
 main programs in the selection pipeline namely
-\emph{selection\_pipeline} and \emph{multipop\_selection_pipeline}. These
+\emph{selection\_pipeline} and \emph{multipop\_selection\_pipeline}. These
 programs share a config file but certain configuration parameters can
 be ommitted when using the \emph{selection\_pipeline} program
 exclusively. A clean install of the pipeline generates an example
@@ -940,8 +940,8 @@ Location of the multicore\_iHH.R script
 \end{itemize}
 \section{Log Files}
 The log files contain all the information for a pipeline run including any errors if for some reason some part of the pipeline does not complete.
-\subsection{multipop\_selection_pipeline}
-The location of the log file for  \emph{multipop\_selection_pipeline} defaults is
+\subsection{multipop\_selection\_pipeline}
+The location of the log file for  \emph{multipop\_selection\_pipeline} defaults is
 located in the log directory. It contains all the logging information
 for the between population selection signature calculations.
 
@@ -951,28 +951,16 @@ in the log directory. The log file contains all the logging
 information for the within population selection signature
 calculations.
 
-\section{Extra Features}
-
-\subsection{Galaxy Intergration}
-The galaxy folder contains the scripts required to add the selection
-pipeline to a local galaxy installation. The pipeline is also
-avaliable on the galaxy toolshed at galaxy\_url. To do intergrate the
-pipeline into galaxy.
-
-\noindent
-{\bf\small\color{blue} [*** JAMES - is this stuff available for
-  Galaxy? ***]}
-
 \section{F.A.Q}
 \begin{enumerate}
-\item How do I run \emph{multipop\_selection_pipeline} with a phased VCF?
+\item How do I run \emph{multipop\_selection\_pipeline} with a phased VCF?
 
-In the -a argument for multipop\_selection_pipeline merely add --phased-vcf
+In the -a argument for multipop\_selection\_pipeline merely add --phased-vcf
 between the quotes. This will ensure phasing and imputation will be
 skipped when \emph{selection\_pipeline} is called.
 
 
-\item My populations are in seperate VCF-Files: how do I run \emph{multipop\_selection_pipeline}?
+\item My populations are in seperate VCF-Files: how do I run \emph{multipop\_selection\_pipeline}?
 
 To run the pipeline you will need to merge the VCF-files into one
 large multipopulation VCF file and generate the appropriate population
@@ -985,7 +973,7 @@ shell.\\
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 
-export PERL5LIB=\${PERL5LIB}:<path to selection pipeline>/lib/perl5
+export PERL5LIB=${PERL5LIB}:<path to selection pipeline>/lib/perl5
 
 \end{minted}
 
