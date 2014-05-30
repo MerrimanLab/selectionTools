@@ -55,7 +55,7 @@ To run the selection pipeline on multiple populations.
     multipop_selection_pipeline -p <population file1> -p <population file2> \
     -i <merged input vcf> --config-file <config file> 
 
-For more information on population filess consult the PDF manual specifically section 3.3.
+For more information on population files consult the PDF manual specifically section 3.3.
 
 To view the other options run the help.
 
