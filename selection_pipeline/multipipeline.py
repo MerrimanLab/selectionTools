@@ -363,7 +363,7 @@ def main():
     output_vcfs = subset_vcf(options.vcf_input, config, populations)
     run_selection_pipeline(output_vcfs, options, populations, config)
     # TODO move FST to here on filtered dataset
-    if (options.no_rsb):
+    if (!options.no_rsb):
         rsb(config, options, populations)
     if not os.path.exists('logs'):
         os.mkdir('logs')

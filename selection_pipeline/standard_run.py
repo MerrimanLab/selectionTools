@@ -180,11 +180,6 @@ class StandardRun(CommandTemplate):
         if not self.options.no_clean_up:
             keep = ['selection_stderr.tmp', 'selection_stdout.tmp']
             clean_folder('.', keep=keep)
-        logger.info(tajimaSD)
-        logger.info(vcf)
-        logger.info(haps)
-        logger.info(ihh)
-        logger.info(fayandwus)
         logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
 
