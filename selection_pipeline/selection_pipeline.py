@@ -150,7 +150,7 @@ def parse_arguments():
     if(options.imputation is None):
         options.imputation = False
     if(options.hwe is None):
-        options.hwe = str(0.001)
+        options.hwe = str(0.0001)
     if(options.maf is None):
         options.maf = str(0.01)
     if(options.daf is None):
