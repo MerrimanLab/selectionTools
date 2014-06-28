@@ -325,6 +325,7 @@ class CommandTemplate(object):
                    self.options.chromosome])
         return(cmd, output_name)
 
+
     def variscan_fayandwus(self, hap2):
         """ Return the template for running variscan fay and wus
 
@@ -359,3 +360,17 @@ class CommandTemplate(object):
         variscan_config.write(config_string)
         variscan_config.close()
         return(cmd, output_name, v_config_name)
+
+    def beagle_phasing(self, vcf):
+        cmd = []
+        java_executable = self.config['java']['java_executable'] 
+        beagle_memory =  self.config['beagle']['vm_size']
+        beagle_jar = self.config['beagle']['beagle_jar']
+        out_prefix = self.options.population + self.options.chromosome + \
+                '.beagle'
+        cmd.append(java_executable)
+        cmd.append('-Xmx' + beagle_memory)
+        cmd.extend(['-jar',beagle_jar])
+        cmd.extend(['gtgl={0}'.format(vcf),'out={0}'.format(out_prefix)])
+        output_name=out_prefix + '.vcf.gz'
+        return(cmd,output_name)

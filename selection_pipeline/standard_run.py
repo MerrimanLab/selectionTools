@@ -2,7 +2,6 @@ import os
 import sys
 from .standard_run_utilities import *
 from .run_pipeline import CommandTemplate
-
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
 import logging
@@ -52,6 +51,11 @@ class StandardRun(CommandTemplate):
         Uses the config dictionary to determine whether all the required
         executables and scripts exists where they have been specified.
         """
+        if(self.which(
+                self.config['beagle']['beagle_jar'],
+                'beagle')is None):
+            logger.error("Beagle not found check config file")
+            return False
         if(self.which(
                 self.config['plink']['plink_executable'],
                 'plink')is None):
@@ -128,9 +132,12 @@ class StandardRun(CommandTemplate):
         """ Run pipeline runs the pipeline for a standard run
 
         """
-        if(self.options.vcf_input):
-            vcf = self.run_remove_indels_from_vcf()
-        if(self.options.phased_vcf):
+        vcf = self.run_remove_indels_from_vcf()
+        if(self.options.beagle_phasing):
+            vcf = self.beagle_phasing(vcf)
+            vcf = gunzip_file(vcf)
+            (haps, sample) = self.vcf_to_haps(vcf)
+        elif(self.options.phased_vcf):
             (haps, sample) = self.vcf_to_haps(vcf)
         elif(self.options.haps and self.options.sample):
             haps = self.options.haps
@@ -145,25 +152,27 @@ class StandardRun(CommandTemplate):
         haps = self.haps_filter(haps)
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
-        fayandwus = self.variscan_fayandwus(haps2_haps)
-        vcf = self.haps_to_vcf(haps, new_sample_file)
-        vcf = self.fix_vcf_qctool(vcf)
+        if (sys.platform != 'darwin'):
+            fayandwus = self.variscan_fayandwus(haps2_haps)
+            vcf = self.haps_to_vcf(haps, new_sample_file)
+            vcf = self.fix_vcf_qctool(vcf)
+            tajimaSD = self.vcf_to_tajimas_d(vcf)
         haps = self.run_aa_annotate_haps(haps)
-        tajimaSD = self.vcf_to_tajimas_d(vcf)
         if (not self.options.no_ihs):
             ihh = self.run_multi_coreihh(haps)
         ihs_file = ihh.split('.ihh')[0] + '.ihs'
         haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if not os.path.exists('results'):
             os.mkdir('results')
-        os.rename(tajimaSD, 'results/' + tajimaSD)
         if (not self.options.no_ihs):
             os.rename(haplo_hh, 'results/' + haplo_hh)
             os.rename(vcf, 'results/' + vcf)
             os.rename(ihh, 'results/' + ihh)
         os.rename(ihs_file, 'results/'+ihs_file)
         os.rename(haps, 'results/' + haps)
-        os.rename(fayandwus, 'results/' + fayandwus)
+        if (sys.platform != 'darwin'):
+            os.rename(tajimaSD, 'results/' + tajimaSD)
+            os.rename(fayandwus, 'results/' + fayandwus)
         if not os.path.exists('log'):
             os.mkdir('log')
         logger.info(self.options.log_file)
@@ -237,6 +246,16 @@ class StandardRun(CommandTemplate):
         """
         (cmd, output_name) = super(StandardRun, self).haps_filter(haps)
         run_subprocess(cmd, 'haps filter')
+        return(output_name)
+
+    def beagle_phasing(self, vcf):
+        """ Run beagle phasing using phasing 
+            
+
+        """
+        (cmd, output_name)= super(StandardRun, self).beagle_phasing(vcf)
+        cmd.append('nthreads='+str(self.threads))
+        run_subprocess(cmd, 'beagle')
         return(output_name)
 
     def join_impute2_files(self, output_prefix, no_commands):

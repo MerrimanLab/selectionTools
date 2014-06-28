@@ -675,6 +675,10 @@ Window overlap for multicore rehh calculations in megabases (Mb) (defaut = 2Mb).
 
 Perform imputation using impute2 on the genotypes produced by shapeit. Option only works on a unphased VCF file.
 
+\item --beagle
+
+Perform phasing using beagle. Option removes shapeit from the analysis and subsequent imputation step.
+
 \item --daf <Minimum derived allele frequency>
 
 Derived allele frequencies below this minimum will be discarded (default = 0.0).

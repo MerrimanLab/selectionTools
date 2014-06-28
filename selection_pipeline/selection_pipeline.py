@@ -113,6 +113,8 @@ def parse_arguments():
                         help="Shapeit haps file")
     parser.add_option('--sample', dest='sample',
                         help='Corresponding sample file to accompany haps')
+    parser.add_option('--beagle',dest='beagle_phasing',action='store_true',
+                      help="Use beagle to phase")
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.verbose):

@@ -3,6 +3,7 @@ import subprocess
 import sys
 import logging
 import re
+import gzip
 #queue for threads
 #regex for hash at start of line
 
@@ -158,6 +159,8 @@ def run_subprocess(
                     command, stdout=stdout, stderr=standard_err)
             standard_out = stdout
     except:
+        print(tool)
+        print(command)
         logger.error(tool + " failed to run " + ' '.join(command))
         standard_err = open(stderr, 'r')
         while True:
@@ -287,3 +290,17 @@ def clean_folder(folder, keep=None):
                 os.unlink(file_path)
         except Exception as e:
             logger.error(e)
+
+def gunzip_file(input_file,output_file=None):
+    """ Gunzips target file and retuns the file name
+
+    """
+    if(output_file is None):
+        output_file = input_file.split(".gz")[0]
+    with open(output_file,'w') as out: 
+        with gzip.open(input_file) as gz:
+            for line in gz:
+                out.write(line)
+    return(output_file)
+                
+
