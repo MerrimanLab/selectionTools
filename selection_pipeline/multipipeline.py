@@ -374,5 +374,6 @@ def main():
         clean_folder('.', keep=keep)
     logger.info("Multi_population Complete")
     logger.info("Goodbye :")
+    print("Multi-population selection pipeline completed successfully !:)")
 if __name__ == "__main__":
     main()

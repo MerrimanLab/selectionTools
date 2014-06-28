@@ -159,8 +159,6 @@ def run_subprocess(
                     command, stdout=stdout, stderr=standard_err)
             standard_out = stdout
     except:
-        print(tool)
-        print(command)
         logger.error(tool + " failed to run " + ' '.join(command))
         standard_err = open(stderr, 'r')
         while True:

@@ -216,7 +216,7 @@ def main():
                         level=logging.INFO)
     s = StandardRun(options, config=config)
     s.run_pipeline()
-
+    print("Selection Pipeline Completed Successfully :)!")
 
 if __name__ == "__main__":
     main()
