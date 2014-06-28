@@ -97,6 +97,8 @@ check_success bash autogen.sh && make
 orig_dir
 mv variscan-2.0.3/src/variscan bin/
 rm -Rf variscan-2.0.3
+echo "Installing Beagle"
+cp src/beagle.jar bin/
 echo "Installing getopt"
 check_success Rscript src/R_dependencies.R 'getopt'
 echo "Installing R Multicore"
