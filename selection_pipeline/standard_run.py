@@ -153,10 +153,9 @@ class StandardRun(CommandTemplate):
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
         if (sys.platform != 'darwin'):
+            # Remove fay and wus from mac osx for the moment
             fayandwus = self.variscan_fayandwus(haps2_haps)
-            vcf = self.haps_to_vcf(haps, new_sample_file)
-            vcf = self.fix_vcf_qctool(vcf)
-            tajimaSD = self.vcf_to_tajimas_d(vcf)
+            os.rename(fayandwus, 'results/' + fayandwus)
         haps = self.run_aa_annotate_haps(haps)
         if (not self.options.no_ihs):
             ihh = self.run_multi_coreihh(haps)
@@ -170,9 +169,7 @@ class StandardRun(CommandTemplate):
             os.rename(ihh, 'results/' + ihh)
         os.rename(ihs_file, 'results/'+ihs_file)
         os.rename(haps, 'results/' + haps)
-        if (sys.platform != 'darwin'):
-            os.rename(tajimaSD, 'results/' + tajimaSD)
-            os.rename(fayandwus, 'results/' + fayandwus)
+        os.rename(tajimaSD, 'results/' + tajimaSD)
         if not os.path.exists('log'):
             os.mkdir('log')
         logger.info(self.options.log_file)
