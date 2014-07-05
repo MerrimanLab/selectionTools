@@ -63,11 +63,13 @@ echo "Installing Shapeit"
 if [ `uname` = "Darwin" ]; then
     wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.MacOSX.tgz
     tar xzf shapeit.v2.r778.MacOSX.tgz
+    rm shapeit.v2.r778.MacOSX.tgz
     mv shapeit bin/
 else
     echo `uname`
     wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
     tar xzf shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
+    rm shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
     mv shapeit bin/
 fi
 rm -Rf example
