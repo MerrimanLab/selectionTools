@@ -171,10 +171,10 @@ class StandardRun(CommandTemplate):
         os.rename(ihs_file, 'results/'+ihs_file)
         os.rename(haps, 'results/' + haps)
         os.rename(tajimaSD, 'results/' + tajimaSD)
-        if not os.path.exists('log'):
-            os.mkdir('log')
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
         logger.info(self.options.log_file)
-        os.rename(self.options.log_file, 'log/' + self.options.log_file)
+        os.rename(self.options.log_file, 'logs/' + self.options.log_file)
         if not self.options.no_clean_up:
             keep = ['selection_stderr.tmp', 'selection_stdout.tmp',os.path.basename(self.options.config_file)]
             clean_folder('.', keep=keep)
