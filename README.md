@@ -5,15 +5,16 @@ Pipeline to take VCF through to Selection Analysis.
 Software Prerequisites
 ---------------------
 
-The selection pipeline was developed on a 64-bit Ubuntu 13.04 system and has been tested on 64-bit Centos and Ubuntu 13.10 installations. The pipeline should work on any 64-bit linux system and Mac OSX with some manual tweaking.
+The selection pipeline was developed on a 64-bit Ubuntu 13.04 system and has been tested on 64-bit Centos and Ubuntu 13.10 installations. The pipeline should work on any 64-bit linux system and OSX (without Fay and Wu's H).
 
 * Python >= 2.6
 * Bourne-again Shell (Bash)
-* Perl5
+* Perl >=5
 * R >= 3.0.0
 * GNU Autotools
 * GCC
 * Git
+* Java >= 1.7 (for beagle)
 
 Python Dependencies
 
