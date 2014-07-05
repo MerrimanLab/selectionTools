@@ -279,6 +279,7 @@ def clean_folder(folder, keep=None):
         to not delete.
     """
     for the_file in os.listdir(folder):
+        the_file = os.path.basename(the_file)
         file_path = os.path.join(folder, the_file)
         if keep is not None:
             if (file_path in [os.path.join(folder, x) for x in keep]):
