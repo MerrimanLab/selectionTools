@@ -164,9 +164,6 @@ class StandardRun(CommandTemplate):
             ihh = self.run_multi_coreihh(haps)
             ihs_file = ihh.split('.ihh')[0] + '.ihs'
             haplo_hh = ihh.split('.ihh')[0] + '.RData'
-
-        if (not os.path.exists('results')):
-            os.mkdir('results')
         if (not self.options.no_ihs):
             os.rename(haplo_hh, 'results/' + haplo_hh)
             os.rename(vcf, 'results/' + vcf)
@@ -179,7 +176,7 @@ class StandardRun(CommandTemplate):
         logger.info(self.options.log_file)
         os.rename(self.options.log_file, 'log/' + self.options.log_file)
         if not self.options.no_clean_up:
-            keep = ['selection_stderr.tmp', 'selection_stdout.tmp']
+            keep = ['selection_stderr.tmp', 'selection_stdout.tmp',os.path.basename(self.options.config_file)]
             clean_folder('.', keep=keep)
         logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
