@@ -157,10 +157,13 @@ class StandardRun(CommandTemplate):
             fayandwus = self.variscan_fayandwus(haps2_haps)
             os.rename(fayandwus, 'results/' + fayandwus)
         haps = self.run_aa_annotate_haps(haps)
+        vcf = self.haps_to_vcf(haps, new_sample_file)
+        vcf = self.fix_vcf_qctool(vcf)
+        tajimaSD = self.vcf_to_tajimas_d(vcf)
         if (not self.options.no_ihs):
             ihh = self.run_multi_coreihh(haps)
-        ihs_file = ihh.split('.ihh')[0] + '.ihs'
-        haplo_hh = ihh.split('.ihh')[0] + '.RData'
+            ihs_file = ihh.split('.ihh')[0] + '.ihs'
+            haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if not os.path.exists('results'):
             os.mkdir('results')
         if (not self.options.no_ihs):
