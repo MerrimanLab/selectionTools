@@ -8,7 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 MISSING_EXECUTABLE = 50
-
+BAD_OPTION_COMBO = 100
 
 class StandardRun(CommandTemplate):
     def is_script(self, fpath):
@@ -44,6 +44,18 @@ class StandardRun(CommandTemplate):
                      " not locatable path or in the directory"
                      " specified in your self.config file")
         return None
+
+    def check_options(self):
+        """ Check the options for any incombatibilities as they are not perfect.
+            
+            For instance specifying the no genetic map option and not using
+            beagle will cause direct problems with shapeit
+
+        """
+        if not self.options.genetic_map and not self.options.beagle:
+            logger.error("Cannot use shapeit with no genetic map")
+            return False
+        return True
 
     def check_executables_and_scripts_exist(self):
         """ Checks to ensure all the scripts and executables exist.
@@ -126,6 +138,8 @@ class StandardRun(CommandTemplate):
         if(full_run):
             if(not self.check_executables_and_scripts_exist()):
                 sys.exit(MISSING_EXECUTABLE)
+            if(not self.check_options()):
+                sys.exit(BAD_OPTION_COMBO)
             self.threads = self.config['system']['cores_avaliable']
 
     def run_pipeline(self):

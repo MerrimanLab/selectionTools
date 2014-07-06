@@ -115,6 +115,8 @@ def parse_arguments():
                         help='Corresponding sample file to accompany haps')
     parser.add_option('--beagle',dest='beagle_phasing',action='store_true',
                       help="Use beagle to phase")
+    parser.add_option('--use-gmap',dest="genetic_map",action="store_true",
+                      help="Use a genetic")
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.verbose):

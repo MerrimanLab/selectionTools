@@ -90,9 +90,9 @@ class CommandTemplate(object):
         prefix = self.options.population + \
             self.options.chromosome + '.phased'
         genetic_map = ''
-        for file in os.listdir(self.config['shapeit']['genetic_map_dir']):
+        for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
             if fnmatch.fnmatch(
-                file, self.config['shapeit']['genetic_map_prefix'].replace(
+                file, self.config['genetic_map']['genetic_map_prefix'].replace(
                     '?', self.options.chromosome)):
                 genetic_map = file
         shapeit = self.config['shapeit']['shapeit_executable']
@@ -130,12 +130,12 @@ class CommandTemplate(object):
             '_impute2'
         impute2 = self.config['impute2']['impute_executable']
         genetic_map = ''
-        for file in os.listdir(self.config['impute2']['impute_map_dir']):
+        for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
             if fnmatch.fnmatch(file, (
-                self.config['impute2']['impute_map_prefix'].replace(
+                self.config['genetic_map']['genetic_map_prefix'].replace(
                     '?', self.options.chromosome))):
                 genetic_map = os.path.join(
-                    self.config['impute2']['impute_map_dir'], file)
+                    self.config['genetic_map']['genetic_map_dir'], file)
         legend_file = ''
         for file in os.listdir(self.config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file, (
