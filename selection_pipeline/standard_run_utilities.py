@@ -4,6 +4,7 @@ import sys
 import logging
 import re
 import gzip
+import tempfile
 #queue for threads
 #regex for hash at start of line
 
@@ -28,16 +29,6 @@ MISSING_EXECUTABLE_ERROR = 5
 # potential edge cases with really really small vcf files these should not be
 # in use
 #
-
-def normalise_genetic_map(genetic_map):
-    genetic_map = ''
-    # Deteci format
-
-    # normalise file format.
-
-    # print out the resulting files.
-
-    `return temp_genetic_map
 
 def split_vcf(input_file, split_positions):
     """ Split a vcf file by input_positions

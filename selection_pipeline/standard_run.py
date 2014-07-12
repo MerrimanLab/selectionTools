@@ -52,10 +52,51 @@ class StandardRun(CommandTemplate):
             beagle will cause direct problems with shapeit
 
         """
-        if not self.options.genetic_map and not self.options.beagle:
+        if not self.options.no_genetic_map and not self.options.beagle and not self.options.phased_vcf:
             logger.error("Cannot use shapeit with no genetic map")
             return False
         return True
+
+    def check_reference_files_exist(self):
+        if self.options.no_genetic_map:
+            genetic_map = ''
+            for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
+                if fnmatch.fnmatch(
+                    file, self.config['genetic_map']['genetic_map_prefix'].replace(
+                        '?', self.options.chromosome)):
+                    genetic_map = file
+            if genetic_map is None:
+                # Complicated logic to capture the options checking
+                if self.config.phased_vcf:
+                    logger.info("Could not find genetic map, but --no-genetic-map "
+                                "was not set. Progressing without genetic map")
+                elif not self.options.beagle:
+                    logger.error("Cannot find genetic map, cannot use shapeit2,"
+                                 "pipeline will exit")
+                    return False
+                else:    
+                    self.options.no_genetic_map = True
+                    logger.info("Could not find genetic map, but --no-genetic-map "
+                                "was not set. Progressing without genetic map")
+        if self.options.imputation:
+            legend_file = ''
+            for file in os.listdir(self.config['impute2']['impute_reference_dir']):
+                if fnmatch.fnmatch(file, (
+                    self.config['impute2']['impute_reference_prefix'].replace(
+                        '?', self.options.chromosome) + '.legend')):
+                    legend_file = os.path.join(
+                        self.config['impute2']['impute_reference_dir'], file)
+            hap_file = ''
+            for file in os.listdir(self.config['impute2']['impute_reference_dir']):
+                if fnmatch.fnmatch(file, (
+                    self.config['impute2']['impute_reference_prefix'].replace(
+                        '?', self.options.chromosome) + '.hap')):
+                    hap_file = os.path.join(
+                        self.config['impute2']['impute_reference_dir'], file)
+            if hap_file == None or legend_file == None:
+                return False
+        return True
+             
 
     def check_executables_and_scripts_exist(self):
         """ Checks to ensure all the scripts and executables exist.
@@ -140,6 +181,8 @@ class StandardRun(CommandTemplate):
                 sys.exit(MISSING_EXECUTABLE)
             if(not self.check_options()):
                 sys.exit(BAD_OPTION_COMBO)
+            if(not self.check_reference_files_exist()):
+                sys.exit(MISSING_EXECUTABLE)
             self.threads = self.config['system']['cores_avaliable']
 
     def run_pipeline(self):
@@ -147,11 +190,11 @@ class StandardRun(CommandTemplate):
 
         """
         vcf = self.run_remove_indels_from_vcf()
-        if(self.options.beagle_phasing):
+        if(self.options.phased_vcf):
+            (haps, sample) = self.vcf_to_haps(vcf)
+        elif(self.options.beagle):
             vcf = self.beagle_phasing(vcf)
             vcf = gunzip_file(vcf)
-            (haps, sample) = self.vcf_to_haps(vcf)
-        elif(self.options.phased_vcf):
             (haps, sample) = self.vcf_to_haps(vcf)
         elif(self.options.haps and self.options.sample):
             haps = self.options.haps
@@ -175,7 +218,12 @@ class StandardRun(CommandTemplate):
         vcf = self.fix_vcf_qctool(vcf)
         tajimaSD = self.vcf_to_tajimas_d(vcf)
         if (not self.options.no_ihs):
-            ihh = self.run_multi_coreihh(haps)
+            if (self.options.no_genetic_map):
+                haps_physical = None
+                ihh = self.run_multi_coreihh(haps, haps_physical)
+            else:
+                (haps_gdist, haps_physical) =self.interpolate_haps(haps)
+                ihh = self.run_multi_coreihh(haps_gdist, haps_physical)
             ihs_file = ihh.split('.ihh')[0] + '.ihs'
             haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if (not self.options.no_ihs):
@@ -209,7 +257,7 @@ class StandardRun(CommandTemplate):
 
         """
         (cmd, haps, sample) = super(StandardRun, self).vcf_to_haps(vcf)
-        run_subprocess(cmd, 'vcf to haps')
+        #run_subprocess(cmd, 'vcf to haps')
         return(haps, sample)
 
     def run_vcf_to_plink(self):
@@ -350,16 +398,24 @@ class StandardRun(CommandTemplate):
         else:
             (cmd, output_name) = super(StandardRun, self).run_aa_annotate_haps(
                 haps)
-            run_subprocess(cmd, 'ancestral_annotation')
+            #run_subprocess(cmd, 'ancestral_annotation')
             return(output_name)
 
-    def run_multi_coreihh(self, haps):
+    def interpolate_haps(self,haps):
+        """ Run interpolate haplotypes
+
+        """
+        (cmd, output_haps, output_physical) = super(StandardRun, self).interpolate_haps(haps)
+        run_subprocess(cmd, 'interpolate_haps')
+        return (output_haps,output_physical)
+
+    def run_multi_coreihh(self, haps, physical_dist):
         """ Run multicore ihh using subprocess
 
             Uses the number of cores to specify the parallelisation
             to multi_core ihh
         """
-        (cmd, output_name) = super(StandardRun, self).run_multi_coreihh(haps)
+        (cmd, output_name) = super(StandardRun, self).run_multi_coreihh(haps, physical_dist)
         cores = self.threads
         ihs_output = output_name.split('.ihh')[0]+'.ihs'
         rdata_output = output_name.split('.ihh')[0]+'.RData'

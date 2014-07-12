@@ -79,7 +79,8 @@ analyses \citep{Gautier:2012et}. Here we have extended rehh to include penalties
 for gaps that match those used in the original iHS paper
 \citep{Voight:2006go}. rehh is used to calculate iHH, iHS, iES and Rsb. To
 calculate Fay and Wu's H, a C program, variscan, was utilised
-\citep{variscan2005}. The pipeline is implemented in Python, and takes a VCF
+\citep{variscan2005}. If a genetic map is present, the pipeline uses linear interpolation to calculate the map positions for each
+marker \citep{Nievergelt:2004ci}. The pipeline is implemented in Python, and takes a VCF
 file as input. The output is a colection of files relating to selection
 signatures dected by the various software tools.
 
@@ -172,14 +173,13 @@ impute2, one reference is available
 Download and extract the archive to referencefiles/impute\_ref and
 uncompress the contents. For shapeit2, a genetic map can be found
 \href{http://www.shapeit.fr/files/genetic_map_b37.tar.gz}{here}.
-Download and extract the archive to referencefiles/shapeit\_ref.\\
+Download and extract the archive to referencefiles/genetic_maps. \\
 
 
 To use other reference files with the selection pipeline requires
 setting the following options in the config file. The question mark character
 "?" in the config is substituted by the chromosome number: this is
 used for reference files that are split on chromosomes.\\
-
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
@@ -195,12 +195,20 @@ If you decide to store the reference files in another location,
 further options require alteration in the config file:\\ 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
 ...
-genetic_map_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/shapeit_ref
+genetic_map_dir= ${HOME}/selectionTools/referencefiles/genetic_maps
 ...
-impute_map_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
-impute_reference_dir= ${HOME}/MerrimanSelectionPipeline/referencefiles/impute_ref
+impute_map_dir= ${HOME}/selectionTools/referencefiles/impute_ref
+impute_reference_dir= ${HOME}/selectionTools/referencefiles/impute_ref
 ...
 \end{minted}
+
+\noindent
+Also, two formats are currently accepted for a genetic map, SHAPEIT and PLINK format.
+The genetic map shown above is in SHAPEIT format and a genetic map in PLINK format can be found
+\href{http://bochet.gcc.biostat.washington.edu/beagle/genetic_maps/plink.GRCh37.map.zip}{here}.
+To use genetic maps like this one will require changing both the settings mentioned above, although
+no specification of file format is necessary as the pipeline automatically detects SHAPEIT and PLINK
+genetic map formats.
 
 \subsection{Ancestral Fasta Files}
 The generation of results for iHS requires assigning the ancestral
@@ -678,6 +686,10 @@ Perform imputation using impute2 on the genotypes produced by shapeit. Option on
 \item --beagle
 
 Perform phasing using beagle. Option removes shapeit from the analysis and subsequent imputation step.
+
+\item --no-genetic-map 
+
+Does not use a genetic map for the analysis when using REHH.
 
 \item --daf <Minimum derived allele frequency>
 

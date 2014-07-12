@@ -17,7 +17,8 @@ setup(
             'selection_pipeline = selection_pipeline.selection_pipeline:main',
             'multipop_selection_pipeline = selection_pipeline.multipipeline:main',
             'haps_to_hapmap = selection_pipeline.haps_to_hapmap:main',
-            'haps_filters = selection_pipeline.haps_filters:main'
+            'haps_filters = selection_pipeline.haps_filters:main',
+            'haps_interpolate = selection_pipeline.haps_interpolate:main'
         ]
     },
     url="github.com/smilefreak/MerrimanSelectionPipeline",
