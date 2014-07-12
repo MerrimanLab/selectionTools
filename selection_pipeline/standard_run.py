@@ -257,7 +257,7 @@ class StandardRun(CommandTemplate):
 
         """
         (cmd, haps, sample) = super(StandardRun, self).vcf_to_haps(vcf)
-        #run_subprocess(cmd, 'vcf to haps')
+        run_subprocess(cmd, 'vcf to haps')
         return(haps, sample)
 
     def run_vcf_to_plink(self):
@@ -398,7 +398,7 @@ class StandardRun(CommandTemplate):
         else:
             (cmd, output_name) = super(StandardRun, self).run_aa_annotate_haps(
                 haps)
-            #run_subprocess(cmd, 'ancestral_annotation')
+            run_subprocess(cmd, 'ancestral_annotation')
             return(output_name)
 
     def interpolate_haps(self,haps):

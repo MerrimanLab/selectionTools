@@ -183,6 +183,36 @@ for ( j in fileNumber){
 #save.image(file="working_data.RData")
 
 results=data.frame()
+if(!is.null(opt$physical_map_haps)){
+for (n in fileNumber){
+  i=n-(offset-1)
+  temp_physical_map= as.numeric(read.table(paste0('gene_',pop1,'.map',n),header=F)[,1])
+  if(n == 1){ # from start to first half of overlaped region (first chunk)
+    results = neutral_res[[i]][temp_physical_map[i] <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
+   } else {
+      if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
+        a= results
+        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map[i]  ,]
+        results = rbind(a,b)
+      } else { #start =take second half of overlap, end = take first half (middle regions)
+        a = results
+        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map[i]  & temp_physical_map[i] <  ((window -overlap)* (n) + (1/2 * overlap)), ]
+        results = rbind(a,b )
+     }
+   } 
+}
+if (!is.null(opt$physical_map_haps)){
+    # Need to replace the second column of 
+    for( i in 1:nrow(results)){
+        results[i,2] = map_positions[i]     
+    }
+}
+write.table(results,paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"))
+if (!is.null(opt$ihs)){
+        ihs =ihh2ihs(results)
+        write.table(ihs$res.ihs,paste(pop1,"chr", chr,"wd",working_dir,".ihs",sep="_"))
+    }
+}else{
 for (n in fileNumber){
   i=n-(offset-1)
   if(n == 1){ # from start to first half of overlaped region (first chunk)
@@ -199,20 +229,11 @@ for (n in fileNumber){
      }
    } 
 }
-if (!is.null(opt$physical_map_haps)){
-    # Need to replace the second column of 
-    for( i in 2:nrow(results)){
-        results[i,3] = map_positions[i-1]     
-    }
-}
 write.table(results,paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"))
 if (!is.null(opt$ihs)){
-        if (!is.null(opt$physical_map_haps)){
-            for( i in 2:nrow(ihs$res)){
-                ihs$res[i,3] = map_positions[i-1]
-            }
-        }
         ihs =ihh2ihs(results)
         write.table(ihs$res.ihs,paste(pop1,"chr", chr,"wd",working_dir,".ihs",sep="_"))
+}
+
 }
 
