@@ -319,8 +319,7 @@ plotting these data using the R programming language. All of the following
 commands are run in an R session with the working directory set as the base
 directory from which the tutorial is being run. In each of the plots
 that follow, the vertical blue lines indicate the position of the
-lactase gene (LCT). These plots are also generated automatically when running the pipeline, for the entire region of your analysis.
-
+lactase gene (LCT). 
 \subsubsection{Visualizing $F_{ST}$ values}
 
 \noindent
@@ -512,7 +511,7 @@ Figure~\ref{fig:tajyri} show the Tajima's D statistic across the full tutorial r
 
 Rsb makes the differeneces between the two populations very clear. The following code shows how to plot the Rsb bilateral P-values for the 10 megabase tutorial region.
 
-\begin{minted}[bgcolor=bg,frame=lines]{R}
+\begin{minted}[bgcolor=bg,frame=lines]{r}
 rsb = read.table('rsb/2CEUYRI.rsb',header=T)
 plot(rsb[,4] ~ rsb[,2],pch='.',cex=2)
 abline(h=2,col='red')
@@ -695,6 +694,7 @@ Perform phasing using beagle. Option removes shapeit from the analysis and subse
 \item --no-genetic-map 
 
 Does not use a genetic map for the analysis when using REHH.
+
 
 \item --daf <Minimum derived allele frequency>
 

@@ -209,6 +209,8 @@ class StandardRun(CommandTemplate):
         haps = self.haps_filter(haps)
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
+        if not os.path.exists('results'):
+            os.mkdir('results')
         if (sys.platform != 'darwin'):
             # Remove fay and wus from mac osx for the moment
             fayandwus = self.variscan_fayandwus(haps2_haps)
@@ -230,7 +232,7 @@ class StandardRun(CommandTemplate):
             os.rename(haplo_hh, 'results/' + haplo_hh)
             os.rename(vcf, 'results/' + vcf)
             os.rename(ihh, 'results/' + ihh)
-        os.rename(ihs_file, 'results/'+ihs_file)
+            os.rename(ihs_file, 'results/'+ ihs_file)
         os.rename(haps, 'results/' + haps)
         os.rename(tajimaSD, 'results/' + tajimaSD)
         if not os.path.exists('log'):

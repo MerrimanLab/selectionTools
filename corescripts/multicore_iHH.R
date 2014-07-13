@@ -52,7 +52,6 @@ if(!is.null(opt$missing_code)){
 }
 
 if (!is.null(opt$physical_map_haps)){
-    print(opt$physical_map_haps)
     map_positions=read.table(opt$physical_map_haps, header=F)
     map_positions=as.numeric(map_positions[,1])
 }else{
@@ -164,8 +163,6 @@ my_scan_hh = function(x){
   if(!is.null(opt$physical_map_haps)){
     physical_positions = read.table(x[3],header=F)
     physical_positions = as.numeric(physical_positions[,1])
-    print(x[3])
-    print(length(physical_positions))
     res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty,physical_positions=physical_positions)
   }else{
     res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty)
@@ -180,7 +177,7 @@ for ( j in fileNumber){
     index = index + 1
 }
 #save(neutral_res,file="neutral_res.RData")
-#save.image(file="working_data.RData")
+save.image(file="working_data.RData")
 
 results=data.frame()
 if(!is.null(opt$physical_map_haps)){
