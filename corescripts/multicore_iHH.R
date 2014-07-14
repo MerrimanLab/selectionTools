@@ -185,15 +185,15 @@ for (n in fileNumber){
   i=n-(offset-1)
   temp_physical_map= as.numeric(read.table(paste0('gene_',pop1,'.map',n),header=F)[,1])
   if(n == 1){ # from start to first half of overlaped region (first chunk)
-    results = neutral_res[[i]][temp_physical_map[i] <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
+    results = neutral_res[[i]][temp_physical_map <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
    } else {
       if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
         a= results
-        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map[i]  ,]
+        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  ,]
         results = rbind(a,b)
       } else { #start =take second half of overlap, end = take first half (middle regions)
         a = results
-        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map[i]  & temp_physical_map[i] <  ((window -overlap)* (n) + (1/2 * overlap)), ]
+        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  & temp_physical_map <  ((window -overlap)* (n) + (1/2 * overlap)), ]
         results = rbind(a,b )
      }
    } 
