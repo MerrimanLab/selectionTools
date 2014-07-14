@@ -113,8 +113,12 @@ def parse_arguments():
                         help="Shapeit haps file")
     parser.add_option('--sample', dest='sample',
                         help='Corresponding sample file to accompany haps')
-    parser.add_option('--beagle',dest='beagle_phasing',action='store_true',
+    parser.add_option('--beagle',dest='beagle',action='store_true',
                       help="Use beagle to phase")
+    parser.add_option('--no-gmap',dest="no_genetic_map",action="store_true",
+                      help="Do not use a genetic map for the analysis")
+    parser.add_option("--no-plots" , dest="no_plots", action="store_true",
+                      help="Do not create rudimentary plots")
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.verbose):
@@ -198,6 +202,12 @@ def parse_arguments():
     else:
         options.small_gap_penalty = str(
             int(float(options.small_gap_penalty) * 1e3))
+    if (options.no_genetic_map):
+        # Must set beagle to true becasue shapeit will not
+        # Work without a genetic map
+        options.beagle = True
+    if (options.no_plots is None):
+        options.no_plots = False
     return options
 
 

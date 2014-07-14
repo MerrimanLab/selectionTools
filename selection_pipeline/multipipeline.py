@@ -369,7 +369,7 @@ def main():
         os.mkdir('logs')
     os.rename(options.log_file, 'logs/' + options.log_file)
     if not options.no_clean_up:
-        keep = [os.path.basename(options.vcf_input)]
+        keep = [os.path.basename(options.vcf_input),os.path.basename(options.config_file)]
         keep.extend(options.populations)
         clean_folder('.', keep=keep)
     logger.info("Multi_population Complete")

@@ -63,12 +63,14 @@ echo "Installing Shapeit"
 if [ `uname` = "Darwin" ]; then
     wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.MacOSX.tgz
     tar xzf shapeit.v2.r778.MacOSX.tgz
+    rm shapeit.v2.r778.MacOSX.tgz
     mv shapeit bin/
     rm -Rf shapeit.v2.r778.MacOSX.tgz
 else
     echo `uname`
     wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
     tar xzf shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
+    rm shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
     mv shapeit bin/
     rm -Rf shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
 fi
@@ -85,9 +87,15 @@ else
 	rm -Rf plink-1.07-x86_64
 fi
 echo "Installing Impute2"
-tar xzf src/impute_v2.3.0_x86_64_static.tgz
-mv impute_v2.3.0_x86_64_static/impute2 bin/
-rm -Rf impute_v2.3.0_x86_64_static/
+if [ `uname` = "Darwin" ]; then
+    tar xzf src/impute_v2.3.1_MacOSX_Intel.tgz
+    mv impute_v2.3.1_MacOSX_Intel/impute2 bin/
+    rm -Rf impute_v2.3.1_MacOSX_Intel
+else
+    tar xzf src/impute_v2.3.0_x86_64_static.tgz
+    mv impute_v2.3.0_x86_64_static/impute2 bin/
+    rm -Rf impute_v2.3.0_x86_64_static/
+fi
 chmod 755 bin/impute2
 echo "Installing Tabix"
 tar -xjf src/tabix.tar.bz2
@@ -113,8 +121,6 @@ echo "Installing Beagle"
 cp src/beagle.jar bin/
 echo "Installing getopt"
 check_success Rscript src/R_dependencies.R 'getopt'
-echo "Installing R Multicore"
-check_success Rscript src/R_dependencies.R 'multicore'
 echo "Installing old rehh"
 check_success Rscript src/R_dependencies.R 'rehh'
 echo "Install rehh"
@@ -138,7 +144,7 @@ if [[ $EUID -eq 0 ]]; then
     orig_dir
     echo "Installing selection_pipeline"
     check_success python setup.py install
-    else
+else
     echo "Installing PyFasta"
     change_folder pyfasta
     check_success python setup.py install --user

@@ -1,6 +1,7 @@
 import os
 import fnmatch
 import logging
+from .haps_interpolate import get_shapeit_genetic_map
 logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT = 10
 
@@ -17,7 +18,7 @@ class CommandTemplate(object):
         e.g. Standard linux box, Load Leveler or another
         cluster interface.
     """
-
+    
     def __init__(self, options, config):
         """ Initialises the class variables self.config and self.options.
 
@@ -77,6 +78,7 @@ class CommandTemplate(object):
         cmd.extend(self.config['plink']['extra_args'].split())
         return(cmd, prefix)
 
+
     def run_shape_it(self, ped, map):
         """ Template for running shapeit
 
@@ -90,16 +92,18 @@ class CommandTemplate(object):
         prefix = self.options.population + \
             self.options.chromosome + '.phased'
         genetic_map = ''
-        for file in os.listdir(self.config['shapeit']['genetic_map_dir']):
+        for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
             if fnmatch.fnmatch(
-                file, self.config['shapeit']['genetic_map_prefix'].replace(
+                file, self.config['genetic_map']['genetic_map_prefix'].replace(
                     '?', self.options.chromosome)):
-                genetic_map = file
+                genetic_map = file,
+            genetic_map=os.path.join(self.config['genetic_map']['genetic_map_dir'], genetic_map)
+        new_genetic_map=prefix + '_temp_genetic_map.txt'
+        # return the genetic map for use in shapeit
+        genetic_map=get_shapeit_genetic_map(genetic_map,new_genetic_map)
         shapeit = self.config['shapeit']['shapeit_executable']
         cmd.append(shapeit)
-        cmd.extend(['--input-ped', ped, map, '-M',
-                   os.path.join(self.config['shapeit']['genetic_map_dir'],
-                                genetic_map), '--output-max', prefix])
+        cmd.extend(['--input-ped', ped, map, '-M',genetic_map, '--output-max', prefix])
         cmd.extend(self.config['shapeit']['extra_args'].split())
         return(cmd, prefix)
 
@@ -111,7 +115,7 @@ class CommandTemplate(object):
         """
         cmd = []
         output_name = self.options.population + \
-            self.options.chromosome + '_indel_filter.haps'
+                self.options.chromosome + '_indel_filter.haps'
         rscript = self.config['Rscript']['rscript_executable']
         indel_filter = self.config['Rscript']['indel_filter']
         cmd.append(rscript)
@@ -130,12 +134,17 @@ class CommandTemplate(object):
             '_impute2'
         impute2 = self.config['impute2']['impute_executable']
         genetic_map = ''
-        for file in os.listdir(self.config['impute2']['impute_map_dir']):
+        for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
             if fnmatch.fnmatch(file, (
-                self.config['impute2']['impute_map_prefix'].replace(
+                self.config['genetic_map']['genetic_map_prefix'].replace(
                     '?', self.options.chromosome))):
                 genetic_map = os.path.join(
-                    self.config['impute2']['impute_map_dir'], file)
+                    self.config['genetic_map']['genetic_map_dir'], file)
+        new_genetic_map=prefix +'_temp_genetic_map.txt'
+        # return the genetic map for use in impute2, only needed if people
+        # use plink genetic maps
+        genetic_map=get_shapeit_genetic_map(genetic_map,new_genetic_map)
+        
         legend_file = ''
         for file in os.listdir(self.config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file, (
@@ -210,7 +219,28 @@ class CommandTemplate(object):
             cmd.extend(['-i', in_file])
             return(cmd, output_haps)
 
-    def run_multi_coreihh(self, haps):
+    def interpolate_haps(self, haps):
+        output_haps = self.options.population.split('.haps')[0] + \
+            '_genetic_dist.haps'
+        output_physical = self.options.population.split('.haps')[0] + \
+            '_genetic_dist.pos'
+        genetic_map = ''
+        for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
+            if fnmatch.fnmatch(
+                file, self.config['genetic_map']['genetic_map_prefix'].replace(
+                    '?', self.options.chromosome)):
+                genetic_map = file
+            genetic_map = os.path.join(self.config['genetic_map']['genetic_map_dir'],genetic_map)
+        cmd = []
+        interpolate_script= \
+                self.config['haps_scripts']['haps_interpolate_script']
+        cmd.append(interpolate_script)
+        cmd.extend(['--haps', haps, '--output', output_haps, '--genetic-map',
+                   genetic_map])
+        cmd.extend(['--physical-position-output',output_physical])
+        return(cmd,output_haps,output_physical)
+
+    def run_multi_coreihh(self, haps, haps_physical):
         """ Return the template for running multi_coren ihh
 
         """
@@ -230,6 +260,8 @@ class CommandTemplate(object):
         cmd.extend(['--big_gap', self.options.big_gap, '--small_gap',
                    self.options.small_gap, '--small_gap_penalty',
                    self.options.small_gap_penalty, '--haplo_hh'])
+        if(haps_physical != None):
+               cmd.extend(['--physical_map_haps',haps_physical])
         return (cmd, output_name)
 
     def fix_sample_file(self, sample_file):
