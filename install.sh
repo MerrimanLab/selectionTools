@@ -49,19 +49,27 @@ cp vcftools_0.1.11/bin/* bin/
 cp vcftools_0.1.11/perl/*pm lib/perl5/
 rm -Rf vcftools_0.1.11
 echo "Installing QCTool"
-tar xzf src/qctool_v1.3-linux-x86_64.tgz
-mv qctool_v1.3-linux-x86_64/qctool bin/
-rm -Rf qctool_v1.3-linux-x86_64
-echo "Installing Shapeit"
+if [ `uname` = "Darwin" ]; then 
+    tar xzf src/qctool_v1.4-osx.tgz
+    mv qctool_v1.4-osx/qctool bin/
+    rm -Rf qctool_v1.4-osx
+else
+    tar xzf src/qctool_v1.4-linux-x86_64.tgz
+    mv qctool_v1.4-linux-x86_64/qctool bin/
+    rm -Rf qctool_v1.4-linux-x86_64
+fi
 
+echo "Installing Shapeit"
 if [ `uname` = "Darwin" ]; then
     wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.MacOSX.tgz
     tar xzf shapeit.v2.r778.MacOSX.tgz
+    rm shapeit.v2.r778.MacOSX.tgz
     mv shapeit bin/
 else
     echo `uname`
     wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
     tar xzf shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
+    rm shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
     mv shapeit bin/
 fi
 rm -Rf example
@@ -77,9 +85,15 @@ else
 	rm -Rf plink-1.07-x86_64
 fi
 echo "Installing Impute2"
-tar xzf src/impute_v2.3.0_x86_64_static.tgz
-mv impute_v2.3.0_x86_64_static/impute2 bin/
-rm -Rf impute_v2.3.0_x86_64_static/
+if [ `uname` = "Darwin" ]; then
+    tar xzf src/impute_v2.3.1_MacOSX_Intel.tgz
+    mv impute_v2.3.1_MacOSX_Intel/impute2 bin/
+    rm -Rf impute_v2.3.1_MacOSX_Intel
+else
+    tar xzf src/impute_v2.3.0_x86_64_static.tgz
+    mv impute_v2.3.0_x86_64_static/impute2 bin/
+    rm -Rf impute_v2.3.0_x86_64_static/
+fi
 chmod 755 bin/impute2
 echo "Installing Tabix"
 tar -xjf src/tabix.tar.bz2
@@ -90,17 +104,21 @@ cp tabix-0.2.6/bgzip bin/
 cp tabix-0.2.6/tabix bin/
 rm -Rf tabix-0.2.6
 echo "Installing Variscan"
-tar -xzf src/variscan-2.0.3.tar.gz
-(cd variscan-2.0.3/src/ && rm *o)
-change_folder  variscan-2.0.3
-check_success bash autogen.sh && make
-orig_dir
-mv variscan-2.0.3/src/variscan bin/
-rm -Rf variscan-2.0.3
+if [ `uname` = "Darwin" ]; then
+    echo "Cannot install on OSX"
+else
+    tar -xzf src/variscan-2.0.3.tar.gz
+    (cd variscan-2.0.3/src/ && rm *o)
+    change_folder  variscan-2.0.3
+    check_success bash autogen.sh && make
+    orig_dir
+    mv variscan-2.0.3/src/variscan bin/
+    rm -Rf variscan-2.0.3
+fi
+echo "Installing Beagle"
+cp src/beagle.jar bin/
 echo "Installing getopt"
 check_success Rscript src/R_dependencies.R 'getopt'
-echo "Installing R Multicore"
-check_success Rscript src/R_dependencies.R 'multicore'
 echo "Installing old rehh"
 check_success Rscript src/R_dependencies.R 'rehh'
 echo "Install rehh"
@@ -124,7 +142,7 @@ if [[ $EUID -eq 0 ]]; then
     orig_dir
     echo "Installing selection_pipeline"
     check_success python setup.py install
-    else
+else
     echo "Installing PyFasta"
     change_folder pyfasta
     check_success python setup.py install --user

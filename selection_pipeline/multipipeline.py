@@ -363,16 +363,17 @@ def main():
     output_vcfs = subset_vcf(options.vcf_input, config, populations)
     run_selection_pipeline(output_vcfs, options, populations, config)
     # TODO move FST to here on filtered dataset
-    if (options.no_rsb):
+    if not (options.no_rsb):
         rsb(config, options, populations)
     if not os.path.exists('logs'):
         os.mkdir('logs')
     os.rename(options.log_file, 'logs/' + options.log_file)
     if not options.no_clean_up:
-        keep = [os.path.basename(options.vcf_input)]
+        keep = [os.path.basename(options.vcf_input),os.path.basename(options.config_file)]
         keep.extend(options.populations)
         clean_folder('.', keep=keep)
     logger.info("Multi_population Complete")
     logger.info("Goodbye :")
+    print("Multi-population selection pipeline completed successfully !:)")
 if __name__ == "__main__":
     main()

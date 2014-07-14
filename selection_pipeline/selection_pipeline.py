@@ -113,6 +113,12 @@ def parse_arguments():
                         help="Shapeit haps file")
     parser.add_option('--sample', dest='sample',
                         help='Corresponding sample file to accompany haps')
+    parser.add_option('--beagle',dest='beagle',action='store_true',
+                      help="Use beagle to phase")
+    parser.add_option('--no-gmap',dest="no_genetic_map",action="store_true",
+                      help="Do not use a genetic map for the analysis")
+    parser.add_option("--no-plots" , dest="no_plots", action="store_true",
+                      help="Do not create rudimentary plots")
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.verbose):
@@ -148,7 +154,7 @@ def parse_arguments():
     if(options.imputation is None):
         options.imputation = False
     if(options.hwe is None):
-        options.hwe = str(0.001)
+        options.hwe = str(0.0001)
     if(options.maf is None):
         options.maf = str(0.01)
     if(options.daf is None):
@@ -196,6 +202,12 @@ def parse_arguments():
     else:
         options.small_gap_penalty = str(
             int(float(options.small_gap_penalty) * 1e3))
+    if (options.no_genetic_map):
+        # Must set beagle to true becasue shapeit will not
+        # Work without a genetic map
+        options.beagle = True
+    if (options.no_plots is None):
+        options.no_plots = False
     return options
 
 
@@ -214,7 +226,7 @@ def main():
                         level=logging.INFO)
     s = StandardRun(options, config=config)
     s.run_pipeline()
-
+    print("Selection Pipeline Completed Successfully :)!")
 
 if __name__ == "__main__":
     main()

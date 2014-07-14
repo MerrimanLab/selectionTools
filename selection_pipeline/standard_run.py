@@ -2,14 +2,13 @@ import os
 import sys
 from .standard_run_utilities import *
 from .run_pipeline import CommandTemplate
-
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
 import logging
 logger = logging.getLogger(__name__)
 
 MISSING_EXECUTABLE = 50
-
+BAD_OPTION_COMBO = 100
 
 class StandardRun(CommandTemplate):
     def is_script(self, fpath):
@@ -46,12 +45,70 @@ class StandardRun(CommandTemplate):
                      " specified in your self.config file")
         return None
 
+    def check_options(self):
+        """ Check the options for any incombatibilities as they are not perfect.
+            
+            For instance specifying the no genetic map option and not using
+            beagle will cause direct problems with shapeit
+
+        """
+        if not self.options.no_genetic_map and not self.options.beagle and not self.options.phased_vcf:
+            logger.error("Cannot use shapeit with no genetic map")
+            return False
+        return True
+
+    def check_reference_files_exist(self):
+        if self.options.no_genetic_map:
+            genetic_map = ''
+            for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
+                if fnmatch.fnmatch(
+                    file, self.config['genetic_map']['genetic_map_prefix'].replace(
+                        '?', self.options.chromosome)):
+                    genetic_map = file
+            if genetic_map is None:
+                # Complicated logic to capture the options checking
+                if self.config.phased_vcf:
+                    logger.info("Could not find genetic map, but --no-genetic-map "
+                                "was not set. Progressing without genetic map")
+                elif not self.options.beagle:
+                    logger.error("Cannot find genetic map, cannot use shapeit2,"
+                                 "pipeline will exit")
+                    return False
+                else:    
+                    self.options.no_genetic_map = True
+                    logger.info("Could not find genetic map, but --no-genetic-map "
+                                "was not set. Progressing without genetic map")
+        if self.options.imputation:
+            legend_file = ''
+            for file in os.listdir(self.config['impute2']['impute_reference_dir']):
+                if fnmatch.fnmatch(file, (
+                    self.config['impute2']['impute_reference_prefix'].replace(
+                        '?', self.options.chromosome) + '.legend')):
+                    legend_file = os.path.join(
+                        self.config['impute2']['impute_reference_dir'], file)
+            hap_file = ''
+            for file in os.listdir(self.config['impute2']['impute_reference_dir']):
+                if fnmatch.fnmatch(file, (
+                    self.config['impute2']['impute_reference_prefix'].replace(
+                        '?', self.options.chromosome) + '.hap')):
+                    hap_file = os.path.join(
+                        self.config['impute2']['impute_reference_dir'], file)
+            if hap_file == None or legend_file == None:
+                return False
+        return True
+             
+
     def check_executables_and_scripts_exist(self):
         """ Checks to ensure all the scripts and executables exist.
 
         Uses the config dictionary to determine whether all the required
         executables and scripts exists where they have been specified.
         """
+        if(self.which(
+                self.config['beagle']['beagle_jar'],
+                'beagle')is None):
+            logger.error("Beagle not found check config file")
+            return False
         if(self.which(
                 self.config['plink']['plink_executable'],
                 'plink')is None):
@@ -122,15 +179,22 @@ class StandardRun(CommandTemplate):
         if(full_run):
             if(not self.check_executables_and_scripts_exist()):
                 sys.exit(MISSING_EXECUTABLE)
+            if(not self.check_options()):
+                sys.exit(BAD_OPTION_COMBO)
+            if(not self.check_reference_files_exist()):
+                sys.exit(MISSING_EXECUTABLE)
             self.threads = self.config['system']['cores_avaliable']
 
     def run_pipeline(self):
         """ Run pipeline runs the pipeline for a standard run
 
         """
-        if(self.options.vcf_input):
-            vcf = self.run_remove_indels_from_vcf()
+        vcf = self.run_remove_indels_from_vcf()
         if(self.options.phased_vcf):
+            (haps, sample) = self.vcf_to_haps(vcf)
+        elif(self.options.beagle):
+            vcf = self.beagle_phasing(vcf)
+            vcf = gunzip_file(vcf)
             (haps, sample) = self.vcf_to_haps(vcf)
         elif(self.options.haps and self.options.sample):
             haps = self.options.haps
@@ -145,37 +209,39 @@ class StandardRun(CommandTemplate):
         haps = self.haps_filter(haps)
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
-        fayandwus = self.variscan_fayandwus(haps2_haps)
-        vcf = self.haps_to_vcf(haps, new_sample_file)
-        vcf = self.fix_vcf_qctool(vcf)
-        haps = self.run_aa_annotate_haps(haps)
-        tajimaSD = self.vcf_to_tajimas_d(vcf)
-        if (not self.options.no_ihs):
-            ihh = self.run_multi_coreihh(haps)
-        ihs_file = ihh.split('.ihh')[0] + '.ihs'
-        haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if not os.path.exists('results'):
             os.mkdir('results')
-        os.rename(tajimaSD, 'results/' + tajimaSD)
+        if (sys.platform != 'darwin'):
+            # Remove fay and wus from mac osx for the moment
+            fayandwus = self.variscan_fayandwus(haps2_haps)
+            os.rename(fayandwus, 'results/' + fayandwus)
+        haps = self.run_aa_annotate_haps(haps)
+        vcf = self.haps_to_vcf(haps, new_sample_file)
+        vcf = self.fix_vcf_qctool(vcf)
+        tajimaSD = self.vcf_to_tajimas_d(vcf)
+        if (not self.options.no_ihs):
+            if (self.options.no_genetic_map):
+                haps_physical = None
+                ihh = self.run_multi_coreihh(haps, haps_physical)
+            else:
+                (haps_gdist, haps_physical) =self.interpolate_haps(haps)
+                ihh = self.run_multi_coreihh(haps_gdist, haps_physical)
+            ihs_file = ihh.split('.ihh')[0] + '.ihs'
+            haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if (not self.options.no_ihs):
             os.rename(haplo_hh, 'results/' + haplo_hh)
             os.rename(vcf, 'results/' + vcf)
             os.rename(ihh, 'results/' + ihh)
-        os.rename(ihs_file, 'results/'+ihs_file)
+            os.rename(ihs_file, 'results/'+ ihs_file)
         os.rename(haps, 'results/' + haps)
-        os.rename(fayandwus, 'results/' + fayandwus)
+        os.rename(tajimaSD, 'results/' + tajimaSD)
         if not os.path.exists('log'):
             os.mkdir('log')
         logger.info(self.options.log_file)
         os.rename(self.options.log_file, 'log/' + self.options.log_file)
         if not self.options.no_clean_up:
-            keep = ['selection_stderr.tmp', 'selection_stdout.tmp']
+            keep = ['selection_stderr.tmp', 'selection_stdout.tmp',os.path.basename(self.options.config_file)]
             clean_folder('.', keep=keep)
-        logger.info(tajimaSD)
-        logger.info(vcf)
-        logger.info(haps)
-        logger.info(ihh)
-        logger.info(fayandwus)
         logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
 
@@ -237,6 +303,16 @@ class StandardRun(CommandTemplate):
         """
         (cmd, output_name) = super(StandardRun, self).haps_filter(haps)
         run_subprocess(cmd, 'haps filter')
+        return(output_name)
+
+    def beagle_phasing(self, vcf):
+        """ Run beagle phasing using phasing 
+            
+
+        """
+        (cmd, output_name)= super(StandardRun, self).beagle_phasing(vcf)
+        cmd.append('nthreads='+str(self.threads))
+        run_subprocess(cmd, 'beagle')
         return(output_name)
 
     def join_impute2_files(self, output_prefix, no_commands):
@@ -327,13 +403,21 @@ class StandardRun(CommandTemplate):
             run_subprocess(cmd, 'ancestral_annotation')
             return(output_name)
 
-    def run_multi_coreihh(self, haps):
+    def interpolate_haps(self,haps):
+        """ Run interpolate haplotypes
+
+        """
+        (cmd, output_haps, output_physical) = super(StandardRun, self).interpolate_haps(haps)
+        run_subprocess(cmd, 'interpolate_haps')
+        return (output_haps,output_physical)
+
+    def run_multi_coreihh(self, haps, physical_dist):
         """ Run multicore ihh using subprocess
 
             Uses the number of cores to specify the parallelisation
             to multi_core ihh
         """
-        (cmd, output_name) = super(StandardRun, self).run_multi_coreihh(haps)
+        (cmd, output_name) = super(StandardRun, self).run_multi_coreihh(haps, physical_dist)
         cores = self.threads
         ihs_output = output_name.split('.ihh')[0]+'.ihs'
         rdata_output = output_name.split('.ihh')[0]+'.RData'
