@@ -1034,7 +1034,7 @@ The following commands run the selection\_pipeline on a 4 core machine with phas
 
 \begin{minted}[bgcolor=bg, frame=lines]{bash}
 
-for chromosome in {1..22} X and Y
+for chromosome in {1..22} X Y
 do
     mkdir -p $chromosome
     (cd ${chromosome}; multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt \
