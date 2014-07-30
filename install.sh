@@ -100,7 +100,7 @@ chmod 755 bin/impute2
 echo "Installing Tabix"
 tar -xjf src/tabix.tar.bz2
 change_folder tabix-0.2.6
-check_success make
+check_success make LIBPATH="${LIB_VAR}"
 orig_dir
 cp tabix-0.2.6/bgzip bin/
 cp tabix-0.2.6/tabix bin/
