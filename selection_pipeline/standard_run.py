@@ -327,12 +327,15 @@ class StandardRun(CommandTemplate):
         output_warnings = open(output_prefix+'.warnings', 'w')
         output_info = open(output_prefix+'.info', 'w')
         for i in range(no_commands):
-            with open(output_prefix+'_'+str(i)+'.haps_haps', 'r') as h:
-                with open(output_prefix + '_'+str(i)+'.warnings', 'r') as w:
-                    with open(output_prefix + '_'+str(i) + '.info', 'r')as f:
-                        output_haps.write(h.read())
-                        output_warnings.write(w.read())
-                        output_info.write(f.read())
+            try:
+                with open(output_prefix+'_'+str(i)+'.haps_haps', 'r') as h:
+                    with open(output_prefix + '_'+str(i)+'.warnings', 'r') as w:
+                        with open(output_prefix + '_'+str(i) + '.info', 'r')as f:
+                            output_haps.write(h.read())
+                            output_warnings.write(w.read())
+                            output_info.write(f.read())
+            except IOError:
+                logger.error(str(output_prefix)+'_'+str(i)+'.haps_haps'+' does not exist, but pipeline continuing without') 
         output_haps.close()
         output_warnings.close()
         output_info.close()
