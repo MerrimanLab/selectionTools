@@ -52,7 +52,7 @@ class StandardRun(CommandTemplate):
             beagle will cause direct problems with shapeit
 
         """
-        if not self.options.no_genetic_map and not self.options.beagle and not self.options.phased_vcf:
+        if self.options.no_genetic_map and not self.options.beagle and not self.options.phased_vcf:
             logger.error("Cannot use shapeit with no genetic map")
             return False
         return True
