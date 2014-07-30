@@ -203,6 +203,7 @@ def run_subprocess(
             break
         logger.info(tool + " STDERR: " + line.strip())
     logger.info("Finished tool " + tool)
+    logger.debug("command = " + ' '.join(command))
     standard_err.close()
     standard_out.close()
     # Removed stdout if it either was not specified

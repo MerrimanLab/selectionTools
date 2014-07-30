@@ -48,8 +48,8 @@ def parse_arguments():
         default values for the program
     """
     parser = OptionParser()
-    parser.add_option('-v', '--verbose',
-                      action="store_true", dest='verbose',
+    parser.add_option('-v', '--debug',
+                      action="store_true", dest='debug',
                       help="Print debug messages")
     parser.add_option('-q', '--silent', action="store_false",
                       dest='verbose', help="Run Silently")
@@ -121,7 +121,7 @@ def parse_arguments():
                       help="Do not create rudimentary plots")
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
-        if(options.verbose):
+        if(options.debug):
             logger.setLevel(logging.DEBUG)
         else:
             logger.setLevel(logging.ERROR)
