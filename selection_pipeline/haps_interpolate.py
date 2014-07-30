@@ -82,8 +82,8 @@ def replace_positions(haps,output,gmap_dict,physical_out):
         haps_line = f.readline()
         dictionary_index = 1
         # Requires the gmap_dictionary is atleast  
-        start_position=gmap_dict[0]
-        end_position=start_position
+        start_position=[0,0.0]
+        end_position=gmap_dict[0]
         while(haps_line and dictionary_index < len(gmap_dict)):
             temp_line = haps_line.split()
             temp_pos = int(temp_line[2])
