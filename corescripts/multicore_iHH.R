@@ -159,17 +159,21 @@ for( i in fileNumber){
 fileNumber = offset:(offset+new_file_number-1)
 
 my_scan_hh = function(x){     
-  d = data2haplohh(hap_file=x[1],map_file=x[2],min_maf=maf)   
-  if(!is.null(opt$physical_map_haps)){
-    physical_positions = read.table(x[3],header=F)
-    physical_positions = as.numeric(physical_positions[,1])
-    res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty,physical_positions=physical_positions)
-  }else{
-    res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty)
-  }
-  write.table(res,paste(x[1],".iHH",sep=""))
-  return(res)
-}  
+  if(length(read.table(x[1]) != 0){
+    d = data2haplohh(hap_file=x[1],map_file=x[2],min_maf=maf)   
+    if(!is.null(opt$physical_map_haps)){
+        physical_positions = read.table(x[3],header=F)
+        physical_positions = as.numeric(physical_positions[,1])
+        res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty,physical_positions=physical_positions)
+    }else{
+        res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty)
+    }
+    write.table(res,paste(x[1],".iHH",sep=""))    
+    
+    } 
+    return(NULL)
+}
+  
 neutral_res = mclapply(para,my_scan_hh,mc.cores=cores)  
 index = 1
 for ( j in fileNumber){
