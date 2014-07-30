@@ -5,6 +5,7 @@ from .run_pipeline import CommandTemplate
 ## Subprocess import clause required for running commands on the shell##
 import subprocess
 import logging
+import fnmatch
 logger = logging.getLogger(__name__)
 
 MISSING_EXECUTABLE = 50
