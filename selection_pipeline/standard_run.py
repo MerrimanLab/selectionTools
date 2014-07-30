@@ -190,8 +190,8 @@ class StandardRun(CommandTemplate):
         """ Run pipeline runs the pipeline for a standard run
 
         """
-        vcf = self.run_remove_indels_from_vcf()
         if(self.options.phased_vcf):
+            vcf = self.run_remove_indels_from_vcf()
             (haps, sample) = self.vcf_to_haps(vcf)
         elif(self.options.beagle):
             vcf = self.beagle_phasing(vcf)
@@ -201,6 +201,7 @@ class StandardRun(CommandTemplate):
             haps = self.options.haps
             sample = self.options.sample
         else:
+            vcf = self.run_remove_indels_from_vcf()
             (ped, map) = self.run_vcf_to_plink()
             (ped, map) = self.run_plink_filter(ped, map)
             (haps, sample) = self.run_shape_it(ped, map)
