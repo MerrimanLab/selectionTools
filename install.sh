@@ -39,15 +39,15 @@ check_success make install
 orig_dir
 rm -Rf zlib-1.2.8
 
-echo "Installing VCF tools"
-tar xzf src/vcftools.tar.gz
-LIB_VAR="-lz -L${ORIG_DIR}/lib -I${ORIG_DIR}/include"
-change_folder vcftools_0.1.11
-check_success make LIB="${LIB_VAR}"
-orig_dir
-cp vcftools_0.1.11/bin/* bin/
-cp vcftools_0.1.11/perl/*pm lib/perl5/
-rm -Rf vcftools_0.1.11
+#echo "Installing VCF tools"
+#tar xzf src/vcftools.tar.gz
+#LIB_VAR="-lz -L${ORIG_DIR}/lib -I${ORIG_DIR}/include"
+#change_folder vcftools_0.1.11
+#check_success make LIB="${LIB_VAR}"
+#orig_dir
+#cp vcftools_0.1.11/bin/* bin/
+#cp vcftools_0.1.11/perl/*pm lib/perl5/
+#rm -Rf vcftools_0.1.11
 echo "Installing QCTool"
 if [ `uname` = "Darwin" ]; then 
     tar xzf src/qctool_v1.4-osx.tgz
@@ -97,14 +97,14 @@ else
     rm -Rf impute_v2.3.0_x86_64_static/
 fi
 chmod 755 bin/impute2
-echo "Installing Tabix"
-tar -xjf src/tabix.tar.bz2
-change_folder tabix-0.2.6
-check_success make LIBPATH="${LIB_VAR}"
-orig_dir
-cp tabix-0.2.6/bgzip bin/
-cp tabix-0.2.6/tabix bin/
-rm -Rf tabix-0.2.6
+#echo "Installing Tabix"
+#tar -xjf src/tabix.tar.bz2
+#change_folder tabix-0.2.6
+#check_success make LIBPATH="${LIB_VAR}"
+#orig_dir
+#cp tabix-0.2.6/bgzip bin/
+#cp tabix-0.2.6/tabix bin/
+#rm -Rf tabix-0.2.6
 echo "Installing Variscan"
 if [ `uname` = "Darwin" ]; then
     echo "Cannot install on OSX"
