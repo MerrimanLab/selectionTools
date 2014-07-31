@@ -159,7 +159,7 @@ for( i in fileNumber){
 fileNumber = offset:(offset+new_file_number-1)
 
 my_scan_hh = function(x){     
-  if(length(read.table(x[1]) != 0){
+  if(length(read.table(x[1]) != 0)){
     d = data2haplohh(hap_file=x[1],map_file=x[2],min_maf=maf)   
     if(!is.null(opt$physical_map_haps)){
         physical_positions = read.table(x[3],header=F)
