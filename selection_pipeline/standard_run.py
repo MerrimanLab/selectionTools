@@ -43,7 +43,7 @@ class StandardRun(CommandTemplate):
                     return exe_file
         logger.error(program_name + " path = " + fpath +
                      " not locatable path or in the directory"
-                     " specified in your self.config file")
+                     " specified in your config {0}".format(self.config))
         return None
 
     def check_options(self):
