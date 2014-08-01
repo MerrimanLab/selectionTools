@@ -6,6 +6,8 @@
 import argparse
 from collections import OrderedDict
 import tempfile
+import decimal
+from decimal import *
 
 def get_genetic_map_format(genetic_map):
     """ Method to get the format of the genetic map files 
@@ -32,8 +34,6 @@ def plink_to_shapeit_gmap(genetic_map_output,new_genetic_map):
     with open(genetic_map_output) as gmap:
         for i, line in enumerate(gmap):
             gmap_line = line.split('\t')
-            # remove the header
-
             if ( i == 0 ):
                 continue
             else:
@@ -61,7 +61,7 @@ def load_genetic_map(genetic_map):
     for i, line in enumerate(genetic_map):
         #shape it format is line seperated
         shapeit_line = line.split()
-        gmap_pos[float(shapeit_line[0])]=float(shapeit_line[2])
+        gmap_pos[float(shapeit_line[0])]=Decimal(shapeit_line[2])
     return gmap_pos
 
 def interpolate(start_position,end_position,x):
