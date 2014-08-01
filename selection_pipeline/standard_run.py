@@ -222,7 +222,7 @@ class StandardRun(CommandTemplate):
         vcf = self.fix_vcf_qctool(vcf)
         tajimaSD = self.vcf_to_tajimas_d(vcf)
         if (not self.options.no_ihs):
-            if (self.options.no_genetic_map):
+            if (self.options.no_genetic_map or self.options.physical_ihs ):
                 haps_physical = None
                 ihh = self.run_multi_coreihh(haps, haps_physical)
             else:
