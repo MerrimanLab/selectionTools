@@ -177,7 +177,11 @@ my_scan_hh = function(x){
 neutral_res = mclapply(para,my_scan_hh,mc.cores=cores)  
 index = 1
 for ( j in fileNumber){
-    neutral_res[[index]] = read.table(paste(hap_file,j,'.iHH',sep=''))
+    if(file.exists(paste(hap_file,j,'.iHH',sep=''))){
+        neutral_res[[index]] = read.table(paste(hap_file,j,'.iHH',sep=''))
+    } else{
+        print(paste(hap_file,j,'.iHH does not exist! Continuing without',sep=""))
+    }
     index = index + 1
 }
 #save(neutral_res,file="neutral_res.RData")
