@@ -6,6 +6,7 @@ from .run_pipeline import CommandTemplate
 import subprocess
 import logging
 import fnmatch
+import shutil
 logger = logging.getLogger(__name__)
 
 MISSING_EXECUTABLE = 50
@@ -190,11 +191,15 @@ class StandardRun(CommandTemplate):
         """ Run pipeline runs the pipeline for a standard run
 
         """
-        if(self.options.phased_vcf):
+        if not os.path.exists('results'):
+            os.mkdir('results')
+        if(self.options.phased_vcf and sepl.options.beagle):
             vcf = self.run_remove_indels_from_vcf()
+            #save the original vcf file      
+            shutil.copy(self.options.vcf_input, os.path.join('results',os.path.basename(self.options.vcf_input) + "orig"))
+        if(self.options.phased_vcf):
             (haps, sample) = self.vcf_to_haps(vcf)
         elif(self.options.beagle):
-            vcf = self.run_remove_indels_from_vcf()
             vcf = self.beagle_phasing(vcf)
             vcf = gunzip_file(vcf)
             (haps, sample) = self.vcf_to_haps(vcf)
@@ -209,11 +214,11 @@ class StandardRun(CommandTemplate):
         if(self.options.imputation):
             (haps) = self.run_impute2(haps)
             haps = self.indel_filter(haps)
+        if not os.path.exists('results'):
+            os.mkdir('results')
         haps = self.haps_filter(haps)
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
-        if not os.path.exists('results'):
-            os.mkdir('results')
         if (sys.platform != 'darwin'):
             # Remove fay and wus from mac osx for the moment
             fayandwus = self.variscan_fayandwus(haps2_haps)
