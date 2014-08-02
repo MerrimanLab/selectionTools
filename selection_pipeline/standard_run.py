@@ -193,7 +193,7 @@ class StandardRun(CommandTemplate):
         """
         if not os.path.exists('results'):
             os.mkdir('results')
-        if(self.options.phased_vcf and sepl.options.beagle):
+        if(self.options.phased_vcf or self.options.beagle):
             vcf = self.run_remove_indels_from_vcf()
             #save the original vcf file      
             shutil.copy(self.options.vcf_input, os.path.join('results',os.path.basename(self.options.vcf_input) + "orig"))
