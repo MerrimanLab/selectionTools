@@ -65,10 +65,11 @@ def load_genetic_map(genetic_map):
     return gmap_pos
 
 def interpolate(start_position,end_position,x):
-    
-    slope = (end_position[1] - start_position[1])/(end_position[0] - start_position[0]) 
+    start0 = Decimal(str(start_position[0]))
+    end0 = Decimal(str(end_position[0]))
+    slope = (end_position[1] - start_position[1])/(end0 - start0) 
     intercept=start_position[1]
-    interp = intercept + ((x-start_position[0]) * slope)
+    interp = intercept + ((x-start0) * slope)
     return interp
 
 def replace_positions(haps,output,gmap_dict,physical_out):
@@ -82,7 +83,7 @@ def replace_positions(haps,output,gmap_dict,physical_out):
         haps_line = f.readline()
         dictionary_index = 1
         # Requires the gmap_dictionary is atleast  
-        start_position=[0,0.0]
+        start_position=[0,Decimal("0.0")]
         end_position=gmap_dict[0]
         while(haps_line and dictionary_index < len(gmap_dict)):
             temp_line = haps_line.split()
