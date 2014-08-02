@@ -194,6 +194,7 @@ class StandardRun(CommandTemplate):
             vcf = self.run_remove_indels_from_vcf()
             (haps, sample) = self.vcf_to_haps(vcf)
         elif(self.options.beagle):
+            vcf = self.run_remove_indels_from_vcf()
             vcf = self.beagle_phasing(vcf)
             vcf = gunzip_file(vcf)
             (haps, sample) = self.vcf_to_haps(vcf)

@@ -5,6 +5,7 @@ import logging
 import re
 import gzip
 import tempfile
+import signal
 from time import sleep
 #queue for threads
 #regex for hash at start of line
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT = 10
 MISSING_EXECUTABLE_ERROR = 5
 STOP = False
+
 # returns Split VCF files that can be used
 # by the vcf-subset function to take advantage of the cores avaliable
 #
@@ -128,7 +130,7 @@ def which(program, program_name):
 def run_subprocess(
     command, tool, stdout=None,
     stderr=None, stdoutlog=False,
-        working_dir=None):
+        working_dir=None,with_queue=False):
     """ Runs a command on the system shell and forks a new process
 
         also creates a file for stderr and stdout if needed
@@ -138,8 +140,8 @@ def run_subprocess(
     if (working_dir is None):
         working_dir = '.'
     if(tool == 'selection_pipeline'):
-        stderr = 'selection_stderr.tmp'
-        stdout = 'selection_stdout.tmp'
+        stderr = working_dir+'/selection_stderr.tmp'
+        stdout = working_dir+ '/selection_stdout.tmp'
     if(stderr is None):
         stderr = 'stderr.tmp'
         standard_err = open(stderr, 'w')
@@ -174,13 +176,19 @@ def run_subprocess(
         while(exit_code.poll() is None):
             sleep(0.2)
             if(STOP == True):
-                exit_code.send_signal(CTRL_C_EVENT) 
-                return
+                exit_code.send_signal(signal.SIGINT) 
+                if (with_queue) :
+                   return
+                else:
+                    sys.exit(SUBPROCESS_FAILED_EXIT)
     except (KeyboardInterrupt, SystemExit):
-        exit_code.send_signal(CTRL_C_EVENT) 
+        exit_code.send_signal(signal.SIGINT) 
         global STOP
         STOP = True
-        return
+        if( with_queue) :
+            return
+        else:
+            sys.exit(SUBPROCESS_FAILED_EXIT)
     standard_err.close()
     standard_out.close()
     standard_err = open(stderr, 'r')
@@ -245,12 +253,13 @@ def __queue_worker__(q, tool_name):
         try:
            run_subprocess(
                 cmd, tool_name, stdout=stdout,
-                stdoutlog=stdoutlog, stderr=stderr, working_dir=folder_names)
+                stdoutlog=stdoutlog, stderr=stderr, working_dir=folder_names,with_queue=True)
         except SystemExit:
+            global STOP
+            STOP = True
             logger.error(tool_name + ": Failed to run in thread")
-            q.task_done()
-            sys.exit(SUBPROCESS_FAILED_EXIT)
-    q.task_done()
+        q.task_done()
+
 def queue_jobs(commands, tool_name, threads, stdouts=None, folder_names=None):
     """ Creates a queue for running jobs
 
