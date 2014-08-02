@@ -61,3 +61,11 @@ For more information on population files consult the PDF manual specifically sec
 To view the other options run the help.
 
     multipop_selection_pipeline -h
+    
+    
+Notes
+-----
+
+With a Red Hat linux system you will need to extract the qctool scientific linux distribution located in the src directory.
+
+
