@@ -192,7 +192,7 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     # Arbitrary cut off for parralelising each population
     # 4 at the moment could be calculated given the amount
     # of parralelisation needed in each run.
-    if(len(populations) >= 4 and int(cores) >= 12):
+    if(len(populations) >= 2 and int(cores) >= 2):
         parralelise_populations = True
     cores = cores // populations 
     orig_dir = os.getcwd()
