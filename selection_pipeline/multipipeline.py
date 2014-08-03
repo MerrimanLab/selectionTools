@@ -1,4 +1,5 @@
 # Multipopulation script calls the selection
+
 # pipeline for each population that we need
 # to do then zips up and runs a script to p# each of the cross population
 # statistics once
@@ -193,7 +194,7 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     # Arbitrary cut off for parralelising each population
     # 4 at the moment could be calculated given the amount
     # of parralelisation needed in each run.
-    if(len(populations) >= 2 and int(cores) >= 2):
+    if(len(populations) >= 4 and int(cores) >= 4):
         parralelise_populations = True
         cores_per_run = str(int(cores) // len(populations))
     orig_dir = os.getcwd()
