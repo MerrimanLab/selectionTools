@@ -6,6 +6,8 @@
 import argparse
 from collections import OrderedDict
 import tempfile
+import decimal
+from decimal import *
 
 def get_genetic_map_format(genetic_map):
     """ Method to get the format of the genetic map files 
@@ -32,8 +34,6 @@ def plink_to_shapeit_gmap(genetic_map_output,new_genetic_map):
     with open(genetic_map_output) as gmap:
         for i, line in enumerate(gmap):
             gmap_line = line.split('\t')
-            # remove the header
-
             if ( i == 0 ):
                 continue
             else:
@@ -61,14 +61,15 @@ def load_genetic_map(genetic_map):
     for i, line in enumerate(genetic_map):
         #shape it format is line seperated
         shapeit_line = line.split()
-        gmap_pos[float(shapeit_line[0])]=float(shapeit_line[2])
+        gmap_pos[float(shapeit_line[0])]=Decimal(shapeit_line[2])
     return gmap_pos
 
 def interpolate(start_position,end_position,x):
-    
-    slope = (end_position[1] - start_position[1])/(end_position[0] - start_position[0]) 
+    start0 = Decimal(str(start_position[0]))
+    end0 = Decimal(str(end_position[0]))
+    slope = (end_position[1] - start_position[1])/(end0 - start0) 
     intercept=start_position[1]
-    interp = intercept + ((x-start_position[0]) * slope)
+    interp = intercept + ((x-start0) * slope)
     return interp
 
 def replace_positions(haps,output,gmap_dict,physical_out):
@@ -82,7 +83,7 @@ def replace_positions(haps,output,gmap_dict,physical_out):
         haps_line = f.readline()
         dictionary_index = 1
         # Requires the gmap_dictionary is atleast  
-        start_position=[0,0.0]
+        start_position=[0,Decimal("0.0")]
         end_position=gmap_dict[0]
         while(haps_line and dictionary_index < len(gmap_dict)):
             temp_line = haps_line.split()

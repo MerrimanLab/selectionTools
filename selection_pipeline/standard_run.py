@@ -43,7 +43,7 @@ class StandardRun(CommandTemplate):
                     return exe_file
         logger.error(program_name + " path = " + fpath +
                      " not locatable path or in the directory"
-                     " specified in your self.config file")
+                     " specified in your config {0}".format(self.config))
         return None
 
     def check_options(self):
@@ -96,6 +96,26 @@ class StandardRun(CommandTemplate):
                         self.config['impute2']['impute_reference_dir'], file)
             if hap_file == None or legend_file == None:
                 return False
+        
+        if(not self.config['ancestral_allele']['split_by_chromosome']):
+            ancestral_fasta = \
+                self.config['ancestral_allele']['ancestral_fasta_file']
+            regex = \
+                self.config['ancestral_allele']['ancestral_fasta_header_regex']
+        else:
+            for file in os.listdir(
+                    self.config['ancestral_allele']['ancestral_fasta_dir']):
+                if fnmatch.fnmatch(
+                        file,
+                        self.config['ancestral_allele']['ancestral_prefix'].
+                        replace('?', self.options.chromosome)):
+                    ancestral_fasta = os.path.join(
+                        self.config['ancestral_allele']['ancestral_fasta_dir'],
+                        file)
+            regex = None
+            if ancestral_fasta == None:
+                logger.infor("Could not find ancestral fasta file as specified in"
+                             "the config file, please check you settings")
         return True
              
 
