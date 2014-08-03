@@ -194,7 +194,7 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     # of parralelisation needed in each run.
     if(len(populations) >= 4 and int(cores) >= 12):
         parralelise_populations = True
-    cores = cores // populations 
+        cores = int(cores) // len(populations)
     orig_dir = os.getcwd()
     if(options.extra_args is not None):
         extra_args = options.extra_args
