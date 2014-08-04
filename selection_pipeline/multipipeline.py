@@ -192,8 +192,9 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     # Arbitrary cut off for parralelising each population
     # 4 at the moment could be calculated given the amount
     # of parralelisation needed in each run.
-    if(len(populations) >= 4 and int(cores) >= 4):
+    if(len(populations) >= 4 and int(cores) >= 12):
         parralelise_populations = True
+        cores = int(cores) // len(populations)
     orig_dir = os.getcwd()
     if(options.extra_args is not None):
         extra_args = options.extra_args
@@ -210,6 +211,8 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     if options.extra_args is not None:
         if '--no-ihs' in options.extra_args:
             options.no_rsb = True
+    if parralelise_populations:
+        folder_names = []
     for vcf, population_name in zip(sorted(output_vcfs), sorted(populations)):
         cmd = []
         cmd.append(selection_pipeline_executable)
@@ -218,8 +221,6 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
                    '--config-file', os.path.abspath(options.config_file)])
         cmd.extend(extra_args.split())
         cmds.append(cmd)
-        if parralelise_populations:
-            folder_names = []
         directory = population_name
         if not os.path.exists(directory):
             os.mkdir(directory)

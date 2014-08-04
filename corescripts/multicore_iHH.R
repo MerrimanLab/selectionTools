@@ -177,7 +177,11 @@ my_scan_hh = function(x){
 neutral_res = mclapply(para,my_scan_hh,mc.cores=cores)  
 index = 1
 for ( j in fileNumber){
-    neutral_res[[index]] = read.table(paste(hap_file,j,'.iHH',sep=''))
+    if(file.exists(paste(hap_file,j,'.iHH',sep=''))){
+        neutral_res[[index]] = read.table(paste(hap_file,j,'.iHH',sep=''))
+    } else{
+        print(paste(hap_file,j,'.iHH does not exist! Continuing without',sep=""))
+    }
     index = index + 1
 }
 #save(neutral_res,file="neutral_res.RData")
@@ -185,56 +189,58 @@ save.image(file="working_data.RData")
 
 results=data.frame()
 if(!is.null(opt$physical_map_haps)){
-for (n in fileNumber){
-  i=n-(offset-1)
-  temp_physical_map= as.numeric(read.table(paste0('gene_',pop1,'.map',n),header=F)[,1])
-  if(n == 1){ # from start to first half of overlaped region (first chunk)
-    results = neutral_res[[i]][temp_physical_map <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
-   } else {
-      if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
-        a= results
-        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  ,]
-        results = rbind(a,b)
-      } else { #start =take second half of overlap, end = take first half (middle regions)
-        a = results
-        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  & temp_physical_map <  ((window -overlap)* (n) + (1/2 * overlap)), ]
-        results = rbind(a,b )
-     }
-   } 
-}
-if (!is.null(opt$physical_map_haps)){
-    # Need to replace the second column of 
-    for( i in 1:nrow(results)){
-        results[i,2] = map_positions[i]     
+	print(fileNumber)
+    for (n in fileNumber){
+        i=n-(offset-1)
+        if(file.exists(paste0('gene_',pop1,'.map',n))){
+            temp_physical_map= as.numeric(read.table(paste0('gene_',pop1,'.map',n),header=F)[,1])
+            if(n == 1){ # from start to first half of overlaped region (first chunk)
+                results = neutral_res[[i]][temp_physical_map <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
+            } else {
+                if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
+                    a= results
+                    b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  ,]
+                    results = rbind(a,b)
+                } else { #start =take second half of overlap, end = take first half (middle regions)
+                    a = results
+                    b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  & temp_physical_map <  ((window -overlap)* (n) + (1/2 * overlap)), ]
+                    results = rbind(a,b )
+                }
+            } 
+        }else{
+            print(paste("File: gene_",pop1,'.map',n," DOES NOT EXIST, skipping region.", sep=""))
+        }
     }
-}
-write.table(results,paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"))
-if (!is.null(opt$ihs)){
+##### replace genetic positions with physical positions
+    if (!is.null(opt$physical_map_haps)){
+            results[,2] = map_positions     
+    }
+    write.table(results,paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"))
+    if (!is.null(opt$ihs)){
         ihs =ihh2ihs(results)
         write.table(ihs$res.ihs,paste(pop1,"chr", chr,"wd",working_dir,".ihs",sep="_"))
     }
 }else{
-for (n in fileNumber){
-  i=n-(offset-1)
-  if(n == 1){ # from start to first half of overlaped region (first chunk)
-    results = neutral_res[[i]][neutral_res[[i]][,2] <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
-   } else {
-      if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
-        a= results
-        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  ,]
-        results = rbind(a,b)
-      } else { #start =take second half of overlap, end = take first half (middle regions)
-        a = results
-        b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  & neutral_res[[i]][,2] <  ((window -overlap)* (n) + (1/2 * overlap)), ]
-        results = rbind(a,b )
-     }
-   } 
-}
-write.table(results,paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"))
-if (!is.null(opt$ihs)){
+    for (n in fileNumber){
+        i=n-(offset-1)
+        if(n == 1){ # from start to first half of overlaped region (first chunk)
+            results = neutral_res[[i]][neutral_res[[i]][,2] <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
+        } else {
+            if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
+                a= results
+                b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  ,]
+                results = rbind(a,b)
+            } else { #start =take second half of overlap, end = take first half (middle regions)
+                a = results
+                b = neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  & neutral_res[[i]][,2] <  ((window -overlap)* (n) + (1/2 * overlap)), ]
+                results = rbind(a,b )
+            }
+        } 
+    }
+    write.table(results,paste(pop1,"chr", chr,"wd",working_dir,".ihh",sep="_"))
+    if (!is.null(opt$ihs)){
         ihs =ihh2ihs(results)
         write.table(ihs$res.ihs,paste(pop1,"chr", chr,"wd",working_dir,".ihs",sep="_"))
-}
-
+    }   
 }
 
