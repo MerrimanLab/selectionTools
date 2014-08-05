@@ -60,13 +60,14 @@ class StandardRun(CommandTemplate):
         return True
 
     def check_reference_files_exist(self):
-        if self.options.no_genetic_map:
-            genetic_map = ''
+        if not self.options.no_genetic_map:
+            genetic_map = None
             for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
                 if fnmatch.fnmatch(
                     file, self.config['genetic_map']['genetic_map_prefix'].replace(
                         '?', self.options.chromosome)):
                     genetic_map = file
+            print(genetic_map)        
             if genetic_map is None:
                 # Complicated logic to capture the options checking
                 if self.config.phased_vcf:
@@ -399,7 +400,7 @@ class StandardRun(CommandTemplate):
         cmds = []
         for i in range(0, no_of_impute_jobs):
             individual_command = list(cmd_template)
-            individual_command.extend(['-int', str((i+first_window)*distance),
+            individual_command.extend(['-int', str((i+first_window)*distance+1),
                                       str((i+first_window+1)*distance)])
             individual_prefix = output_prefix + '_' + str(i)
             individual_command.extend(['-o', individual_prefix+'.haps',

@@ -323,6 +323,8 @@ def main():
     (options, args) = parser.parse_args()
     assert options.vcf_input is not None, \
         "no VCF file has been specified as input"
+    assert os.path.isfile(options.vcf_input), \
+        "Cannot locate vcf file at path = {0)".format(options.vcf_input)
     assert options.chromosome is not None, \
         "no chromosome has been specified to the script"
     assert options.populations is not None and \

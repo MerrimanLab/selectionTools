@@ -137,6 +137,7 @@ def run_subprocess(
         to avoid deadlock.
     """
     # Very dirty hack
+    logger.info(tool + ' command = ' + ' '.join(command))
     if (working_dir is None):
         working_dir = '.'
     if(tool == 'selection_pipeline'):

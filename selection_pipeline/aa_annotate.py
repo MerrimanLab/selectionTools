@@ -145,7 +145,7 @@ def annotate_vcf(options):
     for record in vcf_reader:
         line = get_haps_line(options, record)
         if(line is not None):
-            output_line = aa_check(aaSeq[record.POS], record.REF,
+            output_line = aa_check(aaSeq[record.POS-1], record.REF,
                                    record.ALT, options.format, line)
             write_hap_line(options, output_line, output)
     close_files(options, output)
