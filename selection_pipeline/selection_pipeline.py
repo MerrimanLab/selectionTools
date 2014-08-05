@@ -135,6 +135,8 @@ def parse_arguments():
         "Population code has not been specified."
     assert options.config_file is not None, \
         "Config file has not been specified."
+    assert os.path.isfile(options.config_file), \
+        "Config file cannot be found on path {0}".format(options.config_file)
     if(options.fayandWuWindowJump is None):
         options.fayandWuWindowJump = str(5000)
     else:
