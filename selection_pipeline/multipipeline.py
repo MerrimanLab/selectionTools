@@ -1,4 +1,5 @@
 # Multipopulation script calls the selection
+
 # pipeline for each population that we need
 # to do then zips up and runs a script to p# each of the cross population
 # statistics once
@@ -167,7 +168,8 @@ def subset_vcf(vcf_input, config, populations):
         # Append to vcf_outputs
         vcf_outputs.append(output_file)
         if(len(value) == 1):
-            os.rename(value[0], output_file)
+            print 'lol'
+            #os.rename(value[0], output_file)
         else:
             vcf_concat_executable = config['vcftools']['vcf_concat_executable']
             cmd.append(vcf_concat_executable)
@@ -192,16 +194,16 @@ def run_selection_pipeline(output_vcfs, options, populations, config):
     # Arbitrary cut off for parralelising each population
     # 4 at the moment could be calculated given the amount
     # of parralelisation needed in each run.
-    if(len(populations) >= 4 and int(cores) >= 12):
+    if(len(populations) >= 4 and int(cores) >= 4):
         parralelise_populations = True
-        cores = int(cores) // len(populations)
+        cores_per_run = str(int(cores) // len(populations))
     orig_dir = os.getcwd()
     if(options.extra_args is not None):
         extra_args = options.extra_args
     else:
         extra_args = ''
     if options.cores is not None:
-        extra_args += ' --cores ' + cores
+        extra_args += ' --cores ' + cores_per_run
     # Run the selection pipeline for a single run job #
     selection_pipeline_executable = \
         config['selection_pipeline']['selection_pipeline_executable']
@@ -321,6 +323,8 @@ def main():
     (options, args) = parser.parse_args()
     assert options.vcf_input is not None, \
         "no VCF file has been specified as input"
+    assert os.path.isfile(options.vcf_input), \
+        "Cannot locate vcf file at path = {0)".format(options.vcf_input)
     assert options.chromosome is not None, \
         "no chromosome has been specified to the script"
     assert options.populations is not None and \

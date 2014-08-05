@@ -5,6 +5,8 @@ import logging
 import re
 import gzip
 import tempfile
+import signal
+from time import sleep
 #queue for threads
 #regex for hash at start of line
 
@@ -16,6 +18,7 @@ from threading import Thread
 logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT = 10
 MISSING_EXECUTABLE_ERROR = 5
+STOP = False
 
 # returns Split VCF files that can be used
 # by the vcf-subset function to take advantage of the cores avaliable
@@ -29,6 +32,8 @@ MISSING_EXECUTABLE_ERROR = 5
 # potential edge cases with really really small vcf files these should not be
 # in use
 #
+
+
 
 def split_vcf(input_file, split_positions):
     """ Split a vcf file by input_positions
@@ -125,19 +130,19 @@ def which(program, program_name):
 def run_subprocess(
     command, tool, stdout=None,
     stderr=None, stdoutlog=False,
-        working_dir=None):
+        working_dir=None,with_queue=False):
     """ Runs a command on the system shell and forks a new process
 
         also creates a file for stderr and stdout if needed
         to avoid deadlock.
     """
     # Very dirty hack
+    logger.info(tool + ' command = ' + ' '.join(command))
+    if (working_dir is None):
+        working_dir = '.'
     if(tool == 'selection_pipeline'):
-        stderr = 'selection_stderr.tmp'
-        stdout = 'selection_stdout.tmp'
-    if (working_dir is not None):
-        orig_dir = os.getcwd()
-        os.chdir(working_dir)
+        stderr = working_dir+'/selection_stderr.tmp'
+        stdout = working_dir+ '/selection_stdout.tmp'
     if(stderr is None):
         stderr = 'stderr.tmp'
         standard_err = open(stderr, 'w')
@@ -147,16 +152,16 @@ def run_subprocess(
         if(stdout is None):
             standard_out = open('stdout.tmp', 'w')
             exit_code = subprocess.Popen(
-                command, stderr=standard_out, stdout=standard_err)
+                command, stderr=standard_out, stdout=standard_err,cwd=working_dir)
         else:
         # find out what kind of exception to try here
             if(hasattr(stdout, 'read')):
                 exit_code = subprocess.Popen(
-                    command, stdout=stdout, stderr=standard_err)
+                    command, stdout=stdout, stderr=standard_err,cwd=working_dir)
             else:
                 stdout = open(stdout, 'w')
                 exit_code = subprocess.Popen(
-                    command, stdout=stdout, stderr=standard_err)
+                    command, stdout=stdout, stderr=standard_err,cwd=working_dir)
             standard_out = stdout
     except:
         logger.error(tool + " failed to run " + ' '.join(command))
@@ -168,7 +173,23 @@ def run_subprocess(
             logger.info(tool + " STDERR: " + line.strip())
         standard_err.close()
         sys.exit(SUBPROCESS_FAILED_EXIT)
-    exit_code.wait()
+    try:
+        while(exit_code.poll() is None):
+            sleep(0.2)
+            if(STOP == True):
+                exit_code.send_signal(signal.SIGINT) 
+                if (with_queue) :
+                   return
+                else:
+                    sys.exit(SUBPROCESS_FAILED_EXIT)
+    except (KeyboardInterrupt, SystemExit):
+        exit_code.send_signal(signal.SIGINT) 
+        global STOP
+        STOP = True
+        if( with_queue) :
+            return
+        else:
+            sys.exit(SUBPROCESS_FAILED_EXIT)
     standard_err.close()
     standard_out.close()
     standard_err = open(stderr, 'r')
@@ -213,8 +234,6 @@ def run_subprocess(
     elif(stdoutlog):
         os.remove(standard_out.name)
     os.remove(stderr)
-    if (working_dir is not None):
-        os.chdir(orig_dir)
 
 
 def __queue_worker__(q, tool_name):
@@ -233,14 +252,14 @@ def __queue_worker__(q, tool_name):
             stderr = None
             folder_names = '.'
         try:
-            run_subprocess(
+           run_subprocess(
                 cmd, tool_name, stdout=stdout,
-                stdoutlog=stdoutlog, stderr=stderr, working_dir=folder_names)
+                stdoutlog=stdoutlog, stderr=stderr, working_dir=folder_names,with_queue=True)
         except SystemExit:
+            global STOP
+            STOP = True
             logger.error(tool_name + ": Failed to run in thread")
-            sys.exit(SUBPROCESS_FAILED_EXIT)
         q.task_done()
-
 
 def queue_jobs(commands, tool_name, threads, stdouts=None, folder_names=None):
     """ Creates a queue for running jobs
@@ -250,9 +269,11 @@ def queue_jobs(commands, tool_name, threads, stdouts=None, folder_names=None):
         The method blocks until all tasks are complete
     """
     q = Queue.Queue()
+    thread_L = []
     for i in range(int(threads)):
         t = Thread(target=__queue_worker__, args=[q, tool_name])
         t.daemon = True
+        thread_L.append(t)
         t.start()
     for i, cmd in enumerate(commands):
         stderr = 'stderr' + str(i) + '.tmp'
@@ -266,6 +287,8 @@ def queue_jobs(commands, tool_name, threads, stdouts=None, folder_names=None):
             stdout = 'stdout' + str(i) + '.tmp'
             q.put([cmd, stdout, True, stderr, folder_name])
     q.join()
+    if (STOP == True):
+        sys.exit(SUBPROCESS_FAILED_EXIT)
 
 # clean folder expecting a list containing
 # files to keep from that folder

@@ -6,6 +6,7 @@ from .run_pipeline import CommandTemplate
 import subprocess
 import logging
 import fnmatch
+import shutil
 logger = logging.getLogger(__name__)
 
 MISSING_EXECUTABLE = 50
@@ -59,13 +60,14 @@ class StandardRun(CommandTemplate):
         return True
 
     def check_reference_files_exist(self):
-        if self.options.no_genetic_map:
-            genetic_map = ''
+        if not self.options.no_genetic_map:
+            genetic_map = None
             for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
                 if fnmatch.fnmatch(
                     file, self.config['genetic_map']['genetic_map_prefix'].replace(
                         '?', self.options.chromosome)):
                     genetic_map = file
+            print(genetic_map)        
             if genetic_map is None:
                 # Complicated logic to capture the options checking
                 if self.config.phased_vcf:
@@ -114,8 +116,8 @@ class StandardRun(CommandTemplate):
                         file)
             regex = None
             if ancestral_fasta == None:
-                logger.infor("Could not find ancestral fasta file as specified in"
-                             "the config file, please check you settings")
+                logger.info("Could not find ancestral fasta file for chromosomose = {} ,as specified in"
+                             "the config file, please check you settings".format(self.options.chromosome))
         return True
              
 
@@ -210,8 +212,13 @@ class StandardRun(CommandTemplate):
         """ Run pipeline runs the pipeline for a standard run
 
         """
-        if(self.options.phased_vcf):
+        if not os.path.exists('results'):
+            os.mkdir('results')
+        if(self.options.phased_vcf or self.options.beagle):
             vcf = self.run_remove_indels_from_vcf()
+            #save the original vcf file      
+            shutil.copy(self.options.vcf_input, os.path.join('results',os.path.basename(self.options.vcf_input) + "orig"))
+        if(self.options.phased_vcf):
             (haps, sample) = self.vcf_to_haps(vcf)
         elif(self.options.beagle):
             vcf = self.beagle_phasing(vcf)
@@ -228,11 +235,11 @@ class StandardRun(CommandTemplate):
         if(self.options.imputation):
             (haps) = self.run_impute2(haps)
             haps = self.indel_filter(haps)
+        if not os.path.exists('results'):
+            os.mkdir('results')
         haps = self.haps_filter(haps)
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
-        if not os.path.exists('results'):
-            os.mkdir('results')
         if (sys.platform != 'darwin'):
             # Remove fay and wus from mac osx for the moment
             fayandwus = self.variscan_fayandwus(haps2_haps)
@@ -393,7 +400,7 @@ class StandardRun(CommandTemplate):
         cmds = []
         for i in range(0, no_of_impute_jobs):
             individual_command = list(cmd_template)
-            individual_command.extend(['-int', str((i+first_window)*distance),
+            individual_command.extend(['-int', str((i+first_window)*distance+1),
                                       str((i+first_window+1)*distance)])
             individual_prefix = output_prefix + '_' + str(i)
             individual_command.extend(['-o', individual_prefix+'.haps',

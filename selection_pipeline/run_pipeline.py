@@ -98,6 +98,8 @@ class CommandTemplate(object):
                     '?', self.options.chromosome)):
                 genetic_map = file,
             genetic_map=os.path.join(self.config['genetic_map']['genetic_map_dir'], genetic_map)
+            assert genetic_map is not None, \
+                    "Cannot find genetic map for chromosome {0}, check config".format(self.options.chromosome)
         new_genetic_map=prefix + '_temp_genetic_map.txt'
         # return the genetic map for use in shapeit
         genetic_map=get_shapeit_genetic_map(genetic_map,new_genetic_map)
@@ -143,8 +145,9 @@ class CommandTemplate(object):
         new_genetic_map=prefix +'_temp_genetic_map.txt'
         # return the genetic map for use in impute2, only needed if people
         # use plink genetic maps
+        assert os.path.isfile(genetic_map), \
+                "Genetic map cannot be found for chromosome {0}".format(self.options.chromosome)
         genetic_map=get_shapeit_genetic_map(genetic_map,new_genetic_map)
-        
         legend_file = ''
         for file in os.listdir(self.config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file, (
@@ -160,6 +163,10 @@ class CommandTemplate(object):
                 hap_file = os.path.join(
                     self.config['impute2']['impute_reference_dir'], file)
         #create the command template
+        assert os.path.isfile(hap_file), \
+                "Hap file cannot be found for chromosome {0}".format(self.options.chromosome)
+        assert os.path.isfile(legend_file), \
+                "Legend file cannot be found for chromosome {0}".format(self.options.chromosome)
         cmd_template = []
         cmd_template.append(impute2)
         cmd_template.extend(['-m', genetic_map, '-h', hap_file, '-l',
@@ -224,14 +231,16 @@ class CommandTemplate(object):
             '_genetic_dist.haps'
         output_physical = self.options.population.split('.haps')[0] + \
             '_genetic_dist.pos'
-        genetic_map = ''
+        genetic_map = None
         for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
             if fnmatch.fnmatch(
                 file, self.config['genetic_map']['genetic_map_prefix'].replace(
                     '?', self.options.chromosome)):
                 genetic_map = file
-            genetic_map = os.path.join(self.config['genetic_map']['genetic_map_dir'],genetic_map)
         cmd = []
+        assert genetic_map is not None, \
+                "Cannot find genetic map for chromosome {0}, check config".format(self.options.chromosome)
+        genetic_map = os.path.join(self.config['genetic_map']['genetic_map_dir'],genetic_map)
         interpolate_script= \
                 self.config['haps_scripts']['haps_interpolate_script']
         cmd.append(interpolate_script)

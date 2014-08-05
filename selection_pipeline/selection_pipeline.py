@@ -11,6 +11,7 @@
 from optparse import OptionParser
 import ConfigParser
 import logging
+import os
 from .standard_run import StandardRun
 from .environment import set_environment
 logger = logging.getLogger(__name__)
@@ -135,6 +136,14 @@ def parse_arguments():
         "Population code has not been specified."
     assert options.config_file is not None, \
         "Config file has not been specified."
+    if(options.haps and options.sample):
+        assert os.path.isfile(options.haps), \
+                "Cannot locate haps file path = {0}".format(options.haps)
+        assert os.path.isfile(options.sample), \
+                "Cannot locate sample file path = {0}".format(options.sample)
+    elif(options.vcf_input):
+        assert os.path.isfile(options.vcf_input), \
+                "Cannot locate vcf input file path = {0}".format(options.vcf_input) 
     if(options.fayandWuWindowJump is None):
         options.fayandWuWindowJump = str(5000)
     else:
