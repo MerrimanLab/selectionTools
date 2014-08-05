@@ -190,7 +190,7 @@ def annotate_haps(options):
             pos = int(lineSplit[2])
             ref = lineSplit[3]
             alt = lineSplit[4]
-            tempSeq = aaSeq[pos]
+            tempSeq = aaSeq[pos-1]
             outputLine = aa_check(tempSeq, ref, alt, options.format, line)
             if(outputLine is not None):
                 if(options.output is not None):
