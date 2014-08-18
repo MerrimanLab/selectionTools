@@ -78,6 +78,8 @@ if(!is.null(opt$haplo_hh)){
   ind[,4] = 1
   ind[,5] = 2
   indPop1=ind
+  indPop1[duplicated(indPop1[,1]),1] = paste(indPop1[duplicated(indPop1[,1]),2],indPop1[duplicated(indPop1[,1]),3],sep=":")
+
   write.table(indPop1,file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),col.names=F,row.names=F)
   write.table(t.hapsPop,file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),col.names=F)
   d = data2haplohh(hap_file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),map_file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),min_maf=maf)   
