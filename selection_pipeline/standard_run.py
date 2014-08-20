@@ -240,14 +240,14 @@ class StandardRun(CommandTemplate):
         haps = self.haps_filter(haps)
         new_sample_file = self.fix_sample_file(sample)
         haps2_haps = self.prepare_haps_for_variscan(haps, new_sample_file)
+        vcf = self.haps_to_vcf(haps, new_sample_file)
+        vcf = self.fix_vcf_qctool(vcf)
+        tajimaSD = self.vcf_to_tajimas_d(vcf)
         if (sys.platform != 'darwin'):
             # Remove fay and wus from mac osx for the moment
             fayandwus = self.variscan_fayandwus(haps2_haps)
             os.rename(fayandwus, 'results/' + fayandwus)
         haps = self.run_aa_annotate_haps(haps)
-        vcf = self.haps_to_vcf(haps, new_sample_file)
-        vcf = self.fix_vcf_qctool(vcf)
-        tajimaSD = self.vcf_to_tajimas_d(vcf)
         if (not self.options.no_ihs):
             if (self.options.no_genetic_map or self.options.physical_ihs ):
                 haps_physical = None
