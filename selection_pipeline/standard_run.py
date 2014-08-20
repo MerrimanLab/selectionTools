@@ -116,7 +116,7 @@ class StandardRun(CommandTemplate):
                         file)
             regex = None
             if ancestral_fasta == None:
-                logger.info("Could not find ancestral fasta file for chromosomose = {} ,as specified in"
+                logger.info("Could not find ancestral fasta file for chromosome = {} ,as specified in"
                              "the config file, please check you settings".format(self.options.chromosome))
         return True
              
