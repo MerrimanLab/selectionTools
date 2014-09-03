@@ -168,8 +168,7 @@ def subset_vcf(vcf_input, config, populations):
         # Append to vcf_outputs
         vcf_outputs.append(output_file)
         if(len(value) == 1):
-            print 'lol'
-            #os.rename(value[0], output_file)
+            os.rename(value[0], output_file)
         else:
             vcf_concat_executable = config['vcftools']['vcf_concat_executable']
             cmd.append(vcf_concat_executable)

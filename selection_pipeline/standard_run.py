@@ -70,7 +70,7 @@ class StandardRun(CommandTemplate):
             print(genetic_map)        
             if genetic_map is None:
                 # Complicated logic to capture the options checking
-                if self.config.phased_vcf:
+                if self.options.phased_vcf:
                     logger.info("Could not find genetic map, but --no-genetic-map "
                                 "was not set. Progressing without genetic map")
                 elif not self.options.beagle:
