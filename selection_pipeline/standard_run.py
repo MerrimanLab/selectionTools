@@ -146,7 +146,7 @@ class StandardRun(CommandTemplate):
                 self.config['ancestral_allele']['ancestral_allele_script'],
                 'ancestral_allele'
                 ) is None):
-            logger.error("ancestral_allele not found check config file")
+            logger.error("ancestral_allele_script not found check config file")
             return False
         if(self.which(
                 self.config['impute2']['impute_executable'],
