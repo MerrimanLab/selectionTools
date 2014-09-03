@@ -67,7 +67,6 @@ class StandardRun(CommandTemplate):
                     file, self.config['genetic_map']['genetic_map_prefix'].replace(
                         '?', self.options.chromosome)):
                     genetic_map = file
-            print(genetic_map)        
             if genetic_map is None:
                 # Complicated logic to capture the options checking
                 if self.options.phased_vcf:

@@ -97,9 +97,9 @@ class CommandTemplate(object):
                     file, self.config['genetic_map']['genetic_map_prefix'].replace(
                         '?', self.options.chromosome)):
                         genetic_map = file,
-        genetic_map=os.path.join(self.config['genetic_map']['genetic_map_dir'], genetic_map)
         assert genetic_map is not None, \
                 "Cannot find genetic map for chromosome {0}, check config".format(self.options.chromosome)
+        genetic_map=os.path.join(self.config['genetic_map']['genetic_map_dir'], genetic_map)
         new_genetic_map=prefix + '_temp_genetic_map.txt'
         # return the genetic map for use in shapeit
         genetic_map=get_shapeit_genetic_map(genetic_map,new_genetic_map)
