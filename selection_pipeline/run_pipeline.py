@@ -96,7 +96,7 @@ class CommandTemplate(object):
             if fnmatch.fnmatch(
                     file, self.config['genetic_map']['genetic_map_prefix'].replace(
                         '?', self.options.chromosome)):
-                        genetic_map = file,
+                        genetic_map = file
         assert genetic_map is not None, \
                 "Cannot find genetic map for chromosome {0}, check config".format(self.options.chromosome)
         genetic_map=os.path.join(self.config['genetic_map']['genetic_map_dir'], genetic_map)
