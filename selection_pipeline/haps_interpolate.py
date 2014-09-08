@@ -41,6 +41,7 @@ def plink_to_shapeit_gmap(genetic_map_output,new_genetic_map):
                 recomb_rate=float(gmap_line[2])
                 centi_morgans=float(gmap_line[3])
                 new_genetic_map.write(str(position) + ' ' + str(recomb_rate) + ' ' + str(centi_morgans) + '\n')
+
     return new_genetic_map
 
 def get_shapeit_genetic_map(genetic_map,temp_genetic_map):
@@ -49,7 +50,13 @@ def get_shapeit_genetic_map(genetic_map,temp_genetic_map):
     """
     file_format=get_genetic_map_format(genetic_map)
     if(file_format =='shapeit'):
-        return(genetic_map)
+        with open(temp_genetic_map,'w') as gmap:
+            for i, line in enumerate(gmap):
+                if (i == 0):
+                    continue
+                else:
+                    temp_genetic_map.write(line)
+        return(temp_genetic_map)
     else:
         temp_genetic_map = open(temp_genetic_map,'w')
         plink_to_shapeit_gmap(genetic_map,temp_genetic_map)
