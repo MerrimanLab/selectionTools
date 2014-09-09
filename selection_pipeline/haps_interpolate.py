@@ -49,8 +49,9 @@ def get_shapeit_genetic_map(genetic_map,temp_genetic_map):
         if the file is already in shapeit format 
     """
     file_format=get_genetic_map_format(genetic_map)
+    temp_genetic_map = open(temp_genetic_map,'w')
     if(file_format =='shapeit'):
-        with open(temp_genetic_map,'w') as gmap:
+        with open(genetic_map) as gmap:
             for i, line in enumerate(gmap):
                 if (i == 0):
                     continue
@@ -58,7 +59,6 @@ def get_shapeit_genetic_map(genetic_map,temp_genetic_map):
                     temp_genetic_map.write(line)
         return(temp_genetic_map)
     else:
-        temp_genetic_map = open(temp_genetic_map,'w')
         plink_to_shapeit_gmap(genetic_map,temp_genetic_map)
         return(temp_genetic_map)
 
