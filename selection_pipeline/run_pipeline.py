@@ -90,16 +90,15 @@ class CommandTemplate(object):
         """
         cmd = []
         prefix = self.options.population + \
-            self.options.chromosome + '.phased'
-        genetic_map = ''
+                self.options.chromosome + '.phased'
         for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
             if fnmatch.fnmatch(
-                file, self.config['genetic_map']['genetic_map_prefix'].replace(
-                    '?', self.options.chromosome)):
-                genetic_map = file,
-            genetic_map=os.path.join(self.config['genetic_map']['genetic_map_dir'], genetic_map)
-            assert genetic_map is not None, \
-                    "Cannot find genetic map for chromosome {0}, check config".format(self.options.chromosome)
+                    file, self.config['genetic_map']['genetic_map_prefix'].replace(
+                        '?', self.options.chromosome)):
+                        genetic_map = file
+        assert genetic_map is not None, \
+                "Cannot find genetic map for chromosome {0}, check config".format(self.options.chromosome)
+        genetic_map=os.path.join(self.config['genetic_map']['genetic_map_dir'], genetic_map)
         new_genetic_map=prefix + '_temp_genetic_map.txt'
         # return the genetic map for use in shapeit
         genetic_map=get_shapeit_genetic_map(genetic_map,new_genetic_map)
@@ -133,16 +132,16 @@ class CommandTemplate(object):
             and the known haps and legend files.
         """
         prefix = self.options.population + self.options.chromosome + \
-            '_impute2'
+                '_impute2'
         impute2 = self.config['impute2']['impute_executable']
         genetic_map = ''
         for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
             if fnmatch.fnmatch(file, (
                 self.config['genetic_map']['genetic_map_prefix'].replace(
                     '?', self.options.chromosome))):
-                genetic_map = os.path.join(
-                    self.config['genetic_map']['genetic_map_dir'], file)
-        new_genetic_map=prefix +'_temp_genetic_map.txt'
+                    genetic_map = os.path.join(
+                            self.config['genetic_map']['genetic_map_dir'], file)
+                    new_genetic_map=prefix +'_temp_genetic_map.txt'
         # return the genetic map for use in impute2, only needed if people
         # use plink genetic maps
         assert os.path.isfile(genetic_map), \
@@ -153,16 +152,16 @@ class CommandTemplate(object):
             if fnmatch.fnmatch(file, (
                 self.config['impute2']['impute_reference_prefix'].replace(
                     '?', self.options.chromosome) + '.legend')):
-                legend_file = os.path.join(
-                    self.config['impute2']['impute_reference_dir'], file)
-        hap_file = ''
+                    legend_file = os.path.join(
+                            self.config['impute2']['impute_reference_dir'], file)
+                    hap_file = ''
         for file in os.listdir(self.config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file, (
                 self.config['impute2']['impute_reference_prefix'].replace(
                     '?', self.options.chromosome) + '.hap')):
-                hap_file = os.path.join(
-                    self.config['impute2']['impute_reference_dir'], file)
-        #create the command template
+                    hap_file = os.path.join(
+                            self.config['impute2']['impute_reference_dir'], file)
+                    #create the command template
         assert os.path.isfile(hap_file), \
                 "Hap file cannot be found for chromosome {0}".format(self.options.chromosome)
         assert os.path.isfile(legend_file), \
@@ -170,7 +169,7 @@ class CommandTemplate(object):
         cmd_template = []
         cmd_template.append(impute2)
         cmd_template.extend(['-m', genetic_map, '-h', hap_file, '-l',
-                            legend_file, '-known_haps_g', haps, '-phase'])
+            legend_file, '-known_haps_g', haps, '-phase'])
         return (cmd_template, prefix)
 
     def get_ancestral_fasta(self):
@@ -181,7 +180,7 @@ class CommandTemplate(object):
         """
         if(not self.config['ancestral_allele']['split_by_chromosome']):
             ancestral_fasta = \
-                self.config['ancestral_allele']['ancestral_fasta_file']
+                    self.config['ancestral_allele']['ancestral_fasta_file']
             regex = \
                 self.config['ancestral_allele']['ancestral_fasta_header_regex']
         else:

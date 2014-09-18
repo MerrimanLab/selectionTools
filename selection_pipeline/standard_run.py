@@ -67,10 +67,9 @@ class StandardRun(CommandTemplate):
                     file, self.config['genetic_map']['genetic_map_prefix'].replace(
                         '?', self.options.chromosome)):
                     genetic_map = file
-            print(genetic_map)        
             if genetic_map is None:
                 # Complicated logic to capture the options checking
-                if self.config.phased_vcf:
+                if self.options.phased_vcf:
                     logger.info("Could not find genetic map, but --no-genetic-map "
                                 "was not set. Progressing without genetic map")
                 elif not self.options.beagle:
@@ -146,7 +145,7 @@ class StandardRun(CommandTemplate):
                 self.config['ancestral_allele']['ancestral_allele_script'],
                 'ancestral_allele'
                 ) is None):
-            logger.error("ancestral_allele not found check config file")
+            logger.error("ancestral_allele_script not found check config file")
             return False
         if(self.which(
                 self.config['impute2']['impute_executable'],

@@ -41,6 +41,7 @@ def plink_to_shapeit_gmap(genetic_map_output,new_genetic_map):
                 recomb_rate=float(gmap_line[2])
                 centi_morgans=float(gmap_line[3])
                 new_genetic_map.write(str(position) + ' ' + str(recomb_rate) + ' ' + str(centi_morgans) + '\n')
+
     return new_genetic_map
 
 def get_shapeit_genetic_map(genetic_map,temp_genetic_map):
@@ -48,12 +49,20 @@ def get_shapeit_genetic_map(genetic_map,temp_genetic_map):
         if the file is already in shapeit format 
     """
     file_format=get_genetic_map_format(genetic_map)
-    if(file_format =='shapeit'):
-        return(genetic_map)
+    if not isinstance(temp_genetic_map, file):
+        temp_genetic_map_file = open(temp_genetic_map,'w')
     else:
-        temp_genetic_map = open(temp_genetic_map,'w')
-        plink_to_shapeit_gmap(genetic_map,temp_genetic_map)
-        return(temp_genetic_map)
+        temp_genetic_map_file = temp_genetic_map
+    if(file_format =='shapeit'):
+        with open(genetic_map) as gmap:
+            for i, line in enumerate(gmap):
+                if (i == 0):
+                    continue
+                else:
+                    temp_genetic_map_file.write(line)
+    else:
+        plink_to_shapeit_gmap(genetic_map,temp_genetic_map_file)
+    return(temp_genetic_map)
 
 def load_genetic_map(genetic_map):
     gmap_pos = OrderedDict()
@@ -120,12 +129,8 @@ def main():
     output = args.output
     genetic_map = args.gmap
     physical_out = args.physical_positions
-    file_format = get_genetic_map_format(genetic_map)
-    if(file_format == 'plink'):
-        temp_file = tempfile.TemporaryFile()
-        genetic_map=plink_to_shapeit_gmap(genetic_map,temp_file)    
-    else:
-        genetic_map = open(genetic_map)
+    temp_file = tempfile.TemporaryFile()
+    genetic_map=get_shapeit_genetic_map(genetic_map,temp_file)    
     gmap_dict = load_genetic_map(genetic_map)
     replace_positions(haps, output, gmap_dict, physical_out=physical_out)
 
