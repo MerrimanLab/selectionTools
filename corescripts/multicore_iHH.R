@@ -123,6 +123,7 @@ while((i-1) * (window - overlap) <= map_positions[length(map_positions)]){
   ind[,4] = 1
   ind[,5] = 2
   indPop1=ind
+  indPop1[duplicated(indPop1[,1]),1] = paste(indPop1[duplicated(indPop1[,1]),2],indPop1[duplicated(indPop1[,1]),3],sep=":")
   #write out entire chromosome
   if (!is.null(opt$physical_map_haps)){
         write.table(genetic_pos,file=paste('gene_',pop1,'.map',i,sep=''),col.names=F,row.names=F)
