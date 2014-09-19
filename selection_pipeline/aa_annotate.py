@@ -1,6 +1,6 @@
 #
-# James Boocock
-# July 2013
+# James Boocock and Murray Cadzow
+# July 2013 / Sept 2014
 # University of Otago
 #
 import re
@@ -137,6 +137,8 @@ def vcf_to_haps(options):
 def annotate_vcf(options):
     if(options.output is not None):
         output = open(options.output, 'w')
+        if(options.output_af is not None):
+            output_af = open(options.output,'a')
     else:
         output = None
     vcf_reader = vcf.Reader(filename=options.vcf_file)
@@ -147,8 +149,12 @@ def annotate_vcf(options):
         if(line is not None):
             output_line = aa_check(aaSeq[record.POS-1], record.REF,
                                    record.ALT, options.format, line)
+            if(options.output_af is not None):
+                output_af.write(str(pos) + "\t" + ref + "\t" + alt + "\t" + tempSeq + "\t" + allele_freq(line.split()[5:],outputLine.split()[5:]) + "\n")
             write_hap_line(options, output_line, output)
     close_files(options, output)
+    if(options.output_af is not None):
+        close_files(options,output_af)
 
 
 def aa_check(realAA, ref, alt, format, line):
@@ -178,12 +184,26 @@ def aa_check(realAA, ref, alt, format, line):
     else:
         return None
 
+def allele_freq(ref, ances):
+    ref = ' '.join(ref)
+    ances = ' '.join(ances)
+    p1 = ref.count('0')
+    q1 = ref.count('1')
+    p2 = ances.count('0')
+    q2 = ances.count('1')
+    maf = q1 / float(p1 + q1)
+    daf = q2 /float(p2 + q2)
+#    print(str(p1) +"\t" + str(q1) + "\t" +str(p2) + "\t" +str(q2))
+    return str(maf) + "\t" + str(daf)
+
 
 def annotate_haps(options):
     aaSeq = aa_seq(options)
     output = None
     if(options.output is not None):
         output = open(options.output, 'w')
+        if(options.output_af is not None):
+            output_af = open(options.output_af, 'a')
     with open(options.haps, 'r') as haps:
         for line in haps:
             lineSplit = line.split()
@@ -195,11 +215,14 @@ def annotate_haps(options):
             if(outputLine is not None):
                 if(options.output is not None):
                     output.write(outputLine + "\n")
+                    if(options.output_af is not None):
+                        output_af.write(str(pos) + "\t" + ref + "\t" + alt + "\t" + tempSeq + "\t" + allele_freq(line.split()[5:],outputLine.split()[5:]) + "\n")
                 else:
                     print(outputLine)
-
     if(options.output is not None):
         output.close()
+        if(options.output_af is not None):
+            output_af.close()
 
 
 def main():
@@ -233,6 +256,7 @@ def main():
                             " convert to haps"))
     parser.add_option('--missing-code',dest='missing_data_code',
                       help='Missing code for output file')
+    parser.add_option('--af',dest='output_af',help="filename for file with minor and derived allele frequencies")
     (options, args) = parser.parse_args()
     if(options.missing_data_code is None):
         options.missing_data_code = '.'
@@ -243,6 +267,10 @@ def main():
     # andy maybe different input ancestral alleles.
     assert options.haps is not None or options.vcf_file is not None,\
         "Haps or VCF input file required to run ancestral annotation."
+    if(options.output_af is not None):
+        f =  open(options.output_af, 'w')
+        f.write("Pos\tRef\tAlt\tAnc\tMAF\tDAF\n")
+        f.close()
     if(options.haps is not None):
         annotate_haps(options)
     elif(options.vcf_file is not None):
