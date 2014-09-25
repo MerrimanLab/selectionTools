@@ -82,8 +82,8 @@ if(!is.null(opt$haplo_hh)){
 
   write.table(indPop1,file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),col.names=F,row.names=F)
   write.table(t.hapsPop,file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),col.names=F)
-  d = data2haplohh(hap_file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),map_file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),min_maf=maf)   
-  save(d, file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))
+  #d = data2haplohh(hap_file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),map_file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),min_maf=maf)   
+  #save(d, file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))
 }
 #print("Why are you not working")
 #want to create overlapping bins
