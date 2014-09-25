@@ -463,7 +463,7 @@ class StandardRun(CommandTemplate):
         os.rename(self.options.population+'_chr_'+self.options.chromosome +
                   '_wd_'+'.'+"_.ihs", ihs_output)
         os.rename(self.options.population+'_chr_'+self.options.chromosome +
-                  '_wd_'+'.'+"_.Rdata", ihs_output)
+                  '_wd_'+'.'+"_.RData", rdata_output)
         return output_name
 
     def fix_sample_file(self, sample_file):
