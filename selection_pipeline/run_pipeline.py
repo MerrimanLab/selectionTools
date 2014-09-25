@@ -91,7 +91,6 @@ class CommandTemplate(object):
         cmd = []
         prefix = self.options.population + \
                 self.options.chromosome + '.phased'
-        genetic_map = ''
         for file in os.listdir(self.config['genetic_map']['genetic_map_dir']):
             if fnmatch.fnmatch(
                     file, self.config['genetic_map']['genetic_map_prefix'].replace(
