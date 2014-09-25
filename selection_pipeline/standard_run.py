@@ -104,6 +104,7 @@ class StandardRun(CommandTemplate):
             regex = \
                 self.config['ancestral_allele']['ancestral_fasta_header_regex']
         else:
+            ancestral_fasta = None
             for file in os.listdir(
                     self.config['ancestral_allele']['ancestral_fasta_dir']):
                 if fnmatch.fnmatch(

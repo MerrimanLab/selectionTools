@@ -292,7 +292,7 @@ multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt \
 As the 1000 genomes datasets are actually phased VCF to run the pipeline without phasing run the following command. The --phased-vcf option significantly speeds up the selection pipeline.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-multipop_selection_pipeline -p CEU_id.txt -p YRI_ids.txt \
+multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt \
     -i CEU_YRI_lactase.vcf --config-file defaults.cfg \
     --a "--phased-vcf"  -c 2  
 \end{minted} 
