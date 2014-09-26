@@ -41,7 +41,7 @@ class CommandTemplate(object):
         else:
             cmd.append('--vcf')
             cmd.extend([self.options.vcf_input, '--plink', '--out',
-                       prefix, '--remove-indels', '--max-alleles',2])
+                       prefix, '--remove-indels', '--max-alleles',str(2)])
             cmd.extend(self.config['vcftools']['extra_args'].split())
         return (cmd, prefix)
 
@@ -55,7 +55,7 @@ class CommandTemplate(object):
         vcftools = self.config['vcftools']['vcf_tools_executable']
         cmd.append(vcftools)
         cmd.extend(['--vcf', self.options.vcf_input, '--remove-indels',
-                   '--out', output_name, '--recode','--max-alleles',2])
+                   '--out', output_name, '--recode','--max-alleles',str(2)])
         return(cmd, output_name + '.recode.vcf')
 
     def run_plink_filter(self, ped, map):
