@@ -38,7 +38,7 @@ def aa_seq(options):
 
 def main():
     header = ("rs# alleles chrom pos strand assembly# center protLSID "
-              "assayLSID panelLSID QCcode")
+            "assayLSID panelLSID QCcode")
     parser = OptionParser()
     parser.add_option('-i', dest="haps_file", help="Haps Input File")
     parser.add_option('-s', dest="sample_file", help="Sample Input File")
@@ -46,19 +46,19 @@ def main():
     parser.add_option('-o', dest="output_file_name", help="Output File name")
     parser.add_option('-a', dest="ancestralfasta", help="Outgroup fasta file")
     parser.add_option('--id', dest="ancestral_indivdual_id",
-                      help="Name of the ancestral Individual")
+            help="Name of the ancestral Individual")
     parser.add_option('--header-regex', dest='header',
-                      help=("To determine which chromosome to extract"
-                            "is a regex with a ? for the chromosome number"))
-    parser.add_option('--single-chromosome', action="store_true",
-                      dest="single_chromosome")
-    (options, args) = parser.parse_args()
+            help=("To determine which chromosome to extract"
+                "is a regex with a ? for the chromosome number"))
+            parser.add_option('--single-chromosome', action="store_true",
+                    dest="single_chromosome")
+            (options, args) = parser.parse_args()
     options.chromosome = str(options.chromosome)
     if(options.single_chromosome is None):
         options.single_chromosome = False
         assert options.header is None, \
-            "Option header_regex required if the fasta file is"\
-            "split by chromosome"
+                "Option header_regex required if the fasta file is"\
+                "split by chromosome"
     # Set default ancestral ID#
     if (options.ancestral_indivdual_id is None):
         options.ancestral_indivdual_id = 'ANCESTOR'
@@ -81,7 +81,7 @@ def main():
             line = line.split()
             rsid = line[1]
             pos = line[2]
-            ancestral_allele = aaSeq[int(pos)]
+            ancestral_allele = aaSeq[int(pos)-1]
             if not (re.match('[ACTGactg]', ancestral_allele)):
                 failed_snps.write(rsid + ' ' + pos + '\n')
             else:
