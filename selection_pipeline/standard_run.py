@@ -94,7 +94,7 @@ class StandardRun(CommandTemplate):
                     self.config['impute2']['impute_reference_prefix'].replace(
                         '?', self.options.chromosome) + '.haplotypes')):
                     hap_file = os.path.join(
-                        self.config['impute2']['impute_refernce_dir'], file)
+                        self.config['impute2']['impute_reference_dir'], file)
                 elif fnmatch.fnmatch(file, (
                     self.config['impute2']['impute_reference_prefix'].replace(
                         '?', self.options.chromosome) + '.hap')):
