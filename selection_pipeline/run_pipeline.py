@@ -160,7 +160,7 @@ class CommandTemplate(object):
                 self.config['impute2']['impute_reference_prefix'].replace(
                     '?', self.options.chromosome) + '.haplotypes')):
                     hap_file = os.path.join(
-                            self.config['impute2']['impute_reference_prefix'],file)
+                            self.config['impute2']['impute_reference_dir'],file)
             elif fnmatch.fnmatch(file, (
                 self.config['impute2']['impute_reference_prefix'].replace(
                     '?', self.options.chromosome) + '.hap')):
