@@ -92,6 +92,11 @@ class StandardRun(CommandTemplate):
             for file in os.listdir(self.config['impute2']['impute_reference_dir']):
                 if fnmatch.fnmatch(file, (
                     self.config['impute2']['impute_reference_prefix'].replace(
+                        '?', self.options.chromosome) + '.haplotypes')):
+                    hap_file = os.path.join(
+                        self.config['impute2']['impute_refernce_dir'], file)
+                elif fnmatch.fnmatch(file, (
+                    self.config['impute2']['impute_reference_prefix'].replace(
                         '?', self.options.chromosome) + '.hap')):
                     hap_file = os.path.join(
                         self.config['impute2']['impute_reference_dir'], file)

@@ -1,0 +1,8 @@
+[console_scripts]
+selection_pipeline = selection_pipeline.selection_pipeline:main
+ancestral_annotation = selection_pipeline.aa_annotate:main
+haps_to_hapmap = selection_pipeline.haps_to_hapmap:main
+haps_interpolate = selection_pipeline.haps_interpolate:main
+multipop_selection_pipeline = selection_pipeline.multipipeline:main
+haps_filters = selection_pipeline.haps_filters:main
+
