@@ -50,9 +50,9 @@ def main():
     parser.add_option('--header-regex', dest='header',
             help=("To determine which chromosome to extract"
                 "is a regex with a ? for the chromosome number"))
-            parser.add_option('--single-chromosome', action="store_true",
+    parser.add_option('--single-chromosome', action="store_true",
                     dest="single_chromosome")
-            (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args()
     options.chromosome = str(options.chromosome)
     if(options.single_chromosome is None):
         options.single_chromosome = False
