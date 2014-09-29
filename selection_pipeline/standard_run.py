@@ -104,6 +104,7 @@ class StandardRun(CommandTemplate):
             regex = \
                 self.config['ancestral_allele']['ancestral_fasta_header_regex']
         else:
+            ancestral_fasta = None
             for file in os.listdir(
                     self.config['ancestral_allele']['ancestral_fasta_dir']):
                 if fnmatch.fnmatch(
@@ -461,6 +462,8 @@ class StandardRun(CommandTemplate):
                   "_wd_"+'.'+"_.ihh", output_name)
         os.rename(self.options.population+'_chr_'+self.options.chromosome +
                   '_wd_'+'.'+"_.ihs", ihs_output)
+        os.rename(self.options.population+'_chr_'+self.options.chromosome +
+                  '_wd_'+'.'+"_.RData", rdata_output)
         return output_name
 
     def fix_sample_file(self, sample_file):

@@ -322,6 +322,7 @@ def main():
     parser.add_option('--no-rsb',dest="no_rsb", action="store_true",
                       help="Do not run calculate RSB")
     (options, args) = parser.parse_args()
+    print(options.extra_args)
     assert options.vcf_input is not None, \
         "no VCF file has been specified as input"
     assert os.path.isfile(options.vcf_input), \

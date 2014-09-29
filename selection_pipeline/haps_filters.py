@@ -47,6 +47,10 @@ def filter_haps_file(args):
                 total = float(len(line))
                 if(((line.count('?')/total)) > args.missing):
                     continue
+                question_marks = line.count('?')
+                # TriAllellic Message
+                if( (question_marks + line.count('0') + line.count('1'))!= int(total)):
+                    continue
                 p = line.count('0')
                 q = line.count('1')
                 major = p

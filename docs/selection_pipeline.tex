@@ -292,7 +292,7 @@ multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt \
 As the 1000 genomes datasets are actually phased VCF to run the pipeline without phasing run the following command. The --phased-vcf option significantly speeds up the selection pipeline.
 
 \begin{minted}[bgcolor=bg,frame=lines]{bash}
-multipop_selection_pipeline -p CEU_id.txt -p YRI_ids.txt \
+multipop_selection_pipeline -p CEU_ids.txt -p YRI_ids.txt \
     -i CEU_YRI_lactase.vcf --config-file defaults.cfg \
     --a "--phased-vcf"  -c 2  
 \end{minted} 
@@ -601,7 +601,7 @@ Path to the selection pipeline config file an example config file is located in 
 Name for the log file. Moved into the logs folder at the end of program run.
 \item --no-clean-up\\ 
 \item -a <Arguments to the selection pipeline>\\
-Quoted string containing any extra arguments to the selection\_pipeline program. e.g "--imputation"
+Quoted string containing any extra arguments to the selection\_pipeline program. e.g "--beagle --no-ihs"
 Do not clean up intermediate data files.
 \item --fst-window-size <FST window size>\\
 Fst calculation sliding window size in kilobases (default = 1kb).
@@ -610,6 +610,8 @@ Fst calculation windoow jump in kilobases, if window size is equal to
 the jump size non-overlapping windows are used (default = 1kb).
 \item --cores \\
 Number of cores avaliable for the pipeline overrides setting in the config file.
+\item --no-rsb \\
+Do not calculate RSB
 \end{itemize}
 \subsection{Selection Pipeline}
 \subsubsection{Input Files}
@@ -720,6 +722,18 @@ threshold is recommended (default = 0kb).
 \item --cores 
 
 Number of cores avaliable for the pipeline overrides setting in the config file. 
+
+\item --no-ihs
+
+Do not calculate the iHS statistic.
+
+\item --no-gmap
+
+Do not use a genetic map for any of the calculations.
+
+\item --physical-ihs
+
+Use the physical map for iHS calculations.
 
 \end{itemize}
 \subsection{Ancestral Annotation}
