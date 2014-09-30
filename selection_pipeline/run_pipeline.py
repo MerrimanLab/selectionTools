@@ -51,7 +51,7 @@ class CommandTemplate(object):
         """
         cmd = []
         output_name = \
-            self.options.vcf_input.split('.vcf')[0]
+           os.path.basename( self.options.vcf_input.split('.vcf')[0])
         vcftools = self.config['vcftools']['vcf_tools_executable']
         cmd.append(vcftools)
         cmd.extend(['--vcf', self.options.vcf_input, '--remove-indels',
