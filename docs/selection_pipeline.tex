@@ -31,7 +31,7 @@
 
 
 \title{\textbf{A bioinformatics workflow for detecting signatures of selection in genomic data}}
-\date{December 12, 2013}
+\date{December 12, 2013\\Updated: October 7 2014}
 
 \author[1]{Murray Cadzow}
 \author[1]{James Boocock}
@@ -367,7 +367,7 @@ Plot the Fay and Wu's H values for the CEU population:\\
 CEUFay=read.table('CEU/results/CEU2.faw',comment.char="#")
 #Plot Fay and Wu's H
 plot(CEUFay[,15] ~ CEUFay[,1],xlim=c(136545410-1e6,136594750+1e6),
-pch='.',cex=2,ylim=c(-50,0),
+pch='.',cex=2,ylim=c(-20,10),
 xlab='Chromosome position (bp)',ylab="H Statistic")
 rect(136545410,-1000,136594750,100,border="Blue") 
 \end{minted}
@@ -387,7 +387,7 @@ and Wu's H values for the YRI population:\\
 YRIFay=read.table('YRI/results/YRI2.faw',comment.char="#")
 #Plot Fay and Wu's H
 plot(YRIFay[,15] ~ YRIFay[,1],xlim=c(136545410-1e6,136594750+1e6),
-pch='.',cex=2,ylim=c(-50,0),
+pch='.',cex=2,ylim=c(-20,10),
 xlab='Chromosome position (bp)',ylab="H Statistic")
 rect(136545410,-1900,136594750,100,border="Blue") 
 \end{minted}
