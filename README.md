@@ -1,4 +1,4 @@
-selectionTools 1.0
+selectionTools 1.1
 =========================
 Pipeline to take VCF through to Selection Analysis.
 
