@@ -263,7 +263,7 @@ class StandardRun(CommandTemplate):
             ihs_file = ihh.split('.ihh')[0] + '.ihs'
             haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if (not self.options.no_ihs):
-            os.rename(haplo_hh, 'results/' + haplo_hh)
+            #os.rename(haplo_hh, 'results/' + haplo_hh)
             os.rename(vcf, 'results/' + vcf)
             os.rename(ihh, 'results/' + ihh)
             os.rename(ihs_file, 'results/'+ ihs_file)
@@ -467,8 +467,8 @@ class StandardRun(CommandTemplate):
                   "_wd_"+'.'+"_.ihh", output_name)
         os.rename(self.options.population+'_chr_'+self.options.chromosome +
                   '_wd_'+'.'+"_.ihs", ihs_output)
-        os.rename(self.options.population+'_chr_'+self.options.chromosome +
-                  '_wd_'+'.'+"_.RData", rdata_output)
+        #os.rename(self.options.population+'_chr_'+self.options.chromosome +
+        #          '_wd_'+'.'+"_.RData", rdata_output)
         return output_name
 
     def fix_sample_file(self, sample_file):
