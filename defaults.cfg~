@@ -1,0 +1,73 @@
+#
+# Defaults config file for VCF process
+#
+# If the executables are on your path 
+# just the executable name is required.
+#
+# ? is the willcard flag for the prefix options
+
+
+
+[system]
+cores_avaliable = 4
+# Library settings do not change, the library folder are appended to the path when runnig the program#
+[environment]
+LD_LIBRARY_PATH=/home/murraycadzow/Repo/selectionTools/lib
+PERL5LIB=/home/murraycadzow/Repo/selectionTools/lib/perl5
+[selection_pipeline]
+selection_pipeline_executable = selection_pipeline
+[vcftools]
+vcf_tools_executable = /home/murraycadzow/Repo/selectionTools/bin/vcftools
+vcf_subset_executable = /home/murraycadzow/Repo/selectionTools/bin/vcf-subset
+vcf_merge_executable = /home/murraycadzow/Repo/selectionTools/bin/vcf-merge
+vcf_concat_executable = /home/murraycadzow/Repo/selectionTools/bin/vcf-concat
+extra_args= 
+[genetic_map]
+genetic_map_dir= /home/murraycadzow/Repo/selectionTools/referencefiles/genetic_maps_b37
+genetic_map_prefix=genetic_map_chr?_combined_b37.txt
+[shapeit]
+shapeit_executable= /home/murraycadzow/Repo/selectionTools/bin/shapeit
+extra_args =
+[impute2]
+impute_executable = /home/murraycadzow/Repo/selectionTools/bin/impute2
+impute_map_dir= /home/murraycadzow/Repo/selectionTools/referencefiles/impute_ref/ALL.integrated_phase1_SHAPEIT_16-06-14.nomono
+impute_reference_dir= /home/murraycadzow/Repo/selectionTools/referencefiles/impute_ref/ALL.integrated_phase1_SHAPEIT_16-06-14.nomono
+impute_map_prefix=genetic_map_chr?_combined_b37.txt
+impute_reference_prefix=ALL.chr?.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.nomono
+extra_args = 
+[plink]
+plink_executable =/home/murraycadzow/Repo/selectionTools/bin/plink
+extra_args = 
+[Rscript]
+rscript_executable = Rscript
+indel_filter = /home/murraycadzow/Repo/selectionTools/corescripts/haps_indel_and_maf_filter.R
+generate_rsb = /home/murraycadzow/Repo/selectionTools/corescripts/generate_rsb.R
+extra_args=
+[haps_scripts]
+haps_to_hapmap_script= haps_to_hapmap
+haps_filter_script = haps_filters
+haps_interpolate_script = haps_interpolate
+[ancestral_allele]
+split_by_chromosome = True
+# not used unless split_by_chromosome is set to False
+ancestral_fasta_header_regex = 
+# not used unless split_by_chromosome is set to False
+ancestral_fasta_file =
+ancestral_allele_script= ancestral_annotation
+
+ancestral_fasta_dir=/home/murraycadzow/Repo/selectionTools/referencefiles/ancestral_ref/human_ancestor_GRCh37_e59/
+ancestral_prefix=human_ancestor_?.fa
+[qctool]
+qctool_executable=/home/murraycadzow/Repo/selectionTools/bin/qctool
+
+[multicore_ihh]
+multicore_ihh = /home/murraycadzow/Repo/selectionTools/corescripts/multicore_iHH.R
+[variscan]
+variscan_executable = /home/murraycadzow/Repo/selectionTools/bin/variscan
+[java]
+java_executable = /usr/bin/java
+[beagle]
+beagle_jar = /home/murraycadzow/Repo/selectionTools/bin/beagle.jar
+vm_size = 4g
+
+
