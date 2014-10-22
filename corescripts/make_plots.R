@@ -1,3 +1,5 @@
+#!/bin/env Rscript
+
 require(getopt)
 
 spec = matrix(c(
