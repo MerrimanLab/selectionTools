@@ -1,3 +1,4 @@
+#!/bin/env Rscript
 
 args = commandArgs(trailingOnly=TRUE)
 package = args[1]
