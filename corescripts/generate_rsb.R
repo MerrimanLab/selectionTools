@@ -1,3 +1,4 @@
+#!/bin/env Rscript
 #
 #  Murray Cadzow and James Boocock
 #  November 2013
