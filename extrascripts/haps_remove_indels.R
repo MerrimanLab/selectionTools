@@ -1,3 +1,5 @@
+#!/bin/env Rscript
+
 #
 # Murray Cadzow
 # July 2013
