@@ -10,7 +10,7 @@ In your repo run the following command.
 ```
 Your version needs to be more recent that the commit dd6ceb045ea6f2a3f4ee2585416ea31cf2020049
 
-citation
+Citation
 ========
 
 
