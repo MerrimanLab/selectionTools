@@ -10,6 +10,12 @@ In your repo run the following command.
 ```
 Your version needs to be more recent that the commit dd6ceb045ea6f2a3f4ee2585416ea31cf2020049
 
+citation
+========
+
+
+Cadzow, Murray, et al. "A bioinformatics workflow for detecting signatures of selection in genomic data." Frontiers in genetics 5 (2014).
+
 selectionTools 1.0
 =========================
 Pipeline to take VCF through to Selection Analysis.
