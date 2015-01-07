@@ -45,17 +45,30 @@ class CommandTemplate(object):
             cmd.extend(self.config['vcftools']['extra_args'].split())
         return (cmd, prefix)
 
+
+### OLD VCFTOOLS METHOD ###
+#    def run_remove_indels_from_vcf(self):
+#        """ Template for running remove indels from vcf
+#
+#        """
+#        cmd = []
+#        output_name = \
+#           os.path.basename( self.options.vcf_input.split('.vcf')[0])
+#        vcftools = self.config['vcftools']['vcf_tools_executable']
+#        cmd.append(vcftools)
+#        cmd.extend(['--vcf', self.options.vcf_input, '--remove-indels',
+#                   '--out', output_name, '--recode','--max-alleles',str(2)])
+#        return(cmd, output_name + '.recode.vcf')
+
     def run_remove_indels_from_vcf(self):
         """ Template for running remove indels from vcf
 
         """
         cmd = []
         output_name = \
-           os.path.basename( self.options.vcf_input.split('.vcf')[0])
-        vcftools = self.config['vcftools']['vcf_tools_executable']
-        cmd.append(vcftools)
-        cmd.extend(['--vcf', self.options.vcf_input, '--remove-indels',
-                   '--out', output_name, '--recode','--max-alleles',str(2)])
+            os.path.basename( self.options.vcf_input.split('.vcf')[0])
+        vcfsnps = self.config['vcflib']['vcflib_vcfsnps']
+        cmd.append(vcfsnps)
         return(cmd, output_name + '.recode.vcf')
 
     def run_plink_filter(self, ped, map):

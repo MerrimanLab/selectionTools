@@ -43,11 +43,22 @@ echo "Installing VCF tools"
 tar xzf src/vcftools.tar.gz
 LIB_VAR="-lz -L${ORIG_DIR}/lib -I${ORIG_DIR}/include"
 change_folder vcftools_0.1.11
-check_success make LIB="${LIB_VAR}"
+#check_success make LIB="${LIB_VAR}"
 orig_dir
 cp vcftools_0.1.11/bin/* bin/
 cp vcftools_0.1.11/perl/*pm lib/perl5/
 rm -Rf vcftools_0.1.11
+
+
+echo "Installing VCFlib"
+unzip src/vcflib.zip
+cp vcflib-master/bin/vcfsnps bin/
+chmod 755 bin/vcfsnps
+rm -Rf vcflib-master
+
+
+
+
 echo "Installing QCTool"
 if [ `uname` = "Darwin" ]; then 
     tar xzf src/qctool_v1.4-osx.tgz
