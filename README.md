@@ -1,14 +1,4 @@
-IMPORTANT
-=========
-Crucial bug fixed in Fay and Wu's calculation.
 
-If you have a old Forked version of selectionTools, you will need to update to the latest version on the master branch.
-
-In your repo run the following command.
-```bash
-    git pull origin master 
-```
-Your version needs to be more recent that the commit dd6ceb045ea6f2a3f4ee2585416ea31cf2020049
 
 Citation
 ========
