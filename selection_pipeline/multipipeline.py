@@ -320,7 +320,7 @@ def main():
     parser.add_option('--cores', dest="cores", help=("Overrides number of "
                       "cores avaliable as provided in the config file"))
     parser.add_option('--no-rsb',dest="no_rsb", action="store_true",
-                      help="Do not run calculate RSB")
+                      help="Do not calculate RSB")
     (options, args) = parser.parse_args()
     print(options.extra_args)
     assert options.vcf_input is not None, \
@@ -331,7 +331,7 @@ def main():
         "no chromosome has been specified to the script"
     assert options.populations is not None and \
         len(options.populations) >= 2, \
-        "Atleast two population files are required"
+        "At least two population files are required"
     if options.config_file is None:
         options.config_file = 'defaults.cfg'
         if not(os.path.isfile(options.config_file)):
