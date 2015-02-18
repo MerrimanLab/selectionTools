@@ -324,11 +324,14 @@ lactase gene (LCT).
 
 \noindent
 Plot the $F_{ST}$ results across the entire 10 megabase region for the tutorial.  Mean $F_{ST}$ is being plotted in each case.\\
-
+\\
+NB: VCFtools can produce negative Fst values which need to be changed to 0 for analysis\\
 \noindent
 Plot mean Weir FST values.\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 weirFST = read.table('fst/2CEUYRI.weir.fst',header=T) 
+weirFST[weirFST$WEIGHTED_FST < 0, "WEIGHTED_FST"] = 0
+weirFST[weirFST$MEAN_FST < 0, "MEAN_FST"] = 0
 plot(weirFST[,6]~ weirFST[,2], pch=16, cex=.4, 
 type="p",ylab=expression(F[ST]),xlab="Chromosome position (bp)") 
 abline(h=mean(weirFST[,6]) + 3 * sd (weirFST[,6]),col='red')
@@ -346,6 +349,8 @@ rect(136545410,-1900,136594750,100,border="Blue")
 Plot mean HapMap FST values.\\
 \begin{minted}[bgcolor=bg,frame=lines]{r}
 hapmapFST = read.table('fst/2CEUYRI.hapmap.fst',header=T) 
+hapmapFST[hapmapFST$WEIGHTED_FST < 0, "WEIGHTED_FST"] = 0
+hapmapFST[hapmpFST$MEAN_FST < 0, "MEAN_FST"] = 0
 plot(hapmapFST[,6]~ hapmapFST[,2], pch=16, cex=.4, 
 type="p",ylab=expression(F[ST]),xlab="Chromosome position (bp)") 
 abline(h=mean(hapmapFST[,6]) + 3 * sd (hapmapFST[,6]),col='red')
@@ -537,8 +542,7 @@ Located in the fst folder. Tab-delimited data file containing 1 header line foll
 CHROM   BIN_START       BIN_END N_VARIANTS      WEIGHTED_FST    MEAN_FST  
 2       130000001       130010000       94      0.133102        0.0680276 
 \end{minted}
-\subsection{selection\_pipeline}
-All the outputs for each population are contained in the results folder. If you ran the tool using \emph{multipop\_selection\_pipeline} the outputs are located in <pop name>/results. 
+NB: VCFtools can produce negative Fst values, for analysis these should be changed to be 0.
 \subsubsection{Fay and Wu's H}
 Space-delimited data file containing header line that start with a hash character (\#). Contains lots of columns. If you are only interested in Fay and Wu's H, column 1 provides the position and column 15 provides the H statistic. \\
 \begin{minted}[bgcolor=bg,frame=lines]{rst}
