@@ -1,3 +1,11 @@
+
+
+Citation
+========
+
+
+Cadzow, Murray, et al. "A bioinformatics workflow for detecting signatures of selection in genomic data." Frontiers in genetics 5 (2014).
+
 selectionTools 1.0
 =========================
 Pipeline to take VCF through to Selection Analysis.
