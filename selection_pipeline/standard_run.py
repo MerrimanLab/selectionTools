@@ -92,6 +92,11 @@ class StandardRun(CommandTemplate):
             for file in os.listdir(self.config['impute2']['impute_reference_dir']):
                 if fnmatch.fnmatch(file, (
                     self.config['impute2']['impute_reference_prefix'].replace(
+                        '?', self.options.chromosome) + '.haplotypes')):
+                    hap_file = os.path.join(
+                        self.config['impute2']['impute_reference_dir'], file)
+                elif fnmatch.fnmatch(file, (
+                    self.config['impute2']['impute_reference_prefix'].replace(
                         '?', self.options.chromosome) + '.hap')):
                     hap_file = os.path.join(
                         self.config['impute2']['impute_reference_dir'], file)
@@ -258,7 +263,7 @@ class StandardRun(CommandTemplate):
             ihs_file = ihh.split('.ihh')[0] + '.ihs'
             haplo_hh = ihh.split('.ihh')[0] + '.RData'
         if (not self.options.no_ihs):
-            os.rename(haplo_hh, 'results/' + haplo_hh)
+            #os.rename(haplo_hh, 'results/' + haplo_hh)
             os.rename(vcf, 'results/' + vcf)
             os.rename(ihh, 'results/' + ihh)
             os.rename(ihs_file, 'results/'+ ihs_file)
@@ -278,9 +283,10 @@ class StandardRun(CommandTemplate):
         """ Run remove indels from vcf using subprocess
 
         """
-        (cmd, output_name) = \
+        (cmd, output_name ) = \
             super(StandardRun, self).run_remove_indels_from_vcf()
-        run_subprocess(cmd, 'remove indels')
+        #run_subprocess(cmd, 'remove indels')
+        run_subprocess(cmd, 'remove indels', stdout = output_name, stdin = self.options.vcf_input)
         return(output_name)
 
     def vcf_to_haps(self, vcf):
@@ -462,8 +468,8 @@ class StandardRun(CommandTemplate):
                   "_wd_"+'.'+"_.ihh", output_name)
         os.rename(self.options.population+'_chr_'+self.options.chromosome +
                   '_wd_'+'.'+"_.ihs", ihs_output)
-        os.rename(self.options.population+'_chr_'+self.options.chromosome +
-                  '_wd_'+'.'+"_.RData", rdata_output)
+        #os.rename(self.options.population+'_chr_'+self.options.chromosome +
+        #          '_wd_'+'.'+"_.RData", rdata_output)
         return output_name
 
     def fix_sample_file(self, sample_file):

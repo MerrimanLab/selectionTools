@@ -45,17 +45,30 @@ class CommandTemplate(object):
             cmd.extend(self.config['vcftools']['extra_args'].split())
         return (cmd, prefix)
 
+
+### OLD VCFTOOLS METHOD ###
+#    def run_remove_indels_from_vcf(self):
+#        """ Template for running remove indels from vcf
+#
+#        """
+#        cmd = []
+#        output_name = \
+#           os.path.basename( self.options.vcf_input.split('.vcf')[0])
+#        vcftools = self.config['vcftools']['vcf_tools_executable']
+#        cmd.append(vcftools)
+#        cmd.extend(['--vcf', self.options.vcf_input, '--remove-indels',
+#                   '--out', output_name, '--recode','--max-alleles',str(2)])
+#        return(cmd, output_name + '.recode.vcf')
+
     def run_remove_indels_from_vcf(self):
         """ Template for running remove indels from vcf
 
         """
         cmd = []
         output_name = \
-            self.options.vcf_input.split('.vcf')[0]
-        vcftools = self.config['vcftools']['vcf_tools_executable']
-        cmd.append(vcftools)
-        cmd.extend(['--vcf', self.options.vcf_input, '--remove-indels',
-                   '--out', output_name, '--recode','--max-alleles',str(2)])
+            os.path.basename( self.options.vcf_input.split('.vcf')[0])
+        vcfsnps = self.config['vcflib']['vcflib_vcfsnps']
+        cmd.append(vcfsnps)
         return(cmd, output_name + '.recode.vcf')
 
     def run_plink_filter(self, ped, map):
@@ -157,6 +170,11 @@ class CommandTemplate(object):
                     hap_file = ''
         for file in os.listdir(self.config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file, (
+                self.config['impute2']['impute_reference_prefix'].replace(
+                    '?', self.options.chromosome) + '.haplotypes')):
+                    hap_file = os.path.join(
+                            self.config['impute2']['impute_reference_dir'],file)
+            elif fnmatch.fnmatch(file, (
                 self.config['impute2']['impute_reference_prefix'].replace(
                     '?', self.options.chromosome) + '.hap')):
                     hap_file = os.path.join(

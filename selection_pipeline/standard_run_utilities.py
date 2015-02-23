@@ -130,7 +130,7 @@ def which(program, program_name):
 def run_subprocess(
     command, tool, stdout=None,
     stderr=None, stdoutlog=False,
-        working_dir=None,with_queue=False):
+        working_dir=None,with_queue=False, stdin=None):
     """ Runs a command on the system shell and forks a new process
 
         also creates a file for stderr and stdout if needed
@@ -148,20 +148,24 @@ def run_subprocess(
         standard_err = open(stderr, 'w')
     else:
         standard_err = open(stderr, 'w')
+    if(stdin is None):
+        standard_in = None
+    else:
+        standard_in = open(working_dir + "/" + stdin, 'r')
     try:
         if(stdout is None):
             standard_out = open('stdout.tmp', 'w')
             exit_code = subprocess.Popen(
-                command, stderr=standard_out, stdout=standard_err,cwd=working_dir)
+                command, stdout=standard_out, stderr=standard_err,cwd=working_dir, stdin=standard_in)
         else:
         # find out what kind of exception to try here
             if(hasattr(stdout, 'read')):
                 exit_code = subprocess.Popen(
-                    command, stdout=stdout, stderr=standard_err,cwd=working_dir)
+                    command, stdout=stdout, stderr=standard_err,cwd=working_dir, stdin=standard_in)
             else:
                 stdout = open(stdout, 'w')
                 exit_code = subprocess.Popen(
-                    command, stdout=stdout, stderr=standard_err,cwd=working_dir)
+                    command, stdout=stdout, stderr=standard_err,cwd=working_dir, stdin=standard_in)
             standard_out = stdout
     except:
         logger.error(tool + " failed to run " + ' '.join(command))

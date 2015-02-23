@@ -82,8 +82,8 @@ if(!is.null(opt$haplo_hh)){
 
   write.table(indPop1,file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),col.names=F,row.names=F)
   write.table(t.hapsPop,file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),col.names=F)
-  d = data2haplohh(hap_file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),map_file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),min_maf=maf)   
-  save(d, file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))
+  #d = data2haplohh(hap_file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),map_file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),min_maf=maf)   
+  #save(d, file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))
 }
 #print("Why are you not working")
 #want to create overlapping bins
@@ -123,6 +123,7 @@ while((i-1) * (window - overlap) <= map_positions[length(map_positions)]){
   ind[,4] = 1
   ind[,5] = 2
   indPop1=ind
+  indPop1[duplicated(indPop1[,1]),1] = paste(indPop1[duplicated(indPop1[,1]),2],indPop1[duplicated(indPop1[,1]),3],sep=":")
   #write out entire chromosome
   if (!is.null(opt$physical_map_haps)){
         write.table(genetic_pos,file=paste('gene_',pop1,'.map',i,sep=''),col.names=F,row.names=F)
