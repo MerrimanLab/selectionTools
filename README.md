@@ -3,6 +3,8 @@
 Citation
 ========
 
+[![Join the chat at https://gitter.im/smilefreak/selectionTools](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/smilefreak/selectionTools?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 Cadzow, Murray, et al. "A bioinformatics workflow for detecting signatures of selection in genomic data." Frontiers in genetics 5 (2014).
 
