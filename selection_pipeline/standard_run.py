@@ -377,7 +377,7 @@ class StandardRun(CommandTemplate):
         """ Run impute2 using subprocess
 
             Impute2 splits the files into the region specified in
-            the options by default it is the recommended 5 megabases.
+            the options. It is the recommended 5 megabases (default).
 
             These chunks are then run in parralel if possible given
             the users cores setting.

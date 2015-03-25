@@ -72,18 +72,18 @@ fi
 
 echo "Installing Shapeit"
 if [ `uname` = "Darwin" ]; then
-    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.MacOSX.tgz
-    tar xzf shapeit.v2.r778.MacOSX.tgz
-    rm shapeit.v2.r778.MacOSX.tgz
+    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r790.MacOSX.tgz
+    tar xzf shapeit.v2.r790.MacOSX.tgz
+    rm shapeit.v2.r790.MacOSX.tgz
     mv shapeit bin/
-    rm -Rf shapeit.v2.r778.MacOSX.tgz
+    rm -Rf shapeit.v2.r790.MacOSX.tgz
 else
     echo `uname`
-    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
-    tar xzf shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
-    rm shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
+    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
+    tar xzf shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
+    rm shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
     mv shapeit bin/
-    rm -Rf shapeit.v2.r778.Ubuntu_12.04.4.static.tar.gz
+    rm -Rf shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
 fi
 rm -Rf example
 rm -f LICENCE
