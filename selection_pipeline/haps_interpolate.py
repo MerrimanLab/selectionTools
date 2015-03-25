@@ -103,7 +103,7 @@ def replace_positions(haps,output,gmap_dict,physical_out):
                 temp_inter = ' '.join(temp_line)
                 out.write(temp_inter + '\n')
                 if (phys_out != None):
-                    phys_out.write(str(temp_pos)+ '\n')
+                    phys_out.write(temp_line[0] +" " +str(temp_pos)+ '\n')#changed here to include markername
                 haps_line = f.readline()
             else:
                 start_position = end_position
