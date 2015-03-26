@@ -232,9 +232,9 @@ if(!is.null(opt$physical_map_haps)){
         results = neutral_res[[n]][temp_physical_map <= ((n+offset-1) * window - 1/2 *overlap) ,] #take correct window when window1 != file1             
       } else {
         if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
-          results = rbind(results2, neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  ,])                  
+          results = rbind(results, neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  ,])                  
         } else { #start =take second half of overlap, end = take first half (middle regions)
-               results = rbind(results2,neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  & temp_physical_map <  ((window -overlap)* (n) + (1/2 * overlap)), ])      
+               results = rbind(results,neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  & temp_physical_map <  ((window -overlap)* (n) + (1/2 * overlap)), ])      
         }
       } 
     }else{
@@ -250,7 +250,7 @@ if(!is.null(opt$physical_map_haps)){
     m[,3]=chr
     m[duplicated(m[,1]),1] = paste(m[duplicated(m[,1]),3],m[duplicated(m[,1]),2],sep=":")
     results$name = rownames(results[,])
-    z = merge(results2, m, by.x="name", by.y="V1")
+    z = merge(results, m, by.x="name", by.y="V1")
     results = z[,c("CHR","V2", "FREQ_a","IHHa","IHHd", "IES")]
     names(results) = c("CHR","POSITION", "FREQ_a","IHHa","IHHd", "IES")
     rownames(results) = z$name    
