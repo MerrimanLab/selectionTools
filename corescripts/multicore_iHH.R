@@ -88,7 +88,7 @@ if(!is.null(opt$haplo_hh)){
   write.table(t.hapsPop,file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),col.names=F)
   #d = data2haplohh(hap_file=paste(pop1,"chr", chr,"wd",working_dir,".haps",sep="_"),map_file=paste(pop1,"chr", chr,"wd",working_dir,".map",sep="_"),min_maf=maf)   
   #save(d, file=paste(pop1,"chr", chr,"wd",working_dir,".RData",sep="_"))
-	rm(ind,indPop1,bin,t.hapsPop, hapsPop.only)
+	#rm(ind,indPop1,bin,t.hapsPop, hapsPop.only)
 }
 
 
@@ -151,7 +151,7 @@ while((i-1) * (window - overlap) <= map_positions[length(map_positions)]){
   }
   i = i + 1
 }
-rm(ind,indPop1,bin,t.hapsPop, hapsPop.only)
+#rm(ind,indPop1,bin,t.hapsPop, hapsPop.only)
 
 #the indices of the window files created
 fileNumber = offset:i 
@@ -192,7 +192,7 @@ my_scan_hh = function(x){
     d = data2haplohh(hap_file=x[1],map_file=x[2],min_maf=maf)   
     if(!is.null(opt$physical_map_haps)){
         physical_positions = read.table(x[3],header=F)
-        physical_positions = as.numeric(physical_positions[,1])
+        physical_positions = as.numeric(as.character(physical_positions[,1]))
         res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty,physical_positions=physical_positions)
     }else{
         res = scan_hh(d,big_gap=opt$big_gap,small_gap=opt$small_gap,small_gap_penalty=opt$small_gap_penalty)
@@ -209,10 +209,12 @@ neutral_res = mclapply(para,my_scan_hh,mc.cores=cores)
 # re-read in all the results files - this is to avoid index problems due to missing windows
 index = 0
 neutral_res=list()
+actualFiles = c()
 for ( j in fileNumber){
 index = index + 1
     if(file.exists(paste(hap_file,j,'.iHH',sep=''))){
         neutral_res[[j]] = read.table(paste(hap_file,j,'.iHH',sep=''))
+	actualFiles = cbind(actualFiles, j)
     } else{
         print(paste(hap_file,j,'.iHH does not exist! Continuing without',sep=""))
     }    
@@ -222,19 +224,19 @@ save.image(file="working_data.RData")
 
 #combine all the windows into a single chromosome again
 results=data.frame()
+results2=data.frame()
 if(!is.null(opt$physical_map_haps)){
   print(fileNumber)
-  for (n in fileNumber){
-    i=n-(offset-1) #keeps track of if window is the first
+  for (n in actualFiles){
     if(file.exists(paste0('gene_',pop1,'.map',n))){
       temp_physical_map= as.numeric(read.table(paste0('gene_',pop1,'.map',n),header=F)[,1])
-      if(i == 1){ # from start to first half of overlaped region (first chunk)
-        results = neutral_res[[n]][temp_physical_map <= ((n+offset-1) * window - 1/2 *overlap) ,] #take correct window when window1 != file1             
+      if(n == min(actualFiles)){ # from start to first half of overlaped region (first chunk)
+        results = neutral_res[[n]][temp_physical_map <= ((window -overlap)* (n) + (1/2 * overlap)) ,] #take correct window when window1 != file1           
       } else {
-        if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
-          results = rbind(results, neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  ,])                  
+        if(n == max(actualFiles)){ #take second half of overlap at start and go until the end (final chunk)
+          results = rbind(results, neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  ,])              
         } else { #start =take second half of overlap, end = take first half (middle regions)
-               results = rbind(results,neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  & temp_physical_map <  ((window -overlap)* (n) + (1/2 * overlap)), ])      
+               results = rbind(results,neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= temp_physical_map  & temp_physical_map <  ((window -overlap)* (n) + (1/2 * overlap)), ])     
         }
       } 
     }else{
@@ -245,12 +247,11 @@ if(!is.null(opt$physical_map_haps)){
   results$name = rownames(results[,])
   ##### replace genetic positions with physical positions
   if (!is.null(opt$physical_map_haps)){
-    #results[,2] = map_positions
     m= read.table(opt$physical_map_haps, header=F)
     m[,3]=chr
     m[duplicated(m[,1]),1] = paste(m[duplicated(m[,1]),3],m[duplicated(m[,1]),2],sep=":")
     results$name = rownames(results[,])
-    z = merge(results, m, by.x="name", by.y="V1")
+    z = merge(results, m, by.x="name", by.y="V1", sort=FALSE)
     results = z[,c("CHR","V2", "FREQ_a","IHHa","IHHd", "IES")]
     names(results) = c("CHR","POSITION", "FREQ_a","IHHa","IHHd", "IES")
     rownames(results) = z$name    
@@ -262,15 +263,14 @@ if(!is.null(opt$physical_map_haps)){
     write.table(ihs$res.ihs,paste(pop1,"chr", chr,"wd",working_dir,".ihs",sep="_"))
   }
 }else{
-    for (n in fileNumber){
-        i=n-(offset-1)
-        if(n == 1){ # from start to first half of overlaped region (first chunk)
-            results = neutral_res[[i]][neutral_res[[i]][,2] <= ((n+offset-1) * window - 1/2 *overlap) ,] #correct window
+    for (n in actualFiles){
+        if(n == min(actualFiles)){ # from start to first half of overlaped region (first chunk)
+            results = neutral_res[[n]][neutral_res[[n]][,2] <= ((window -overlap)* (n) + (1/2 * overlap)) ,] #correct window
         } else {
-            if(n == max(fileNumber)){ #take second half of overlap at start and go until the end (final chunk)
-                results = rbind(results, neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  ,])
+            if(n == max(actualFiles)){ #take second half of overlap at start and go until the end (final chunk)
+                results = rbind(results, neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[n]][,2]  ,])
             } else { #start =take second half of overlap, end = take first half (middle regions)
-                results = rbind(results, neutral_res[[i]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[i]][,2]  & neutral_res[[i]][,2] <  ((window -overlap)* (n) + (1/2 * overlap)),])
+                results = rbind(results, neutral_res[[n]][ ((window-overlap)* (n-1) + 1/2*overlap) <= neutral_res[[n]][,2]  & neutral_res[[n]][,2] <  ((window -overlap)* (n) + (1/2 * overlap)),])
             }
         } 
     }
