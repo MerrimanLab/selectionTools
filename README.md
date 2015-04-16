@@ -66,7 +66,7 @@ Multiple Populations
 To run the selection pipeline on multiple populations.
 
     multipop_selection_pipeline -p <population file1> -p <population file2> \
-    -i <merged input vcf> --config-file <config file> 
+    -i <merged input vcf> --config-file <config file> -c <chromosome number>
 
 For more information on population files consult the PDF manual specifically section 3.3.
 
