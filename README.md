@@ -42,6 +42,8 @@ After cloning or downloading and extracting running `./install.sh` in the root d
 
 By default the pipeline executables will be added to $HOME/.local/bin, you should add this directory to your executable path.
 
+__Docker__: in the docker directory there is a dockerfile and instructions to create a docker image. Also try this option if the normal installation method doesn't work
+
 Config File
 -----------
 
