@@ -6,7 +6,7 @@ setup(
     packages=['selection_pipeline','selection_pipeline.tests'],
     test_suite='selection_pipeline.tests.test_selection_pipeline',
     author="James Boocock",
-    author_email="smilefreak@gmx.com",
+    author_email="james.boocock@otago.ac.nz",
     description="Selection Pipeline for VCF Data",
     license="MIT",
     keywords="iHS ehh selection evolution",
