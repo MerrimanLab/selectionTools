@@ -8,6 +8,7 @@ see https://docs.docker.com
 
 
 Build the docker image:
+selectionTools/docker is the path to the directory containing the dockerfile
 $ sudo docker build -t selectiondocker/selectiontools selectionTools/docker/
 
 This should build a docker image based from ubuntu 14.04 and install all pre-requisites and the selection pipeline itself
@@ -23,6 +24,7 @@ Your data will be found in /data
 
 
 Test installation:
+(logged into the docker image)
 $ selection_pipeline -h
 
 The selection pipeline directory will be located at /selectionTools
