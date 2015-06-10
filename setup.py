@@ -1,9 +1,6 @@
 from setuptools import setup, find_packages
 __version__ = "unknown"
-try:
-	from selection_pipeline._version import __version__
-except ImportError:
-	pass
+from selection_pipeline._version import __version__
 setup(
     name="selectionTools",
     version=__version__,
