@@ -1,6 +1,6 @@
 #!/bin/env Rscript
 # Murray Cadzow and James Boocock
-# July 2013
+# July 2013 updated March 2015
 # University of Otago
 #
 
@@ -53,7 +53,7 @@ if(!is.null(opt$missing_code)){
 
 if (!is.null(opt$physical_map_haps)){
     map_positions=read.table(opt$physical_map_haps, header=F)
-    map_positions=as.numeric(map_positions[,1])
+    map_positions=as.numeric(map_positions[,2])
 }else{
     map_positions=hapsPop[,3]
 }
@@ -159,7 +159,7 @@ for( i in fileNumber){
     flag = 1;  
     }
 }  
-fileNumber = offset:(offset+new_file_number-1)
+actualfileNumber = offset:(offset+new_file_number-1)
 
 my_scan_hh = function(x){     
   if(length(read.table(x[1]) != 0)){
@@ -178,14 +178,16 @@ my_scan_hh = function(x){
 }
   
 neutral_res = mclapply(para,my_scan_hh,mc.cores=cores)  
-index = 1
+index = 0
+
 for ( j in fileNumber){
+index = index + 1
     if(file.exists(paste(hap_file,j,'.iHH',sep=''))){
-        neutral_res[[index]] = read.table(paste(hap_file,j,'.iHH',sep=''))
+        neutral_res[[j]] = read.table(paste(hap_file,j,'.iHH',sep=''))
     } else{
         print(paste(hap_file,j,'.iHH does not exist! Continuing without',sep=""))
     }
-    index = index + 1
+    
 }
 #save(neutral_res,file="neutral_res.RData")
 save.image(file="working_data.RData")

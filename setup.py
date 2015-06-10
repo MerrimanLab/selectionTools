@@ -1,8 +1,12 @@
 from setuptools import setup, find_packages
-
+__version__ = "unknown"
+try:
+	from selection_tools._version import __version__
+except: ImporError:
+	pass
 setup(
     name="selectionTools",
-    version="1.0",
+    version=__version__,
     packages=['selection_pipeline','selection_pipeline.tests'],
     test_suite='selection_pipeline.tests.test_selection_pipeline',
     author="James Boocock",

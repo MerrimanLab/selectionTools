@@ -1,0 +1,15 @@
+
+======================
+ IMPUTE version 2.3.0 
+======================
+
+Copyright 2008 Bryan Howie, Peter Donnelly, and Jonathan Marchini
+Please see the LICENCE file included with this program for conditions of use.
+
+The seed for the random number generator is 1833996178.
+
+Command-line input: ./bin/impute2 --version
+
+ERROR: The following command-line options were not recognized:
+1. <--version>
+
