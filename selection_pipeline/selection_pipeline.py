@@ -130,7 +130,7 @@ def parse_arguments():
             logger.setLevel(logging.DEBUG)
         else:
             logger.setLevel(logging.ERROR)
-    if( options.ver is not True): 
+    if(options.ver is True): 
         print "Version: {0}".format(__version__)
         sys.exit(1)        
 
