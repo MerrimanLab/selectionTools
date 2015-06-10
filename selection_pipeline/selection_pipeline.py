@@ -130,9 +130,10 @@ def parse_arguments():
             logger.setLevel(logging.DEBUG)
         else:
             logger.setLevel(logging.ERROR)
-    assert options.ver is not True, \
-        "Version: {0}".format(__version__)
-        
+    if( options.ver is not True) 
+        print "Version: {0}".format(__version__)
+        sys.exit(1)        
+
     # Obligatory arguments
     assert options.vcf_input or (options.haps and options.sample) is not None, \
         "No VCF or haps/sample file has been specified as input"
