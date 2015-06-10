@@ -130,7 +130,7 @@ def parse_arguments():
             logger.setLevel(logging.DEBUG)
         else:
             logger.setLevel(logging.ERROR)
-    assert options.ver is not true, \
+    assert options.ver is not True, \
         "Version: {0}".format(__version__)
         
     # Obligatory arguments
