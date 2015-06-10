@@ -18,4 +18,4 @@ import multipipeline
 import run_pipeline
 import haps_to_hapmap
 import haps_filters
-import version
+import _version
