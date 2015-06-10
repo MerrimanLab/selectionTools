@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="selectionTools",
-    version="1.0",
+    version="1.1",
     packages=['selection_pipeline','selection_pipeline.tests'],
     test_suite='selection_pipeline.tests.test_selection_pipeline',
     author="James Boocock",
