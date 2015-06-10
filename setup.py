@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 __version__ = "unknown"
 try:
 	from selection_tools._version import __version__
-except: ImportError:
+except ImportError:
 	pass
 setup(
     name="selectionTools",
