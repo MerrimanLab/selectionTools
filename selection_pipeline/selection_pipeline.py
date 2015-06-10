@@ -12,6 +12,7 @@ from optparse import OptionParser
 import ConfigParser
 import logging
 import os
+import sys
 from .standard_run import StandardRun
 from .environment import set_environment
 from ._version import __version__
