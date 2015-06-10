@@ -285,8 +285,8 @@ class StandardRun(CommandTemplate):
         """
         (cmd, output_name ) = \
             super(StandardRun, self).run_remove_indels_from_vcf()
-        #run_subprocess(cmd, 'remove indels')
-        run_subprocess(cmd, 'remove indels', stdout = output_name, stdin = self.options.vcf_input)
+        run_subprocess(cmd, 'remove indels') #uncomment when using old method
+        #run_subprocess(cmd, 'remove indels', stdout = output_name, stdin = self.options.vcf_input) #uncomment when using new method
         return(output_name)
 
     def vcf_to_haps(self, vcf):
