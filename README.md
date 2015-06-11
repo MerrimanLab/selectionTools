@@ -1,4 +1,7 @@
+**selectionTools1.1 was merged onto the master branch on 12JUN15**
 
+
+Original and minor updated versions of 1.0 can be found under releases
 
 Citation
 ========
