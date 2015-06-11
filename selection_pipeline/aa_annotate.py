@@ -267,6 +267,8 @@ def main():
     # andy maybe different input ancestral alleles.
     assert options.haps is not None or options.vcf_file is not None,\
         "Haps or VCF input file required to run ancestral annotation."
+    if(options.output_af is None):
+        options.output_af = options.output.split('.haps')[0] + ".af"
     if(options.output_af is not None):
         f =  open(options.output_af, 'w')
         f.write("Pos\tRef\tAlt\tAnc\tMAF\tDAF\n")

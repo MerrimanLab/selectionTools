@@ -12,8 +12,10 @@ from optparse import OptionParser
 import ConfigParser
 import logging
 import os
+import sys
 from .standard_run import StandardRun
 from .environment import set_environment
+from ._version import __version__
 logger = logging.getLogger(__name__)
 SUBPROCESS_FAILED_EXIT = 10
 
@@ -121,12 +123,18 @@ def parse_arguments():
     parser.add_option('--physical-ihs',dest="physical_ihs",help="Use physical map for calculating iHS",action="store_true")
     parser.add_option("--no-plots" , dest="no_plots", action="store_true",
                       help="Do not create rudimentary plots")
+    parser.add_option('--version', dest = "ver", action="store_true",
+                      help="Print version info")
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.debug):
             logger.setLevel(logging.DEBUG)
         else:
             logger.setLevel(logging.ERROR)
+    if(options.ver is True): 
+        print "Version: {0}".format(__version__)
+        sys.exit(1)        
+
     # Obligatory arguments
     assert options.vcf_input or (options.haps and options.sample) is not None, \
         "No VCF or haps/sample file has been specified as input"

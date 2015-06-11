@@ -48,6 +48,17 @@ orig_dir
 cp vcftools_0.1.11/bin/* bin/
 cp vcftools_0.1.11/perl/*pm lib/perl5/
 rm -Rf vcftools_0.1.11
+
+
+echo "Installing VCFlib"
+unzip src/vcflib.zip
+cp vcflib-master/bin/vcfsnps bin/
+chmod 755 bin/vcfsnps
+rm -Rf vcflib-master
+
+
+
+
 echo "Installing QCTool"
 if [ `uname` = "Darwin" ]; then 
     tar xzf src/qctool_v1.4-osx.tgz
@@ -92,9 +103,9 @@ if [ `uname` = "Darwin" ]; then
     mv impute_v2.3.1_MacOSX_Intel/impute2 bin/
     rm -Rf impute_v2.3.1_MacOSX_Intel
 else
-    tar xzf src/impute_v2.3.0_x86_64_static.tgz
-    mv impute_v2.3.0_x86_64_static/impute2 bin/
-    rm -Rf impute_v2.3.0_x86_64_static/
+    tar xzf src/impute_v2.3.1_x86_64_static.tgz
+    mv impute_v2.3.1_x86_64_static/impute2 bin/
+    rm -Rf impute_v2.3.1_x86_64_static/
 fi
 chmod 755 bin/impute2
 echo "Installing Tabix"

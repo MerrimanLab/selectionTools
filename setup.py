@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
-
+__version__ = "unknown"
+from selection_pipeline._version import __version__
 setup(
     name="selectionTools",
-    version="1.0",
+    version=__version__,
     packages=['selection_pipeline','selection_pipeline.tests'],
     test_suite='selection_pipeline.tests.test_selection_pipeline',
     author="James Boocock",
