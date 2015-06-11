@@ -15,7 +15,7 @@ selectionTools 1.1
 =========================
 Pipeline to take VCF through to Selection Analysis.
 
-the branch selectionTools 1.1 is being used for further development 
+the branch selectionTools1.1-dev is being used for further development 
 
 Software Prerequisites
 ---------------------
