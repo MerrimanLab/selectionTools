@@ -1,3 +1,8 @@
+# haps_to_selscan-haps.py
+# Murray Cadzow
+# University of Otago
+# 5 Aug 2015
+
 import argparse
 
 def readFiles(haps, pos, output, chr):
@@ -7,20 +12,25 @@ def readFiles(haps, pos, output, chr):
     output_map = open(output + ".selscanmap", 'w')
     
     hapsArray = []
-    #posArray = []
     positions = []
     for hapsLine in hapsFile:
-        #output_haps.write( changeLine(hapsLine.strip()) )
         posLine=posFile.readline().strip().split(' ')
         hapsLine = hapsLine.strip().split(' ')
         if(len(posLine) == 1):
             i=0
         else:
             i=1
-        if(posLine[i] not in positions):
-            positions.append(posLine[i])
-            hapsArray.append(hapsLine[5:])
-            output_map.write(str(chr) +' '+ hapsLine[0] +' '+ hapsLine[2] +' '+ posLine[i]+ "\n")
+        #speed hack 
+        if(len(positions) < 50):
+            if(posLine[i] not in positions):
+                positions.append(posLine[i])
+                hapsArray.append(hapsLine[5:])
+                output_map.write(str(chr) +' '+ hapsLine[0] +' '+ hapsLine[2] +' '+ posLine[i]+ "\n")
+        else:
+            if(posLine[i] not in positions[len(positions)-50:len(positions)]):
+                positions.append(posLine[i])
+                hapsArray.append(hapsLine[5:])
+                output_map.write(str(chr) +' '+ hapsLine[0] +' '+hapsLine[2] +' '+ posLine[i]+ "\n")
             #posArray.append(posLine)
     #transpose haps array and write out
     #each row is now a sample (haplotype), each coloum is now a loci
@@ -35,21 +45,6 @@ def readFiles(haps, pos, output, chr):
     hapsFile.close()
     posFile.close()
 
-
-
-
-def changeLine(line):
-    l = line.split(' ')
-    hap1 = []
-    hap2 = []
-    #haps file has marker marker pos a1 a2 hap0 hap0 hap1 hap1...
-    for i in xrange(5,len(l)):
-        if(i % 2 == 0):
-            hap1.append(l[i])
-        elif (i % 2 == 1):
-            hap2.append(l[i])
-    newHaps = " ".join(hap1) + "\n" + " ".join(hap2) + "\n"
-    return newHaps
 
 def main():
     parser = argparse.ArgumentParser(description="Change haps file to selscan haps file\nInput files are ouput of haps_interpolate")
