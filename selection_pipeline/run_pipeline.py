@@ -296,8 +296,7 @@ class CommandTemplate(object):
         cmd.append( selscan)
         cmd.extend(['--ihs', '--hap', selscanhaps, '--map', selscanmap, '--out', selscan.split('.')[0]])
         cmd.extend(['--threads', self.threads])
-        run_subprocess(cmd, 'selscan')
-        return output_name    
+        return (cmd, selscanhaps, selscanmap)    
         
 
 
