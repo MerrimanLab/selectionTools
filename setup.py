@@ -20,7 +20,7 @@ setup(
             'haps_to_hapmap = selection_pipeline.haps_to_hapmap:main',
             'haps_filters = selection_pipeline.haps_filters:main',
             'haps_interpolate = selection_pipeline.haps_interpolate:main',
-            'haps_to_selscan = selections_pipeline.haps_to_selscan:main'
+            'haps_to_selscan = selection_pipeline.haps_to_selscan:main'
         ]
     },
     url="github.com/smilefreak/MerrimanSelectionPipeline",
