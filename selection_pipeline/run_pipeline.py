@@ -285,13 +285,13 @@ class CommandTemplate(object):
         haps_to_selscan_script = \
                 self.config['haps_scripts']['haps_to_selscan_script']
         cmd.append(haps_to_selscan_script)
-        cmd.extend(['--haps', haps, '--pos', haps_physical, '--chr',self.options.chromosome, '--output', output_prefix]
-        selscanhaps = str(output_prefix) + '.selscanhaps'
-        selscanmap = str(output_prefix) + '.selscanmap'
+        cmd.extend(['--haps', haps, '--pos', haps_physical, '--chr',self.options.chromosome, '--output', output_prefix])
+        selscanhaps = output_prefix + '.selscanhaps'
+        selscanmap = output_prefix + '.selscanmap'
         return(cmd, selscanhaps, selscanmap)
 
     def run_selscan_ihs(self, selscanhaps, selscanmap):
-    (cmd,output_name) = super(StandardRun, self).run_selscan(selscanhaps,selscanmap)
+        (cmd,output_name) = super(StandardRun, self).run_selscan(selscanhaps,selscanmap)
         cmd.extend('--ihs', '--hap', selscanhaps, '--map', selscanmap, '--out',output_name)
         cmd.extend('--threads', self.threads)
         run_subprocess(cmd, 'selscan')
