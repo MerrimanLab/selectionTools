@@ -474,7 +474,7 @@ class StandardRun(CommandTemplate):
         """ Run haps to selscanhaps
 
         """
-        (cmd,output_name) = super(StandardRun, self).haps_to_selscan(haps, physical_dist)
+        (cmd,output_selscanhaps,output_selscanmap) = super(StandardRun, self).haps_to_selscan(haps, physical_dist)
         run_subprocess(cmd, 'haps_to_selscan')
         return (output_selscanhaps, output_selscanmap)
 
