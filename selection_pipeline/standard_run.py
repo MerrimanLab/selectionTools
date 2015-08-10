@@ -483,8 +483,6 @@ class StandardRun(CommandTemplate):
 
         """
         (cmd,output_name) = super(StandardRun, self).run_selscan_ihs(selscanhaps,selscanmap)
-        cmd.extend('--ihs', '--hap', selscanhaps, '--map', selscanmap, '--out',output_name)
-        cmd.extend('--threads', self.threads)
         run_subprocess(cmd, 'selscan')
         return output_name
         
