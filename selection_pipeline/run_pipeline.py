@@ -293,10 +293,11 @@ class CommandTemplate(object):
     def run_selscan_ihs(self, selscanhaps, selscanmap):
         cmd = []
         selscan = self.config['selscan']['selscan_executable']
+        output_name = selscanhaps.split('.')[0]
         cmd.append( selscan)
-        cmd.extend(['--ihs', '--hap', selscanhaps, '--map', selscanmap, '--out', selscan.split('.')[0]])
+        cmd.extend(['--ihs', '--hap', selscanhaps, '--map', selscanmap, '--out', output_name])
         cmd.extend(['--threads', self.threads])
-        return (cmd, selscanhaps, selscanmap)    
+        return (cmd, output_name)    
         
 
 
