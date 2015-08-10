@@ -293,7 +293,7 @@ class CommandTemplate(object):
     def run_selscan_ihs(self, selscanhaps, selscanmap):
         cmd = []
         selscan = [self.config['selscan']['selscan_executable']
-        cmd.append = selscan
+        cmd.append( selscan)
         cmd.extend('--ihs', '--hap', selscanhaps, '--map', selscanmap, '--out',output_name)
         cmd.extend('--threads', self.threads)
         run_subprocess(cmd, 'selscan')
