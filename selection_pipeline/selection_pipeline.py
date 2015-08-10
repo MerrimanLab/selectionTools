@@ -8,6 +8,7 @@
 # July 2013
 # University Of Otago
 #
+# edited Aug 2015 (MC) to add seed setting and threshold flags
 from optparse import OptionParser
 import ConfigParser
 import logging
@@ -125,15 +126,19 @@ def parse_arguments():
                       help="Do not create rudimentary plots")
     parser.add_option('--version', dest = "ver", action="store_true",
                       help="Print version info")
+    parser.add_option('--set-shapeit-seed',dest="shapeitSeed", action="store_true",
+                      help="NOT IMPLEMENTED YET seed to start shapeit with")
+    parser.add_option('--set-impute-seed',dest='imputeSeed', action='store_true',
+                      help='NOT IMPLEMENTED YET seed to start impute2 with')
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.debug):
             logger.setLevel(logging.DEBUG)
         else:
             logger.setLevel(logging.ERROR)
-    if(options.ver is True): 
+    if(options.ver is True):
         print "Version: {0}".format(__version__)
-        sys.exit(1)        
+        sys.exit(1)
 
     # Obligatory arguments
     assert options.vcf_input or (options.haps and options.sample) is not None, \
@@ -151,7 +156,7 @@ def parse_arguments():
                 "Cannot locate sample file path = {0}".format(options.sample)
     elif(options.vcf_input):
         assert os.path.isfile(options.vcf_input), \
-                "Cannot locate vcf input file path = {0}".format(options.vcf_input) 
+                "Cannot locate vcf input file path = {0}".format(options.vcf_input)
     if(options.fayandWuWindowJump is None):
         options.fayandWuWindowJump = str(5000)
     else:
