@@ -280,6 +280,7 @@ class StandardRun(CommandTemplate):
                 (haps_gdist, haps_physical) =self.interpolate_haps(haps)
                 (selscanhaps,selscanmap) = self.haps_to_selscan(haps_gdist, haps_physical)
                 selscan_ihs = self.run_selscan_ihs(selscanhaps,selscanmap)
+                selscan_nsl = self.run_selscan_nsl(selscanhaps,selscanmap)
                 ihh = self.run_multi_coreihh(haps_gdist, haps_physical)
             ihs_file = ihh.split('.ihh')[0] + '.ihs'
             haplo_hh = ihh.split('.ihh')[0] + '.RData'
@@ -485,7 +486,14 @@ class StandardRun(CommandTemplate):
         (cmd,output_name) = super(StandardRun, self).run_selscan_ihs(selscanhaps,selscanmap)
         run_subprocess(cmd, 'selscan')
         return output_name
-        
+
+    def run_selscan_nsl(self,selscanhaps, selscanmap):
+        """ Run selscan nSL
+
+        """
+        (cmd, output_name) = super(StandardRun, self).run_selscan_nsl(selscanhaps,selscanmap)
+        run_subprocess(cmd,'selscan')
+        return output_name        
 
     def run_multi_coreihh(self, haps, physical_dist):
         """ Run multicore ihh using subprocess
