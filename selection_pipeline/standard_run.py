@@ -275,7 +275,7 @@ class StandardRun(CommandTemplate):
         os.rename(self.options.log_file, 'log/' + self.options.log_file)
         if not self.options.no_clean_up:
             keep = ['selection_stderr.tmp', 'selection_stdout.tmp',os.path.basename(self.options.config_file)]
-            clean_folder('.', keep=keep)
+            #clean_folder('.', keep=keep)
         logger.info("Pipeline completed successfully")
         logger.info("Goodbye :)")
 
