@@ -1,3 +1,10 @@
+# standard_run.py
+#
+# James Boocock
+# Murray Cadzow
+# University of Otago
+#
+# Modified Aug 2015 to include haps_to_selscan and selscan
 import os
 import sys
 from .standard_run_utilities import *
@@ -184,6 +191,12 @@ class StandardRun(CommandTemplate):
             logger.error("qctool not found check config file")
             return False
         if(self.which(
+                self.config['selscan']['selscan_executable'],
+                'selscan'
+                ) is None):
+            logger.error("selscan not found check config file")
+            return False
+        if(self.which(
                 self.config['haps_scripts']['haps_to_hapmap_script'],
                 'haps_to_hapmap'
                 ) is None):
@@ -194,6 +207,12 @@ class StandardRun(CommandTemplate):
                 'haps_filter'
                 ) is None):
             logger.error('haps_filter not found check config file')
+            return False
+        if(self.which(
+                self.config['haps_scripts']['haps_to_selscan_script'],
+                'haps_to_selscan'
+                ) is None):
+            logger.error('haps_to_selscan not found check config file')
             return False
         return True
 
@@ -259,6 +278,9 @@ class StandardRun(CommandTemplate):
                 ihh = self.run_multi_coreihh(haps, haps_physical)
             else:
                 (haps_gdist, haps_physical) =self.interpolate_haps(haps)
+                (selscanhaps,selscanmap) = self.haps_to_selscan(haps_gdist, haps_physical)
+                selscan_ihs = self.run_selscan_ihs(selscanhaps,selscanmap)
+                selscan_nsl = self.run_selscan_nsl(selscanhaps,selscanmap)
                 ihh = self.run_multi_coreihh(haps_gdist, haps_physical)
             ihs_file = ihh.split('.ihh')[0] + '.ihs'
             haplo_hh = ihh.split('.ihh')[0] + '.RData'
@@ -448,6 +470,30 @@ class StandardRun(CommandTemplate):
         (cmd, output_haps, output_physical) = super(StandardRun, self).interpolate_haps(haps)
         run_subprocess(cmd, 'interpolate_haps')
         return (output_haps,output_physical)
+
+    def haps_to_selscan(self,haps, physical_dist):
+        """ Run haps to selscanhaps
+
+        """
+        (cmd,output_selscanhaps,output_selscanmap) = super(StandardRun, self).haps_to_selscan(haps, physical_dist)
+        run_subprocess(cmd, 'haps_to_selscan')
+        return (output_selscanhaps, output_selscanmap)
+
+    def run_selscan_ihs(self, selscanhaps, selscanmap):
+        """ Run selscan ihs
+
+        """
+        (cmd,output_name) = super(StandardRun, self).run_selscan_ihs(selscanhaps,selscanmap)
+        run_subprocess(cmd, 'selscan')
+        return output_name
+
+    def run_selscan_nsl(self,selscanhaps, selscanmap):
+        """ Run selscan nSL
+
+        """
+        (cmd, output_name) = super(StandardRun, self).run_selscan_nsl(selscanhaps,selscanmap)
+        run_subprocess(cmd,'selscan')
+        return output_name        
 
     def run_multi_coreihh(self, haps, physical_dist):
         """ Run multicore ihh using subprocess
