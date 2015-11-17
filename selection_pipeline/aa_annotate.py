@@ -162,9 +162,9 @@ def aa_check(realAA, ref, alt, format, line):
         if(realAA.islower() and format == "upper"):
             return None
         else:
-            if(realAA == ref):
+            if(realAA.upper() == ref.upper()):
                 return line.strip()
-            elif(realAA == alt):
+            elif(realAA.upper() == alt.upper()):
                 newLine = line.split()
                 newLine[3] = alt
                 newLine[4] = ref
