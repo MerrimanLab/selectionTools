@@ -87,7 +87,7 @@ def get_haps_line(options, record):
         # Need to skip any snps that have any missing phase data to
         # increase certainty of our results.
         # If every snp will indeed be phased
-            
+
         if(gt != None and '|' in gt):
             gtSplit = gt.split('|')
             if(gtSplit[0] == '.'):
@@ -162,9 +162,9 @@ def aa_check(realAA, ref, alt, format, line):
         if(realAA.islower() and format == "upper"):
             return None
         else:
-            if(realAA == ref):
+            if(realAA.upper() == ref.upper()):
                 return line.strip()
-            elif(realAA == alt):
+            elif(realAA.upper() == alt.upper()):
                 newLine = line.split()
                 newLine[3] = alt
                 newLine[4] = ref
