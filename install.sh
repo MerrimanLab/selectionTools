@@ -79,7 +79,8 @@ if [ `uname` = "Darwin" ]; then
     rm -Rf shapeit.v2.r790.MacOSX.tgz
 else
     echo `uname`
-    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
+    http://mathgen.stats.ox.ac.uk/genetics_software/shapeit/old_versions/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
+    #wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
     tar xzf shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
     rm shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
     mv shapeit bin/
