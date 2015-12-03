@@ -8,7 +8,9 @@
 # July 2013
 # University Of Otago
 #
+# edited Aug 2015 (MC) to add seed setting and threshold flags
 from optparse import OptionParser
+from optparse import OptionGroup
 import ConfigParser
 import logging
 import os
@@ -51,11 +53,13 @@ def parse_arguments():
         default values for the program
     """
     parser = OptionParser()
-    parser.add_option('-v', '--debug',
+    group = OptionGroup(parser, "Debug Options")
+    group.add_option('-v', '--debug',
                       action="store_true", dest='debug',
                       help="Print debug messages")
     parser.add_option('-q', '--silent', action="store_false",
                       dest='verbose', help="Run Silently")
+    parser.add_option_group(group)
     parser.add_option('-i', '--vcf',
                       dest='vcf_input', help="VCF input file")
     parser.add_option('-c', '--chromosome',
@@ -82,36 +86,40 @@ def parse_arguments():
                       dest="vcf_gz", help="VCF input is in GZ file (optional)")
     parser.add_option('--TajimaD', dest='tajimas_d',
                       help="Output Tajima's D statistic in bins of size (bp)")
-    parser.add_option('--fay-Window-Width', dest='fayandWuWindowWidth',
+    group = OptionGroup(parser, "Fay and Wu's Options")
+    group.add_option('--fay-Window-Width', dest='fayandWuWindowWidth',
                       help="Sliding window width for Fay and Wu's H (kb)")
-    parser.add_option('--fay-Window-Jump', dest="fayandWuWindowJump",
+    group.add_option('--fay-Window-Jump', dest="fayandWuWindowJump",
                       help=("Window Jump for Fay and Wus ( if fay-Window-Width"
                             " = fay-Window-Jump non-overlapping windows "
                             "are used (kb)"))
+    parser.add_option_group(group)
     parser.add_option('--no-clean-up', dest="no_clean_up", action="store_true",
                       help="Do not clean up intermediate datafiles")
     parser.add_option('--impute-split-size', dest='impute_split_size',
                       help="impute2 split size (Mb)")
-    parser.add_option('--ehh-window-size', dest="multi_window_size",
+    group = OptionGroup(parser, "iHS Options")
+    group.add_option('--ehh-window-size', dest="multi_window_size",
                       help="Multicore window size (Mp)")
-    parser.add_option('--ehh-overlap', dest="ehh_overlap",
+    group.add_option('--ehh-overlap', dest="ehh_overlap",
                       help="EHH window overlap (Mb)")
     parser.add_option('--daf', dest='daf',
                       help="Derived Allele Frequency filter proportion")
-    parser.add_option('--big-gap', dest="big_gap",
+    group.add_option('--big-gap', dest="big_gap",
                       help=("Gap size for not calculating iHH if "
                             "core SNP spans this gap (kb)"))
-    parser.add_option('--small-gap', dest='small_gap',
+    group.add_option('--small-gap', dest='small_gap',
                       help=("Gap size for applying a penalty to "
                             "the area calculated by iHH (kb)"))
-    parser.add_option('--small-gap-penalty', dest="small_gap_penalty",
+    group.add_option('--small-gap-penalty', dest="small_gap_penalty",
                       help=("Penalty multiplier for intergration steps"
                             "in iHH see manual for formula, usually the "
                             "same as small-gap"))
     parser.add_option('--cores', dest='cores',
                       help="Override cores avaliable setting")
-    parser.add_option('--no-ihs',dest='no_ihs',action="store_true"
+    group.add_option('--no-ihs',dest='no_ihs',action="store_true"
                       , help='Disable iHS and iHH calculation')
+    parser.add_option_group(group)
     parser.add_option('--haps', dest='haps',
                         help="Shapeit haps file")
     parser.add_option('--sample', dest='sample',
@@ -125,15 +133,19 @@ def parse_arguments():
                       help="Do not create rudimentary plots")
     parser.add_option('--version', dest = "ver", action="store_true",
                       help="Print version info")
+    parser.add_option('--set-shapeit-seed',dest="shapeitSeed", action="store_true",
+                      help="NOT IMPLEMENTED YET seed to start shapeit with")
+    parser.add_option('--set-impute-seed',dest='imputeSeed', action='store_true',
+                      help='NOT IMPLEMENTED YET seed to start impute2 with')
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.debug):
             logger.setLevel(logging.DEBUG)
         else:
             logger.setLevel(logging.ERROR)
-    if(options.ver is True): 
+    if(options.ver is True):
         print "Version: {0}".format(__version__)
-        sys.exit(1)        
+        sys.exit(1)
 
     # Obligatory arguments
     assert options.vcf_input or (options.haps and options.sample) is not None, \
@@ -151,7 +163,7 @@ def parse_arguments():
                 "Cannot locate sample file path = {0}".format(options.sample)
     elif(options.vcf_input):
         assert os.path.isfile(options.vcf_input), \
-                "Cannot locate vcf input file path = {0}".format(options.vcf_input) 
+                "Cannot locate vcf input file path = {0}".format(options.vcf_input)
     if(options.fayandWuWindowJump is None):
         options.fayandWuWindowJump = str(5000)
     else:

@@ -87,7 +87,7 @@ def get_haps_line(options, record):
         # Need to skip any snps that have any missing phase data to
         # increase certainty of our results.
         # If every snp will indeed be phased
-            
+
         if(gt != None and '|' in gt):
             gtSplit = gt.split('|')
             if(gtSplit[0] == '.'):

@@ -56,7 +56,11 @@ cp vcflib-master/bin/vcfsnps bin/
 chmod 755 bin/vcfsnps
 rm -Rf vcflib-master
 
-
+echo "Installing selscan"
+unzip src/selscan_10_Aug_2015.zip
+cp src/selscan-master/bin/linux/selscan bin/
+chmod 755 bin/selscan
+rm -Rf selscan-master 
 
 
 echo "Installing QCTool"

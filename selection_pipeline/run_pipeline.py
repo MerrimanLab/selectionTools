@@ -1,3 +1,10 @@
+# run_pipline.py
+#
+# James Boocock
+# Murray Cadzow
+# University of Otago
+#
+# modified Aug 2015 to include selscan and haps_to_selscan
 import os
 import fnmatch
 import logging
@@ -18,7 +25,7 @@ class CommandTemplate(object):
         e.g. Standard linux box, Load Leveler or another
         cluster interface.
     """
-    
+
     def __init__(self, options, config):
         """ Initialises the class variables self.config and self.options.
 
@@ -118,6 +125,8 @@ class CommandTemplate(object):
         shapeit = self.config['shapeit']['shapeit_executable']
         cmd.append(shapeit)
         cmd.extend(['--input-ped', ped, map, '-M',genetic_map, '--output-max', prefix])
+        #if(self.options.shapeitSeed not NULL):
+        #    cmd.extend(['--seed', self.options.shapeitSeed])
         cmd.extend(self.config['shapeit']['extra_args'].split())
         return(cmd, prefix)
 
@@ -188,6 +197,10 @@ class CommandTemplate(object):
         cmd_template.append(impute2)
         cmd_template.extend(['-m', genetic_map, '-h', hap_file, '-l',
             legend_file, '-known_haps_g', haps, '-phase'])
+        #if(self.options.impute2Seed is not NULL):
+        #    cmd_template.extend(['--seed', self.options.impute2Seed])
+        #if(self.options.imputeInfo is not NULL):
+
         return (cmd_template, prefix)
 
     def get_ancestral_fasta(self):
@@ -266,8 +279,37 @@ class CommandTemplate(object):
         cmd.extend(['--physical-position-output',output_physical])
         return(cmd,output_haps,output_physical)
 
+    def haps_to_selscan(self, haps, haps_physical):
+        output_prefix = self.options.population.split('.haps')[0]
+        cmd=[]
+        haps_to_selscan_script = \
+                self.config['haps_scripts']['haps_to_selscan_script']
+        cmd.append(haps_to_selscan_script)
+        cmd.extend(['--haps', haps, '--pos', haps_physical, '--chr',self.options.chromosome, '--output', output_prefix])
+        selscanhaps = output_prefix + '.selscanhaps'
+        selscanmap = output_prefix + '.selscanmap'
+        return(cmd, selscanhaps, selscanmap)
+
+    def run_selscan_ihs(self, selscanhaps, selscanmap):
+        cmd = []
+        selscan = self.config['selscan']['selscan_executable']
+        output_name = selscanhaps.split('.')[0]
+        cmd.append( selscan)
+        cmd.extend(['--ihs', '--hap', selscanhaps, '--map', selscanmap, '--out', output_name])
+        cmd.extend(['--threads', self.threads])
+        return (cmd, output_name)    
+        
+    def run_selscan_nsl(self,selscanhaps, selscanmap):
+        cmd = []
+        selscan = self.config['selscan']['selscan_executable']
+        output_name = selscanhaps.split('.')[0]
+        cmd.append( selscan)
+        cmd.extend(['--nsl', '--hap', selscanhaps, '--map', selscanmap, '--out', output_name])
+        cmd.extend(['--threads', self.threads])
+        return (cmd, output_name)
+
     def run_multi_coreihh(self, haps, haps_physical):
-        """ Return the template for running multi_coren ihh
+        """ Return the template for running multi_coreihh
 
         """
         cmd = []
@@ -421,7 +463,7 @@ class CommandTemplate(object):
 
     def beagle_phasing(self, vcf):
         cmd = []
-        java_executable = self.config['java']['java_executable'] 
+        java_executable = self.config['java']['java_executable']
         beagle_memory =  self.config['beagle']['vm_size']
         beagle_jar = self.config['beagle']['beagle_jar']
         out_prefix = self.options.population + self.options.chromosome + \
