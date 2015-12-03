@@ -12,8 +12,8 @@ RUN apt-get install -y --no-install-recommends \
 RUN ln -s /usr/share/doc/littler/examples/install.r \
     /usr/local/bin/install.r
 
-RUN git clone https://github.com/smilefreak/selectionTools.git \
-    && cd selectionTools \
+RUN git clone -b selectionTools1.1-dev https://github.com/smilefreak/selectionTools.git  selectionTools1.1-dev\
+    && cd selectionTools1.1-dev \
     && ./install.sh
 RUN /usr/local/bin/selection_pipeline -h
 
