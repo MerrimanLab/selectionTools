@@ -56,7 +56,7 @@ class StandardRun(CommandTemplate):
 
     def check_options(self):
         """ Check the options for any incombatibilities as they are not perfect.
-            
+
             For instance specifying the no genetic map option and not using
             beagle will cause direct problems with shapeit
 
@@ -83,7 +83,7 @@ class StandardRun(CommandTemplate):
                     logger.error("Cannot find genetic map, cannot use shapeit2,"
                                  "pipeline will exit")
                     return False
-                else:    
+                else:
                     self.options.no_genetic_map = True
                     logger.info("Could not find genetic map, but --no-genetic-map "
                                 "was not set. Progressing without genetic map")
@@ -109,7 +109,7 @@ class StandardRun(CommandTemplate):
                         self.config['impute2']['impute_reference_dir'], file)
             if hap_file == None or legend_file == None:
                 return False
-        
+
         if(not self.config['ancestral_allele']['split_by_chromosome']):
             ancestral_fasta = \
                 self.config['ancestral_allele']['ancestral_fasta_file']
@@ -131,7 +131,7 @@ class StandardRun(CommandTemplate):
                 logger.info("Could not find ancestral fasta file for chromosome = {} ,as specified in"
                              "the config file, please check you settings".format(self.options.chromosome))
         return True
-             
+
 
     def check_executables_and_scripts_exist(self):
         """ Checks to ensure all the scripts and executables exist.
@@ -240,7 +240,7 @@ class StandardRun(CommandTemplate):
             os.mkdir('results')
         if(self.options.phased_vcf or self.options.beagle):
             vcf = self.run_remove_indels_from_vcf()
-            #save the original vcf file      
+            #save the original vcf file
             shutil.copy(self.options.vcf_input, os.path.join('results',os.path.basename(self.options.vcf_input) + "orig"))
         if(self.options.phased_vcf):
             (haps, sample) = self.vcf_to_haps(vcf)
@@ -363,8 +363,8 @@ class StandardRun(CommandTemplate):
         return(output_name)
 
     def beagle_phasing(self, vcf):
-        """ Run beagle phasing using phasing 
-            
+        """ Run beagle phasing using phasing
+
 
         """
         (cmd, output_name)= super(StandardRun, self).beagle_phasing(vcf)
@@ -390,7 +390,7 @@ class StandardRun(CommandTemplate):
                             output_warnings.write(w.read())
                             output_info.write(f.read())
             except IOError:
-                logger.error(str(output_prefix)+'_'+str(i)+'.haps_haps'+' does not exist, but pipeline continuing without') 
+                logger.error(str(output_prefix)+'_'+str(i)+'.haps_haps'+' does not exist, but pipeline continuing without')
         output_haps.close()
         output_warnings.close()
         output_info.close()
@@ -493,7 +493,7 @@ class StandardRun(CommandTemplate):
         """
         (cmd, output_name) = super(StandardRun, self).run_selscan_nsl(selscanhaps,selscanmap)
         run_subprocess(cmd,'selscan')
-        return output_name        
+        return output_name
 
     def run_multi_coreihh(self, haps, physical_dist):
         """ Run multicore ihh using subprocess
