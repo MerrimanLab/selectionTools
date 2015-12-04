@@ -40,7 +40,7 @@ def aa_seq(options):
 
     """
     f = Fasta(options.ancestralfasta)
-    keyz = (f.keys())
+    keyz = (list(f.keys()))
     match = ''
     if (options.single_chromosome):
         # Single chromosome fasta should only have one sequence.

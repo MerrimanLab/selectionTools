@@ -40,14 +40,18 @@ orig_dir
 rm -Rf zlib-1.2.8
 
 echo "Installing VCF tools"
-tar xzf src/vcftools.tar.gz
+wget https://github.com/vcftools/vcftools/releases/download/v0.1.14/vcftools-0.1.14.tar.gz
+tar xzf vcftools-0.1.14.tar.gz
+#tar xzf src/vcftools.tar.gz
 LIB_VAR="-lz -L${ORIG_DIR}/lib -I${ORIG_DIR}/include"
-change_folder vcftools_0.1.11
+change_folder vcftools-0.1.14
+./configure
 check_success make LIB="${LIB_VAR}"
 orig_dir
-cp vcftools_0.1.11/bin/* bin/
-cp vcftools_0.1.11/perl/*pm lib/perl5/
-rm -Rf vcftools_0.1.11
+cp vcftools_0.1.14/bin/* bin/
+cp vcftools_0.1.14/perl/*pm lib/perl5/
+rm -rf vcftools-0.1.14
+rm vcftools-0.1.14.tar.gz
 
 
 echo "Installing VCFlib"
@@ -56,11 +60,11 @@ cp vcflib-master/bin/vcfsnps bin/
 chmod 755 bin/vcfsnps
 rm -Rf vcflib-master
 
-echo "Installing selscan"
-unzip src/selscan_10_Aug_2015.zip
-cp src/selscan-master/bin/linux/selscan bin/
-chmod 755 bin/selscan
-rm -Rf selscan-master 
+#echo "Installing selscan"
+#unzip src/selscan_10_Aug_2015.zip
+#cp src/selscan-master/bin/linux/selscan bin/
+#chmod 755 bin/selscan
+#rm -Rf selscan-master 
 
 
 echo "Installing QCTool"
@@ -76,19 +80,20 @@ fi
 
 echo "Installing Shapeit"
 if [ `uname` = "Darwin" ]; then
-    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r790.MacOSX.tgz
-    tar xzf shapeit.v2.r790.MacOSX.tgz
-    rm shapeit.v2.r790.MacOSX.tgz
+    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r837.MacOSX.tgz
+    tar xzf shapeit.v2.r837.MacOSX.tgz
+    rm shapeit.v2.r837.MacOSX.tgz
     mv shapeit bin/
-    rm -Rf shapeit.v2.r790.MacOSX.tgz
+    rm -Rf shapeit.v2.r837.MacOSX.tgz
 else
     echo `uname`
-    http://mathgen.stats.ox.ac.uk/genetics_software/shapeit/old_versions/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
+    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r837.GLIBCv2.20.Linux.static.tgz
+    #http://mathgen.stats.ox.ac.uk/genetics_software/shapeit/old_versions/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
     #wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
-    tar xzf shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
-    rm shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
+    tar xzf shapeit.v2.r837.GLIBCv2.20.Linux.static.tgz
+    rm shapeit.v2.r837.GLIBCv2.20.Linux.static.tgz
     mv shapeit bin/
-    rm -Rf shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
+    rm -Rf shapeit.v2.r837.GLIBCv2.20.Linux.static
 fi
 rm -Rf example
 rm -f LICENCE
@@ -110,17 +115,22 @@ if [ `uname` = "Darwin" ]; then
 else
     tar xzf src/impute_v2.3.1_x86_64_static.tgz
     mv impute_v2.3.1_x86_64_static/impute2 bin/
-    rm -Rf impute_v2.3.1_x86_64_static/
+    rm -rf impute_v2.3.1_x86_64_static/
 fi
 chmod 755 bin/impute2
 echo "Installing Tabix"
-tar -xjf src/tabix.tar.bz2
-change_folder tabix-0.2.6
+wget https://github.com/samtools/htslib/releases/download/1.2.1/htslib-1.2.1.tar.bz2
+tar -xjf htslib-1.2.1.tar.bz2
+change_folder htslib-1.2.1
+#tar -xjf src/tabix.tar.bz2
+#change_folder tabix-0.2.6
+./configure
 check_success make LIBPATH="${LIB_VAR}"
 orig_dir
-cp tabix-0.2.6/bgzip bin/
-cp tabix-0.2.6/tabix bin/
-rm -Rf tabix-0.2.6
+cp htslib-1.2.1/bgzip bin/
+cp htslib-1.2.1/tabix bin/
+rm htslib-1.2.1.tar.bz2
+rm -rf htslib-1.2.1
 echo "Installing Variscan"
 if [ `uname` = "Darwin" ]; then
     echo "Cannot install on OSX"
@@ -141,6 +151,22 @@ echo "Installing old rehh"
 check_success Rscript src/R_dependencies.R 'rehh'
 echo "Install rehh"
 check_success R CMD INSTALL src/rehh_1.11.tar.gz
+echo "Install selscan"
+if [ `uname` = "Darwin" ]; then
+    wget https://github.com/szpiech/selscan/releases/download/1.1.0a/selscan-osx-1.1.0a.tar.gz
+    tar -xzf selscan-osx-1.1.0a.tar.gz
+    cp selscan-osx-1.1.0a/norm bin/
+    cp selscan-osx-1.1.0a/selscan bin/
+    rm -rf selscan-osx-1.1.0a/
+    rm -rf selscan-osx-1.1.0a.tar.gz
+else
+    wget https://github.com/szpiech/selscan/releases/download/1.1.0a/selscan-linux-1.1.0a.tar.gz
+    tar -xzf selscan-linux-1.1.0a.tar.gz
+    cp selscan-linux-1.1.0a/norm bin/
+    cp selscan-linux-1.1.0a/selscan bin/
+    rm -rf selscan-linux-1.1.0a/
+    rm selscan-linux-1.1.0a.tar.gz
+fi    
 echo "Updating submodules"
 git submodule init
 git submodule update

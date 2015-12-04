@@ -88,7 +88,7 @@ def replace_positions(haps,output,gmap_dict,physical_out):
     if (physical_out is not None):
         phys_out = open(physical_out,'w')
     with open(haps) as f:
-        gmap_dict = gmap_dict.items()
+        gmap_dict = list(gmap_dict.items())
         haps_line = f.readline()
         dictionary_index = 1
         # Requires the gmap_dictionary is atleast  

@@ -11,7 +11,7 @@ from time import sleep
 #regex for hash at start of line
 
 try:
-    import Queue as Queue
+    import queue as Queue
 except ImportError:
     import queue as Queue
 from threading import Thread

@@ -15,7 +15,7 @@ from pyfasta import Fasta
 
 def aa_seq(options):
     f = Fasta(options.ancestralfasta)
-    keyz = (f.keys())
+    keyz = (list(f.keys()))
     match = ''
     if (options.single_chromosome):
         # Single chromosome fasta should only have one sequence.
@@ -98,11 +98,11 @@ def main():
                             return a2
                     except:
                         return "0"
-                change_alleles = map(check_alleles, line[5:])
+                change_alleles = list(map(check_alleles, line[5:]))
                 change_alleles = list(change_alleles)
                 zipa = change_alleles[0::2]
                 zipb = change_alleles[1::2]
-                change_alleles = zip(zipa, zipb)
+                change_alleles = list(zip(zipa, zipb))
                 change_alleles = [''.join(row) for row in change_alleles]
                 output_line = rsid + ' ' + a1 + '/' + a2 + \
                     ' ' + options.chromosome + ' ' + pos

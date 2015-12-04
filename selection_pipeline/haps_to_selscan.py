@@ -34,9 +34,9 @@ def readFiles(haps, pos, output, chr):
             #posArray.append(posLine)
     #transpose haps array and write out
     #each row is now a sample (haplotype), each coloum is now a loci
-    for i in xrange(0,len(hapsArray[0])): # number of loci
+    for i in range(0,len(hapsArray[0])): # number of loci
         line = []
-        for j in xrange(0,len(hapsArray)): # number of samples
+        for j in range(0,len(hapsArray)): # number of samples
             line.append(hapsArray[j][i])    
         output_haps.write(" ".join(line) + "\n")     
     #close files    

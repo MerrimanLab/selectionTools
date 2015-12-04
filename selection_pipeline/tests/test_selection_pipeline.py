@@ -128,7 +128,7 @@ class TestAncestralAnnotation(unittest.TestCase):
     def test_get_haps_line(self):
         options = Args()
         vcf_reader = vcf.Reader(filename=get_file("CEU_test.vcf"))
-        record = vcf_reader.next()
+        record = next(vcf_reader)
         line = get_haps_line(options,record)
         line = line.split()
         assert line[0] == "rs147096179"

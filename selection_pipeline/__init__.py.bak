@@ -1,0 +1,21 @@
+# Merriman selection pipeline library
+#
+# Author James Boocock and Murray Cadzow
+#
+"""
+ A selection pipeline for running
+    various natural selection tools
+    on next generation sequencing data
+
+"""
+
+import selection_pipeline.aa_annotate
+import selection_pipeline.standard_run
+import selection_pipeline.standard_run_utilities
+import selection_pipeline.environment
+import selection_pipeline.selection_pipeline
+import selection_pipeline.multipipeline
+import selection.pipeline.run_pipeline
+import selection.pipeline.haps_to_hapmap
+import selection_pipeline.haps_filters
+import selection.pipeline._version

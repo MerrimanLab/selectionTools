@@ -20,7 +20,7 @@ import math
 import sys
 import os
 from optparse import OptionParser
-import ConfigParser
+import configparser
 import logging
 from .environment import set_environment
 from .standard_run_utilities import *
@@ -91,7 +91,7 @@ def parse_config(options):
 
         Read the config file and save the results in a dictionary
     """
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(options.config_file)
     config_parsed = {}
     logger.debug(config.sections())
@@ -145,7 +145,7 @@ def subset_vcf(vcf_input, config, populations):
     cmds = []
     stdouts = []
     for i, vcf in enumerate(vcf_inputs):
-        for key, value in populations.items():
+        for key, value in list(populations.items()):
             cmd = []
             output_file = key + str(i) + '.vcf'
             try:
@@ -161,7 +161,7 @@ def subset_vcf(vcf_input, config, populations):
     queue_jobs(cmds, 'vcf-subset',
                config['system']['cores_avaliable'], stdouts=stdouts)
     cmds = []
-    for key, value in vcf_dict.items():
+    for key, value in list(vcf_dict.items()):
         # generate the commands for vcf concat for each output file generated
         cmd = []
         output_file = key + '.vcf'
@@ -322,7 +322,7 @@ def main():
     parser.add_option('--no-rsb',dest="no_rsb", action="store_true",
                       help="Do not calculate RSB")
     (options, args) = parser.parse_args()
-    print(options.extra_args)
+    print((options.extra_args))
     assert options.vcf_input is not None, \
         "no VCF file has been specified as input"
     assert os.path.isfile(options.vcf_input), \
@@ -365,7 +365,7 @@ def main():
     set_environment(config['environment'])
     options.vcf_input = os.path.abspath(options.vcf_input)
     populations = get_populations(options.populations)
-    populations = OrderedDict(sorted(populations.items(), key=lambda t: t[0]))
+    populations = OrderedDict(sorted(list(populations.items()), key=lambda t: t[0]))
     fst_vcf(options.vcf_input, config, options, populations)
     output_vcfs = subset_vcf(options.vcf_input, config, populations)
     run_selection_pipeline(output_vcfs, options, populations, config)

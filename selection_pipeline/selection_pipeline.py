@@ -11,7 +11,7 @@
 # edited Aug 2015 (MC) to add seed setting and threshold flags
 from optparse import OptionParser
 from optparse import OptionGroup
-import ConfigParser
+import configparser
 import logging
 import os
 import sys
@@ -28,7 +28,7 @@ def parse_config(options):
         Reads a config and parses the
         arguments into a dictionary.
     """
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read(options.config_file)
     config_parsed = {}
     logger.debug(config.sections())
@@ -53,73 +53,74 @@ def parse_arguments():
         default values for the program
     """
     parser = OptionParser()
-    group = OptionGroup(parser, "Debug Options")
-    group.add_option('-v', '--debug',
+    debug_options = OptionGroup(parser, "Debug Options")
+    faw_options = OptionGroup(parser, "Fay and Wu's Options")
+    ihs_options = OptionGroup(parser, "iHS Options")
+    filter_options = OptionGroup(parser, "Filtering Options")
+    tajimas_options = OptionGroup(parser, "Tajima's D Options")
+    impute_options = OptionGroup(parser, "Impute2 Options")
+    debug_options.add_option('-v', '--debug',
                       action="store_true", dest='debug',
                       help="Print debug messages")
-    parser.add_option('-q', '--silent', action="store_false",
+    debug_options.add_option('-q', '--silent', action="store_false",
                       dest='verbose', help="Run Silently")
-    parser.add_option_group(group)
-    parser.add_option('-i', '--vcf',
+    req_options = OptionGroup(parser, "Required Options")
+    req_options.add_option('-i', '--vcf',
                       dest='vcf_input', help="VCF input file")
-    parser.add_option('-c', '--chromosome',
+    req_options.add_option('-c', '--chromosome',
                       dest='chromosome', help="Chromosome")
-    parser.add_option('-l', '--log-fire', dest='log_file',
+    debug_options.add_option('-l', '--log-fire', dest='log_file',
                       help="Log file for the pipeline process")
-    parser.add_option('--maf', dest='maf',
+    filter_options.add_option('--maf', dest='maf',
                       help='Minor allele-frequency filter')
-    parser.add_option('--hwe', dest='hwe',
+    filter_options.add_option('--hwe', dest='hwe',
                       help="Hardy-Weinberg Equillibrium filter proportion")
-    parser.add_option('--remove-missing', dest="remove_missing",
+    filter_options.add_option('--remove-missing', dest="remove_missing",
                       help="Remove missing genotypes")
-    parser.add_option('--config-file', dest="config_file",
+    req_options.add_option('--config-file', dest="config_file",
                       help="Config file")
     parser.add_option('--phased-vcf', action="store_true",
                       dest="phased_vcf", help="Phased vcf file")
-    parser.add_option('--population', dest="population",
+    req_options.add_option('--population', dest="population",
                       help="Population Code ")
-    parser.add_option('--imputation', action="store_true",
+    impute_options.add_option('--imputation', action="store_true",
                       dest="imputation", help="Imputation")
     parser.add_option('--full-process', action="store_true",
                       dest="full_process", help="Run Entire Process")
     parser.add_option('--gzvcf', action="store_true",
                       dest="vcf_gz", help="VCF input is in GZ file (optional)")
-    parser.add_option('--TajimaD', dest='tajimas_d',
+    tajimas_options.add_option('--TajimaD', dest='tajimas_d',
                       help="Output Tajima's D statistic in bins of size (bp)")
-    group = OptionGroup(parser, "Fay and Wu's Options")
-    group.add_option('--fay-Window-Width', dest='fayandWuWindowWidth',
+    faw_options.add_option('--fay-Window-Width', dest='fayandWuWindowWidth',
                       help="Sliding window width for Fay and Wu's H (kb)")
-    group.add_option('--fay-Window-Jump', dest="fayandWuWindowJump",
+    faw_options.add_option('--fay-Window-Jump', dest="fayandWuWindowJump",
                       help=("Window Jump for Fay and Wus ( if fay-Window-Width"
                             " = fay-Window-Jump non-overlapping windows "
                             "are used (kb)"))
-    parser.add_option_group(group)
     parser.add_option('--no-clean-up', dest="no_clean_up", action="store_true",
                       help="Do not clean up intermediate datafiles")
-    parser.add_option('--impute-split-size', dest='impute_split_size',
+    impute_options.add_option('--impute-split-size', dest='impute_split_size',
                       help="impute2 split size (Mb)")
-    group = OptionGroup(parser, "iHS Options")
-    group.add_option('--ehh-window-size', dest="multi_window_size",
+    ihs_options.add_option('--ehh-window-size', dest="multi_window_size",
                       help="Multicore window size (Mp)")
-    group.add_option('--ehh-overlap', dest="ehh_overlap",
+    ihs_options.add_option('--ehh-overlap', dest="ehh_overlap",
                       help="EHH window overlap (Mb)")
-    parser.add_option('--daf', dest='daf',
+    filter_options.add_option('--daf', dest='daf',
                       help="Derived Allele Frequency filter proportion")
-    group.add_option('--big-gap', dest="big_gap",
+    ihs_options.add_option('--big-gap', dest="big_gap",
                       help=("Gap size for not calculating iHH if "
                             "core SNP spans this gap (kb)"))
-    group.add_option('--small-gap', dest='small_gap',
+    ihs_options.add_option('--small-gap', dest='small_gap',
                       help=("Gap size for applying a penalty to "
                             "the area calculated by iHH (kb)"))
-    group.add_option('--small-gap-penalty', dest="small_gap_penalty",
+    ihs_options.add_option('--small-gap-penalty', dest="small_gap_penalty",
                       help=("Penalty multiplier for intergration steps"
                             "in iHH see manual for formula, usually the "
                             "same as small-gap"))
     parser.add_option('--cores', dest='cores',
                       help="Override cores avaliable setting")
-    group.add_option('--no-ihs',dest='no_ihs',action="store_true"
+    ihs_options.add_option('--no-ihs',dest='no_ihs',action="store_true"
                       , help='Disable iHS and iHH calculation')
-    parser.add_option_group(group)
     parser.add_option('--haps', dest='haps',
                         help="Shapeit haps file")
     parser.add_option('--sample', dest='sample',
@@ -128,15 +129,22 @@ def parse_arguments():
                       help="Use beagle to phase")
     parser.add_option('--no-gmap',dest="no_genetic_map",action="store_true",
                       help="Do not use a genetic map for the analysis")
-    parser.add_option('--physical-ihs',dest="physical_ihs",help="Use physical map for calculating iHS",action="store_true")
+    ihs_options.add_option('--physical-ihs',dest="physical_ihs",help="Use physical map for calculating iHS",action="store_true")
     parser.add_option("--no-plots" , dest="no_plots", action="store_true",
                       help="Do not create rudimentary plots")
-    parser.add_option('--version', dest = "ver", action="store_true",
+    debug_options.add_option('--version', dest = "ver", action="store_true",
                       help="Print version info")
     parser.add_option('--set-shapeit-seed',dest="shapeitSeed", action="store_true",
                       help="NOT IMPLEMENTED YET seed to start shapeit with")
-    parser.add_option('--set-impute-seed',dest='imputeSeed', action='store_true',
+    impute_options.add_option('--set-impute-seed',dest='imputeSeed', action='store_true',
                       help='NOT IMPLEMENTED YET seed to start impute2 with')
+    parser.add_option_group(req_options)
+    parser.add_option_group(filter_options)
+    parser.add_option_group(tajimas_options)
+    parser.add_option_group(faw_options)
+    parser.add_option_group(ihs_options)
+    parser.add_option_group(impute_options)
+    parser.add_option_group(debug_options)
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
         if(options.debug):
@@ -144,7 +152,7 @@ def parse_arguments():
         else:
             logger.setLevel(logging.ERROR)
     if(options.ver is True):
-        print "Version: {0}".format(__version__)
+        print(("Version: {0}".format(__version__)))
         sys.exit(1)
 
     # Obligatory arguments
