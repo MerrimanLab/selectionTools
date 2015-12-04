@@ -166,6 +166,8 @@ else
     cp selscan-linux-1.1.0a/selscan bin/
     rm -rf selscan-linux-1.1.0a/
     rm selscan-linux-1.1.0a.tar.gz
+    rm -rf ._selscan-linux-1.1.0a
+
 fi    
 echo "Updating submodules"
 git submodule init
