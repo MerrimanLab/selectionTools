@@ -55,10 +55,13 @@ def parse_arguments():
     parser = OptionParser()
     debug_options = OptionGroup(parser, "Debug Options")
     faw_options = OptionGroup(parser, "Fay and Wu's Options")
-    ihs_options = OptionGroup(parser, "iHS Options")
+    rehh_options = OptionGroup(parser, "rehh Options")
     filter_options = OptionGroup(parser, "Filtering Options")
     tajimas_options = OptionGroup(parser, "Tajima's D Options")
     impute_options = OptionGroup(parser, "Impute2 Options")
+    beagle_options = OptionGroup(parser, "Beagle Options")
+    selscan_options = OptionGroup(parser, "Selscan Options",
+                              "NOT IMPLEMENTED YET")
     debug_options.add_option('-v', '--debug',
                       action="store_true", dest='debug',
                       help="Print debug messages")
@@ -101,35 +104,35 @@ def parse_arguments():
                       help="Do not clean up intermediate datafiles")
     impute_options.add_option('--impute-split-size', dest='impute_split_size',
                       help="impute2 split size (Mb)")
-    ihs_options.add_option('--ehh-window-size', dest="multi_window_size",
+    rehh_options.add_option('--ehh-window-size', dest="multi_window_size",
                       help="Multicore window size (Mp)")
-    ihs_options.add_option('--ehh-overlap', dest="ehh_overlap",
+    rehh_options.add_option('--ehh-overlap', dest="ehh_overlap",
                       help="EHH window overlap (Mb)")
     filter_options.add_option('--daf', dest='daf',
                       help="Derived Allele Frequency filter proportion")
-    ihs_options.add_option('--big-gap', dest="big_gap",
+    rehh_options.add_option('--big-gap', dest="big_gap",
                       help=("Gap size for not calculating iHH if "
                             "core SNP spans this gap (kb)"))
-    ihs_options.add_option('--small-gap', dest='small_gap',
+    rehh_options.add_option('--small-gap', dest='small_gap',
                       help=("Gap size for applying a penalty to "
                             "the area calculated by iHH (kb)"))
-    ihs_options.add_option('--small-gap-penalty', dest="small_gap_penalty",
+    rehh_options.add_option('--small-gap-penalty', dest="small_gap_penalty",
                       help=("Penalty multiplier for intergration steps"
                             "in iHH see manual for formula, usually the "
                             "same as small-gap"))
     parser.add_option('--cores', dest='cores',
                       help="Override cores avaliable setting")
-    ihs_options.add_option('--no-ihs',dest='no_ihs',action="store_true"
+    rehh_options.add_option('--no-ihs',dest='no_ihs',action="store_true"
                       , help='Disable iHS and iHH calculation')
     parser.add_option('--haps', dest='haps',
                         help="Shapeit haps file")
     parser.add_option('--sample', dest='sample',
                         help='Corresponding sample file to accompany haps')
-    parser.add_option('--beagle',dest='beagle',action='store_true',
+    beagle_options.add_option('--beagle',dest='beagle',action='store_true',
                       help="Use beagle to phase")
-    parser.add_option('--no-gmap',dest="no_genetic_map",action="store_true",
-                      help="Do not use a genetic map for the analysis")
-    ihs_options.add_option('--physical-ihs',dest="physical_ihs",help="Use physical map for calculating iHS",action="store_true")
+    beagle_options.add_option('--no-gmap',dest="no_genetic_map",action="store_true",
+                      help="Do not use a genetic map for the analysis. Can only use with Beagle")
+    rehh_options.add_option('--physical-ihs',dest="physical_ihs",help="Use physical map for calculating iHS",action="store_true")
     parser.add_option("--no-plots" , dest="no_plots", action="store_true",
                       help="Do not create rudimentary plots")
     debug_options.add_option('--version', dest = "ver", action="store_true",
@@ -138,12 +141,26 @@ def parse_arguments():
                       help="NOT IMPLEMENTED YET seed to start shapeit with")
     impute_options.add_option('--set-impute-seed',dest='imputeSeed', action='store_true',
                       help='NOT IMPLEMENTED YET seed to start impute2 with')
+    selscan_options.add_option('--max-extend-nsl', dest='maxExtendnsl', action='store_true',
+                        help=('The maximum distance an nSL haplotype is allowed to extend from the core. '
+                            'Set <= 0 for no restriction. '
+                            'Default: 100The maximum distance an nSL haplotype is allowed to extend from the core. '
+                            'Set <= 0 for no restriction.'))
+    selscan_options.add_option('--selscan-maf', dest='selscan_maf')
+    selscan_options.add_option('--gap-scale', dest='gap_scale')
+    selscan_options.add_option('--max-gap', dest='max_gap')
+    selscan_options.add_option('--trunk-ok', dest='trunk_ok')
+    selscan_options.add_option('--alt', dest='selscan_alt')
+    selscan_options.add_option('--max-extend', dest='max_extend_ihs')
+    selscan_options.add_option('--skip-low-freq', dest='skip_low_freq')
     parser.add_option_group(req_options)
     parser.add_option_group(filter_options)
     parser.add_option_group(tajimas_options)
     parser.add_option_group(faw_options)
-    parser.add_option_group(ihs_options)
+    parser.add_option_group(rehh_options)
+    parser.add_option_group(selscan_options)
     parser.add_option_group(impute_options)
+    parser.add_option_group(beagle_options)
     parser.add_option_group(debug_options)
     (options, args) = parser.parse_args()
     if(options.verbose is not None):
