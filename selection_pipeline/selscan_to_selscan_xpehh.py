@@ -51,7 +51,7 @@ def selscan_xpehh_convert(options):
 
     # write out common map file
     # positions should be the same if using pop1_map or pop2_map but marker names may be different
-    out1_map = open(options.out +options.pop1 +'_' + options.pop2 +'_'+ options.chr+ '.xpehh_selscanmap','w')
+    out1_map = open(options.outpref +options.pop1 +'_' + options.pop2 +'_'+ options.chr+ '.xpehh_selscanmap','w')
     pop1_map.seek(0)
     i = 0
     for ind in extract1:
@@ -65,7 +65,7 @@ def selscan_xpehh_convert(options):
     pop1_map.close()
 
     # sanity check - write second map file from pop2_map, positions should match exactly between the 2 files
-    #out1_map = open(options.out +options.pop1 +'_' + options.pop2 +'_'+ options.chr+ '.xpehh_selscanmap','w')
+    #out1_map = open(options.outpref +options.pop1 +'_' + options.pop2 +'_'+ options.chr+ '.xpehh_selscanmap','w')
     #pop2_map.seek(0)
     #i = 0
     #for ind in extract2:
@@ -79,7 +79,7 @@ def selscan_xpehh_convert(options):
     #pop2_map.close()
 
     # write out selected hap1 columns
-    out1_hap = open(options.out + options.pop1 + "_" + options.chr + '.matches_' + options.pop2+'.xpehh_selscanhaps','w')
+    out1_hap = open(options.outpref + options.pop1 + "_" + options.chr + '.matches_' + options.pop2+'.xpehh_selscanhaps','w')
     pop1_hap = open(options.pref1 + ".selscanhaps", 'r')
     for line in pop1_hap:
         hap = line.split()
@@ -89,7 +89,7 @@ def selscan_xpehh_convert(options):
     pop1_hap.close()
 
     #write out selected hap2 columns
-    out2_hap = open(options.out + options.pop2 + "_" + options.chr + '.matches_' + options.pop1 +'.xp_ehh_selscanhaps','w')
+    out2_hap = open(options.outpref + options.pop2 + "_" + options.chr + '.matches_' + options.pop1 +'.xp_ehh_selscanhaps','w')
     pop2_hap = open(options.pref2 + ".selscanhaps",'r')
     for line in pop2_hap:
         hap = line.split()
