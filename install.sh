@@ -119,7 +119,7 @@ else
 fi
 chmod 755 bin/impute2
 echo "Installing Tabix"
-wget -O htslib-1.2.1.bar.bz2 'https://github.com/samtools/htslib/releases/download/1.2.1/htslib-1.2.1.tar.bz2'
+wget -O htslib-1.2.1.tar.bz2 'https://github.com/samtools/htslib/releases/download/1.2.1/htslib-1.2.1.tar.bz2'
 tar -xjf htslib-1.2.1.tar.bz2
 change_folder htslib-1.2.1
 #tar -xjf src/tabix.tar.bz2
