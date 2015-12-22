@@ -40,7 +40,7 @@ orig_dir
 rm -Rf zlib-1.2.8
 
 echo "Installing VCF tools"
-wget https://github.com/vcftools/vcftools/releases/download/v0.1.14/vcftools-0.1.14.tar.gz
+wget -O vcftools-0.1.14.tar.gz 'https://github.com/vcftools/vcftools/releases/download/v0.1.14/vcftools-0.1.14.tar.gz'
 tar xzf vcftools-0.1.14.tar.gz
 #tar xzf src/vcftools.tar.gz
 LIB_VAR="-lz -L${ORIG_DIR}/lib -I${ORIG_DIR}/include"
@@ -80,14 +80,14 @@ fi
 
 echo "Installing Shapeit"
 if [ `uname` = "Darwin" ]; then
-    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r837.MacOSX.tgz
+    wget -O shapeit.v2.r837.MacOSX.tgz 'https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r837.MacOSX.tgz'
     tar xzf shapeit.v2.r837.MacOSX.tgz
     rm shapeit.v2.r837.MacOSX.tgz
     mv shapeit bin/
     rm -Rf shapeit.v2.r837.MacOSX.tgz
 else
     echo `uname`
-    wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r837.GLIBCv2.20.Linux.static.tgz
+    wget -O shapeit.v2.r837.GLIBCv2.20.Linux.static.tgz 'https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r837.GLIBCv2.20.Linux.static.tgz'
     #http://mathgen.stats.ox.ac.uk/genetics_software/shapeit/old_versions/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
     #wget https://mathgen.stats.ox.ac.uk/genetics_software/shapeit/shapeit.v2.r790.Ubuntu_12.04.4.static.tar.gz
     tar xzf shapeit.v2.r837.GLIBCv2.20.Linux.static.tgz
@@ -119,7 +119,7 @@ else
 fi
 chmod 755 bin/impute2
 echo "Installing Tabix"
-wget https://github.com/samtools/htslib/releases/download/1.2.1/htslib-1.2.1.tar.bz2
+wget -O htslib-1.2.1.bar.bz2 'https://github.com/samtools/htslib/releases/download/1.2.1/htslib-1.2.1.tar.bz2'
 tar -xjf htslib-1.2.1.tar.bz2
 change_folder htslib-1.2.1
 #tar -xjf src/tabix.tar.bz2
@@ -153,14 +153,14 @@ echo "Install rehh"
 check_success R CMD INSTALL src/rehh_1.11.tar.gz
 echo "Install selscan"
 if [ `uname` = "Darwin" ]; then
-    wget https://github.com/szpiech/selscan/releases/download/1.1.0a/selscan-osx-1.1.0a.tar.gz
+    wget -O selscan-osx-1.1.0a.tar.gz 'https://github.com/szpiech/selscan/releases/download/1.1.0a/selscan-osx-1.1.0a.tar.gz'
     tar -xzf selscan-osx-1.1.0a.tar.gz
     cp selscan-osx-1.1.0a/norm bin/
     cp selscan-osx-1.1.0a/selscan bin/
     rm -rf selscan-osx-1.1.0a/
     rm -rf selscan-osx-1.1.0a.tar.gz
 else
-    wget https://github.com/szpiech/selscan/releases/download/1.1.0a/selscan-linux-1.1.0a.tar.gz
+    wget -O selscan-linux-1.1.0a.tar.gz 'https://github.com/szpiech/selscan/releases/download/1.1.0a/selscan-linux-1.1.0a.tar.gz'
     tar -xzf selscan-linux-1.1.0a.tar.gz
     cp selscan-linux-1.1.0a/norm bin/
     cp selscan-linux-1.1.0a/selscan bin/
