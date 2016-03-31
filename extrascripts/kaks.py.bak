@@ -45,13 +45,13 @@ def add_gene(record):
                                      str(r).split('|')[gene_name_index]]
 
 
-print("GeneID\tGeneName\tka\tks\tka_div_ks_plus1")
+print "GeneID\tGeneName\tka\tks\tka_div_ks_plus1"
 for record in vcf_reader:
     add_gene(record)
     
 for gene in genes_ka_ks:
-    print(( gene +"\t"+ genes_ka_ks[gene][2] +"\t"+ str(genes_ka_ks[gene][0]) 
-          +"\t"+ str(genes_ka_ks[gene][1]) +"\t"+ str(genes_ka_ks[gene][0]/float(genes_ka_ks[gene][1] +1)) )) 
+    print( gene +"\t"+ genes_ka_ks[gene][2] +"\t"+ str(genes_ka_ks[gene][0]) 
+          +"\t"+ str(genes_ka_ks[gene][1]) +"\t"+ str(genes_ka_ks[gene][0]/float(genes_ka_ks[gene][1] +1)) ) 
 
 
             
