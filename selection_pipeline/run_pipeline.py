@@ -176,7 +176,7 @@ class CommandTemplate(object):
                     '?', self.options.chromosome) + '.legend')):
                     legend_file = os.path.join(
                             self.config['impute2']['impute_reference_dir'], file)
-                    hap_file = ''
+        hap_file = ''
         for file in os.listdir(self.config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file, (
                 self.config['impute2']['impute_reference_prefix'].replace(
