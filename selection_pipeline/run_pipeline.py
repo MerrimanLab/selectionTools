@@ -18,7 +18,7 @@ class CommandTemplate(object):
         e.g. Standard linux box, Load Leveler or another
         cluster interface.
     """
-    
+
     def __init__(self, options, config):
         """ Initialises the class variables self.config and self.options.
 
@@ -167,7 +167,7 @@ class CommandTemplate(object):
                     '?', self.options.chromosome) + '.legend')):
                     legend_file = os.path.join(
                             self.config['impute2']['impute_reference_dir'], file)
-                    hap_file = ''
+        hap_file = ''
         for file in os.listdir(self.config['impute2']['impute_reference_dir']):
             if fnmatch.fnmatch(file, (
                 self.config['impute2']['impute_reference_prefix'].replace(
@@ -421,7 +421,7 @@ class CommandTemplate(object):
 
     def beagle_phasing(self, vcf):
         cmd = []
-        java_executable = self.config['java']['java_executable'] 
+        java_executable = self.config['java']['java_executable']
         beagle_memory =  self.config['beagle']['vm_size']
         beagle_jar = self.config['beagle']['beagle_jar']
         out_prefix = self.options.population + self.options.chromosome + \
