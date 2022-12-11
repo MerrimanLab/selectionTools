@@ -1,3 +1,6 @@
+This project hasn't been able to be updated or maintained for a long period of time and has now been archived
+
+
 # CRITICAL BUGFIX 18NOV15
 https://github.com/smilefreak/selectionTools/issues/16
 bug in aa_annotate.py has now been fixed **only in master (selectionTools1.1) and selectionTools1.1-dev branches or version 1.1.1+**
